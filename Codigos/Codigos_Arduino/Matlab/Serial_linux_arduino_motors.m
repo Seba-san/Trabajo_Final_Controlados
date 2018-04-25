@@ -1,8 +1,8 @@
 %% Configuracion inicial
-cd /home/seba/Dropbox/Facultad/Trabajo_final_Controlados/Codigos/Codigos_Arduino/Matlab
+cd /media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Codigos_Arduino/Matlab
 %cd('C:\Users\Tania\Dropbox\Trabajo final - Controlados\Codigos\Codigos\Matlab')%compu Tania
 
-addpath('/home/seba/Dropbox/Facultad/Trabajo_final_Controlados/Codigos/Matlab');
+addpath('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab');
 %% Inicio
 % uart = serial('COM2','BaudRate',1200,'DataBits',7);
 %s = serial('COM5');
