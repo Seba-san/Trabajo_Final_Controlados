@@ -1,0 +1,13 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "pagina"]
+	url = https://github.com/Seba-san/Controlados_Arduino.git
+	fetch = +refs/heads/*:refs/remotes/pagina/*
+[color]
+	ui = true
+[remote "drop"]
+	url = /home/seba/Dropbox/Facultad/Codigos_Arduino_git
+	fetch = +refs/heads/*:refs/remotes/drop/*

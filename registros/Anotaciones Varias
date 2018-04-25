@@ -1,0 +1,4 @@
+.- Los encoders necesitan 1,2mA en el receptor y entre 10 y 20 mA para el emisor. esto a 7.4V de vcc da una resistencia de 5616 ohms. 
+.- Un led de los encoders ilumina mas que el otro.
+
+

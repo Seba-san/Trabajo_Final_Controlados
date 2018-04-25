@@ -1,0 +1,9 @@
+Tareas hechas el 13-02-18:
+
+1) Pruebas con encoders. Le pusimos cartoncitos a las ruedas que andan como encoders. Funcionan tapando el receptor. 
+Detectamos una oscilación debido a que las ruedas están descentradas. Por eso no podemos leer bien el encoder. Sin eso creemos que andaría bien, pero requiere calibración del PWM que de momento no está automatizada.
+
+2) Ensamblamos con la proto el robot. La electrónica funcionó como se esperaba, pero falta agarre en las ruedas.
+Velocidad aproximada para dutycycle de 50% con ruedas sin agregados: 0,9167m/s.
+
+3) Reeplanteo de tareas y cronograma.

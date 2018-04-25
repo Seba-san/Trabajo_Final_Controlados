@@ -1,0 +1,7 @@
+0000000000000000000000000000000000000000 b75e17e95812708d28ca103e8cc1f0afb0d40fc8 Seba <sansoni.sebas@gmail.com> 1523400981 -0300	commit (initial): commit inicial. Empezando pruebas con el robot, PID sin funcionar de forma estable.
+b75e17e95812708d28ca103e8cc1f0afb0d40fc8 0a221c4a33950ecde8a77c34b937befb4ebc555e Seba <sansoni.sebas@gmail.com> 1523571769 -0300	merge test: Fast-forward
+0a221c4a33950ecde8a77c34b937befb4ebc555e d238ae9fa3b38ff15ae278f7d934a17492fdea98 Seba <sansoni.sebas@gmail.com> 1523572247 -0300	merge limpio: Fast-forward
+d238ae9fa3b38ff15ae278f7d934a17492fdea98 6f22b515fbae25e48063fc0a72a77b93fd51e7e0 Seba <sansoni.sebas@gmail.com> 1523572516 -0300	commit: Avances de tania, tiene problemas con las interrupciones del USB en MATLAB.. eso no esta funcionando actualmente
+6f22b515fbae25e48063fc0a72a77b93fd51e7e0 9d821794c8dadafb7aa14f2fa8d0ac050ce9a6a6 Seba <sansoni.sebas@gmail.com> 1523818774 -0300	merge test: Fast-forward
+9d821794c8dadafb7aa14f2fa8d0ac050ce9a6a6 efcebfaa8361de59366a541f86ee21c31243b8b8 Seba <sansoni.sebas@gmail.com> 1524074485 -0300	merge test: Fast-forward
+efcebfaa8361de59366a541f86ee21c31243b8b8 ee393f33fbfa7552bed268c122a974ffea8b691e Seba <sansoni.sebas@gmail.com> 1524153006 -0300	merge test: Fast-forward

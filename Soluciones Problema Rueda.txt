@@ -1,0 +1,17 @@
+Soluciones problema rueda
+
+1) Preguntar a un mecánico:
+   -Seba
+   -
+
+2) Variar el PWM para compensar la variación mecánica.
+
+3) Hacer un soporte que permita mantener a 90º mientras se calienta la rueda para insertarla.
+
+4) Ponerle goamespuma en el eje.
+
+5) Poner un eje extra en la rueda.
+
+6) Levantar el perfil de la rueda girando y corregirlo externamente.
+
+7) Poner una rueda extra en la que se mida la dist recorrida

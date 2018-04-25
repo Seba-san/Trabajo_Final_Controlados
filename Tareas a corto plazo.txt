@@ -1,0 +1,28 @@
+Tania:
+1. V Armar librerías propias.
+2. V Cambiar el timer1. Aumentar frec del PWM. 16 bits.V Se implementó con 9 bits en librería "Controlados".
+3. chequear la teoria de control: - PID, discretizacion, y eso.
+4. Hacer andar comunicación. Verificar que RADIOHEAD no se pise con lo hecho. Que use timer 2. Y que se pueda utilizar por los pines TX y Rx de la UART.
+5. V Chequear que analog write pueda salir por pin 11 y 13.
+6. (Pseudo Opcional) Probar rutinas de movimiento del robot.
+7. Agregar al código el control de STBY de los motores (pin 7).
+
+
+Ambos:
+1. Sensores de línea.
+2. Comunicación.
+3. Ruedas.
+4. Encoders.
+5. Rutinas de calibración encoders.
+
+
+Seba:
+1. Medir consumo motores. 
+2. V Ver interferencias. Que no reinicien el micro.
+3. V Armar fuentes de corriente.
+4. V Soldar cables motor.
+5. V Prueba en proto.
+6. V Diseñar PCB.
+7. V Armar la comunicacion
+8. V Probar la configuracion de pines antes de hacer la placa. Se usan casi todos los pines del nano.
+9. Hacer PCB.

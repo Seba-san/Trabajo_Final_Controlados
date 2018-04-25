@@ -1,0 +1,18 @@
+Para generar la secuencia binaria pseudo aleatoria, ver la siguiente pagina:
+https://blog.kurttomlinson.com/posts/prbs-pseudo-random-binary-sequence
+
+
+Si haces la secuencia para el polinomio x^3+x^2+1 empezando por cualquier polinomio menor a este, resulta la siguiente secuencia (en binario):
+1 2 4 8 3 6 12 11 9 5 10 7. Si los pasas a binario y miras el ultimo bit, ese bit se supone que esta fuertemente descorrelacionado del resto de los ultimos bits.
+El procedimiento es el siguiente: el polinomio x^3+x^2+1 equivale a 1101 (por los coeficientes) que en decimal es el numero 13. Entonces, agarras cualquier numero entre 13 y 0 (sin que sea 13 o 0) luego lo dividis por 13, al resto lo multiplicas por 2 y lo volves a dividir por 13, al resto de eso lo multiplicas por 2 y lo dividis por 13 y asi... cada resto generado es la salida del generador, y son estos numeros: 1 2 4 8 3 6 12 11 9 5 10 7. Notar que estan todos los numeros de entre 0 y 13. 
+
+Existen otros polinomios como el x^7+x^6+1, que equivale al numero binario 11000001, que en decimal es 193. La secuencia que genera este polinomio se puede buscar en intertet: https://oeis.org/A011686
+
+La demas info la saque de aca:
+https://en.wikipedia.org/wiki/Pseudorandom_binary_sequence
+
+
+
+
+
+algunos de x^7+x^6+1 son: 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1

@@ -1,0 +1,2 @@
+0000000000000000000000000000000000000000 ee393f33fbfa7552bed268c122a974ffea8b691e Seba <sansoni.sebas@gmail.com> 1524153022 -0300	branch: Created from HEAD
+ee393f33fbfa7552bed268c122a974ffea8b691e 1c5a3f70ecdcd2db50a1c2ba5f3f7e6ac2803b01 Seba <sansoni.sebas@gmail.com> 1524153288 -0300	commit: se sacaron comentarios de funciones, y variables que no se usaban, esta rama sirve para ir sacando cosas que no se usan.
