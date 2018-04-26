@@ -123,7 +123,7 @@ if (bitRead(Bandera,0)){ // timer 2 overflow
   } 
    if (bitRead(Bandera,3)){ // Se midio un tiempo de 15mS, se realiza el calculo del PID
   bitWrite(Bandera,3,0);
-  PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
+  //PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts. 
   } 
 }
@@ -147,6 +147,7 @@ void serialEvent() { // esta funcion se activa sola, es por interrupciones (pone
           break;
         case ins_PWM://Instrucción 250: cambiar PWM de los motores
           trama_activa=1;
+          Serial.println(171,DEC);
           break;
         case ins_test://Instrucción 249: codigo para exigir una resputa preestablecida. Sirve para saber si hay conexion.
           Serial.println(170,DEC);
@@ -165,6 +166,7 @@ void serialEvent() { // esta funcion se activa sola, es por interrupciones (pone
       trama_activa=0;//Le indico al nano que terminé, por lo que el próximo byte que reciba debería ser una nueva instrucción.      
       controlados1.actualizarDutyCycleMotores(PWMA,PWMB);//Realizo la actualización simultánea de la velocidad de ambos motores.
       controlados1.modoAdelante();
+      Serial.println(172,DEC);
     }
     else if (trama_activa==3){
       set_point=dato; // Actualiza el valor del setpoint
@@ -194,8 +196,8 @@ void timer_interrupt(){ // se utiliza esta funcion ya que permite llamarla desde
     }
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si se acontrolada.
       //PID_online();
-      controlados1.actualizarDutyCycleMotores(u[2],u[2]);//Realizo la actualización simultánea de la velocidad de ambos motores.
-      controlados1.modoAdelante();
+     // controlados1.actualizarDutyCycleMotores(u[2],u[2]);//Realizo la actualización simultánea de la velocidad de ambos motores.
+     // controlados1.modoAdelante();
     }
 
   

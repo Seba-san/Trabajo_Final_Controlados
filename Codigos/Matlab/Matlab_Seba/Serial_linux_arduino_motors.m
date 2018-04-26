@@ -1,5 +1,5 @@
 %% Configuracion inicial
-cd /media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Codigos_Arduino/Matlab
+cd /media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab/Matlab_Seba
 %cd('C:\Users\Tania\Dropbox\Trabajo final - Controlados\Codigos\Codigos\Matlab')%compu Tania
 
 addpath('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab');
@@ -17,6 +17,16 @@ s=InicializacionSerial('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
 fclose(s)
 %clear all;clc
 disp('Puerto Cerrado')
+%%
+
+Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
+Env_instruccion(s,'stop')
+Env_instruccion(s,'PWM',[20 20]); 
+
+
+
+
+
 %%
 % Respuesta al escalon
 % Le digo al micro que ponga el PWM en un dado valor y que mida la
