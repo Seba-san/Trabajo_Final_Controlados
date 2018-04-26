@@ -33,6 +33,11 @@ class Controlados
 	//Configuración timer2 como contador:
 	void configTimer2Contador(const int& Frecuencia, const int& Prescaler,bool interrupciones);
   void configTimer2Contador();
+
+ // Funciones agregadas por comodidad:
+ unsigned long tic(void);
+unsigned long toc(unsigned long);
+  
 	
   private: //Funciones y variables internas
 	int _timerMotores;//Para indicar cuál timer fue configurado para los motores.
