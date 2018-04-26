@@ -34,7 +34,8 @@ name=datestr(now,'yymmddhhMMss');
 name=strcat(name,'.mat');
 save(name,'tiempo','PWMA','wA') 
 %% Gr�fico de la Respuesta del motor B
- load('../../Mediciones/180423182356_resp_escalon.mat')
+cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
+load('../../Mediciones/180423182356_resp_escalon.mat')
 figure(1);
 plot(tiempo,PWMA,tiempo,wA,'.');
 %legend('Se�al de PWM','Se�al de vel ang');
@@ -150,8 +151,8 @@ Parametros_Ogata'
 % Para crear y probar el controlador con esos parametros hay que ejecutar la
 % siguiente instruccion:
 a=ind_PID;P=Parametros_Ogata;PIDF=1; % en 1 es si, en 0 es no
-C_pdf=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',data.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
-T_pi = feedback(C_pdf*sys, 1);
+C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',data.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
+T_pi = feedback(C*sys, 1);
 figure (2);
 step(T_pi)
 title ('Controlado')
@@ -181,6 +182,11 @@ title ('Sin controlar')
 
 % ### Lo paso a la forma apropiada para programarlo
 mm=C;
+% Primero, Segundo y Tercero son los distintos terminos del PID. Este
+% algoritmo lo que hace es pasarlo de la forma "bibliografica" a la forma
+% de cociente de polinomios.
+% la forma final propuesta resulta:
+% Y(k)=e(k)*A+e(k-1)*B+e(k-2)*C+y(k-1)*D+y(k-2)*E
 Primero=tf(mm.Kp,1);
 Segundo=tf([mm.Ts*mm.Ki 0],[1 -1],mm.Ts);
 if (PIDF==1)
@@ -193,7 +199,7 @@ num=pipi.Numerator{1};
 den=pipi.Denominator{1};
 num=num/den(1);den=den/den(1); % hay que dividir por den(1) porque es el coeficiente de u(k).
 disp('A B C D E')
-CUCU=[num -den(2:size(den,2))];
+CUCU=[num -den(2:size(den,2))]; % Cual es el orden de los parametros?
 sprintf('%f, %f, %f, %f, %f',CUCU)
 %tfsys=tf(sys.Numerator,sys.Denominator,sys.Ts)
 % Transformo el sistema discreto a continuo
