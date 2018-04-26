@@ -9,11 +9,13 @@ Controlados controlados1;
 // #   #   #   # Definiciones 
 #define interruptON bitSet(SREG,7) //habilita las interrupciones globales
 #define interruptOFF bitClear(SREG,7)//desactiva las interrupciones globales
+// Instrucciones traducidas
 #define ins_PWM 250 // instrucciones traducidas. 
 #define ins_trama 253
 #define ins_online 252
 #define ins_stop 251 // baja de transmitir online
 #define ins_test 249
+#define ins_setpoint 248
 
 
 // #   #   #   # Constantes 
@@ -60,6 +62,11 @@ unsigned long aux[6];  // este es un buffer para enviar datos en formato trama, 
 unsigned long  bufferVel[2*cantMarcasEncoder];//buffer donde almaceno las últimas velocidades calculadas.
 float velAngular=0;//última velocidad angular calculada. Lo separo del vector bufferVel para que no haya problemas por interrumpir en medio de una actualización de éste.
 float velDeseada=0;//Empieza detenido el motor.
+// Variables del PID
+unsigned long error[3],u[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
+int set_point=0; // Set_point esta en RPM
+const float Parametros[]={1.262460, -2.505161, 1.242723, 1.985222, -0.985222};//{1.261400, -2.522133, 1.260733, 1.999500, -0.999500};
+int soft_prescaler=0;
 
 
 // #   #   #   # Declaracion de Funciones
@@ -68,6 +75,7 @@ void medirVelocidad(unsigned char);
 void EnviarTX(int cantidad,char identificador, unsigned long *datos);
 void EnviarTX_online(unsigned long var);
 void timer_interrupt(void);
+void PID_offline(void);
 
 
 void setup() {
@@ -101,6 +109,7 @@ void loop() {
 //controlados1.actualizarDutyCycleMotores(0,0);
 //controlados1.modoAdelante();
 if (bitRead(Bandera,0)){ // timer 2 overflow
+  
   } 
   if (bitRead(Bandera,1)){ // Entra cuando no registra cambio en la entrada
   // Serial.println  (Bandera,BIN);
@@ -112,7 +121,11 @@ if (bitRead(Bandera,0)){ // timer 2 overflow
   bitWrite(Bandera,2,0);
   medirVelocidad(1);  
   } 
-   
+   if (bitRead(Bandera,3)){ // Se midio un tiempo de 15mS, se realiza el calculo del PID
+  bitWrite(Bandera,3,0);
+  PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
+  // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts. 
+  } 
 }
 
 void serialEvent() { // esta funcion se activa sola, es por interrupciones (ponele)
@@ -137,6 +150,9 @@ void serialEvent() { // esta funcion se activa sola, es por interrupciones (pone
           break;
         case ins_test://Instrucción 249: codigo para exigir una resputa preestablecida. Sirve para saber si hay conexion.
           Serial.println(170,DEC);
+          case ins_setpoint://Instrucción 248: cambiar el valor del setpoint
+          trama_activa=3;
+          break;
         default://No hace nada si no recibe una instrucción válida
           break;}      
     }
@@ -150,6 +166,10 @@ void serialEvent() { // esta funcion se activa sola, es por interrupciones (pone
       controlados1.actualizarDutyCycleMotores(PWMA,PWMB);//Realizo la actualización simultánea de la velocidad de ambos motores.
       controlados1.modoAdelante();
     }
+    else if (trama_activa==3){
+      set_point=dato; // Actualiza el valor del setpoint
+      trama_activa=0;     
+      }
   }
 }
 
@@ -158,14 +178,27 @@ ISR (TIMER2_COMPA_vect){//Interrupción por Timer2 para definir frec de muestreo
 timer_interrupt(); 
 
 }
-void timer_interrupt(){ // se utiliza esta funcion ya que permite llamarla desde otras funciones. Si lo haces desde la interrupcion, no podes.
+void timer_interrupt(){ // se utiliza esta funcion ya que permite llamarla desde otras funciones. Si lo haces desde la interrupcion, no podrias.
   //estado2=!estado2;
   //digitalWrite(SalidaTest,estado2);
   cantOVerflow++;
+ soft_prescaler++;
   if(cantOVerflow>cota){
    bitWrite(Bandera,1,1); //medirVelocidad(0);//Llamo a la rutina de medición de vel indicándole que pasó demasiado tiempo y que tiene que asumir que la velocidad es 0.                                        
   }
-  bitWrite(Bandera,0,1);
+  bitWrite(Bandera,0,1); // Esta bandera le avisa al resto de las funciones que se produjo una interrupcion por timer
+
+  if (soft_prescaler==30){
+    soft_prescaler=0;
+    bitWrite(Bandera,3,1);
+    }
+if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si se acontrolada.
+      //PID_online();
+      controlados1.actualizarDutyCycleMotores(u[2],u[2]);//Realizo la actualización simultánea de la velocidad de ambos motores.
+      controlados1.modoAdelante();
+    }
+
+  
   //estado=!estado;
   //if (estado){
    // estado2=!estado2;
@@ -208,22 +241,13 @@ unsigned long suma=0;
   {
     bufferVel[k]=bufferVel[k+1];//Desplazamiento a la derecha de los datos del buffer
     suma=suma+bufferVel[k];
-  }
-  
+  }  
   //Al terminar el bucle bufferVel tiene los últimos dos valores iguales (los dos de más a la izquierda). Esto cambia a continuación con la actualización del valor más a la derecha:
   if(interrupcion){
     // Se hace de forma separada porque se detectaron problemas de calculo asociado con los tipos de variables. Esto se resolvio separando las cuentas, queda a futuro resolverlo en una sola linea.
      t=cantOVerflow_actual*OCR2A;
      tmh=TCNT2actual-TCNT2anterior+t; // Ver problemas de variables
-    bufferVel[2*cantMarcasEncoder-1]=long(preescaler)*(tmh);
-    
-    //bufferVel[2*cantMarcasEncoder-1]=(long(preescaler)*(TCNT2actual+cantOVerflow_actual*long(OCR2A)-TCNT2anterior));
-     //bufferVel[2*cantMarcasEncoder-1]=float(fclkio)/(float(preescaler)*(TCNT2actual+cantOVerflow_actual*float(OCR2A)-TCNT2anterior));
-   // bufferVel[2*cantMarcasEncoder-1]=preescaler*(TCNT2actual+cantOVerflow*OCR2A-TCNT2anterior)*fclkio2;// Es para contar ciclos
-    //bufferVel[2*cantMarcasEncoder-1]=fclkio/(2*cantMarcasEncoder*preescaler*(TCNT2actual+cantOVerflow*OCR2A-TCNT2anterior));
-                              //Unidad de medición: ciclos/seg.
-   // bufferVel[2*cantMarcasEncoder-1]=60.0*float(fclkio)/(float(2*cantMarcasEncoder*preescaler)*(float(cantOVerflow_actual*OCR2A)-TCNT2anterior+TCNT2actual));
-                              //Unidad de medición: rpm.
+    bufferVel[2*cantMarcasEncoder-1]=long(preescaler)*(tmh); 
   }
   else{
      bufferVel[2*cantMarcasEncoder-1]=0;
@@ -231,13 +255,16 @@ unsigned long suma=0;
 
 suma=suma+ bufferVel[2*cantMarcasEncoder-1];
 
+
+// Pruebas. Para proximas modificaciones poner la version para la que funcionan.
+
   freq=float(F_CPU*60)/(suma);
   
-  aux[0]=freq;
-  aux[1]=tocc;//Envío el tiempo en el que se tomó la muestra
+  //aux[0]=freq;
+  //aux[1]=tocc;//Envío el tiempo en el que se tomó la muestra
   //EnviarTX(2,'a',aux);
-EnviarTX_online( freq);
-EnviarTX_online( tocc);
+EnviarTX_online(freq);
+//EnviarTX_online(tocc);
 
 }
 
@@ -267,8 +294,6 @@ void EnviarTX_online(unsigned long var){ // funcion de envio de datos de corta d
   Serial.println(var,DEC);
   }
   }
-
-
 // ##################### Estas 2 funciones hacen los mismo que en matlab :-)
   void tic()
   {
@@ -279,3 +304,23 @@ void toc()
   {
    tocc=micros()-ticc;    
     }
+
+
+
+void PID_offline (void){ 
+
+  /* La idea de esta funcion es que realice los calculos que no requieren que esten sincronizados.
+   Luego, en la interrupcion por overflow, que e hagan solo los calculos necesarios y se aplique la señal de control.
+   */
+for(int k=0;k<2;k++)
+  {
+   error[k]=error[k+1];//Desplazamiento a la derecha de los datos del buffer
+   u[k]=u[k+1];
+  }  
+error[2]=set_point-freq;
+u[2]=Parametros[0]*error[2]+Parametros[1]*error[1]+Parametros[2]*error[0]+Parametros[3]*u[0]+Parametros[4]*u[1];
+if (u[2]>100){u[2]=100;}
+if (u[2]<0){u[2]=0;}
+
+}
+     

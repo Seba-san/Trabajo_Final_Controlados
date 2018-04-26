@@ -11,6 +11,8 @@ switch info
         instruccion=249;
     case 'stop'
         instruccion=251;
+    case 'setpoint'
+        instruccion=248;
         
 end
 EscribirSerial(s,instruccion);
