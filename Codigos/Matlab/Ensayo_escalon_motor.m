@@ -41,29 +41,77 @@ plot(tiempo,PWMA,tiempo,wA,'.');
 %legend('Se�al de PWM','Se�al de vel ang');
 title('Respuesta del Motor B');
 xlabel('tiempo (us)');ylabel('Vel Ang (rpm) / PWM') %Revisar la unidad!! $
-%% Acomodando Ts para estimacion del sistema
+
+%% Acomodando Ts para estimacion del sistema con INTERPOLACION LINEAL
+% Aparentemente hay un problema con los datos, en lo que sigue voy a
+% utilizar una interpolacion LINEAL entre los puntos.
+entrada=PWMA;%PWMA;
+salida=wA;%wA
+tiempo_=tiempo;
+Fs=2e3;
+Ts=1/Fs;
+tiempoSeg=tiempo_*1e-6;
+t=min(tiempoSeg):1/Fs:max(tiempoSeg);
+
+figure
+w_interp = interp1(tiempoSeg,salida,t);
+pwm_interp=interp1(tiempoSeg,entrada,t);
+figure
+plot(tiempoSeg,salida,'o',t,w_interp,':.');
+title('Interpolacion Lineal de w_salida');
+figure
+plot(tiempoSeg,entrada,'o',t,pwm_interp,':.');
+title('Interpolacion Lineal de pwm_entrada');
+
+%% Realizo el calculo de las constantes del sistema
+
+entrada=PWM;%PWMA;
+salida=w_interp;%wA;
+tiempo_=t;
+% Revistar esto, porque la interpolacion genera error en el calculo de t0.
+dPWMA=diff(entrada);[~,indice_set]=max(dPWMA);t0=tiempo_(indice_set); % Obtengo el tiempo en el que inicia el pulso
+time=(tiempo_-t0);%*1e-6; % Acondiciono el tiempo para en ensayo escalon.
+indices_=find(time>=0);time2=time(indices_);
+wm=salida-min(salida);wm2=wm(indices_);
+S = stepinfo(wm2,time2) %Extraigo la informacion de la respuesta escalon
+PWMA2=entrada(indices_);
+plot(time2,wm2,'b.',time2,PWMA2,'r.')
+
+%%
+%Acomodo los tiempos
+index=find(time<2*S.SettlingTime & time>-S.SettlingTime);
+w_data=wm(index);
+pwm_data=entrada(index);pwm_data=pwm_data-min(pwm_data);
+t_data=time(index);
+plot(t_data,w_data,'b.',t_data,pwm_data)
+
+%% Acomodando Ts para estimacion del sistema con ZOH
 % Como la estimacion de Matlab se hace para una senal muestreada a Fs cte,
 % generamos una version que guarde el valor anterior mas cercano para cada
 % valor del vector de tiempos constante.
+entrada=PWMA;%PWMA;
+salida=wA;%wA
 Fs=2e3;
 Ts=1/Fs;
 tiempoSeg=tiempo*1e-6;
-t=min(tiempoSeg):1/Fs:max(tiempoSeg);
-for k=1:length(t)
-    [~,indice]=min(abs(tiempoSeg-t(k)));%Busco la muestra mas cercana al valor de tiempo en el que estoy mirando
-    if tiempoSeg(indice)-t(k)>0 && indice>1
+t_zoh=min(tiempoSeg):1/Fs:max(tiempoSeg);
+for k=1:length(t_zoh)
+    [~,indice]=min(abs(tiempoSeg-t_zoh(k)));%Busco la muestra mas cercana al valor de tiempo en el que estoy mirando
+    if tiempoSeg(indice)-t_zoh(k)>0 && indice>1
         indice=indice-1;%Me aseguro que siempre se quede con el valor mas cercano pero anterior, no futuro
     end
-    w(k)=wA(indice);%Guardo el valor de wA anterior mas proximo al valor de tiempo que estoy considerando
-    PWM(k)=PWMA(indice);
+    w(k)=salida(indice);%Guardo el valor de wA anterior mas proximo al valor de tiempo que estoy considerando
+    PWM(k)=entrada(indice);
 end
-figure(1);plot(t,w,'r.',tiempoSeg,wA,'b.');
+figure(1);plot(t_zoh,w,'r.',tiempoSeg,wA,'b.');
 %figure(1);plot(t,PWM,'.',tiempoSeg,PWMA);
+
 %% Estimacion Sist
 % transformo la informacion al formato iidata:
 % data = iddata(w',PWM',Ts);
 
-data = iddata((w-w(1))',(PWM-PWM(1))',Ts);%Le corro el eje y para que arranque en 0.
+%data = iddata((w-w(1))',(PWM-PWM(1))',Ts);%Le corro el eje y para que arranque en 0.
+data = iddata(w_data',pwm_data',Ts);
 %Nota: no funcion� :( . Para 2 polos 1 cero parece que da exactamente el
 %mismo sistema que la versi�n no desplazada.
 
@@ -72,13 +120,14 @@ data = iddata((w-w(1))',(PWM-PWM(1))',Ts);%Le corro el eje y para que arranque e
 % time of the experimental data.
 % Obs: tienen que ser vectores columna!! Sino lo toma como 5millones de
 % entradas/salidas.
-np=1;%Le indico el nro de polos
-nz=[];%Le indico el nro de ceros
-iodelay=0;%No se que ponerle
-sys = tfest(data,np,nz,iodelay,'Ts',data.Ts);
+np=2;%Le indico el nro de polos
+nz=[0];%Le indico el nro de ceros
+iodelay=[0];%No se que ponerle
+sys = tfest(data,np,nz,iodelay,'Ts',data.Ts)
 %% Prueba del sist estimado
-we=filter(sys.Numerator,sys.Denominator,PWM);
-figure();plot(t,we,t,w,'.');
+we=filter(sys.Numerator,sys.Denominator,pwm_data);
+figure(1);plot(t_data,we,t_data,w_data,'.');
+
 %% PID
 
 % Hay varios metodos de ajuste; en este caso se va a implementar
@@ -86,40 +135,48 @@ figure();plot(t,we,t,w,'.');
 % Tambien se puede ver en el Ogata, pagina 569; Ver capitulo 8 (muy bueno,
 % tiene codigos de matlab e ideas) pagina 567 :P
 %calculo de la pendiente
+entrada=pwm_data;
+salida=w_data;
+tiempo=t_data;
 try
 close(1);close(2)
 end
-dt=diff(t); dw=diff(w); ddw=diff(dw);
+dt=diff(tiempo); dw=diff(salida); ddw=diff(dw);
 N=6;
-indices=zeros(1,N);
+indices=zeros(1,N); % Se fija los N puntos que tienen un diferencial mas grande y esos los usa para estimar la recta
 for i=1:N   
 [val,indices(i)]=max(dw);
 dw(indices(i))=0;
 end
+% Busco el cambio de concabidad:
+[mx_ddw, ind_mx]=max(ddw);[min_ddw,ind_min]=min(ddw);
+indice_set=round((ind_mx+ind_min)/2);indice_set=[indice_set indice_set-1];
 im=min(indices);imx=max(indices);
 %[m, o]=polyfit(t(im:imx),w(im:imx),1);
-[m, o]=polyfit(t(indices),w(indices),1);
-
+%[m, o]=polyfit(tiempo(indices),salida(indices),1); % Obtengo la ecuacion de la recta
+[m, o]=polyfit(tiempo(indice_set),salida(indice_set),1); % Obtengo la ecuacion de la recta
 
 %m=(max(w(indices))-min(w(indices)))/(max(t(indices))-min(t(indices)))
 
 % Recta dada pendiente y punto: (y-y1)=m*(x-x1) -> y=m(x-x1) +y1
 %Puntos_r=m(1)*(t(indices(1)-100:indices(1)+100)-t(indices(1)))+w(indices(1));
-Puntos_r=m(1)*t+m(2); %Puntos_r=polyval(m,t,0);
-%figure(1);plot(t,w,'b.',t(indices),w(indices),'ro');hold on ; plot(t((im-50):(imx+50)),Puntos_r((im-50):(imx+50)),'g');hold off
+Puntos_r=m(1)*tiempo+m(2); %Puntos_r=polyval(m,t,0);
+%figure(1);plot(tiempo,salida,'b.',tiempo(indices),salida(indices),'ro');hold on ; plot(tiempo((im-50):(imx+50)),Puntos_r((im-50):(imx+50)),'g');ylim([0 900]);hold off
 
-yinf=max(w);y0=min(w);
-uinf=max(PWM);u0=min(PWM);
+yinf=max(salida);y0=min(salida);
+uinf=max(entrada);u0=min(entrada);
 k0=(yinf-y0)/(uinf-u0);
-[~,indice_t2]=min(abs(Puntos_r-yinf));t2=(t(indice_t2));
-[~,indice_t1]=min(abs(Puntos_r-y0));t1=(t(indice_t1));
-dPWM=diff(PWM);[~,indice_set]=max(dPWM);%plot(PWM,'.');hold on; plot(indice_set,PWM(indice_set),'or')
-t0=t(indice_set);% plot(t,PWM);hold off
-%figure(2);plot(t,w,'b.',t(indice_t2),Puntos_r(indice_t2),'ro',t(indice_t1),Puntos_r(indice_t1),'go',t(indice_set),w(indice_set),'go');
+[~,indice_t2]=min(abs(Puntos_r-yinf));t2=(tiempo(indice_t2));
+[~,indice_t1]=min(abs(Puntos_r-y0));t1=(tiempo(indice_t1));
+%dPWM=diff(entrada);[~,indice_set]=max(dPWM);%plot(PWM,'.');hold on; plot(indice_set,PWM(indice_set),'or')
+t0=tiempo(indice_set(1));% plot(t,PWM);hold off
+figure(2);plot(tiempo,salida,'b.',tiempo(indice_t2),Puntos_r(indice_t2),'ro',tiempo(indice_t1),Puntos_r(indice_t1),'go',tiempo(indice_set(1)),salida(indice_set(1)),'go');
 tao0=t1-t0;gama0=t2-t1;
 k0 
 tao0
 gama0
+
+
 
 %%
 % Calculo de los coeficientes para los 3 casos:
@@ -150,17 +207,20 @@ Parametros_Ogata'
 %Kpid(s)=Kp(1+1/(Tr*s)+Td*s/(taod*s+1))
 % Para crear y probar el controlador con esos parametros hay que ejecutar la
 % siguiente instruccion:
-a=ind_PID;P=Parametros_Ogata;PIDF=1; % en 1 es si, en 0 es no
-C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',data.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
-T_pi = feedback(C*sys, 1);
-figure (2);
-step(T_pi)
-title ('Controlado')
-figure (3);
-step(sys)
-title ('Sin controlar')
+a=ind_PID;P=Parametros_Ogata;PIDF=0; Ts=0.015;%data.Ts; % en 1 es si, en 0 es no
+C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
+%No tiene sentido hacer lo que sigue, porque el systema no queda bien
+%estimado
+%T_pi = feedback(C*sys, 1);
+%figure (2);
+%step(T_pi)
+%title ('Controlado')
+%figure (3);
+%step(sys)
+%title ('Sin controlar')
 %%
 % Tunea automaticamente, segun las caracteristicas programadas
+%sys2=d2d(sys,0.015)
 %C = pidtune(sys,'pid')
 PIDF=1; % en 1 es si, en 0 es no
 C0 = pid(1,1,1,PIDF,'Ts',data.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
@@ -203,5 +263,10 @@ CUCU=[num -den(2:size(den,2))]; % Cual es el orden de los parametros?
 sprintf('%f, %f, %f, %f, %f',CUCU)
 %tfsys=tf(sys.Numerator,sys.Denominator,sys.Ts)
 % Transformo el sistema discreto a continuo
+
+
+
+%%
+
 
 
