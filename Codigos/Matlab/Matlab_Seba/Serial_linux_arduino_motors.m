@@ -19,14 +19,19 @@ fclose(s)
 %clear all;clc
 disp('Puerto Cerrado')
 %%
+Env_instruccion(s,'parametros',0.1); 
 
+%%
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test(s)
-%Env_instruccion(s,'PWM',[40 40]); 
+ %Env_instruccion(s,'PWM',[30 30]); 
+% pause(1)
 Env_instruccion(s,'setpoint',500); 
 N=1000;
-medicion=zeros(1,N); i=1;
+medicion=zeros(1,N);
+control=zeros(1,N);
+i=1;
 a=1;veces=0;
 pause(1)
 limite=900; %limite del grafico
@@ -37,7 +42,10 @@ figure(1)
 while (veces<1)
     %figure(1)
     
+    
     medicion(i)=str2double(fscanf(s));
+    control(i)=str2double(fscanf(s));
+    %medicion(i)=16e6*60/suma;
     flushinput(s);
 %     flushinput(s);
 %    e2=str2double(fscanf(s))
@@ -58,7 +66,7 @@ while (veces<1)
 end
 Env_instruccion(s,'stop'); 
 Env_instruccion(s,'setpoint',0); 
-%Env_instruccion(s,'PWM',[0 0]); 
+Env_instruccion(s,'PWM',[0 0]); 
 
 
 %%

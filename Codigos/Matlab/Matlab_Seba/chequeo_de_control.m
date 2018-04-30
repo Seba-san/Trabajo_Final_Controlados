@@ -23,15 +23,18 @@ figure(1);plot(sen_control,'.')
 % plot(medicion,'.')
 
 %%
-set_point=800;
+set_point=400;
 error=[0,0,0];
 u=[0,0,0];
-Parametros=[0.007, 0,0, 1,0];
+N=1000;
+Parametros=[0.4673 ,   0.1130  ,  0.0282, 1,0];
+% Parametros=[0.00707, 0,0, 0,0];
 Env_instruccion(s,'online')
-frecuencia=zeros(1,1000);
-ucontrol=zeros(1,1000);
+frecuencia=zeros(1,N);
+ucontrol=zeros(1,N);
 flushinput(s);
-for mu=1:1000
+for mu=1:N
+    %t=tic;
      freq=str2double(fscanf(s));   
      flushinput(s);
 for(k=1:2)%int k=0;k<2;k++)
@@ -40,18 +43,23 @@ for(k=1:2)%int k=0;k<2;k++)
 end
 error(3)=((set_point)-freq);
 u(3)=Parametros(1)*error(3)+Parametros(2)*error(2)+Parametros(3)*error(1)+Parametros(4)*u(2)+Parametros(5)*u(1);
+%Seba dice que quizás ZN está trabajando como si ...
+ ucontrol(mu)=u(3);
+u(3)=u(3)/k0;
 if (u(3)>100)
     u(3)=100;
 elseif (u(3)<10)
     u(3)=10;
 end
+   % ucontrol(mu)=round(u(3));
     Env_instruccion(s,'Ucontrol',round(u(3)))
     frecuencia(mu)=freq;
-    ucontrol(mu)=round(u(3));
+    %toc(t)
 end
 Env_instruccion(s,'stop');
- Env_instruccion(s,'Ucontrol',0);
- figure(1)
-plot(frecuencia,'.');ylim([0 900])
-figure(2)
-plot(ucontrol,'.');ylim([0 100])
+Env_instruccion(s,'Ucontrol',0);
+figure(1)
+subplot(211);plot(frecuencia,'.');ylim([0 900]);
+title('Velocidad medida (en rpm)')
+subplot(212);plot(ucontrol,'.');%ylim([0 100])
+title('Señal de Control (en % de dutycycle)')

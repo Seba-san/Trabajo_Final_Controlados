@@ -133,7 +133,7 @@ data = iddata(w_data',pwm_data',Ts);
 % entradas/salidas.
 np=3;%Le indico el nro de polos
 nz=[2];%Le indico el nro de ceros
-iodelay=[1];%No se que ponerle
+iodelay=[];%No se que ponerle
 sys = tfest(data,np,nz,iodelay,'Ts',data.Ts)
 %%
 % version continua
@@ -143,10 +143,10 @@ step(sys);hold on; plot(t_data,w_data,'.');hold off
 sysd=c2d(sys,Ts);
 %% Prueba del sist estimado
 we=filter(sys.Numerator,sys.Denominator,pwm_data);
-we=filter(sysd.Numerator,sysd.Denominator,pwm_data);
+%we=filter(sysd.Numerator,sysd.Denominator,pwm_data);
 figure(1);plot(t_data,we,t_data,w_data,'.');
-figure(1);plot(time,we,t_data,w_data,'.');
-figure(1);plot(t_data,we,'.');
+%figure(1);plot(time,we,t_data,w_data,'.');
+%figure(1);plot(t_data,we,'.');
 %% PID
 
 % Hay varios metodos de ajuste; en este caso se va a implementar
@@ -230,6 +230,7 @@ Parametros_Ogata'
 % siguiente instruccion:
 a=ind_PID;P=Parametros_Ogata;PIDF=0; Ts=0.015;%data.Ts; % en 1 es si, en 0 es no
 C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds')
+% C=pid(P(1,a),P(2,a),P(3,a));
 %No tiene sentido hacer lo que sigue, porque el systema no queda bien
 %estimado
 %T_pi = feedback(C*sys, 1);
@@ -244,7 +245,7 @@ C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','B
 %sys2=d2d(sys,0.015)
 %C = pidtune(sys,'pid')
 PIDF=0; % en 1 es si, en 0 es no
-sistema=sysd;
+sistema=sys;
 C0 = pid(1,1,1,PIDF,'Ts',sistema.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
 %C = pidtune(sys,C0);
 opt = pidtuneOptions('DesignFocus','reference-tracking','CrossoverFrequency',10);%'PhaseMargin',10
