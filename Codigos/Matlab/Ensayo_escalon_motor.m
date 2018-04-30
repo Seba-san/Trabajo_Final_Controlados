@@ -53,9 +53,16 @@ Ts=1/Fs;
 tiempoSeg=tiempo_*1e-6;
 t=min(tiempoSeg):1/Fs:max(tiempoSeg);
 
-figure
-w_interp = interp1(tiempoSeg,salida,t);
-pwm_interp=interp1(tiempoSeg,entrada,t);
+w_interp = interp1(tiempoSeg,salida,t); % Interpola lo datos de salida
+% Interpola los datos de entrada, para evitar que los haga con una
+% pendiente, los fabrico a mano.
+inicia=find(entrada==max(entrada),1); 
+% Busca cuando empezo el pulso
+inicia_seg=find(abs(tiempo_(inicia)*1e-6 -t)==min(abs(tiempo_(inicia)*1e-6 -t)));
+
+pwm_interp=zeros(1,length(t));
+pwm_interp(inicia_seg:length(t))=max(entrada);pwm_interp(1:(inicia_seg-1))=min(entrada);
+%pwm_interp=interp1(tiempoSeg,entrada,t);
 figure
 plot(tiempoSeg,salida,'o',t,w_interp,':.');
 title('Interpolacion Lineal de w_salida');
@@ -63,19 +70,22 @@ figure
 plot(tiempoSeg,entrada,'o',t,pwm_interp,':.');
 title('Interpolacion Lineal de pwm_entrada');
 
-%% Realizo el calculo de las constantes del sistema
+%% Realizo el calculo de las constantes del sistema y acomodo los tiempos
 
-entrada=PWM;%PWMA;
+entrada=pwm_interp;%PWMA;
 salida=w_interp;%wA;
 tiempo_=t;
 % Revistar esto, porque la interpolacion genera error en el calculo de t0.
-dPWMA=diff(entrada);[~,indice_set]=max(dPWMA);t0=tiempo_(indice_set); % Obtengo el tiempo en el que inicia el pulso
+%dPWMA=diff(entrada);[~,indice_set]=max(dPWMA);t0=tiempo_(indice_set+1); % Obtengo el tiempo en el que inicia el pulso
+t0=tiempo_(inicia_seg);
 time=(tiempo_-t0);%*1e-6; % Acondiciono el tiempo para en ensayo escalon.
 indices_=find(time>=0);time2=time(indices_);
 wm=salida-min(salida);wm2=wm(indices_);
 S = stepinfo(wm2,time2) %Extraigo la informacion de la respuesta escalon
 PWMA2=entrada(indices_);
+figure(1)
 plot(time2,wm2,'b.',time2,PWMA2,'r.')
+title('Respuesta escalon recortada al inicio del escalon ')
 
 %%
 %Acomodo los tiempos
@@ -84,6 +94,7 @@ w_data=wm(index);
 pwm_data=entrada(index);pwm_data=pwm_data-min(pwm_data);
 t_data=time(index);
 plot(t_data,w_data,'b.',t_data,pwm_data)
+disp('Respuesta escalon recortada desde 1 settlingtime antes del escalon y 2 Settlingtime despues ')
 
 %% Acomodando Ts para estimacion del sistema con ZOH
 % Como la estimacion de Matlab se hace para una senal muestreada a Fs cte,
@@ -120,14 +131,22 @@ data = iddata(w_data',pwm_data',Ts);
 % time of the experimental data.
 % Obs: tienen que ser vectores columna!! Sino lo toma como 5millones de
 % entradas/salidas.
-np=2;%Le indico el nro de polos
-nz=[0];%Le indico el nro de ceros
-iodelay=[0];%No se que ponerle
+np=3;%Le indico el nro de polos
+nz=[2];%Le indico el nro de ceros
+iodelay=[1];%No se que ponerle
 sys = tfest(data,np,nz,iodelay,'Ts',data.Ts)
+%%
+% version continua
+data = iddata(w_data',pwm_data');
+sys = tfest(data,np,nz)
+step(sys);hold on; plot(t_data,w_data,'.');hold off
+sysd=c2d(sys,Ts);
 %% Prueba del sist estimado
 we=filter(sys.Numerator,sys.Denominator,pwm_data);
+we=filter(sysd.Numerator,sysd.Denominator,pwm_data);
 figure(1);plot(t_data,we,t_data,w_data,'.');
-
+figure(1);plot(time,we,t_data,w_data,'.');
+figure(1);plot(t_data,we,'.');
 %% PID
 
 % Hay varios metodos de ajuste; en este caso se va a implementar
@@ -148,10 +167,11 @@ for i=1:N
 [val,indices(i)]=max(dw);
 dw(indices(i))=0;
 end
+im=min(indices);imx=max(indices);
 % Busco el cambio de concabidad:
 [mx_ddw, ind_mx]=max(ddw);[min_ddw,ind_min]=min(ddw);
 indice_set=round((ind_mx+ind_min)/2);indice_set=[indice_set indice_set-1];
-im=min(indices);imx=max(indices);
+
 %[m, o]=polyfit(t(im:imx),w(im:imx),1);
 %[m, o]=polyfit(tiempo(indices),salida(indices),1); % Obtengo la ecuacion de la recta
 [m, o]=polyfit(tiempo(indice_set),salida(indice_set),1); % Obtengo la ecuacion de la recta
@@ -161,15 +181,14 @@ im=min(indices);imx=max(indices);
 % Recta dada pendiente y punto: (y-y1)=m*(x-x1) -> y=m(x-x1) +y1
 %Puntos_r=m(1)*(t(indices(1)-100:indices(1)+100)-t(indices(1)))+w(indices(1));
 Puntos_r=m(1)*tiempo+m(2); %Puntos_r=polyval(m,t,0);
-%figure(1);plot(tiempo,salida,'b.',tiempo(indices),salida(indices),'ro');hold on ; plot(tiempo((im-50):(imx+50)),Puntos_r((im-50):(imx+50)),'g');ylim([0 900]);hold off
+figure(1);plot(tiempo,salida,'b.',tiempo(indices),salida(indices),'ro');hold on ; plot(tiempo((im-50):(imx+50)),Puntos_r((im-50):(imx+50)),'g');ylim([0 900]);hold off
 
 yinf=max(salida);y0=min(salida);
 uinf=max(entrada);u0=min(entrada);
 k0=(yinf-y0)/(uinf-u0);
 [~,indice_t2]=min(abs(Puntos_r-yinf));t2=(tiempo(indice_t2));
 [~,indice_t1]=min(abs(Puntos_r-y0));t1=(tiempo(indice_t1));
-%dPWM=diff(entrada);[~,indice_set]=max(dPWM);%plot(PWM,'.');hold on; plot(indice_set,PWM(indice_set),'or')
-t0=tiempo(indice_set(1));% plot(t,PWM);hold off
+t0=0; % Si los datos estan acomodados, t0 tiene que ser 0.
 figure(2);plot(tiempo,salida,'b.',tiempo(indice_t2),Puntos_r(indice_t2),'ro',tiempo(indice_t1),Puntos_r(indice_t1),'go',tiempo(indice_set(1)),salida(indice_set(1)),'go');
 tao0=t1-t0;gama0=t2-t1;
 k0 
@@ -191,6 +210,11 @@ Parametros(ind_Kp,ind_P)=gama0/(k0*tao0);
 Parametros(ind_Kp,ind_PI)=0.9*Parametros(ind_Kp,ind_P);Parametros(ind_Tr,ind_PI)=3*tao0;
 Parametros(ind_Kp,ind_PID)=1.2*Parametros(ind_Kp,ind_P);Parametros(ind_Tr,ind_PID)=2*tao0;Parametros(ind_Td,ind_PID)=0.5*tao0;
 Parametros'
+% Las formas del PID consideradas son:
+% Kp(s)=Kp
+%Kpi(s)=Kp(1+1/s*Tr)
+%Kpd(s)=Kp(1+Td*s/(taod*s+1))
+%Kpid(s)=Kp(1+1/(Tr*s)+Td*s/(taod*s+1))
 
 % Segun OGATA
 
@@ -200,15 +224,12 @@ Parametros_Ogata(ind_Kp,ind_PI)=0.9*Parametros_Ogata(ind_Kp,ind_P);Parametros_Og
 Parametros_Ogata(ind_Kp,ind_PID)=1.2*Parametros_Ogata(ind_Kp,ind_P);Parametros_Ogata(ind_Tr,ind_PID)=2*(t1-t0);Parametros_Ogata(ind_Td,ind_PID)=0.5*(t1-t0);
 Parametros_Ogata'
 %
-% Las formas del PID consideradas son:
-% Kp(s)=Kp
-%Kpi(s)=Kp(1+1/s*Tr)
-%Kpd(s)=Kp(1+Td*s/(taod*s+1))
-%Kpid(s)=Kp(1+1/(Tr*s)+Td*s/(taod*s+1))
+%Z-N considera:
+% Gc(s)=Kp(1+1/(Ti*S)+Td*S)
 % Para crear y probar el controlador con esos parametros hay que ejecutar la
 % siguiente instruccion:
 a=ind_PID;P=Parametros_Ogata;PIDF=0; Ts=0.015;%data.Ts; % en 1 es si, en 0 es no
-C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
+C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds')
 %No tiene sentido hacer lo que sigue, porque el systema no queda bien
 %estimado
 %T_pi = feedback(C*sys, 1);
@@ -222,18 +243,19 @@ C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','B
 % Tunea automaticamente, segun las caracteristicas programadas
 %sys2=d2d(sys,0.015)
 %C = pidtune(sys,'pid')
-PIDF=1; % en 1 es si, en 0 es no
-C0 = pid(1,1,1,PIDF,'Ts',data.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
+PIDF=0; % en 1 es si, en 0 es no
+sistema=sysd;
+C0 = pid(1,1,1,PIDF,'Ts',sistema.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
 %C = pidtune(sys,C0);
 opt = pidtuneOptions('DesignFocus','reference-tracking','CrossoverFrequency',10);%'PhaseMargin',10
-[C,info] = pidtune(sys,C0,opt);
+[C,info] = pidtune(sistema,C0,opt);
 %[C,info] = pidtune(sys,C0);
-T_pi = feedback(C*sys, 1);
+T_pi = feedback(C*sistema, 1);
 figure (2);
 step(T_pi)
 title ('Controlado')
 figure (3);
-step(sys)
+step(sistema)
 title ('Sin controlar')
 %%
 % 
