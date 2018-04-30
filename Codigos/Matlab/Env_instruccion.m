@@ -13,11 +13,19 @@ switch info
         instruccion=251;
     case 'setpoint'
         instruccion=248;
+    case 'parametros'
+        instruccion=247;
+    case 'Ucontrol'
+        instruccion=246;
         
 end
 EscribirSerial(s,instruccion);
+%  if instruccion==247
+%             datos=datos*10000; % Es para que se puedan enviar numeros con coma
+%  end
 if (nargin==3) 
     for i=1:length(datos)
+       
     EscribirSerial(s,datos(i));
     end
 end

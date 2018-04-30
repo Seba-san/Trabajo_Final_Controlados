@@ -16,7 +16,8 @@ Controlados controlados1;
 #define ins_stop 251 // baja de transmitir online
 #define ins_test 249
 #define ins_setpoint 248
-
+#define ins_parametros 247
+#define ins_u_control 246
 
 // #   #   #   # Constantes 
 const int cantMarcasEncoder = 8; //Es la cantidad de huecos que tiene el encoder de cada motor.
@@ -59,7 +60,7 @@ unsigned long TCNT2anterior=0;//Valor anterior del contador (para corregir la me
 unsigned long TCNT2actual=0;//Almaceno el valor del timer para que no me jodan posibles actualizaciones.                
 unsigned long cantOVerflow_actual=0;     //Valor anterior del contador (para corregir la medición), correspondiente al TCNT2anterior. 
 unsigned long aux[6];  // este es un buffer para enviar datos en formato trama, corresponde a la funcion "EnviarTX"       
-unsigned long  bufferVel[2*cantMarcasEncoder];//buffer donde almaceno las últimas velocidades calculadas.
+float  bufferVel[2*cantMarcasEncoder];//buffer donde almaceno las últimas velocidades calculadas. // ANtes era unsigned long
 bool BanderadelBuffer=true;
 bool Motores_ON=false;
 float velAngular=0;//última velocidad angular calculada. Lo separo del vector bufferVel para que no haya problemas por interrumpir en medio de una actualización de éste.
@@ -68,7 +69,7 @@ float velDeseada=0;//Empieza detenido el motor.
 float u[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float error[3];
 float set_point=0; // Set_point esta en RPM
-const float Parametros[]={0.0179  ,  0.0161  ,  0.0214, 1, 0};//{1.261400, -2.522133, 1.260733, 1.999500, -0.999500};
+float Parametros[]={ 0.007, 0,0, 1,0};//{1.261400, -2.522133, 1.260733, 1.999500, -0.999500};
 int soft_prescaler=0;
 
 
@@ -128,13 +129,13 @@ if (bitRead(Bandera,0)){ // timer 2 overflow
   } 
    if (bitRead(Bandera,3)){ // Se midio un tiempo de 15mS, se realiza el calculo del PID
   bitWrite(Bandera,3,0);
-  PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
+  //PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts. 
   } 
 }
 
 void serialEvent() { // esta funcion se activa sola, es por interrupciones (ponele)
-  int dato;
+  unsigned long dato;
   if (Serial.available() > 0) {
     dato= Serial.read();
     if(trama_activa==0){
@@ -160,6 +161,12 @@ void serialEvent() { // esta funcion se activa sola, es por interrupciones (pone
           case ins_setpoint://Instrucción 248: cambiar el valor del setpoint
           trama_activa=3;
           break;
+          case ins_parametros://Instrucción 248: cambiar el valor del setpoint
+          trama_activa=4;
+          break;
+          case ins_u_control://Instrucción 248: cambiar el valor del setpoint
+          trama_activa=5;
+          break;
         default://No hace nada si no recibe una instrucción válida
           break;}      
     }
@@ -182,6 +189,16 @@ void serialEvent() { // esta funcion se activa sola, es por interrupciones (pone
     else if (trama_activa==3){
       set_point=dato; // Actualiza el valor del setpoint
       trama_activa=0;     
+      }
+    else if (trama_activa==4){
+      Parametros[0]=dato/10000; 
+      trama_activa=0;     
+      }
+      else if (trama_activa==5){
+        digitalWrite(13,HIGH);
+      u[2]=dato; 
+      trama_activa=0;  
+        digitalWrite(13,LOW)  ; 
       }
   }
 }
@@ -248,7 +265,7 @@ void medirVelocidad(unsigned char interrupcion)
 
 
   
-unsigned long suma=0;
+float suma=0;
  long t,tmh; // Lo hago por partes porque todo junto generaba errores en algunas ocaciones
   //Corro los valores de w en el buffer un lugar y voy sumando los valores para después calcular el promedio de velocidades:  
   for(int k=0;k<(2*cantMarcasEncoder-1);k++)
@@ -338,9 +355,9 @@ for(int k=0;k<2;k++)
    u[k]=u[k+1];
   }  
 error[2]=((float)(set_point)-freq)*(1.f);
-u[2]=Parametros[0]*error[2]+Parametros[1]*error[1]+Parametros[2]*error[0]+(float)(Parametros[3]*u[1]+Parametros[4]*u[0]);
+u[2]=Parametros[0]*error[2]+Parametros[1]*error[1]+Parametros[2]*error[0]+Parametros[3]*u[1]+Parametros[4]*u[0];
 if (u[2]>100){u[2]=100;}
-if (u[2]<0){u[2]=0;}
+if (u[2]<10){u[2]=10;}
 //EnviarTX_online(error[2]);
 //EnviarTX_online(error[1]);
 //EnviarTX_online(error[0]);
