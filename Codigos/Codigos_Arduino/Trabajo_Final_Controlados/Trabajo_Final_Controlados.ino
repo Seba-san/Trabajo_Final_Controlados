@@ -23,7 +23,7 @@ Controlados controlados1;
 const int cantMarcasEncoder = 8; //Es la cantidad de huecos que tiene el encoder de cada motor.
 const int FsEncoders = 2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 32;//8 32 64 
-const int cota = 75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
+const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 const unsigned long _OCR2A = 250;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
