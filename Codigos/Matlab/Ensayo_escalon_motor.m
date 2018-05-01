@@ -35,6 +35,7 @@ name=strcat(name,'.mat');
 save(name,'tiempo','PWMA','wA') 
 %% Gr�fico de la Respuesta del motor B
 cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
+
 load('../../Mediciones/180423182356_resp_escalon.mat')
 figure(1);
 plot(tiempo,PWMA,tiempo,wA,'.');
@@ -122,7 +123,7 @@ figure(1);plot(t_zoh,w,'r.',tiempoSeg,wA,'b.');
 % data = iddata(w',PWM',Ts);
 
 %data = iddata((w-w(1))',(PWM-PWM(1))',Ts);%Le corro el eje y para que arranque en 0.
-data = iddata(w_data',pwm_data',Ts);
+data = iddata(w_interp',pwm_interp',Ts);
 %Nota: no funcion� :( . Para 2 polos 1 cero parece que da exactamente el
 %mismo sistema que la versi�n no desplazada.
 
@@ -142,9 +143,9 @@ sys = tfest(data,np,nz)
 step(sys);hold on; plot(t_data,w_data,'.');hold off
 sysd=c2d(sys,Ts);
 %% Prueba del sist estimado
-we=filter(sys.Numerator,sys.Denominator,pwm_data);
+we=filter(sys.Numerator,sys.Denominator,pwm_interp);
 %we=filter(sysd.Numerator,sysd.Denominator,pwm_data);
-figure(1);plot(t_data,we,t_data,w_data,'.');
+figure(1);plot(t,we,t,w_interp,'.');
 %figure(1);plot(time,we,t_data,w_data,'.');
 %figure(1);plot(t_data,we,'.');
 %% PID
@@ -154,9 +155,12 @@ figure(1);plot(t_data,we,t_data,w_data,'.');
 % Tambien se puede ver en el Ogata, pagina 569; Ver capitulo 8 (muy bueno,
 % tiene codigos de matlab e ideas) pagina 567 :P
 %calculo de la pendiente
-entrada=pwm_data;
-salida=w_data;
-tiempo=t_data;
+% entrada=pwm_data;
+% salida=w_data;
+% tiempo=t_data;
+entrada=pwm_interp_2;
+salida=w_interp_2;
+tiempo=time;
 try
 close(1);close(2)
 end
@@ -228,24 +232,25 @@ Parametros_Ogata'
 % Gc(s)=Kp(1+1/(Ti*S)+Td*S)
 % Para crear y probar el controlador con esos parametros hay que ejecutar la
 % siguiente instruccion:
-a=ind_PID;P=Parametros_Ogata;PIDF=0; Ts=0.015;%data.Ts; % en 1 es si, en 0 es no
+a=ind_PID;P=Parametros_Ogata;PIDF=0; Ts=data.Ts;%0.015;%data.Ts; % en 1 es si, en 0 es no
 C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds')
+%C=C/k0;
 % C=pid(P(1,a),P(2,a),P(3,a));
 %No tiene sentido hacer lo que sigue, porque el systema no queda bien
 %estimado
-%T_pi = feedback(C*sys, 1);
-%figure (2);
-%step(T_pi)
-%title ('Controlado')
-%figure (3);
-%step(sys)
-%title ('Sin controlar')
+% T_pi = feedback(C*sys_2, 1);
+% figure (2);
+% step(T_pi)
+% title ('Controlado')
+% figure (3);
+% step(sys_2)
+% title ('Sin controlar')
 %%
 % Tunea automaticamente, segun las caracteristicas programadas
 %sys2=d2d(sys,0.015)
 %C = pidtune(sys,'pid')
-PIDF=0; % en 1 es si, en 0 es no
-sistema=sys;
+PIDF=1; % en 1 es si, en 0 es no
+sistema=sys_2;
 C0 = pid(1,1,1,PIDF,'Ts',sistema.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
 %C = pidtune(sys,C0);
 opt = pidtuneOptions('DesignFocus','reference-tracking','CrossoverFrequency',10);%'PhaseMargin',10

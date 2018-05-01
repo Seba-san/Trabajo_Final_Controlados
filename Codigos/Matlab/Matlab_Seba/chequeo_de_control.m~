@@ -59,26 +59,31 @@ u(3)=Parametros(1)*error(3)+Parametros(2)*error(2)+Parametros(3)*error(1)+Parame
 if Con_Z_N
     if u(3)>1000
         u(3)=1000;
-    elseif (u(3)<100)
-        u(3)=100;
+    elseif (u(3)<170)
+        u(3)=170;
     end
     pwm=round(u(3)/k0);
 else
     if (u(3)>100)
         u(3)=100;
-    elseif (u(3)<10)
-        u(3)=10;
+    elseif (u(3)<17)
+        u(3)=17;
     end
     pwm=u(3);
 end
-    Env_instruccion(s,'Ucontrol',pwm);
+
+
+
+
+   % ucontrol(mu)=round(u(3));
+    %Env_instruccion(s,'Ucontrol',pwm);
     frecuencia(mu)=freq;
     ucontrol(mu)=u(3);
     error_hist(mu)=error(3);
     %toc(tu)
 end
 Env_instruccion(s,'stop');
-Env_instruccion(s,'Ucontrol',10);
+Env_instruccion(s,'Ucontrol',14);
 figure(1)
 subplot(311);plot(frecuencia,'.');ylim([0 1000]);
 title('Velocidad medida (en rpm)')
@@ -90,6 +95,7 @@ else
     ylim([0 100]);
     title('Seal de control (en % de PWM)')
 end
+title('Señal de Control (en rmp)')
 subplot(313);plot(error_hist,'.');
 title('Historial del error')
 xlabel('Muestras')
