@@ -232,6 +232,7 @@ Parametros_Ogata'
 % Gc(s)=Kp(1+1/(Ti*S)+Td*S)
 % Para crear y probar el controlador con esos parametros hay que ejecutar la
 % siguiente instruccion:
+
 a=ind_P;P=Parametros_Ogata;PIDF=0; Ts=0.015;%0.015;%data.Ts; % en 1 es si, en 0 es no
 C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds')
 %C=C/k0;
