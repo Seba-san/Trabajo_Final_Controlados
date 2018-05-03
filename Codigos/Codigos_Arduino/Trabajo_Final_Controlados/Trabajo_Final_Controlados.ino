@@ -102,7 +102,7 @@ Serial.begin(115200); // Si se comunica a mucha velocidad se producen errores (q
   //pinMode(SalidaTest, OUTPUT);
   //pinMode(SalidaTest2, OUTPUT);
   //pinMode(SalidaTest3, OUTPUT);
-  tic();
+ticc=controlados1.tic();
 }
 
 void loop() {
@@ -253,7 +253,7 @@ ISR(PCINT1_vect){
   cantOVerflow_actual=cantOVerflow; 
   cantOVerflow=0;
   bitWrite(Bandera,2,1);   //medirVelocidad(1); 
-  toc();//Actualizo el valor de tocc
+tocc= controlados1.toc(ticc);//Actualizo el valor de tocc
   //estado=!estado;
    //digitalWrite(SalidaTest2,0);
   //}
@@ -331,16 +331,7 @@ void EnviarTX_online(float var){ // funcion de envio de datos de corta duracion.
   }
   }
 // ##################### Estas 2 funciones hacen los mismo que en matlab :-)
-  void tic()
-  {
-    ticc=micros();
-  }
-
-void toc()
-  {
-   tocc=micros()-ticc;    
-    }
-
+  
 
 
 void PID_offline (void){ 

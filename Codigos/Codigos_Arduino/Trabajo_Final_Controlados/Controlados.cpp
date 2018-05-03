@@ -346,5 +346,18 @@ if (interrupciones){
 	//TCCR2B=0b00000011;
 }
 
+unsigned long tic(void)
+  {
+   
+   unsigned long ticc=micros();
+    return ticc;
+  }
+
+unsigned long toc(unsigned long ticc)
+  {
+   unsigned long tocc=micros()-ticc;    
+   return tocc;
+    }
+
 
 
