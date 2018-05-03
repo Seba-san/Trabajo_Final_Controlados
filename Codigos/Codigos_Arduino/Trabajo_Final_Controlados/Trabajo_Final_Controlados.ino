@@ -1,6 +1,4 @@
 
-#include <avr/interrupt.h> //Esto lo pongo porque decía el manual de avr que
-#include <avr/io.h>        //supuestamente lo necesito para las interrupciones
 
 #include "Controlados.h" //Acá están las funciones propias para no tener todo mezclado.
 //Controlados es la clase. Ahora necesito crear objetos de esta clase:
