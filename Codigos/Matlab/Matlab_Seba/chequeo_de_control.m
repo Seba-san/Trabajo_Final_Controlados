@@ -21,9 +21,9 @@ end
 %%
 
 % plot(medicion,'.')
-s=InicializacionSerial('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
+%s=InicializacionSerial('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
 
-
+s=InicializacionSerial('/dev/ttyUSB0',1000000);
 %% Fin
 fclose(s)
 %clear all;clc

@@ -4,7 +4,7 @@
 //Controlados es la clase. Ahora necesito crear objetos de esta clase:
 Controlados controlados1;
 
-// #   #   #   # Definiciones 
+// #   #   #   # Definiciones $1
 #define interruptON bitSet(SREG,7) //habilita las interrupciones globales
 #define interruptOFF bitClear(SREG,7)//desactiva las interrupciones globales
 // Instrucciones traducidas
@@ -80,11 +80,11 @@ void timer_interrupt(void);
 void PID_offline(void);
 
 
-void setup() {
+void setup() { // $2
   interruptOFF; // se desactivan las interrupciones para configurar.
 
-Serial.begin(115200); // Si se comunica a mucha velocidad se producen errores (que no se detectan hasta que haces las cuentas)
-
+//Serial.begin(115200); // Si se comunica a mucha velocidad se producen errores (que no se detectan hasta que haces las cuentas)
+Serial.begin(1000000);
  controlados1.configPinesMotores();
  controlados1.modoStop();
  controlados1.configTimerMotores();
@@ -94,45 +94,29 @@ Serial.begin(115200); // Si se comunica a mucha velocidad se producen errores (q
 
   interruptON;//Activo las interrupciones
   pinMode(A0, INPUT);
-  // pinMode(A2, OUTPUT);
-   //digitalWrite(A2,0);
-  // $Prueba
-  //pinMode(SalidaTest, OUTPUT);
-  //pinMode(SalidaTest2, OUTPUT);
-  //pinMode(SalidaTest3, OUTPUT);
-  tic();
 }
 
-void loop() {
-  NOP;
-
-  //while (!iniciar) {
-   //  NOP;
-  //}
-  
-//controlados1.actualizarDutyCycleMotores(0,0);
-//controlados1.modoAdelante();
-if (bitRead(Bandera,0)){ // timer 2 overflow
+void loop() { //$3
+if (bitRead(Bandera,0)){ bitWrite(Bandera,0,0);// timer 2 overflow
   
   } 
-  if (bitRead(Bandera,1)){ // Entra cuando no registra cambio en la entrada
+  if (bitRead(Bandera,1)){ bitWrite(Bandera,1,0); // Entra cuando no registra cambio en la entrada
   // Serial.println  (Bandera,BIN);
-  bitWrite(Bandera,1,0);
+  
   medirVelocidad(0);   
 
   } 
-  if (bitRead(Bandera,2)){ // se registra cambio en la entrada
-  bitWrite(Bandera,2,0);
+  if (bitRead(Bandera,2)){  bitWrite(Bandera,2,0);// se registra cambio en la entrada
   medirVelocidad(1);  
   } 
-   if (bitRead(Bandera,3)){ // Se midio un tiempo de 15mS, se realiza el calculo del PID
-  bitWrite(Bandera,3,0);
+   if (bitRead(Bandera,3)){ bitWrite(Bandera,3,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
+  
   //PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts. 
   } 
 }
 
-void serialEvent() { // esta funcion se activa sola, es por interrupciones (ponele)
+void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones (ponele)
   unsigned long dato;
   if (Serial.available() > 0) {
     dato= Serial.read();
@@ -206,7 +190,7 @@ ISR (TIMER2_COMPA_vect){//Interrupción por Timer2 para definir frec de muestreo
 timer_interrupt(); 
 
 }
-void timer_interrupt(){ // se utiliza esta funcion ya que permite llamarla desde otras funciones. Si lo haces desde la interrupcion, no podrias.
+void timer_interrupt(){ // $5 se utiliza esta funcion ya que permite llamarla desde otras funciones. Si lo haces desde la interrupcion, no podrias.
   //estado2=!estado2;
   //digitalWrite(SalidaTest,estado2);
   cantOVerflow++;
@@ -236,6 +220,10 @@ if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si se aco
   //digitalWrite(SalidaTest,0);
 }
 ISR(PCINT1_vect){
+interrupt_flanco();
+}
+
+void interrupt_flanco(){ // $6
  /*
   * Hay que verificar donde fue el cambio de estado, porque al tener 2 ruedas, no se sabe de donde provino (habria que hacer una comparacion manual)
   */
@@ -259,7 +247,7 @@ ISR(PCINT1_vect){
 }
 
 void medirVelocidad(unsigned char interrupcion)
-{
+{ // $7
 
 
   
@@ -303,7 +291,7 @@ EnviarTX_online(freq);
 }
 
 // Ver como mejorar sustancialmente esta funcion. Esta media fea.
-void EnviarTX(int cantidad,const char identificador, unsigned long *datos){ // ojo, datos es un puntero
+void EnviarTX(int cantidad,const char identificador, unsigned long *datos){ //  $8 ojo, datos es un puntero
   
  // [inicio][cantidad de datos][identificador][Datos][fin] Agregar un CRC y ACK???
 
@@ -323,7 +311,7 @@ for (int i=0;i<cantidad;i++){
    
   }
 
-void EnviarTX_online(float var){ // funcion de envio de datos de corta duracion. No se envia en formato trama, solo verifica una bandera.
+void EnviarTX_online(float var){ //  $8 funcion de envio de datos de corta duracion. No se envia en formato trama, solo verifica una bandera.
   if (online==true && tx_activada==true){
   Serial.println(var,DEC);
   }
@@ -341,7 +329,7 @@ void toc()
 
 
 
-void PID_offline (void){ 
+void PID_offline (void){ //$9
 
   /* La idea de esta funcion es que realice los calculos que no requieren que esten sincronizados.
    Luego, en la interrupcion por overflow, que e hagan solo los calculos necesarios y se aplique la señal de control.
