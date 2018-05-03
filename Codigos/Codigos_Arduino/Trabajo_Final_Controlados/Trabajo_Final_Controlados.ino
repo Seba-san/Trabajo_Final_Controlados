@@ -102,18 +102,11 @@ Serial.begin(115200); // Si se comunica a mucha velocidad se producen errores (q
   //pinMode(SalidaTest, OUTPUT);
   //pinMode(SalidaTest2, OUTPUT);
   //pinMode(SalidaTest3, OUTPUT);
-ticc=controlados1.tic();
+
 }
 
 void loop() {
   NOP;
-
-  //while (!iniciar) {
-   //  NOP;
-  //}
-  
-//controlados1.actualizarDutyCycleMotores(0,0);
-//controlados1.modoAdelante();
 if (bitRead(Bandera,0)){ // timer 2 overflow
   
   } 
