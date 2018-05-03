@@ -132,6 +132,7 @@ data = iddata(w_interp',pwm_interp',Ts);
 % time of the experimental data.
 % Obs: tienen que ser vectores columna!! Sino lo toma como 5millones de
 % entradas/salidas.
+<<<<<<< Updated upstream
 np=3;%Le indico el nro de polos
 nz=[2];%Le indico el nro de ceros
 iodelay=[];%No se que ponerle
@@ -142,6 +143,18 @@ data = iddata(w_data',pwm_data');
 sys = tfest(data,np,nz)
 step(sys);hold on; plot(t_data,w_data,'.');hold off
 sysd=c2d(sys,Ts);
+=======
+np=2;%Le indico el nro de polos
+<<<<<<< Updated upstream
+nz=[0];%Le indico el nro de ceros
+iodelay=[0];%No se que ponerle
+sys = tfest(data,np,nz,iodelay,'Ts',data.Ts)
+=======
+nz=[];%Le indico el nro de ceros
+iodelay=0;%No se que ponerle
+sys = tfest(data,np,nz,iodelay,'Ts',data.Ts);
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 %% Prueba del sist estimado
 we=filter(sys.Numerator,sys.Denominator,pwm_interp);
 %we=filter(sysd.Numerator,sysd.Denominator,pwm_data);
@@ -184,16 +197,33 @@ indice_set=round((ind_mx+ind_min)/2);indice_set=[indice_set indice_set-1];
 
 % Recta dada pendiente y punto: (y-y1)=m*(x-x1) -> y=m(x-x1) +y1
 %Puntos_r=m(1)*(t(indices(1)-100:indices(1)+100)-t(indices(1)))+w(indices(1));
+<<<<<<< Updated upstream
 Puntos_r=m(1)*tiempo+m(2); %Puntos_r=polyval(m,t,0);
+<<<<<<< Updated upstream
 figure(1);plot(tiempo,salida,'b.',tiempo(indices),salida(indices),'ro');hold on ; plot(tiempo((im-50):(imx+50)),Puntos_r((im-50):(imx+50)),'g');ylim([0 900]);hold off
+=======
+%figure(1);plot(tiempo,salida,'b.',tiempo(indices),salida(indices),'ro');hold on ; plot(tiempo((im-50):(imx+50)),Puntos_r((im-50):(imx+50)),'g');ylim([0 900]);hold off
+=======
+Puntos_r=m(1)*t+m(2); %Puntos_r=polyval(m,t,0);
+figure(1);plot(t,w,'b.',t(indices),w(indices),'ro');hold on ; plot(t((im-50):(imx+50)),Puntos_r((im-50):(imx+50)),'g');hold off
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 
 yinf=max(salida);y0=min(salida);
 uinf=max(entrada);u0=min(entrada);
 k0=(yinf-y0)/(uinf-u0);
+<<<<<<< Updated upstream
 [~,indice_t2]=min(abs(Puntos_r-yinf));t2=(tiempo(indice_t2));
 [~,indice_t1]=min(abs(Puntos_r-y0));t1=(tiempo(indice_t1));
 t0=0; % Si los datos estan acomodados, t0 tiene que ser 0.
 figure(2);plot(tiempo,salida,'b.',tiempo(indice_t2),Puntos_r(indice_t2),'ro',tiempo(indice_t1),Puntos_r(indice_t1),'go',tiempo(indice_set(1)),salida(indice_set(1)),'go');
+=======
+[~,indice_t2]=min(abs(Puntos_r-yinf));t2=(t(indice_t2));
+[~,indice_t1]=min(abs(Puntos_r-y0));t1=(t(indice_t1));
+dPWM=diff(PWM);[~,indice_set]=max(dPWM);%plot(PWM,'.');hold on; plot(indice_set,PWM(indice_set),'or')
+t0=t(indice_set);% plot(t,PWM);hold off
+figure(2);plot(t,w,'b.',t(indice_t2),Puntos_r(indice_t2),'ro',t(indice_t1),Puntos_r(indice_t1),'go',t(indice_set),w(indice_set),'go');
+>>>>>>> Stashed changes
 tao0=t1-t0;gama0=t2-t1;
 k0 
 tao0
@@ -232,13 +262,23 @@ Parametros_Ogata'
 % Gc(s)=Kp(1+1/(Ti*S)+Td*S)
 % Para crear y probar el controlador con esos parametros hay que ejecutar la
 % siguiente instruccion:
+<<<<<<< Updated upstream
 
 a=ind_P;P=Parametros_Ogata;PIDF=0; Ts=0.015;%0.015;%data.Ts; % en 1 es si, en 0 es no
+=======
+<<<<<<< Updated upstream
+a=ind_PID;P=Parametros_Ogata;PIDF=0; Ts=data.Ts;%0.015;%data.Ts; % en 1 es si, en 0 es no
+=======
+<<<<<<< Updated upstream
+a=ind_PID;P=Parametros_Ogata;PIDF=0; Ts=0.015;%data.Ts; % en 1 es si, en 0 es no
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds')
 %C=C/k0;
 % C=pid(P(1,a),P(2,a),P(3,a));
 %No tiene sentido hacer lo que sigue, porque el systema no queda bien
 %estimado
+<<<<<<< Updated upstream
 % T_pi = feedback(C*sys_2, 1);
 % figure (2);
 % step(T_pi)
@@ -246,6 +286,26 @@ C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','B
 % figure (3);
 % step(sys_2)
 % title ('Sin controlar')
+=======
+%T_pi = feedback(C*sys, 1);
+%figure (2);
+%step(T_pi)
+%title ('Controlado')
+%figure (3);
+%step(sys)
+%title ('Sin controlar')
+=======
+a=ind_PI;P=Parametros;PIDF=1; % en 1 es si, en 0 es no
+C_pdf=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',data.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
+T_pi = feedback(C_pdf*sys, 1);
+figure (2);
+step(T_pi)
+title ('Controlado')
+figure (3);
+step(sys)
+title ('Sin controlar')
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 %%
 % Tunea automaticamente, segun las caracteristicas programadas
 %sys2=d2d(sys,0.015)
@@ -270,12 +330,16 @@ title ('Sin controlar')
 
 
 % ### Lo paso a la forma apropiada para programarlo
+<<<<<<< Updated upstream
 mm=C;
 % Primero, Segundo y Tercero son los distintos terminos del PID. Este
 % algoritmo lo que hace es pasarlo de la forma "bibliografica" a la forma
 % de cociente de polinomios.
 % la forma final propuesta resulta:
 % Y(k)=e(k)*A+e(k-1)*B+e(k-2)*C+y(k-1)*D+y(k-2)*E
+=======
+mm=C_pdf;
+>>>>>>> Stashed changes
 Primero=tf(mm.Kp,1);
 Segundo=tf([mm.Ts*mm.Ki 0],[1 -1],mm.Ts);
 if (PIDF==1)
