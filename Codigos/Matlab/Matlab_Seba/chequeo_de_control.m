@@ -32,8 +32,8 @@ disp('Puerto Cerrado')
 set_point=700;
 error=[0,0,0];
 u=[0,0,0];
-N=400;
-<<<<<<< HEAD
+N=1000;
+
 Parametros=zeros(1,5);
 %Parametros=[0.4673 ,   0.1130  ,  0.0282, 1,0];
 %Parametros(1)=0.389381;% Z-N P
@@ -41,20 +41,10 @@ Parametros=zeros(1,5);
 Parametros=[2.352285, -4.233923, 1.883333, 1.000000, -0.000000]; %  Z-N
 %PID
 %Parametros=[56.967313, -113.467257, 56.500000, 1.000000, -0.000000]; % Z-N Con Fs=2kHz.
-Con_Z_N=1;
-%Parametros=[0.020719, 0.008004, -0.012715, 1.000000, -0.000000]; % Parametros con PID-TUNE
+Con_Z_N=0;
+Parametros=[0.020719, 0.008004, -0.012715, 1.000000, -0.000000]; % Parametros con PID-TUNE
 % Parametros=[0.026080, -0.031646, 0.007538, 1.868783, -0.868783]; %Con PID-TUNE y PIDF
 
-
-=======
-%Parametros=[0.4673 ,   0.1130  ,  0.0282, 1,0];
-%Parametros=[2.352285, -4.233923, 1.883333, 1.000000, -0.000000]; % parametros segun Z-N
-%Parametros=[56.967313, -113.467257, 56.500000, 1.000000, -0.000000]; % Z-N Con Fs=2kHz.
-%Parametros=[0.020719, 0.008004, -0.012715, 1.000000, -0.000000]; % Parametros con PID-TUNE
-Parametros=[0.026080, -0.031646, 0.007538, 1.868783, -0.868783]; %Con PID-TUNE y PIDF
-% Parametros=[0.00707, 0,0, 0,0];
-Con_Z_N=0;
->>>>>>> 4bcde1e6a90705459bea9ac942fb4adb2f9f6e51
 Env_instruccion(s,'online')
 frecuencia=zeros(1,N);
 ucontrol=zeros(1,N);
