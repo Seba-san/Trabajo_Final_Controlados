@@ -8,31 +8,38 @@ s=InicializacionSerial(InfoHard.SerialPorts{1},115200);%Velocidad: 115200 baudio
 %% Cerrar puerto
 fclose(instrfindall);       %cierra todos los puertos activos y ocultos
 %% Ensayo al escalon
-N=200;%Cantidad de muestras a tomar
+N=600;%Cantidad de muestras a tomar
 wA=[];
 tiempo=[];
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos
 PWMA=[];                   
 PWM=10;
-Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
-pause(1);
+%Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
+Env_instruccion(s,'Ucontrol',PWM);
+pause(3);
 flushinput(s);  %Vacia el buffer de entrada
 for k=1:N %Ojo con el tope que pone el nano
-    if k==16
+    if k==100
         PWM=100;
-        Env_instruccion(s,'PWM',[PWM PWM]);
+        Env_instruccion(s,'Ucontrol',PWM);
     end
-    dato=str2double(fscanf(s));%Actualmente el nano est� enviando la vel en rpm y el tiempo en us.
-    wA=[wA dato];
-     dato=str2double(fscanf(s));
-    tiempo=[tiempo dato];
+    dato1=str2double(fscanf(s));%Actualmente el nano est� enviando la vel en rpm y el tiempo en us.
+      dato2=str2double(fscanf(s));
+       %flushinput(s);
+    wA=[wA dato1];
+    tiempo=[tiempo dato2];
     PWMA=[PWMA PWM];
 end
-Env_instruccion(s,'PWM',[0 0]);
+Env_instruccion(s,'Ucontrol',0);
 Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
 name=datestr(now,'yymmddhhMMss');
-name=strcat(name,'.mat');
-save(name,'tiempo','PWMA','wA') 
+name=strcat('respuesta_escalon_',name,'.mat');
+%save(name,'tiempo','PWMA','wA') 
+figure(1);plot(tiempo,PWMA,tiempo,wA,'.');%ylim([0 1500])
+%legend('Se�al de PWM','Se�al de vel ang');
+title('Respuesta del Motor B');
+xlabel('tiempo (us)');ylabel('Vel Ang (rpm) / PWM') %Revisar la unidad!! $
+figure(2);plot(diff(tiempo-tiempo(1))*1e-6,'.');ylim([0 10e-3])
 %% Gr�fico de la Respuesta del motor B
 cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
 
