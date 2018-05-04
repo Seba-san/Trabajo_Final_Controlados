@@ -8,18 +8,20 @@ s=InicializacionSerial(InfoHard.SerialPorts{1},115200);%Velocidad: 115200 baudio
 %% Cerrar puerto
 fclose(instrfindall);       %cierra todos los puertos activos y ocultos
 %% Ensayo al escalon
-N=600;%Cantidad de muestras a tomar
+N=200;%Cantidad de muestras a tomar
 wA=[];
 tiempo=[];
-Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos
+%Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos
 PWMA=[];                   
 PWM=10;
 %Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
 Env_instruccion(s,'Ucontrol',PWM);
 pause(3);
+Comunic_test(s)
+Env_instruccion(s,'online');
 flushinput(s);  %Vacia el buffer de entrada
 for k=1:N %Ojo con el tope que pone el nano
-    if k==100
+    if k==50
         PWM=100;
         Env_instruccion(s,'Ucontrol',PWM);
     end
@@ -39,7 +41,7 @@ figure(1);plot(tiempo,PWMA,tiempo,wA,'.');%ylim([0 1500])
 %legend('Se�al de PWM','Se�al de vel ang');
 title('Respuesta del Motor B');
 xlabel('tiempo (us)');ylabel('Vel Ang (rpm) / PWM') %Revisar la unidad!! $
-figure(2);plot(diff(tiempo-tiempo(1))*1e-6,'.');ylim([0 10e-3])
+figure(2);plot(diff(tiempo-tiempo(1))*1e-6,'.');%ylim([0 10e-3])
 %% Gr�fico de la Respuesta del motor B
 cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
 
@@ -165,8 +167,8 @@ figure(1);plot(t,we,t,w_interp,'.');
 % entrada=pwm_data;
 % salida=w_data;
 % tiempo=t_data;
-entrada=pwm_interp_2;
-salida=w_interp_2;
+entrada=pwm_interp;%pwm_interp_2;
+salida=w_interp;%w_interp_2;
 tiempo=time;
 try
 close(1);close(2)
@@ -240,7 +242,7 @@ Parametros_Ogata'
 % Para crear y probar el controlador con esos parametros hay que ejecutar la
 % siguiente instruccion:
 
-a=ind_P;P=Parametros_Ogata;PIDF=0; Ts=0.015;%0.015;%data.Ts; % en 1 es si, en 0 es no
+a=ind_P;P=Parametros_Ogata;PIDF=0; Ts=0.005;%0.015;%data.Ts; % en 1 es si, en 0 es no
 C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds')
 %C=C/k0;
 % C=pid(P(1,a),P(2,a),P(3,a));
@@ -257,8 +259,8 @@ C=pid(P(1,a),P(2,a),P(3,a),PIDF,'Ts',Ts,'IFormula','BackwardEuler','DFormula','B
 % Tunea automaticamente, segun las caracteristicas programadas
 %sys2=d2d(sys,0.015)
 %C = pidtune(sys,'pid')
-PIDF=1; % en 1 es si, en 0 es no
-sistema=sys_2;
+PIDF=0; % en 1 es si, en 0 es no
+sistema=sys;%sys_2;
 C0 = pid(1,1,1,PIDF,'Ts',sistema.Ts,'IFormula','BackwardEuler','DFormula','BackwardEuler','TimeUnit','seconds');  
 %C = pidtune(sys,C0);
 opt = pidtuneOptions('DesignFocus','reference-tracking','CrossoverFrequency',10);%'PhaseMargin',10
