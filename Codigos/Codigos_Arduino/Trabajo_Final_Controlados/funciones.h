@@ -4,7 +4,7 @@
 extern unsigned long ticc,tocc;
 
 //variables del PID
-extern float  freq;
+extern volatile float  freq;
 extern float u[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 extern float error[3];
 extern float set_point; // Set_point esta en RPM
@@ -20,3 +20,5 @@ extern void toc(void);
 extern void PID_offline(void);
 extern void EnviarTX(int cantidad,const char identificador, unsigned long *datos);
 extern void EnviarTX_online(float);
+extern void EnviarTX_online(int);
+extern void EnviarTX_online(long);
