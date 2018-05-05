@@ -64,8 +64,8 @@ cuenta=0;
 while (bandera)
 try         %Intenta ejecutar y, si hay error, sigue con el resto del codigo
     fclose(instrfindall);       %cierra todos los puertos activos y ocultos
-    delete(instrfindall);       %elimina todo los puertos activos y ocultos
-    clear s
+    %delete(instrfindall);       %elimina todo los puertos activos y ocultos
+    %clear s
     disp('Puerto Cerrado')
 end
         s=serial(PORT,'BaudRate',baud,'Terminator','CR','FlowControl','none','InputBuffer',4096);  %HAY QUE PONER EL CR EN EL MICRO!
@@ -76,6 +76,7 @@ end
         flushinput(s);
         flushoutput(s);
 bandera2=1;
+pause(3); % Lei por ahi que tarda un toque en abrirlo
 while (bandera2)
     Env_instruccion(s,'test');
     salida=str2num(fscanf(s));
@@ -88,7 +89,7 @@ while (bandera2)
        % flushinput(s);
        % flushoutput(s);
     end
-    if cuenta > 10
+    if cuenta > 2
         cuenta=0;
         bandera2=0;
     end

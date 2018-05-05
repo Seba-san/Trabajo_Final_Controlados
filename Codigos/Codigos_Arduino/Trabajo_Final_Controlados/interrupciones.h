@@ -25,20 +25,25 @@ extern float Parametros[5];
 
 // Variables para interrupcion por Overflow
 
-extern volatile int cantOVerflow;
+
 extern int soft_prescaler,Bandera;
 extern const int cota;
 extern const float k0;
 extern bool estado;
 
 
-
+extern volatile unsigned long cantOVerflow;
 extern volatile unsigned long TCNT2anterior;//Valor anterior del contador (para corregir la medición)
 extern volatile unsigned long TCNT2actual;//Almaceno el valor del timer para que no me jodan posibles actualizaciones.
 extern volatile unsigned long cantOVerflow_actual;
 
+
+// Variables de pruebas
+
+extern volatile float freq;
 // funciones
 
 extern Controlados controlados1;
 extern void toc(void);
 void timer_interrupt(void);
+extern void EnviarTX_online(float);

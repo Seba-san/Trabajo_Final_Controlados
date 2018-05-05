@@ -23,6 +23,7 @@ if (u[2]<100){u[2]=windup_bottom;}
 //EnviarTX_online(error[1]);
 //EnviarTX_online(error[0]);
 //EnviarTX_online(u[2]);
+
 }
 
 
@@ -49,13 +50,24 @@ for (int i=0;i<cantidad;i++){
    
   }
 
-void EnviarTX_online(float var){ //  $8 funcion de envio de datos de corta duracion. No se envia en formato trama, solo verifica una bandera.
+void EnviarTX_online(float var){
   if (online==true && tx_activada==true){
   Serial.println(var,DEC);
   }
   }
 
 
+void EnviarTX_online(int var){ //  $8 funcion de envio de datos de corta duracion. No se envia en formato trama, solo verifica una bandera.
+  if (online==true && tx_activada==true){
+  Serial.println(var,DEC);
+  }
+  }
+
+void EnviarTX_online(long var){
+  if (online==true && tx_activada==true){
+  Serial.println(var,DEC);
+  }
+  }
 
 
 // ##################### Estas 2 funciones hacen los mismo que en matlab :-)

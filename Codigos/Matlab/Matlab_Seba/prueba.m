@@ -2,6 +2,7 @@
 s=InicializacionSerial('/dev/ttyUSB1',115200);
 %% Fin
 fclose(s)
+%clear s;
 %clear all;clc
 disp('Puerto Cerrado')
 %%
@@ -56,3 +57,72 @@ end
 plot(freq,'.')
 Env_instruccion(s,'stop');
 Env_instruccion(s,'setpoint',100);
+
+
+%%
+
+%Mido la frecuencia de 100Hz.
+N=10;
+freq=zeros(1,N);
+suma=zeros(1,N);
+Env_instruccion(s,'trama');
+flushinput(s);
+i=0;
+clc
+cuenta=0;
+while( i<N)
+    %flushinput(s);
+    %freq(i)=str2double(fscanf(s));  
+    %suma(i)=str2double(fscanf(s)); 
+    Dato=DatoRx(s);
+    r=32*(Dato.datos(3)*Dato.datos(2)+Dato.datos(5)-Dato.datos(4));
+    if r~=Dato.datos(1)
+        (r-Dato.datos(1))/(32*Dato.datos(2))
+        Dato.datos
+        cuenta
+        cuenta=0;
+        
+       % Dato
+         i=i+1;
+    else
+        cuenta=cuenta+1;
+    end
+    
+
+end
+Env_instruccion(s,'stop');
+%figure(1);plot(freq,'b.')
+%figure(2);plot(16e6*60*1./suma,'b.')
+
+%%
+
+%Mido la frecuencia de 100Hz.
+N=1000;
+freq=zeros(1,N);
+suma=zeros(1,N);
+Env_instruccion(s,'online');
+flushinput(s);
+i=0;
+clc
+cuenta=0;
+for i=1:N
+    %flushinput(s);
+    freq(i)=str2double(fscanf(s));  
+end
+Env_instruccion(s,'stop');
+figure(1);plot(freq,'b.')
+%figure(2);plot(16e6*60*1./suma,'b.')
+
+%%
+aux[0]=suma;
+aux[1]=_OCR2A;
+aux[2]=cantOVerflow_actual;
+aux[3]=TCNT2anterior;
+aux[4]=TCNT2actual;
+
+%%
+
+for i=1: 10
+32*(Dato(i).datos(3)*Dato(i).datos(2)+Dato(i).datos(5)-Dato(i).datos(4))
+Dato(i).datos(1)
+end
