@@ -1,0 +1,15 @@
+Poner con un jumper las conexiones entre el modulo de comunicacion y el arduino.
+
+Alinear los aujeros de el sensor de linea con los de la placa para que puedan ser ensamblado uno sobre el otro
+
+Agujerear con una mecha mas fina y/o agrandar los pads para que las pistas no se salten.
+
+Poner un diodo en serie con la alimentacion para evitar que accidentalmente se conecte al revez la alimentacion.
+
+Revisr las fuentes de corriente, por arriba de 10mA ya empiezan a tener inercia termica. (no te la compliques tanto Seba!!)
+
+A la comunicacion serial hay que agregarle un pin de GND. (es muy util para ver que dice el micro.)
+
+Dejar la via libre para programarlo. Sacar el capa de 1u que esta justo al frente de la ficha.
+
+
