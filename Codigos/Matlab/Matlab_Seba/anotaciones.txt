@@ -1,0 +1,5 @@
+hoy calibre la funcion micros() para saber si estaba midiendo bien. Segun matlab, de aproximadamente 50 segundos de prueba, la funcion micros tubo 40 milisegundos de error (siempre por arriba).
+
+Ademas realice otra respuesta al escalon, modificando la funcion para que funcione con el programa de ahora, pero obtube los mismos resultados.
+
+Descubri que los tiempos entre pulsos a 100% de rpm son de 2 milisegundos, esto es, una frecuencia de 500Hz. 
