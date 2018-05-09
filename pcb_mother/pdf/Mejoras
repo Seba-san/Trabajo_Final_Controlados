@@ -12,4 +12,5 @@ A la comunicacion serial hay que agregarle un pin de GND. (es muy util para ver 
 
 Dejar la via libre para programarlo. Sacar el capa de 1u que esta justo al frente de la ficha.
 
-
+Agregar un smith trigger a la salida de los sensores de linea.
+Pensar en otra fuente de corriente para los leds emisores y quizas tambien para los receptores. Se puede incorporar un trimmer?
