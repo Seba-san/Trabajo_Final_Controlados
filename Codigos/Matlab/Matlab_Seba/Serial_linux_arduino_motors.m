@@ -27,8 +27,8 @@ Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin 
 Comunic_test(s)
  %Env_instruccion(s,'PWM',[30 30]); 
 % pause(1)
-Env_instruccion(s,'setpoint',500); 
-N=1000;
+Env_instruccion(s,'setpoint',800); 
+N=400;
 medicion=zeros(1,N);
 control=zeros(1,N);
 i=1;
@@ -44,7 +44,7 @@ while (veces<1)
     
     
     medicion(i)=str2double(fscanf(s));
-    control(i)=str2double(fscanf(s));
+   % control(i)=str2double(fscanf(s));
     %medicion(i)=16e6*60/suma;
     flushinput(s);
 %     flushinput(s);
@@ -66,7 +66,7 @@ while (veces<1)
 end
 Env_instruccion(s,'stop'); 
 Env_instruccion(s,'setpoint',0); 
-Env_instruccion(s,'PWM',[0 0]); 
+%Env_instruccion(s,'PWM',[0 0]); 
 
 
 %%

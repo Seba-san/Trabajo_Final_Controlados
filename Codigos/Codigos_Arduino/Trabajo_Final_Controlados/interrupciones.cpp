@@ -1,6 +1,6 @@
 #include "interrupciones.h"
 #include "Controlados.h"
-
+#include "Arduino.h"
 
 
 
@@ -20,7 +20,7 @@ void  timer_interrupt(void){
   }
   bitWrite(Bandera,0,1); // Esta bandera le avisa al resto de las funciones que se produjo una interrupcion por timer
 
-  if (soft_prescaler>=10){
+  if (soft_prescaler>=2){ // $VER ponerlo en 2 para 200Hz por interrupt. 
     soft_prescaler=0;
     bitWrite(Bandera,3,1);
     //toc();
@@ -28,8 +28,8 @@ void  timer_interrupt(void){
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si se acontrolada. $interrup
       //PID_online();
       // Esta funcion mete mucho tiempo de computo 120 uS
-      //int aux=u[2]/k0;
-      //controlados1.actualizarDutyCycleMotores((int)(aux),(int)aux);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
+      int aux=u[2];///k0;
+      controlados1.actualizarDutyCycleMotores((int)(aux),(int)aux);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
    //estado=!estado;
    //digitalWrite(SalidaTest,estado);
 //   EnviarTX_online(freq);
@@ -51,7 +51,7 @@ ISR(PCINT1_vect){
  /*
   * Hay que verificar donde fue el cambio de estado, porque al tener 2 ruedas, no se sabe de donde provino (habria que hacer una comparacion manual)
   */
-digitalWrite(SalidaTest,HIGH);
+//digitalWrite(SalidaTest,HIGH);
 
   TCNT2anterior=TCNT2actual;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
   
@@ -64,7 +64,7 @@ digitalWrite(SalidaTest,HIGH);
   cantOVerflow_actual=cantOVerflow;
   cantOVerflow=0;
   bitWrite(Bandera,2,1);   //medirVelocidad(1);
-  digitalWrite(SalidaTest,LOW);
+  //digitalWrite(SalidaTest,LOW);
 }
 
 
@@ -72,7 +72,7 @@ digitalWrite(SalidaTest,HIGH);
 
 
 void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones (ponele)
-  digitalWrite(SalidaTest,HIGH);
+  //digitalWrite(SalidaTest,HIGH);
   unsigned long dato;
   if (Serial.available() > 0) {
     dato= Serial.read();
@@ -139,5 +139,5 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones (p
        // digitalWrite(13,LOW)  ;
       }
   }
-  digitalWrite(SalidaTest,LOW);
+  //digitalWrite(SalidaTest,LOW);
 }

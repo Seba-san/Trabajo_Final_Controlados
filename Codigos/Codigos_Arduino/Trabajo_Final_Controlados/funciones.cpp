@@ -17,8 +17,8 @@ for(int k=0;k<2;k++)
   }  
 error[2]=((float)(set_point)-freq)*(1.f);
 u[2]=Parametros[0]*error[2]+Parametros[1]*error[1]+Parametros[2]*error[0]+Parametros[3]*u[1]+Parametros[4]*u[0];
-if (u[2]>1000){u[2]=windup_top;}
-if (u[2]<100){u[2]=windup_bottom;}
+if (u[2]>windup_top){u[2]=windup_top;}
+if (u[2]<windup_bottom){u[2]=windup_bottom;}
 //EnviarTX_online(error[2]);
 //EnviarTX_online(error[1]);
 //EnviarTX_online(error[0]);

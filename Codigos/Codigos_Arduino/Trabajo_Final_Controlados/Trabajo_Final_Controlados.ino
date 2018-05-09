@@ -5,8 +5,8 @@ Controlados controlados1;
 
 // #   #   #   # Constantes
 const int cantMarcasEncoder = 8; //Es la cantidad de huecos que tiene el encoder de cada motor.
-const int FsEncoders = 2000;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
-const int preescaler = 32;//1024;//32;//8 32 64
+const int FsEncoders = 200;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
+const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
  unsigned long _OCR2A ;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
@@ -51,10 +51,10 @@ int soft_prescaler=0;
 float u[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float error[3];
 float set_point=0; // Set_point esta en RPM
-float Parametros[]={ 0.162651, 0, 0, 0, -0.000000};//{1.261400, -2.522133, 1.260733, 1.999500, -0.999500};
+float Parametros[]={0.093657,-0.087562,0,1,0} ; // {0.66642,-1.0641,0.42479,0,1}//{0.10068,0,0,0,0}
 
 volatile float freq;
-int windup_top=1000,windup_bottom=100;
+int windup_top=100,windup_bottom=10;
 
 
 // # # # # # Variables prueba
@@ -99,7 +99,7 @@ while (!Serial) {
   pinMode(SalidaTest,OUTPUT);
   pinMode(SalidaTest2,OUTPUT);
   pinMode(SalidaTest3,OUTPUT);
-  tic();
+ // tic();
 }
 
 void loop() { //$3

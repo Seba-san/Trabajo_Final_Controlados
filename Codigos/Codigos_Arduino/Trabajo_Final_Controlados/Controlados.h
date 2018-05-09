@@ -35,8 +35,8 @@ class Controlados
   void configTimer2Contador();
 
  // Funciones agregadas por comodidad:
- unsigned long tic(void);
-unsigned long toc(unsigned long);
+ //unsigned long tic(void);
+//unsigned long toc(unsigned long);
   
 	
   private: //Funciones y variables internas
