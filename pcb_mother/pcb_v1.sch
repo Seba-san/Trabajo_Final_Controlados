@@ -273,7 +273,7 @@ L CP C1
 U 1 1 5A7C1F25
 P 5450 900
 F 0 "C1" H 5475 1000 50  0000 L CNN
-F 1 "CP" H 5475 800 50  0000 L CNN
+F 1 "10u" H 5475 800 50  0000 L CNN
 F 2 "Capacitors_THT:CP_Radial_D5.0mm_P2.50mm" H 5488 750 50  0001 C CNN
 F 3 "" H 5450 900 50  0001 C CNN
 	1    5450 900 
@@ -509,8 +509,6 @@ Wire Wire Line
 	6300 3100 6100 3100
 Wire Wire Line
 	6100 3200 6300 3200
-Text Label 5650 4150 0    60   ~ 0
-S_lin_ref_a
 Wire Wire Line
 	5650 4450 5850 4450
 $Comp
@@ -747,4 +745,10 @@ Text Label 4950 1650 0    60   ~ 0
 A6_l5_A
 Text Label 5250 1450 0    60   ~ 0
 VCC
+Wire Wire Line
+	5400 750  5450 750 
+Connection ~ 5450 750 
+Connection ~ 5400 750 
+Text Label 5700 1100 0    60   ~ 0
+GND
 $EndSCHEMATC
