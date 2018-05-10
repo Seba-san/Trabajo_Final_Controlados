@@ -7,7 +7,7 @@
 %% Ensayo al escalón - Cargo los datos
 clear all;close all;clc;
 cd('C:\Users\Tania\Documents\ING\Carrera de Grado\Controlados\Trabajo Final con Seba\Git con Seba\Trabajo_Final_Controlados_git\Codigos\Matlab')
-load('../../Mediciones/respuesta_escalon_180503213903.mat')
+load('../../Mediciones/respuesta_escalon_180510160713.mat')
 % load('../../Mediciones/respuesta_escalon_180503210331.mat')
 tiempo=tiempo*1e-6;%Acomodo la unidad del tiempo.
 %% Gráfico de la Respuesta al escalón
@@ -17,13 +17,17 @@ legend('Señal de PWM','Señal de vel ang');
 title('Respuesta del Motor B');
 xlabel('tiempo');ylabel('Vel Ang (rpm) / PWM') %Revisar la unidad!! $
 %% Ajuste del nombre de las variables
-N=176;%Corto la señal para sacar valores ruidosos
+N=length(PWMA);%176;%Corto la señal para sacar valores ruidosos
 entrada=PWMA(1:N);
 salida=wA(1:N);
 tiempo=tiempo(1:N);
-entrada=entrada-min(entrada);
-salida=salida-min(salida);
-figure(1);
+[~,t0]=max(entrada);%Busco el valor donde la entrada pega el salto
+sal0=mean(salida(1:t0-1));%Tomo el valor de corrección como el promedio de 
+%los valores de la salida cuando la entrada vale el mínimo.
+ent0=min(entrada);
+entrada=entrada-ent0;
+salida=salida-sal0;
+figure();
 plot(tiempo,entrada,tiempo,salida,'.');
 legend('Señal de PWM','Señal de vel ang');
 title('Respuesta del Motor B');
