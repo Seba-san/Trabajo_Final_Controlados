@@ -33,7 +33,7 @@ Ts2=0.015;
 tipo={'P';'PI';'PID'};
 clear A B C D E F;
 for k=1:3
-    [Kp,Ki,Kd]=ControlZN(tipo{k},entrada,salida,tiempo,0);
+    [Kp,Ki,Kd]=ControlZN(tipo{k},entrada,salida,tiempo,0,1);
     Tf=0;%No sé qué poner en Tf porque ZN no me lo da.
     control=c2d(tf(pid(Kp,Ki,Kd,Tf)),Ts2,'tustin')
     [A(k,1),B(k,1),C(k,1),D(k,1),E(k,1)]=tf2ctesNano(cell2mat(control.num),cell2mat(control.den),tipo{k});
@@ -71,7 +71,7 @@ pwm_interp(inicia_seg:length(t))=max(entrada);pwm_interp(1:(inicia_seg-1))=min(e
 data = iddata(w_interp',pwm_interp',Ts);
 np=3;%Le indico el nro de polos
 nz=[];%Le indico el nro de ceros
-iodelay=[4];%No se que ponerle
+iodelay=[];%No se que ponerle
 sys = tfest(data,np,nz,iodelay,'Ts',data.Ts);
 syscont = tfest(data,np,nz,[]);
 % Cambio el tiempo de muestreo del sistema:
@@ -116,5 +116,5 @@ sysControladoPID= feedback(series(d2c(controlPID,'tustin'),syscont),1);
 % legend('Control P','Control PI','Control PID');
 
 %Calculo las respuestas al escalón de los sistemas realimentados:
-figure();step(sysControladoP);hold on;step(sysControladoPI);step(sysControladoPID);
+figure();step(sysControladoP);hold on;step(sysControladoPI);%step(sysControladoPID);
 legend('Control P','Control PI','Control PID');
