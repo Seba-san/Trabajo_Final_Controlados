@@ -15,7 +15,7 @@ for(int k=0;k<2;k++)
    error[k]=error[k+1];//Desplazamiento a la derecha de los datos del buffer
    u[k]=u[k+1];
   }  
-error[2]=((float)(set_point)-freq)*(1.f);
+error[2]=((float)(set_point)-freq+sal0);
 u[2]=Parametros[0]*error[2]+Parametros[1]*error[1]+Parametros[2]*error[0]+Parametros[3]*u[1]+Parametros[4]*u[0];
 if (u[2]>windup_top){u[2]=windup_top;}
 if (u[2]<windup_bottom){u[2]=windup_bottom;}

@@ -23,6 +23,9 @@ extern float u[3];
 extern float set_point;
 extern float Parametros[5];
 
+//Variables del controlador:
+extern float ent0;
+
 // Variables para interrupcion por Overflow
 
 
