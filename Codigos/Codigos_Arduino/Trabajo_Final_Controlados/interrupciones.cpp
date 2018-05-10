@@ -23,7 +23,7 @@ void  timer_interrupt(void){
   if (soft_prescaler>=2){ // $VER ponerlo en 2 para 200Hz por interrupt. 
     soft_prescaler=0;
     bitWrite(Bandera,3,1);
-    //toc();
+    toc();
     }
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si se acontrolada. $interrup
       //PID_online();

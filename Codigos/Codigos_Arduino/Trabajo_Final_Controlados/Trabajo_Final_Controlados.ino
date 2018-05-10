@@ -99,7 +99,7 @@ while (!Serial) {
   pinMode(SalidaTest,OUTPUT);
   pinMode(SalidaTest2,OUTPUT);
   pinMode(SalidaTest3,OUTPUT);
- // tic();
+ tic();
 }
 
 void loop() { //$3
@@ -116,9 +116,9 @@ if (bitRead(Bandera,0)){ bitWrite(Bandera,0,0);// timer 2 overflow
   medirVelocidad(1);
   }
    if (bitRead(Bandera,3)){ bitWrite(Bandera,3,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
-  //EnviarTX_online(freq);
-  //EnviarTX_online((float)tocc);
-  PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
+  EnviarTX_online(freq);
+  EnviarTX_online((float)tocc);
+  //PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
   }
 }
@@ -180,7 +180,7 @@ aux[4]=TCNT2actual;
 
 //digitalWrite(SalidaTest3,LOW);
  //indice=int(freq);
-EnviarTX_online(freq);
+//EnviarTX_online(freq);
 //EnviarTX_online(suma);
 
 }
