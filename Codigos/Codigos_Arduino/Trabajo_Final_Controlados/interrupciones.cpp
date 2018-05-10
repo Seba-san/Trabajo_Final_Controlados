@@ -28,7 +28,7 @@ void  timer_interrupt(void){
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si se acontrolada. $interrup
       //PID_online();
       // Esta funcion mete mucho tiempo de computo 120 uS
-      int aux=u[2];///k0;
+      int aux=u[2]+ent0;///k0;
       controlados1.actualizarDutyCycleMotores((int)(aux),(int)aux);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
    //estado=!estado;
    //digitalWrite(SalidaTest,estado);
@@ -125,7 +125,7 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones (p
       //Serial.println(172,DEC);
     }
     else if (trama_activa==3){
-      set_point=dato; // Actualiza el valor del setpoint
+      set_point=dato*10; // Actualiza el valor del setpoint
       trama_activa=0;
       }
     else if (trama_activa==4){

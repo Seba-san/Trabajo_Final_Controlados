@@ -3,9 +3,9 @@
 Controlados controlados1;
 
 
-// #   #   #   # Constantes
+// #   #   #   # Constantes $1
 const int cantMarcasEncoder = 8; //Es la cantidad de huecos que tiene el encoder de cada motor.
-const int FsEncoders = 200;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
+const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
  unsigned long _OCR2A ;
@@ -51,10 +51,12 @@ int soft_prescaler=0;
 float u[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float error[3];
 float set_point=0; // Set_point esta en RPM
-float Parametros[]={0.093657,-0.087562,0,1,0} ; // {0.66642,-1.0641,0.42479,0,1}//{0.10068,0,0,0,0}
+float Parametros[]={0.10679,-0.099861,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};//{0.093657,-0.087562,0,1,0} ; // {0.66642,-1.0641,0.42479,0,1}//{0.10068,0,0,0,0}
+float sal0=0;//89.3556;
+float ent0=0;//10;
 
 volatile float freq;
-int windup_top=100,windup_bottom=10;
+int windup_top=100-ent0,windup_bottom=10-ent0;
 
 
 // # # # # # Variables prueba
@@ -120,6 +122,7 @@ if (bitRead(Bandera,0)){ bitWrite(Bandera,0,0);// timer 2 overflow
   //EnviarTX_online((float)tocc);
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
+  EnviarTX_online(freq);
   }
 }
 
@@ -180,7 +183,7 @@ aux[4]=TCNT2actual;
 
 //digitalWrite(SalidaTest3,LOW);
  //indice=int(freq);
-EnviarTX_online(freq);
+//EnviarTX_online(freq);
 //EnviarTX_online(suma);
 
 }

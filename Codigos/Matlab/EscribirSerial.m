@@ -10,6 +10,7 @@ function []=EscribirSerial(s,dato)
 %     end
 %     vector(N+3)=suma;
 %     fwrite(s,vector,'uchar');
-flushinput(s); % COmo voy a pedir datos, no me interesa lo anterior.
+    flushinput(s); % COmo voy a pedir datos, no me interesa lo anterior.
     fwrite(s,dato,'uchar');
+    %fwrite(s,dato,'double');
 end

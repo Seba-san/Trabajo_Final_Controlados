@@ -1,5 +1,5 @@
 function Env_instruccion(s,info,datos)
-
+parametro=1;
 switch info    
     case 'PWM'
         instruccion=250;
@@ -13,6 +13,7 @@ switch info
         instruccion=251;
     case 'setpoint'
         instruccion=248;
+        parametro=10;
     case 'parametros'
         instruccion=247;
     case 'Ucontrol'
@@ -26,7 +27,7 @@ EscribirSerial(s,instruccion);
 if (nargin==3) 
     for i=1:length(datos)
        
-    EscribirSerial(s,datos(i));
+    EscribirSerial(s,fix(datos(i)/parametro));
     end
 end
 
