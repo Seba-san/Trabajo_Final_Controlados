@@ -127,9 +127,9 @@ Wire Wire Line
 Wire Wire Line
 	9600 4050 9600 4250
 Connection ~ 9050 4650
-Text Label 9600 4200 0    60   ~ 0
+Text Label 9050 4150 0    60   ~ 0
 E2
-Text Label 9050 4200 0    60   ~ 0
+Text Label 9600 4150 0    60   ~ 0
 E1
 $Comp
 L R R1
@@ -599,9 +599,9 @@ Text Label 2350 3350 0    60   ~ 0
 A3_l2_A
 Text Label 2900 3350 0    60   ~ 0
 A2_l1_A
-Text Label 3450 3350 0    60   ~ 0
-A1_E2
 Text Label 3950 3350 0    60   ~ 0
+A1_E2
+Text Label 3450 3350 0    60   ~ 0
 A0_E1
 Text Label 850  4700 0    60   ~ 0
 D2_L8_a
@@ -676,14 +676,14 @@ F 3 "" H 1850 3800 50  0001 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L 74HCT04 U2
-U 4 1 5AF29DC5
+L 74HCT04 U3
+U 2 1 5AF29DC5
 P 3450 3800
-F 0 "U2" H 3600 3900 50  0000 C CNN
+F 0 "U3" H 3600 3900 50  0000 C CNN
 F 1 "74HCT04" H 3650 3700 50  0000 C CNN
 F 2 "Housings_DIP:DIP-14_W7.62mm_Socket_LongPads" H 3450 3800 50  0001 C CNN
 F 3 "" H 3450 3800 50  0001 C CNN
-	4    3450 3800
+	2    3450 3800
 	0    -1   -1   0   
 $EndComp
 $Comp
@@ -745,4 +745,6 @@ Text Label 4950 1750 0    60   ~ 0
 A5_l4_A
 Text Label 4950 1650 0    60   ~ 0
 A6_l5_A
+Text Label 5250 1450 0    60   ~ 0
+VCC
 $EndSCHEMATC
