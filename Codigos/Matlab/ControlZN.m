@@ -1,14 +1,19 @@
-function [Kp,Ki,Kd]=ControlZN(control,entrada,salida,tiempo,tangente,figuras)
+function [Kp,Ki,Kd]=ControlZN(control,metodo,entrada,salida,tiempo,tangente,figuras)
 % Esta función calcula el controlador indicado en control (P, PI o PID)
-% utilizando el método de Ziegler Nichols. Para ello se usan los datos de
-% ensayo indicados por entrada, salida y tiempo. El método de ajuste sigue
+% utilizando el método de Ziegler Nichols (metodo='ZN') o el de Cohen Coon
+% (metodo='CC'). Para ello se usan los datos de ensayo indicados por
+% entrada, salida y tiempo. El método de ajuste con Ziegler Nichols sigue
 % lo indicado en el Ogata (pág 569). También aportó algo de claridad
-% https://sites.google.com/site/picuino/ziegler-nichols- La variable
-% figuras indica si se desean ver los gráficos internos o no. La variable
-% tangente me indica cómo estimar la recta tangente para sacar los parámetros
-% que requiere Z-N; si tangente=1, busco la recta tangente en el punto de
-% inflección de la curva, sino uso la recta que pasa por los puntos de 10 y
-% 90% del aumento de la señal.
+% https://sites.google.com/site/picuino/ziegler-nichols. Para el métodos
+% de Cohen Coon falta encontrar mejor bibiliografía; por ahora están las
+% constantes sacadas de una página web random
+% (http://blog.opticontrols.com/archives/383). 
+
+% La variable figuras indica si se desean ver los gráficos internos o no.
+% La variable tangente me indica cómo estimar la recta tangente para sacar
+% los parámetros que requiere Z-N; si tangente=1, busco la recta tangente
+% en el punto de inflección de la curva, sino uso la recta que pasa por los
+% puntos de 10 y 90% del aumento de la señal.
 
 % Observación: como la salida oscila, para el valor en estado estacionario
 % tomo un promedio del último 10% de las muestras.
@@ -19,9 +24,18 @@ end
 if tangente==1
     [K,L,T]=ParametrosDelEnsayo(entrada,salida,tiempo,figuras);
 else
-    [K,L,T]=ParametrosDelEnsayo2(entrada,salida,tiempo,figuras);
+    [K,L,T,tao]=ParametrosDelEnsayo2(entrada,salida,tiempo,figuras);
 end
-Parametros=Constantes(K,L,T);
+
+%Calculo los parámetros según el método elegido:
+if metodo=='ZN'
+    Parametros=ConstantesZN(K,L,T);
+elseif metodo=='CC'
+    Parametros=ConstantesCC(K,L,tao);
+else
+    disp('Error')
+end
+
 switch control
     case 'P'
         indice=1;
@@ -113,10 +127,12 @@ end
 L=t1-t0;T=t2-t1;
 end
 
-function [K,L,T]=ParametrosDelEnsayo2(entrada,salida,tiempo,figuras)
+function [K,L,T,tao]=ParametrosDelEnsayo2(entrada,salida,tiempo,figuras)
 % Esta función calcula los parámetros de la respuesta al escalón necesarios
 % para utilizar el método de Zieger-Nichols. Para ello estima la recta
 % tangente como la recta que une los puntos de 10% y de 90% de señal.
+% Además, calcula el valor de la constante de tiempo para poder usar el
+% método de Cohen-Coon.
 
 n=length(salida);
 yinf=mean(salida(round(n*0.9):n));%Como la salida oscila, estimo el valor en estado 
@@ -150,6 +166,16 @@ t1=(y0-m(2))/m(1);
 %t0 es el valor en el que empieza el escalón:
 [~,indice_t0]=max(entrada);%Busco cuándo la entrada pega el salto
 t0=tiempo(indice_t0);
+
+L=t1-t0;T=t2-t1;
+
+%Calculo la constante de tiempo:
+y_en_tao=y0+(yinf-y0)*(1-exp(-1));%Valor de la salida en t0+tao
+[~,ind]=min(abs(w_interp-y_en_tao));%Busco el valor más próximo
+tao=t(ind)-t0-L;%tomo tao como el valor de tiempo al que se daba el valor de 
+                %salida más próximo al deseado menos t0+L (por el delay de
+                %la planta).
+           
 if figuras==1
     figure();plot(t,w_interp,'b.',tiempo,salida,'m.',t,Puntos_r,'g');
     hold on ;plot(t(indices),w_interp(indices),'ro');ylim([y0-yinf*0.1,yinf*1.1])
@@ -161,13 +187,27 @@ if figuras==1
         'Recta Tangente','Puntos para el cálculo de la recta tangente',...
         'Intersección entre la recta y el valor máximo','Intersección entre la recta y el valor minimo');
 end
-L=t1-t0;T=t2-t1;
 end
 
-function Parametros=Constantes(K,L,T)
-%Calculo la tabla de coeficientes para cada controlador según el Ogata
+function Parametros=ConstantesZN(K,L,T)
+%Calculo la tabla de coeficientes para cada controlador según
+%https://sites.google.com/site/picuino/ziegler-nichols (es casi igual al
+%Ogata, cambia en que el Ogata pone 0.5 donde la página pone 0.6).
 Kp=(1/K)*T/L*[1;0.9;1.2];
 Ki=(1/K)*T/L^2*[0;0.27;0.6];
 Kd=(1/K)*T*[0;0;0.6];
 Parametros=table(Kp,Ki,Kd,'RowName',{'P';'PI';'PID'});
+end
+
+function Parametros=ConstantesCC(gp,td,tao)
+%Calculo la tabla de coeficientes para cada controlador según
+%http://blog.opticontrols.com/archives/383.
+Kc=(1/gp)*[1.03;0.9;1.35].*(tao/td+[.34;.092;.185]);
+Kp=Kc;
+Ki=Kc.*[0;(.3/td)*(tao+2.22*td)/(tao+.092*td);(.4/td)*(tao+0.611*td)/(tao+0.185*td)];
+Kd=Kc.*[0;0;.37*td*tao/(tao+0.185*td)];
+Parametros=table(Kp,Ki,Kd,'RowName',{'P';'PI';'PID'});
+
+%Obs: Da pseudo similar a lo que daba antes, pero cuando simulo con el
+%sistema estimado me da inestable con el PID y con el P :/
 end

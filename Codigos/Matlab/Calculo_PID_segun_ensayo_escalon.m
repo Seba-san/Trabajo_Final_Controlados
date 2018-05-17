@@ -5,7 +5,7 @@
 % diseñado se hace una estimación de la planta y se verifica el efecto del
 % controlador sobre esta estimación de la planta.
 %% Ensayo al escalón - Cargo los datos
-clear all;close all;clc;
+clear all;close all;%clc;
 cd('C:\Users\Tania\Documents\ING\Carrera de Grado\Controlados\Trabajo Final con Seba\Git con Seba\Trabajo_Final_Controlados_git\Codigos\Matlab')
 load('../../Mediciones/respuesta_escalon_180510160713.mat')
 % load('../../Mediciones/respuesta_escalon_180503210331.mat')
@@ -37,9 +37,9 @@ Ts2=0.015;
 tipo={'P';'PI';'PID'};
 clear A B C D E F;
 for k=1:3
-    [Kp,Ki,Kd]=ControlZN(tipo{k},entrada,salida,tiempo,0,1);
+    [Kp,Ki,Kd]=ControlZN(tipo{k},'CC',entrada,salida,tiempo,0,1);
     Tf=0;%No sé qué poner en Tf porque ZN no me lo da.
-    control=c2d(tf(pid(Kp,Ki,Kd,Tf)),Ts2,'tustin')
+    control=c2d(tf(pid(Kp,Ki,Kd,Tf)),Ts2,'tustin');
     [A(k,1),B(k,1),C(k,1),D(k,1),E(k,1)]=tf2ctesNano(cell2mat(control.num),cell2mat(control.den),tipo{k});
 end
 ctes=table(A,B,C,D,E,'RowNames',tipo)
