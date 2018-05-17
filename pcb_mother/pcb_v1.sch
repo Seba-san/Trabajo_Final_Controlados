@@ -553,7 +553,7 @@ U 1 1 5AF0E572
 P 9850 1100
 F 0 "D1" H 9850 1200 50  0000 C CNN
 F 1 "D" H 9850 1000 50  0000 C CNN
-F 2 "Diodes_SMD:D_1206" H 9850 1100 50  0001 C CNN
+F 2 "Diodes_THT:D_DO-35_SOD27_P7.62mm_Horizontal" H 9850 1100 50  0001 C CNN
 F 3 "" H 9850 1100 50  0001 C CNN
 	1    9850 1100
 	1    0    0    -1  
@@ -564,11 +564,8 @@ Wire Wire Line
 	9700 1100 9400 1100
 Wire Wire Line
 	9600 4650 8100 4650
-Text Label 7500 4050 0    60   ~ 0
+Text Label 7300 4050 0    60   ~ 0
 Vcc_5v
-Wire Wire Line
-	7500 4050 7750 4050
-Connection ~ 7650 4050
 Wire Wire Line
 	4700 1450 5250 1450
 Wire Wire Line
@@ -751,4 +748,6 @@ Connection ~ 5450 750
 Connection ~ 5400 750 
 Text Label 5700 1100 0    60   ~ 0
 GND
+Wire Wire Line
+	7750 4050 7300 4050
 $EndSCHEMATC
