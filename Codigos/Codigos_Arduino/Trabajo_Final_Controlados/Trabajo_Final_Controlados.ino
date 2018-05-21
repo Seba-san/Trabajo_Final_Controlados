@@ -8,17 +8,13 @@ const int cantMarcasEncoder = 8; //Es la cantidad de huecos que tiene el encoder
 const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
- unsigned long _OCR2A ;
+unsigned long _OCR2A;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
-const float k0=9.7419;
 
-
-bool estado=0;
 
 // #   #   #   # Variable Basura
 int Bandera=0; // bandera para administrar procesos fuera de interrupciones
-float b;
-unsigned long cuenta;
+
 
 //################
 
@@ -29,64 +25,39 @@ bool online;//Me indica si poner o no el identificador para la transmisión (onl
 bool tx_activada;//Me indica si transmitir o no.
 bool iniciar=false; // le dice al micro cuando puede iniciar.
 int PWMA;int PWMB;//Acá guardo los valores de nuevos de PWM que me mada Matlab para que actualice. La actualización efectiva se hace cuando tengo estos dos valores.
-
-/*
-int TCNT2anterior=0;//Valor anterior del contador (para corregir la medición)
-int TCNT2actual=0;//Almaceno el valor del timer para que no me jodan posibles actualizaciones.
-int cantOVerflow_actual=0;     //Valor anterior del contador (para corregir la medición), correspondiente al TCNT2anterior.
-*/
-volatile unsigned long cantOVerflow=0;//Variable que almacena la cantidad de veces que se desbordó el timer2 hasta que vuelvo a tener interrupción por pin de entrada. Esto permite realizar la medición de
-                  //tiempos entre aujeros del encoder.
-volatile unsigned long TCNT2anterior=0;//Valor anterior del contador (para corregir la medición)
-volatile unsigned long TCNT2actual=0;//Almaceno el valor del timer para que no me jodan posibles actualizaciones.
-volatile unsigned long cantOVerflow_actual=0;     //Valor anterior del contador (para corregir la medición), correspondiente al TCNT2anterior.
+volatile unsigned long cantOVerflowA=0,cantOVerflowB=0;//Variable que almacena la cantidad de veces que se desbordó el timer2 hasta que vuelvo a tener interrupción por pin de entrada. 
+                                                       //Esto permite realizar la medición de tiempos entre agujeros del encoder.
+volatile unsigned long TCNT2anteriorA=0,TCNT2anteriorB=0;//Valor anterior del contador (para corregir la medición)
+volatile unsigned long TCNT2actualA=0,TCNT2actualB=0;//Almaceno el valor del timer para que no me jodan posibles actualizaciones.
+volatile unsigned long cantOVerflow_actualA=0,cantOVerflow_actualB=0;//Valor anterior del contador (para corregir la medición), correspondiente al TCNT2anterior.
 unsigned long aux[6];  // este es un buffer para enviar datos en formato trama, corresponde a la funcion "EnviarTX"
-float  bufferVel[2*cantMarcasEncoder];//buffer donde almaceno las últimas velocidades calculadas. // ANtes era unsigned long
-bool BanderadelBuffer=true;
+float  bufferVelA[2*cantMarcasEncoder],bufferVelB[2*cantMarcasEncoder];//buffer donde almaceno las últimas velocidades calculadas.
 bool Motores_ON=false;
-float velAngular=0;//última velocidad angular calculada. Lo separo del vector bufferVel para que no haya problemas por interrumpir en medio de una actualización de éste.
-float velDeseada=0;//Empieza detenido el motor.
 int soft_prescaler=0;
 // Variables del PID
-float u[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
-float error[3];
-float set_point=0; // Set_point esta en RPM
-float Parametros[]={0.10679,-0.099861,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};//{0.093657,-0.087562,0,1,0} ; // {0.66642,-1.0641,0.42479,0,1}//{0.10068,0,0,0,0}
-float sal0=0;//89.3556;
-float ent0=0;//10;
+float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
+float errorA[3],errorB[3];
+float set_pointA=0,set_pointB=0; // Set_point esta en RPM
+float ParametrosA[]={0.10679,-0.099861,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
+float ParametrosB[]={0.10679,-0.099861,0,1,0};
 
-volatile float freq;
-int windup_top=100-ent0,windup_bottom=10-ent0;
+volatile float freqA;
+volatile float freqB;
+int windup_top=100,windup_bottom=10;
 
-
-// # # # # # Variables prueba
-
-int * puntero;
-int indice=0;
-
+unsigned char estadoEncoder=0;//En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
 // #   #   #   # Declaracion de Funciones
-
-void medirVelocidad(unsigned char);
-//void EnviarTX(int cantidad,char identificador, unsigned long *datos);
-//void EnviarTX_online(unsigned long var);
-//void timer_interrupt(void);
-//void interrupt_flanco(void);
-/*
-void PID_offline(void);
-
-void tic(void);
-void toc(void);
-*/
+void medirVelocidadA(unsigned char);
+void medirVelocidadB(unsigned char);
 
 
 void setup() { // $2
   interruptOFF; // se desactivan las interrupciones para configurar.
 
-Serial.begin(115200); // Si se comunica a mucha velocidad se producen errores (que no se detectan hasta que haces las cuentas)
-//Serial.begin(1000000);
+  Serial.begin(115200); // Si se comunica a mucha velocidad se producen errores (que no se detectan hasta que haces las cuentas)
 
-while (!Serial) {
+  while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB
   }
  controlados1.configPinesMotores();
@@ -94,96 +65,87 @@ while (!Serial) {
  controlados1.configTimerMotores();
  controlados1.configTimer2Contador(FsEncoders,preescaler,1);//Configuro el timer2 como contador con interrupción. La frecuencia va desde 500000 hasta 1997.
  controlados1.actualizarDutyCycleMotores(0,0);
+
+ //Antes de prender los motores guardo el valor de los encoderes en la variable estadoEncoder para que cuando se genere la primer interrupción por
+ int encoderAux;
+ encoderAux=bitRead(PORTC,0);
+ bitWrite(estadoEncoder,0,encoderAux);
+ encoderAux=bitRead(PORTC,1);
+ bitWrite(estadoEncoder,0,encoderAux);
+ 
  controlados1.modoAdelante();
  _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
-  pinMode(A0, INPUT);
-  pinMode(SalidaTest,OUTPUT);
-  pinMode(SalidaTest2,OUTPUT);
-  pinMode(SalidaTest3,OUTPUT);
- // tic();
 }
 
 void loop() { //$3
-if (bitRead(Bandera,0)){ bitWrite(Bandera,0,0);// timer 2 overflow
-
+  if (bitRead(Bandera,0)){bitWrite(Bandera,0,0);// timer 2 overflow
   }
-  if (bitRead(Bandera,1)){ bitWrite(Bandera,1,0); // Entra cuando no registra cambio en la entrada
-  // Serial.println  (Bandera,BIN);
-
-  medirVelocidad(0);
-
+  if (bitRead(Bandera,1)){bitWrite(Bandera,1,0); // Entra cuando no registra cambio en la entrada A
+  medirVelocidadA(0);
   }
-  if (bitRead(Bandera,2)){  bitWrite(Bandera,2,0);// se registra cambio en la entrada
-  medirVelocidad(1);
+  if (bitRead(Bandera,2)){bitWrite(Bandera,2,0);// se registra cambio en la entrada A
+  medirVelocidadA(1);
   }
-   if (bitRead(Bandera,3)){ bitWrite(Bandera,3,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
-  //EnviarTX_online(freq);
-  //EnviarTX_online((float)tocc);
+  if (bitRead(Bandera,3)){bitWrite(Bandera,3,0); // Entra cuando no registra cambio en la entrada B
+  medirVelocidadB(0);
+  }
+  if (bitRead(Bandera,4)){bitWrite(Bandera,4,0);// se registra cambio en la entrada B
+  medirVelocidadB(1);
+  }
+  if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  EnviarTX_online(freq);
+  EnviarTX_online(freqA);
   }
 }
 
-
-void medirVelocidad(unsigned char interrupcion)
-{ // $7
-  //digitalWrite(SalidaTest3,HIGH);
+void medirVelocidadA(unsigned char interrupcionA)
+{
 long suma=0;
- long t,tmh; // Lo hago por partes porque todo junto generaba errores en algunas ocaciones
   //Corro los valores de w en el buffer un lugar y voy sumando los valores para después calcular el promedio de velocidades:
   for(int k=0;k<(2*cantMarcasEncoder-1);k++)
   {
-    bufferVel[k]=bufferVel[k+1];//Desplazamiento a la derecha de los datos del buffer
-    suma=suma+bufferVel[k];
+    bufferVelA[k]=bufferVelA[k+1];//Desplazamiento a la derecha de los datos del buffer
+    suma=suma+bufferVelA[k];
   }
   //Al terminar el bucle bufferVel tiene los últimos dos valores iguales (los dos de más a la izquierda). Esto cambia a continuación con la actualización del valor más a la derecha:
-  if(interrupcion){
+  if(interrupcionA){
     // Se hace de forma separada porque se detectaron problemas de calculo asociado con los tipos de variables. Esto se resolvio separando las cuentas, queda a futuro resolverlo en una sola linea.
     interruptOFF; // Es importante poner esto antes de hacer el calculo para evitar que modifique las variables en la interrupcion. Se observaron problemas de medicion.
-   /*  t=cantOVerflow_actual*_OCR2A;
-     tmh=TCNT2actual-TCNT2anterior+t; // Ver problemas de variables
-    bufferVel[2*cantMarcasEncoder-1]=long(preescaler)*(tmh);
-*/
-     bufferVel[2*cantMarcasEncoder-1]=(long)(preescaler)*(TCNT2actual-TCNT2anterior+cantOVerflow_actual*_OCR2A);
-    suma=suma+ bufferVel[2*cantMarcasEncoder-1];
-    freq=float((F_CPU*60.0)/(suma));
+    bufferVelA[2*cantMarcasEncoder-1]=(long)(preescaler)*(TCNT2actualA-TCNT2anteriorA+cantOVerflow_actualA*_OCR2A);
+    suma=suma+ bufferVelA[2*cantMarcasEncoder-1];
+    freqA=float((F_CPU*60.0)/(suma));
     interruptON;
-     BanderadelBuffer=true;
-
   }
   else{
-     bufferVel[2*cantMarcasEncoder-1]=0;
-     BanderadelBuffer=false;
-     suma=suma+ bufferVel[2*cantMarcasEncoder-1];
-     freq=0; // Hay que calcularla aca porque sino da cualquier valor.
+     bufferVelA[2*cantMarcasEncoder-1]=0;
+     suma=suma+ bufferVelA[2*cantMarcasEncoder-1];
+     freqA=0; // Hay que calcularla aca porque sino da cualquier valor.
   }
-
-/*
-if (abs(bufferVel[2*cantMarcasEncoder-1]+bufferVel[2*cantMarcasEncoder-2]-160000)>1000)
-{
-aux[0]=bufferVel[2*cantMarcasEncoder-1];
-aux[1]=_OCR2A;
-aux[2]=cantOVerflow_actual;
-aux[3]=TCNT2anterior;
-aux[4]=TCNT2actual;
- EnviarTX(5,'a',aux);
 }
-*/
-// Pruebas. Para proximas modificaciones poner la version para la que funcionan.
 
-
-  //aux[0]=freq;
-  //aux[1]=tocc;//Envío el tiempo en el que se tomó la muestra
-  //EnviarTX(2,'a',aux);
-//EnviarTX_online(freq);
-//EnviarTX_online((float)tocc);
-//EnviarTX_online(bufferVel[2*cantMarcasEncoder-1]);
-
-//digitalWrite(SalidaTest3,LOW);
- //indice=int(freq);
-//EnviarTX_online(freq);
-//EnviarTX_online(suma);
-
+void medirVelocidadB(unsigned char interrupcionB)
+{
+long suma=0;
+  //Corro los valores de w en el buffer un lugar y voy sumando los valores para después calcular el promedio de velocidades:
+  for(int k=0;k<(2*cantMarcasEncoder-1);k++)
+  {
+    bufferVelB[k]=bufferVelB[k+1];//Desplazamiento a la derecha de los datos del buffer
+    suma=suma+bufferVelB[k];
+  }
+  //Al terminar el bucle bufferVel tiene los últimos dos valores iguales (los dos de más a la izquierda). Esto cambia a continuación con la actualización del valor más a la derecha:
+  if(interrupcionB){
+    // Se hace de forma separada porque se detectaron problemas de calculo asociado con los tipos de variables. Esto se resolvio separando las cuentas, queda a futuro resolverlo en una sola linea.
+    interruptOFF; // Es importante poner esto antes de hacer el calculo para evitar que modifique las variables en la interrupcion. Se observaron problemas de medicion.
+    bufferVelB[2*cantMarcasEncoder-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
+    suma=suma+ bufferVelB[2*cantMarcasEncoder-1];
+    freqB=float((F_CPU*60.0)/(suma));
+    interruptON;
+  }
+  else{
+     bufferVelB[2*cantMarcasEncoder-1]=0;
+     suma=suma+ bufferVelB[2*cantMarcasEncoder-1];
+     freqB=0; // Hay que calcularla aca porque sino da cualquier valor.
+  }
 }
