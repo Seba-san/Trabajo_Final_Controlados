@@ -1,6 +1,6 @@
 %% Inicio
 %s=InicializacionSerial('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
-s=InicializacionSerial('COM5',115200);%Velocidad: 115200 baudios
+s=InicializacionSerial('COM6',115200);%Velocidad: 115200 baudios
 %% Fin
 fclose(s)
 %clear all;clc
@@ -11,8 +11,8 @@ Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin 
 Comunic_test(s)
  %Env_instruccion(s,'PWM',[30 30]); 
 % pause(1)
-Env_instruccion(s,'setpoint',800); 
-N=400;
+Env_instruccion(s,'setpoint',[700,00]); 
+N=800;
 medicion=zeros(1,N);
 control=zeros(1,N);
 i=1;
@@ -50,6 +50,6 @@ while (veces<1)
     
 end
 Env_instruccion(s,'stop'); 
-Env_instruccion(s,'setpoint',0); 
+Env_instruccion(s,'setpoint',[0,0]); 
 % pause(1)
 % close all

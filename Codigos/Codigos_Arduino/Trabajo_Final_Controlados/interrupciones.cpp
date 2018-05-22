@@ -37,10 +37,18 @@ ISR(PCINT1_vect){
  /*
   * Hay que verificar donde fue el cambio de estado, porque al tener 2 ruedas, no se sabe de donde provino (habria que hacer una comparacion manual)
   */
-  int A0=bitRead(PORTC,0),A1=bitRead(PORTC,1);//Leo el estado actual de los encoders.
-  int MA=bitRead(estadoEncoder,0),MB=bitRead(estadoEncoder,1);//Separo por comodidad los estados anteriores del encoder.
+  int A0, A1, MA, MB;
+  A0=bitRead(PINC,0);//Leo el estado actual de los encoders.
+  A1=bitRead(PINC,1);
+  MA=bitRead(estadoEncoder,0);//Separo por comodidad los estados anteriores del encoder.
+  MB=bitRead(estadoEncoder,1);
 
-  if(A0!=MA){//Si A0 es distinto a MA es porque el estado del motor A cambió y eso fue lo que generó la interrupción.
+  //Serial.println("Interrupt");
+  //Serial.print(PINC,BIN);Serial.print(" ");Serial.print(A0);Serial.print(" ");Serial.print(A1);Serial.print(" ");Serial.print(MA);Serial.print(" ");Serial.println(MB);
+  
+  int auxiliar;//$$$BORRAR
+
+  if(A0!=MA){//Si A0 es distinto a MA es porque el estado del motor A cambió y eso fue lo que generó la interrupción.   
     bitWrite(estadoEncoder,0,A0);//Almaceno el estado del encoder para la proxima interrupción.
     TCNT2anteriorA=TCNT2actualA;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
     TCNT2actualA=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
@@ -52,7 +60,12 @@ ISR(PCINT1_vect){
     cantOVerflowA=0;
     bitWrite(Bandera,2,1);
   }
-  if(A1!=MB){//Si A1 es distinto a MB es porque el estado del motor B cambió y eso fue lo que generó la interrupción.
+  if(A1!=MB){//Si A1 es distinto a MB es porque el estado del motor B cambió y eso fue lo que generó la interrupción.    
+
+    auxiliar=digitalRead(LED_BUILTIN);//$$$BORRAR
+    if(auxiliar==0){digitalWrite(LED_BUILTIN,HIGH);}//$$$BORRAR
+    else{digitalWrite(LED_BUILTIN,LOW);}//$$$BORRAR
+    
     bitWrite(estadoEncoder,1,A1);//Almaceno el estado del encoder para la proxima interrupción.
     TCNT2anteriorB=TCNT2actualB;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
     TCNT2actualB=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
