@@ -5,7 +5,7 @@ Controlados controlados1;
 
 // #   #   #   # Constantes $1
 const int cantMarcasEncoder = 18; //Es la cantidad de huecos que tiene el encoder de cada motor.
-const int cantMarcasEncoderB = 8; //$ BORRAR!!! SOLO PARA PRUEBAS
+const int cantMarcasEncoderB = 18; //$ BORRAR!!! SOLO PARA PRUEBAS
 const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
@@ -38,7 +38,7 @@ int soft_prescaler=0;
 // Variables del PID
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
-float set_pointA=0,set_pointB=0; // Set_point esta en RPM
+float set_pointA=500,set_pointB=500; // Set_point esta en RPM
 float ParametrosA[]={0.10679,-0.099861,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 float ParametrosB[]={0.10679,-0.099861,0,1,0};
 
@@ -67,6 +67,10 @@ void setup() { // $2
   //Config pines de encoders:
   pinMode(14, INPUT);//A0 = pin 14 del nano
   pinMode(15, INPUT);//A1 = pin 15 del nano
+
+  //$$$BORRAR:
+  pinMode(16, OUTPUT);//A1 = pin 15 del nano
+  pinMode(17, OUTPUT);//A1 = pin 15 del nano
   
  controlados1.configPinesMotores();
  controlados1.modoStop();
@@ -104,8 +108,7 @@ void loop() { //$3
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  EnviarTX_online(freqA);
-  Serial.println(freqA);
+  EnviarTX_online(freqB);
   }
 }
 

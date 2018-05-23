@@ -11,8 +11,8 @@ Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin 
 Comunic_test(s)
  %Env_instruccion(s,'PWM',[30 30]); 
 % pause(1)
-Env_instruccion(s,'setpoint',[700,00]); 
-N=800;
+Env_instruccion(s,'setpoint',[100,500]); 
+N=400;
 medicion=zeros(1,N);
 control=zeros(1,N);
 i=1;
