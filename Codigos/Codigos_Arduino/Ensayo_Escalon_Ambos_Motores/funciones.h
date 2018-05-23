@@ -4,14 +4,14 @@
 extern unsigned long ticc,tocc;
 
 //variables del PID
-extern volatile float  freq;
-extern float u[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
-extern float error[3];
-extern float set_point; // Set_point esta en RPM
-extern float Parametros[5];//{1.261400, -2.522133, 1.260733, 1.999500, -0.999500};
-extern float sal0;
+extern volatile float  freqA,freqB;
+extern float uA[3],uB[3];// historia del error cometido y la historia de las salidas de control ejecutadas.
+extern float errorA[3],errorB[3];
+extern float set_pointA,set_pointB;// Set_point esta en RPM
+extern float ParametrosA[5],ParametrosB[5];
 extern int soft_prescaler;
 extern int windup_top,windup_bottom;
+
 // Variables comunicaciones
 extern bool online, tx_activada;
 

@@ -15,7 +15,7 @@ unsigned long _OCR2A;
 
 // #   #   #   # Variable Basura
 int Bandera=0; // bandera para administrar procesos fuera de interrupciones
-
+int MedicionNueva=0;//Para que el nano no transmita 2 veces una misma medición
 
 //################
 
@@ -88,6 +88,8 @@ void setup() { // $2
  controlados1.modoAdelante();
  _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
+  
+  tic();
 }
 
 void loop() { //$3
@@ -106,12 +108,18 @@ void loop() { //$3
   medirVelocidadB(1);
   }
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
-  PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
+  //PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  digitalWrite(LED_BUILTIN,HIGH);//$$$BORRAR
-  EnviarTX_online(freqA);
-  //EnviarTX_online(uA[2]);
-  digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
+
+  if(MedicionNueva==1){//Solo transmito si la medición es distinta a la que transmití antes
+    digitalWrite(LED_BUILTIN,HIGH);
+    float frec=freqA,tiempo=(float)tocc;//Variables aux para que no me las pise mientras estoy transmitiendo
+    Serial.println(255);
+    EnviarTX_online(frec);
+    EnviarTX_online(tiempo);
+    MedicionNueva=0;
+    digitalWrite(LED_BUILTIN,LOW);
+  }
   }
 }
 
@@ -138,6 +146,7 @@ long suma=0;
      suma=suma+ bufferVelA[2*cantMarcasEncoder-1];
      freqA=0; // Hay que calcularla aca porque sino da cualquier valor.
   }
+  MedicionNueva=1;//Aviso que hay una nueva medición disponible
 }
 
 void medirVelocidadB(unsigned char interrupcionB)
@@ -163,4 +172,5 @@ long suma=0;
      suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
      freqB=0; // Hay que calcularla aca porque sino da cualquier valor.
   }
+  MedicionNueva=1;//Aviso que hay una nueva medición disponible
 }

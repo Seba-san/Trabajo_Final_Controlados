@@ -59,6 +59,8 @@ ISR(PCINT1_vect){
     cantOVerflow_actualA=cantOVerflowA;
     cantOVerflowA=0;
     bitWrite(Bandera,2,1);
+    //Comentar si quiero ver el motor B: $.$
+    toc();
   }
   if(A1!=MB){//Si A1 es distinto a MB es porque el estado del motor B cambió y eso fue lo que generó la interrupción.    
     bitWrite(estadoEncoder,1,A1);//Almaceno el estado del encoder para la proxima interrupción.
@@ -71,6 +73,8 @@ ISR(PCINT1_vect){
     cantOVerflow_actualB=cantOVerflowB;
     cantOVerflowB=0;
     bitWrite(Bandera,4,1);
+    //Comentar si quiero ver el motor A: $.$
+    //toc();
   }
 }
 
@@ -100,6 +104,10 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
         case ins_setpoint://Instrucción 248: cambiar el valor del setpoint
           trama_activa=3;
           break;
+        case ins_u_control://Instrucción 246: Fuerzo la señal de control al valor deseado
+          trama_activa=5;
+          break;
+
         default://No hace nada si no recibe una instrucción válida
           break;}
     }
@@ -121,6 +129,11 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
       }
     else if (trama_activa==4){
       set_pointB=dato*10; // Actualiza el valor del setpoint de B
+      trama_activa=0;
+      }
+      else if (trama_activa==5){
+      uA[2]=dato;
+      uB[2]=dato;
       trama_activa=0;
       }
   }

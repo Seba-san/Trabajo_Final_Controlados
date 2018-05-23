@@ -335,16 +335,10 @@ void Controlados::configTimer2Contador(const int& Frecuencia, const int& Prescal
     break;   
     }
 
-if (interrupciones){
-  //Interrupciones por estado en pin para lectura de los encoders:
- 
-  bitWrite(PCICR,PCIE1,1); // Pin Change Interrupt Control Register ; Bit 1 – PCIE1: Pin Change Interrupt Enable 1; PCINT[14:8]
+if (interrupciones){//Interrupciones por estado en pin para lectura de los encoders
+   bitWrite(PCICR,PCIE1,1); // Pin Change Interrupt Control Register ; Bit 1 – PCIE1: Pin Change Interrupt Enable 1; PCINT[14:8]. Nosotros usamos A0=PCINT8 y A1=PCINT9
   bitWrite(PCMSK1,PCINT8,1); // PCINT8 corresponde a A0.
+  bitWrite(PCMSK1,PCINT9,1); // PCINT9 corresponde a A1.
   bitWrite(PCIFR,PCIF1,1);// Limpio la bandera
   }
-  
-	//TCCR2B=0b00000011;
 }
-
-
-
