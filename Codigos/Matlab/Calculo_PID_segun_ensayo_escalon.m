@@ -7,7 +7,7 @@
 %% Ensayo al escalón - Cargo los datos
 clear all;close all;%clc;
 cd('C:\Users\Tania\Documents\ING\Carrera de Grado\Controlados\Trabajo Final con Seba\Git con Seba\Trabajo_Final_Controlados_git\Codigos\Matlab')
-load('../../Mediciones/respuesta_escalon_180510160713.mat')
+load('../../Mediciones/respuesta_escalon_motorA180523181021.mat')
 % load('../../Mediciones/respuesta_escalon_180503210331.mat')
 tiempo=tiempo*1e-6;%Acomodo la unidad del tiempo.
 %% Gráfico de la Respuesta al escalón
