@@ -38,9 +38,13 @@ int soft_prescaler=0;
 // Variables del PID
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
-float set_pointA=200,set_pointB=200; // Set_point esta en RPM
-float ParametrosA[]={0.10679,-0.099861,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
-float ParametrosB[]={0.10679,-0.099861,0,1,0};
+float set_pointA=300,set_pointB=300; // Set_point esta en RPM
+
+//Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
+//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
+
+float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
+float ParametrosB[]={0.11391,-0.095936,0,1,0};
 
 volatile float freqA;
 volatile float freqB;
