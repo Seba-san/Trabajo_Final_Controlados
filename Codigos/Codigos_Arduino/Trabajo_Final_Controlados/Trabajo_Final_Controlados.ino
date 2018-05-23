@@ -38,7 +38,7 @@ int soft_prescaler=0;
 // Variables del PID
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
-float set_pointA=500,set_pointB=500; // Set_point esta en RPM
+float set_pointA=200,set_pointB=200; // Set_point esta en RPM
 float ParametrosA[]={0.10679,-0.099861,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 float ParametrosB[]={0.10679,-0.099861,0,1,0};
 
@@ -108,7 +108,10 @@ void loop() { //$3
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  EnviarTX_online(freqB);
+  digitalWrite(LED_BUILTIN,HIGH);//$$$BORRAR
+  EnviarTX_online(freqA);
+  //EnviarTX_online(uA[2]);
+  digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
   }
 }
 

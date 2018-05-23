@@ -61,11 +61,6 @@ ISR(PCINT1_vect){
     bitWrite(Bandera,2,1);
   }
   if(A1!=MB){//Si A1 es distinto a MB es porque el estado del motor B cambió y eso fue lo que generó la interrupción.    
-
-    auxiliar=digitalRead(LED_BUILTIN);//$$$BORRAR
-    if(auxiliar==0){digitalWrite(LED_BUILTIN,HIGH);}//$$$BORRAR
-    else{digitalWrite(LED_BUILTIN,LOW);}//$$$BORRAR
-    
     bitWrite(estadoEncoder,1,A1);//Almaceno el estado del encoder para la proxima interrupción.
     TCNT2anteriorB=TCNT2actualB;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
     TCNT2actualB=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
