@@ -11,7 +11,7 @@ Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin 
 Comunic_test(s)
  %Env_instruccion(s,'PWM',[30 30]); 
 % pause(1)
-Env_instruccion(s,'setpoint',[100,500]); 
+Env_instruccion(s,'setpoint',[500,100]); 
 N=400;
 medicion=zeros(1,N);
 control=zeros(1,N);
@@ -24,6 +24,7 @@ try
     close(1)
 end
 figure(1)
+ flushinput(s);
 while (veces<1)
     %figure(1)
     
@@ -39,7 +40,11 @@ while (veces<1)
     % setpoint=str2double(fscanf(s))
     
     m1=1:1:i;m2=i+1:1:N;
+    %figure(1)
     plot(m1,medicion(1:i),'.','color',[~a 0 a]); hold on;plot(m2,medicion(i+1:N),'.','color',[a 0 ~a]); hold off; ylim([limite_inf limite_sup]);
+ % figure(2)
+   % plot(m1,control(1:i),'.','color',[~a 0 a]); hold on;plot(m2,control(i+1:N),'.','color',[a 0 ~a]); hold off; ylim([0 110]);
+   
     pause(0.001)
     i=i+1;
     if (i>N ) 
