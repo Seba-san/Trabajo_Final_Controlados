@@ -5,14 +5,23 @@ InfoHard=instrhwinfo('serial');%Busco cu�l puerto tengo conectado con esta ins
 %En InfoHard.SerialPorts me guarda celdas con los puertos disponibles. Uso
 %la primer celda y chau.
 s=InicializacionSerial(InfoHard.SerialPorts{1},115200);%Velocidad: 115200 baudios
+%%
+cd /media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab/Matlab_Seba
+%cd('C:\Users\Tania\Dropbox\Trabajo final - Controlados\Codigos\Codigos\Matlab')%compu Tania
+
+addpath('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab');
+s=InicializacionSerial('/dev/ttyUSB1',1000000);%Velocidad: 115200 baudios
 %% Cerrar puerto
 fclose(instrfindall);       %cierra todos los puertos activos y ocultos
+disp('puerto cerrado')
 %% Ensayo al escalon
-N=200;%Cantidad de muestras a tomar
+
+N=300;%Cantidad de muestras a tomar
 wA=[];
 tiempo=[];
 %Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos
-PWMA=[];                   
+PWMA=[];  
+Comunic_test(s)
 PWM=10;
 %Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
 Env_instruccion(s,'Ucontrol',PWM);
@@ -21,12 +30,12 @@ Comunic_test(s)
 Env_instruccion(s,'online');
 flushinput(s);  %Vacia el buffer de entrada
 for k=1:N %Ojo con el tope que pone el nano
-    if k==50
-        PWM=100;
+    if k==10
+        PWM=40;
         Env_instruccion(s,'Ucontrol',PWM);
     end
     dato1=str2double(fscanf(s));%Actualmente el nano est� enviando la vel en rpm y el tiempo en us.
-      dato2=str2double(fscanf(s));
+    dato2=str2double(fscanf(s));
        %flushinput(s);
     wA=[wA dato1];
     tiempo=[tiempo dato2];
@@ -35,13 +44,13 @@ end
 Env_instruccion(s,'Ucontrol',0);
 Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
 name=datestr(now,'yymmddhhMMss');
-name=strcat('respuesta_escalon_',name,'.mat');
+name=strcat('respuesta_escalon_motorA_',name,'.mat');
 %save(name,'tiempo','PWMA','wA') 
-figure(1);plot(tiempo,PWMA,tiempo,wA,'.');%ylim([0 1500])
+figure(1);plot((tiempo-tiempo(1))*1e-6,PWMA,(tiempo-tiempo(1))*1e-6,wA,'.');%ylim([0 1500])
 %legend('Se�al de PWM','Se�al de vel ang');
 title('Respuesta del Motor B');
-xlabel('tiempo (us)');ylabel('Vel Ang (rpm) / PWM') %Revisar la unidad!! $
-figure(2);plot(diff(tiempo-tiempo(1))*1e-6,'.');%ylim([0 10e-3])
+xlabel('tiempo (s)');ylabel('Vel Ang (rpm) / PWM') %Revisar la unidad!! $
+figure(2);plot(diff(tiempo-tiempo(1))*1e-6,'.');ylabel('tiempo entre muestras en segundos')%ylim([0 10e-3])
 %% Gr�fico de la Respuesta del motor B
 cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
 

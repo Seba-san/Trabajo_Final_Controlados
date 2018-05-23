@@ -3,9 +3,9 @@
 Controlados controlados1;
 
 
-// #   #   #   # Constantes
-const int cantMarcasEncoder = 8; //Es la cantidad de huecos que tiene el encoder de cada motor.
-const int FsEncoders = 200;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
+// #   #   #   # Constantes $1
+const int cantMarcasEncoder = 18; //Para un encoder de 18 lineas
+const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
  unsigned long _OCR2A ;
@@ -81,8 +81,8 @@ void toc(void);
 void setup() { // $2
   interruptOFF; // se desactivan las interrupciones para configurar.
 
-Serial.begin(115200); // Si se comunica a mucha velocidad se producen errores (que no se detectan hasta que haces las cuentas)
-//Serial.begin(1000000);
+//Serial.begin(115200); // Si se comunica a mucha velocidad se producen errores (que no se detectan hasta que haces las cuentas)
+Serial.begin(1000000);
 
 while (!Serial) {
     ; // wait for serial port to connect. Needed for native USB
@@ -116,8 +116,8 @@ if (bitRead(Bandera,0)){ bitWrite(Bandera,0,0);// timer 2 overflow
   medirVelocidad(1);
   }
    if (bitRead(Bandera,3)){ bitWrite(Bandera,3,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
-  EnviarTX_online(freq);
-  EnviarTX_online((float)tocc);
+  //EnviarTX_online(freq);
+  //EnviarTX_online((float)tocc);
   //PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
   }
@@ -182,5 +182,8 @@ aux[4]=TCNT2actual;
  //indice=int(freq);
 //EnviarTX_online(freq);
 //EnviarTX_online(suma);
+
+EnviarTX_online(freq);
+  EnviarTX_online((float)tocc);
 
 }

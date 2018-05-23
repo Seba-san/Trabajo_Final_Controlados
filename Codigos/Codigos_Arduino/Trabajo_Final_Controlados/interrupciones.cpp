@@ -23,7 +23,7 @@ void  timer_interrupt(void){
   if (soft_prescaler>=2){ // $VER ponerlo en 2 para 200Hz por interrupt. 
     soft_prescaler=0;
     bitWrite(Bandera,3,1);
-    toc();
+   // toc();
     }
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si se acontrolada. $interrup
       //PID_online();
@@ -56,7 +56,7 @@ ISR(PCINT1_vect){
   TCNT2anterior=TCNT2actual;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
   
   TCNT2actual=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
-  //toc();
+  toc();
   if (bitRead(TIFR2,1)){ // me fijo si hay overflow
   timer_interrupt();
   bitSet(TIFR2,1); // borro bandera para que no entre de nuevo
