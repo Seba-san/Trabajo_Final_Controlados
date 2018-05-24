@@ -28,7 +28,7 @@ class Controlados
 	void modoStop();
 	
 	void configPinesSensorLinea();
-	int leerSensorDeLinea();
+	unsigned char leerSensorDeLinea();
 	
 	//Configuración timer2 como contador:
 	void configTimer2Contador(const int& Frecuencia, const int& Prescaler,bool interrupciones);

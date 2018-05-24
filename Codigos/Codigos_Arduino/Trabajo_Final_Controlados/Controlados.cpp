@@ -210,7 +210,7 @@ void Controlados::configPinesSensorLinea()
 	pinMode(rx_8,INPUT_PULLUP);
 }
 
-int Controlados::leerSensorDeLinea()
+unsigned char Controlados::leerSensorDeLinea()
 {
 	//Esta función lee el sensor de línea (valor de los LEDs puestos en rx_1 a
 	//rx_8) y determina en función de ellos un valor para el error entre el
@@ -219,7 +219,8 @@ int Controlados::leerSensorDeLinea()
 	//pines de rx_1:8, sino que está puesto a mano acá cuáles son los pines que
 	//usa.
 
-	uint8_t LED[8];int aux;int error;
+	uint8_t LED[8];unsigned char byteSensor; int aux;int error;
+/*
 
 	//1<<bitn mueve el 1 del byte bitn lugares a la izq, entonces si bitn=3
 	//1<<bitn=b00001000, lo que permite recuperar el bit 3 del registro
@@ -240,10 +241,33 @@ int Controlados::leerSensorDeLinea()
 	LED[7]=~(port8&(1<<bit8))>>bit8;
 
 	//Junto todos los bits en un byte:
-	aux=LED[0]|(LED[1]<<1)|(LED[2]<<2)|(LED[3]<<3)|(LED[4]<<4)|(LED[5]<<5)|(LED[6]<<6)|(LED[7]<<7);
+	aux=(unsigned char) LED[0]|(LED[1]<<1)|(LED[2]<<2)|(LED[3]<<3)|(LED[4]<<4)|(LED[5]<<5)|(LED[6]<<6)|(LED[7]<<7);
 	return aux;//Devuelvo como valor de salida aux
 
 	//Si hay más de
+ */
+
+  //Segundo intento
+  LED[0]=bitRead(port1,bit1);
+  LED[1]=bitRead(port2,bit2);
+  LED[2]=bitRead(port3,bit3);
+  LED[3]=bitRead(port4,bit4);
+
+  //Acá hago algo distinto porque el pin es analógico
+  aux=analogRead(A6);//Lectura del bit analógico
+  LED[4]=(aux&512>>9);//aux&512 me da un 1 seguido de 9 ceros si aux>=512
+                      //y sino me da todos ceros.
+
+  LED[5]=bitRead(port6,bit6);
+  LED[6]=bitRead(port7,bit7);
+  LED[7]=bitRead(port8,bit8);
+
+  //Junto todos los bits en un byte:
+  byteSensor=0;
+  for(int k=0;k<8;k++){
+    bitWrite(byteSensor,k,LED[k]);
+  }
+  return byteSensor;//Lo devuelvo como valor de salida
 }
  void Controlados::configTimer2Contador(){
   int a=2000,b=32;
