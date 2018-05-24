@@ -20,14 +20,14 @@ void  timer_interrupt(void){
   }
   bitWrite(Bandera,0,1); // Esta bandera le avisa al resto de las funciones que se produjo una interrupcion por timer
 
-  if (soft_prescaler>=2){ // $VER ponerlo en 2 para 200Hz por interrupt. 
+  if (soft_prescaler>=1){ // $VER ponerlo en 2 para 200Hz por interrupt. 
     soft_prescaler=0;
     bitWrite(Bandera,5,1);
     }
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si sea controlada. $interrup
       // Esta funcion mete mucho tiempo de computo 120 uS
-      int auxA=uA[2],auxB=uB[2];
-      controlados1.actualizarDutyCycleMotores((int)(auxA),(int)auxB);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
+     // int auxA=uA[2],auxB=uB[2];
+     // controlados1.actualizarDutyCycleMotores((int)(auxA),(int)auxB);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
     }
 }
 
@@ -50,6 +50,7 @@ ISR(PCINT1_vect){
 
   if(A0!=MA){//Si A0 es distinto a MA es porque el estado del motor A cambió y eso fue lo que generó la interrupción.   
     bitWrite(estadoEncoder,0,A0);//Almaceno el estado del encoder para la proxima interrupción.
+   
     TCNT2anteriorA=TCNT2actualA;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
     TCNT2actualA=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
     if (bitRead(TIFR2,1)){ // me fijo si hay overflow
@@ -62,6 +63,7 @@ ISR(PCINT1_vect){
   }
   if(A1!=MB){//Si A1 es distinto a MB es porque el estado del motor B cambió y eso fue lo que generó la interrupción.    
     bitWrite(estadoEncoder,1,A1);//Almaceno el estado del encoder para la proxima interrupción.
+     
     TCNT2anteriorB=TCNT2actualB;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
     TCNT2actualB=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
     if (bitRead(TIFR2,1)){ // me fijo si hay overflow
@@ -115,7 +117,7 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
       if (!PWMA && !PWMB ){Motores_ON=false;}
       else {Motores_ON=true;}
       }
-    else if (trama_activa==3){
+    else if (trama_activa==3){ //Instrucción 248: cambiar el valor del setpoint
       set_pointA=dato*10; // Actualiza el valor del setpoint de A
       trama_activa=4;
       }

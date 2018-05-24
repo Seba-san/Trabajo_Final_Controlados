@@ -31,8 +31,9 @@ volatile unsigned long cantOVerflowA=0,cantOVerflowB=0;//Variable que almacena l
 volatile unsigned long TCNT2anteriorA=0,TCNT2anteriorB=0;//Valor anterior del contador (para corregir la medición)
 volatile unsigned long TCNT2actualA=0,TCNT2actualB=0;//Almaceno el valor del timer para que no me jodan posibles actualizaciones.
 volatile unsigned long cantOVerflow_actualA=0,cantOVerflow_actualB=0;//Valor anterior del contador (para corregir la medición), correspondiente al TCNT2anterior.
+long sumaA,sumaB;
 unsigned long aux[6];  // este es un buffer para enviar datos en formato trama, corresponde a la funcion "EnviarTX"
-float  bufferVelA[2*cantMarcasEncoder],bufferVelB[2*cantMarcasEncoderB];//buffer donde almaceno las últimas velocidades calculadas.
+float  bufferVelA[2*cantMarcasEncoder],bufferVelB[2*cantMarcasEncoder];//buffer donde almaceno las últimas velocidades calculadas.
 bool Motores_ON=false;
 int soft_prescaler=0;
 // Variables del PID
@@ -63,14 +64,12 @@ void setup() { // $2
   }
 
   Serial.println("Inicio");//$$$BORRAR
-
+  // $$$ BORRAR
+  //pinMode(13, OUTPUT);//A0 = pin 14 del nano
+ // $$$ BORRAR
   //Config pines de encoders:
   pinMode(14, INPUT);//A0 = pin 14 del nano
   pinMode(15, INPUT);//A1 = pin 15 del nano
-
-  //$$$BORRAR:
-  pinMode(16, OUTPUT);//A1 = pin 15 del nano
-  pinMode(17, OUTPUT);//A1 = pin 15 del nano
   
  controlados1.configPinesMotores();
  controlados1.modoStop();
@@ -106,10 +105,10 @@ void loop() { //$3
   medirVelocidadB(1);
   }
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
-  PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
+  //PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
   
-  EnviarTX_online(freqA);
+  EnviarTX_online(sumaB);
   //EnviarTX_online(uA[2]);
   
   }
@@ -138,13 +137,14 @@ long suma=0;
      suma=suma+ bufferVelA[2*cantMarcasEncoder-1];
      freqA=0; // Hay que calcularla aca porque sino da cualquier valor.
   }
+    sumaA=suma;
 }
 
 void medirVelocidadB(unsigned char interrupcionB)
 {
 long suma=0;
   //Corro los valores de w en el buffer un lugar y voy sumando los valores para después calcular el promedio de velocidades:
-  for(int k=0;k<(2*cantMarcasEncoderB-1);k++)
+  for(int k=0;k<(2*cantMarcasEncoder-1);k++)
   {
     bufferVelB[k]=bufferVelB[k+1];//Desplazamiento a la derecha de los datos del buffer
     suma=suma+bufferVelB[k];
@@ -153,14 +153,15 @@ long suma=0;
   if(interrupcionB){
     // Se hace de forma separada porque se detectaron problemas de calculo asociado con los tipos de variables. Esto se resolvio separando las cuentas, queda a futuro resolverlo en una sola linea.
     interruptOFF; // Es importante poner esto antes de hacer el calculo para evitar que modifique las variables en la interrupcion. Se observaron problemas de medicion.
-    bufferVelB[2*cantMarcasEncoderB-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
-    suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
+    bufferVelB[2*cantMarcasEncoder-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
+    suma=suma+ bufferVelB[2*cantMarcasEncoder-1];
     freqB=float((F_CPU*60.0)/(suma));
     interruptON;
   }
   else{
-     bufferVelB[2*cantMarcasEncoderB-1]=0;
-     suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
+     bufferVelB[2*cantMarcasEncoder-1]=0;
+     suma=suma+ bufferVelB[2*cantMarcasEncoder-1];
      freqB=0; // Hay que calcularla aca porque sino da cualquier valor.
   }
+  sumaB=suma;
 }

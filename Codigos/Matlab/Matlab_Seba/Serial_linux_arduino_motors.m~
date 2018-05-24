@@ -25,7 +25,7 @@ Env_instruccion(s,'parametros',0.1);
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test(s)
- Env_instruccion(s,'PWM',[10 100]); 
+ Env_instruccion(s,'PWM',[10 50]); 
 % pause(1)
 %Env_instruccion(s,'setpoint',[200 200]); 
 N=400;
@@ -39,7 +39,7 @@ try
     close(1)
 end
 figure(1)
-while  (veces<1)
+while (veces<1)
     %figure(1)
     
     
@@ -82,7 +82,7 @@ Y = fft(medicion(2:end));
 P2 = abs(Y/L);
 P1 = P2(1:L/2+1);
 P1(2:end-1) = 2*P1(2:end-1);
-y=filter(bb,1,medicion(2:end));
+y=filter(bb,1,medicion);
 %y(isnan(y))=[];L=length(y);f2 = Fs*(0:(L/2))/L;
 Y = fft(y(2:L));
 P2 = abs(Y/L);
@@ -92,16 +92,16 @@ filtrada(2:end-1) = 2*filtrada(2:end-1);
 
 
 figure(1)
-plot(f1(2:end),P1(2:end),'.',f1(2:end),filtrada(2:end),'.')
+plot(f1(2:end),P1(2:end),'.',f2(2:end),filtrada(2:end),'.')
 %figure(2)
 %plot(f2(2:end),filtrada(2:end),'.')
 title('Single-Sided Amplitude Spectrum of S(t)')
 xlabel('f (Hz)')
 ylabel('|P1(f)|')
 legend('Input Data','Filtered Data')
-%%
+
 figure(3)
-sin_filtro=16e6*60./medicion(2:end);
+sin_filtro=16e6*60./medicion;
 con_filtro=16e6*60./y;
 l=1:1:N;
 plot(l,sin_filtro,'.',l,con_filtro,'.')

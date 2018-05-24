@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<!-- saved from url=(0071)http://www.piclist.com/techref/au/net/ezy/www/http/~fastvid/encoder.htm -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title> Simple encoder-less encoder for speed control small DC motor</title>
+
+<script src="./Simple encoder-less encoder for speed control small DC motor_files/cb=gapi.loaded_1" async=""></script><script src="./Simple encoder-less encoder for speed control small DC motor_files/cb=gapi(1).loaded_0" async=""></script><script src="./Simple encoder-less encoder for speed control small DC motor_files/f.txt"></script><script type="text/javascript" async="" src="./Simple encoder-less encoder for speed control small DC motor_files/plusone.js" gapi_processed="true"></script><script src="./Simple encoder-less encoder for speed control small DC motor_files/ca-pub-3554665142518411.js"></script><script type="text/javascript">
+//window.google_analytics_uacct = "UA-9394133-1";
+window.google_analytics_domain_name="none";
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="./Simple encoder-less encoder for speed control small DC motor_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-9394133-1");
+pageTracker._setDomainName("none");
+pageTracker._setAllowLinker(true);
+pageTracker._trackPageview();
+} catch(err) {}</script>
+  <style media="screen and (min-width: 481px)">
+  body {
+  	font-family: Arial, Verdana, Helvetica, sans-serif;
+  	}
+  h1 {
+  	border-bottom-width: 1px;
+  	border-bottom-style: solid;
+  	border-bottom-color: #000000;
+  	padding-bottom: 2px;
+  	padding-top: 20px;
+  	}
+  h2 {
+  	margin: 0px 100px 5px 0px;
+  	border-bottom-width: 1px;
+  	border-bottom-style: solid;
+  	border-bottom-color: #000000;
+  	padding-bottom: 1px;
+  	padding-top: 10px;
+  	}
+   A:visited { color: #0000BB;}
+  ul {
+      list-style-position: inside;
+      }
+  .fb-like-box iframe{width:250px !important;height:200px !important;}
+  .responsivesky { width: 320px; height: 50px; }
+  @media (min-width:500px) { .responsivesky { width: 468px; height: 60px; } }
+  @media (min-width:800px) { .responsivesky { width: 728px; height: 90px; } }
+  </style>
+  <link rel="stylesheet" type="text/css" href="./Simple encoder-less encoder for speed control small DC motor_files/phone.css" media="only screen and (max-width: 480px)">
+   <meta name="viewport" content="initial-scale=1, width=device-width">
+  <link href="./Simple encoder-less encoder for speed control small DC motor_files/googiespell.css" rel="stylesheet" type="text/css" media="all">
+  <script type="text/javascript" src="./Simple encoder-less encoder for speed control small DC motor_files/massmind.js"></script>
+  <script type="text/javascript" src="./Simple encoder-less encoder for speed control small DC motor_files/AJS.js"></script>
+  <script type="text/javascript" src="./Simple encoder-less encoder for speed control small DC motor_files/googiespell.js"></script>
+  <script async="" type="text/javascript" src="./Simple encoder-less encoder for speed control small DC motor_files/cookiesupport.js"></script>
+  <meta name="keywords" content=" Simple encoder-less encoder for speed control small DC motor">
+  <meta name="description" content=" Simple encoder-less encoder for speed control small DC motor">
+  <script>
+       (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-3554665142518411",
+            enable_page_level_ads: true
+       });
+  </script>
+<link rel="preload" href="./Simple encoder-less encoder for speed control small DC motor_files/f(1).txt" as="script"><script type="text/javascript" src="./Simple encoder-less encoder for speed control small DC motor_files/f(1).txt"></script><link rel="preload" href="./Simple encoder-less encoder for speed control small DC motor_files/f(2).txt" as="script"><script type="text/javascript" src="./Simple encoder-less encoder for speed control small DC motor_files/f(2).txt"></script><style type="text/css">.fb_hidden{position:absolute;top:-10000px;z-index:10001}.fb_reposition{overflow:hidden;position:relative}.fb_invisible{display:none}.fb_reset{background:none;border:0;border-spacing:0;color:#000;cursor:auto;direction:ltr;font-family:"lucida grande", tahoma, verdana, arial, sans-serif;font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;letter-spacing:normal;line-height:1;margin:0;overflow:visible;padding:0;text-align:left;text-decoration:none;text-indent:0;text-shadow:none;text-transform:none;visibility:visible;white-space:normal;word-spacing:normal}.fb_reset>div{overflow:hidden}.fb_link img{border:none}@keyframes fb_transform{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}.fb_animate{animation:fb_transform .3s forwards}
+.fb_dialog{background:rgba(82, 82, 82, .7);position:absolute;top:-10000px;z-index:10001}.fb_reset .fb_dialog_legacy{overflow:visible}.fb_dialog_advanced{padding:10px;border-radius:8px}.fb_dialog_content{background:#fff;color:#333}.fb_dialog_close_icon{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 0 transparent;cursor:pointer;display:block;height:15px;position:absolute;right:18px;top:17px;width:15px}.fb_dialog_mobile .fb_dialog_close_icon{top:5px;left:5px;right:auto}.fb_dialog_padding{background-color:transparent;position:absolute;width:1px;z-index:-1}.fb_dialog_close_icon:hover{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -15px transparent}.fb_dialog_close_icon:active{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yq/r/IE9JII6Z1Ys.png) no-repeat scroll 0 -30px transparent}.fb_dialog_loader{background-color:#f6f7f9;border:1px solid #606060;font-size:24px;padding:20px}.fb_dialog_top_left,.fb_dialog_top_right,.fb_dialog_bottom_left,.fb_dialog_bottom_right{height:10px;width:10px;overflow:hidden;position:absolute}.fb_dialog_top_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 0;left:-10px;top:-10px}.fb_dialog_top_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -10px;right:-10px;top:-10px}.fb_dialog_bottom_left{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -20px;bottom:-10px;left:-10px}.fb_dialog_bottom_right{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ye/r/8YeTNIlTZjm.png) no-repeat 0 -30px;right:-10px;bottom:-10px}.fb_dialog_vert_left,.fb_dialog_vert_right,.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{position:absolute;background:#525252;filter:alpha(opacity=70);opacity:.7}.fb_dialog_vert_left,.fb_dialog_vert_right{width:10px;height:100%}.fb_dialog_vert_left{margin-left:-10px}.fb_dialog_vert_right{right:0;margin-right:-10px}.fb_dialog_horiz_top,.fb_dialog_horiz_bottom{width:100%;height:10px}.fb_dialog_horiz_top{margin-top:-10px}.fb_dialog_horiz_bottom{bottom:0;margin-bottom:-10px}.fb_dialog_iframe{line-height:0}.fb_dialog_content .dialog_title{background:#6d84b4;border:1px solid #365899;color:#fff;font-size:14px;font-weight:bold;margin:0}.fb_dialog_content .dialog_title>span{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/yd/r/Cou7n-nqK52.gif) no-repeat 5px 50%;float:left;padding:5px 0 7px 26px}body.fb_hidden{-webkit-transform:none;height:100%;margin:0;overflow:visible;position:absolute;top:-10000px;left:0;width:100%}.fb_dialog.fb_dialog_mobile.loading{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/ya/r/3rhSv5V8j3o.gif) white no-repeat 50% 50%;min-height:100%;min-width:100%;overflow:hidden;position:absolute;top:0;z-index:10001}.fb_dialog.fb_dialog_mobile.loading.centered{width:auto;height:auto;min-height:initial;min-width:initial;background:none}.fb_dialog.fb_dialog_mobile.loading.centered #fb_dialog_loader_spinner{width:100%}.fb_dialog.fb_dialog_mobile.loading.centered .fb_dialog_content{background:none}.loading.centered #fb_dialog_loader_close{color:#fff;display:block;padding-top:20px;clear:both;font-size:18px}#fb-root #fb_dialog_ipad_overlay{background:rgba(0, 0, 0, .45);position:absolute;bottom:0;left:0;right:0;top:0;width:100%;min-height:100%;z-index:10000}#fb-root #fb_dialog_ipad_overlay.hidden{display:none}.fb_dialog.fb_dialog_mobile.loading iframe{visibility:hidden}.fb_dialog_content .dialog_header{-webkit-box-shadow:white 0 1px 1px -1px inset;background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#738ABA), to(#2C4987));border-bottom:1px solid;border-color:#1d4088;color:#fff;font:14px Helvetica, sans-serif;font-weight:bold;text-overflow:ellipsis;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0;vertical-align:middle;white-space:nowrap}.fb_dialog_content .dialog_header table{-webkit-font-smoothing:subpixel-antialiased;height:43px;width:100%}.fb_dialog_content .dialog_header td.header_left{font-size:12px;padding-left:5px;vertical-align:middle;width:60px}.fb_dialog_content .dialog_header td.header_right{font-size:12px;padding-right:5px;vertical-align:middle;width:60px}.fb_dialog_content .touchable_button{background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#4966A6), color-stop(.5, #355492), to(#2A4887));border:1px solid #29487d;-webkit-background-clip:padding-box;-webkit-border-radius:3px;-webkit-box-shadow:rgba(0, 0, 0, .117188) 0 1px 1px inset, rgba(255, 255, 255, .167969) 0 1px 0;display:inline-block;margin-top:3px;max-width:85px;line-height:18px;padding:4px 12px;position:relative}.fb_dialog_content .dialog_header .touchable_button input{border:none;background:none;color:#fff;font:12px Helvetica, sans-serif;font-weight:bold;margin:2px -12px;padding:2px 6px 3px 6px;text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog_content .dialog_header .header_center{color:#fff;font-size:16px;font-weight:bold;line-height:18px;text-align:center;vertical-align:middle}.fb_dialog_content .dialog_content{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat 50% 50%;border:1px solid #555;border-bottom:0;border-top:0;height:150px}.fb_dialog_content .dialog_footer{background:#f6f7f9;border:1px solid #555;border-top-color:#ccc;height:40px}#fb_dialog_loader_close{float:left}.fb_dialog.fb_dialog_mobile .fb_dialog_close_button{text-shadow:rgba(0, 30, 84, .296875) 0 -1px 0}.fb_dialog.fb_dialog_mobile .fb_dialog_close_icon{visibility:hidden}#fb_dialog_loader_spinner{animation:rotateSpinner 1.2s linear infinite;background-color:transparent;background-image:url(https://static.xx.fbcdn.net/rsrc.php/v3/yD/r/t-wz8gw1xG1.png);background-repeat:no-repeat;background-position:50% 50%;height:24px;width:24px}@keyframes rotateSpinner{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.fb_iframe_widget{display:inline-block;position:relative}.fb_iframe_widget span{display:inline-block;position:relative;text-align:justify}.fb_iframe_widget iframe{position:absolute}.fb_iframe_widget_fluid_desktop,.fb_iframe_widget_fluid_desktop span,.fb_iframe_widget_fluid_desktop iframe{max-width:100%}.fb_iframe_widget_fluid_desktop iframe{min-width:220px;position:relative}.fb_iframe_widget_lift{z-index:1}.fb_hide_iframes iframe{position:relative;left:-10000px}.fb_iframe_widget_loader{position:relative;display:inline-block}.fb_iframe_widget_fluid{display:inline}.fb_iframe_widget_fluid span{width:100%}.fb_iframe_widget_loader iframe{min-height:32px;z-index:2;zoom:1}.fb_iframe_widget_loader .FB_Loader{background:url(https://static.xx.fbcdn.net/rsrc.php/v3/y9/r/jKEcVPZFk-2.gif) no-repeat;height:32px;width:32px;margin-left:-16px;position:absolute;left:50%;z-index:4}
+.fb_customer_chat_bounce_in{animation-duration:250ms;animation-name:fb_bounce_in}.fb_customer_chat_bounce_out{animation-duration:250ms;animation-name:fb_fade_out}.fb_invisible_flow{display:inherit;height:0;overflow-x:hidden;width:0}.fb_mobile_overlay_active{background-color:#fff;height:100%;overflow:hidden;position:fixed;visibility:hidden;width:100%}@keyframes fb_fade_out{from{opacity:1}to{opacity:0}}@keyframes fb_bounce_in{0%{opacity:0;transform:scale(.8, .8);transform-origin:100% 100%}10%{opacity:.1}20%{opacity:.2}30%{opacity:.3}40%{opacity:.4}50%{opacity:.5}60%{opacity:.6}70%{opacity:.7}80%{opacity:.8;transform:scale(1.03, 1.03)}90{opacity:.9}100%{opacity:1;transform:scale(1, 1)}}</style></head>
+<body onload="javascript:et=new Date();eol();" ondblclick="javascript:dictword()">
+<script type="text/javascript"><!--
+var st=new Date();					
+var et=new Date();					
+var avgBndWdth=0;						
+function eol() {						
+var s=7234;					
+var i=document.images;				
+ for (var j=0;j<i.length;j++) 		
+  { s += parseInt(i[j].fileSize); };	
+ avgBndWdth = s/((et-st)||1);			
+ s= ' '+parseInt(s/1024)+'KB'; 		
+ i=' ('+(document.images.length-1)+' imgs) in '+((et-st)||1)/1000+'s is ';	
+ if (document.getElementById) 		
+  {document.getElementById('lt').innerText=s+i+parseInt(avgBndWdth)+'KBps';}
+ };						
+//--></script>
+<a href="http://www.piclist.com/techref/indexok.asp?spider=43244.6707986111" onclick="return false;"><img src="./Simple encoder-less encoder for speed control small DC motor_files/null.gif" align="LEFT" height="1" width="1" border="0" alt="please dont rip this site"></a>
+<h1>
+  Encoder-less Encoder!
+</h1>  <p align="RIGHT">
+
+</p><pre>Roman Black - April 2001
+
+<h2>How to get speed feedback from a small DC motor.
+</h2>
+This shows how to get speed feedback suitable for input
+to a logic input (ie, PIC input pin) from a small DC motor
+with no optical encoder needed, and no mods to the motor.
+It can be used with no mechanical mods to the device.
+It gives X pulses per motor revolution, X depends on
+the motor type.
+
+
+-------------
+Requirements:
+-------------
+
+A small DC motor (brush/commutator type)
+1x small NPN transistor
+2x 22k ohm resistor
+1x 5k ohm trimpot
+some small ceramic caps
+1x IN4148 small signal diode 
+(see notes for parts details)
+(multimeter and CRO handy for setup)
+
+
+--------
+Details:
+--------
+
+I have used this circuit to get speed information and
+even count revolutions from a number of small DC motors.
+It is not perfect, and won't give perfect position
+feedback like a proper optical encoder disk, but it
+is great for measuring motor speed with motors that
+DON'T have an encoder disk. It's cheap, easy to do,
+and works best on small cheap style DC motors like the
+ones found in toys or small hand drills etc. These are
+also the hardest motors to fit optical encoders to.
+
+
+-------
+Theory:
+-------
+
+The motor must be a brush/commutator type. Small motors
+usually have two brushes and 3 or 5 commutator segments.
+There are 6 or 10 places per rotation where a brush hits
+the "join" between commutator segments and a small electrical
+spike is generated.
+
+This circuit uses a small capacitor to couple that spike
+to a sense transistor and with every spike the transistor
+turns on for a short time. The output from the transistor
+can be coupled directly into a PIC input pin or other logic
+type input (into any IC).
+
+The spikes are short and fast, they contain very little
+energy but they do couple well through a small capacitor,
+even if the two grounds are not connected. The spikes are
+NOT evenly spaced around the revolution of the motor, but
+the number of spikes per revolution is constant and can be
+used to give pretty good motor speed sensing if a little
+software averaging is used.
+
+This is a good way to speed-control a tiny DC motor,
+like in a small robot or those little high speed hand-drills
+(supertools?) that people use to drill PCBs. You don't need
+to modify any of the mechanicals in the device, which
+is great.
+
+
+(Circuit diagram)
+<img src="./Simple encoder-less encoder for speed control small DC motor_files/encoder.gif">
+
+
+-------------
+How it works!
+-------------
+
+As the motor turns the brushes pass over the joins between
+the commutator segments. When a brush hits a join this is
+like a little switch contact opening or closing, and as
+the motor coils have inductance this switch effect makes
+little back-emfs or "spikes". These spikes are short and
+have very little energy. Generally a few microseconds.
+
+Fast little spikes like this are about the only thing
+that passes through a very small capacitor, like 330pF.
+Slower waves and DC won't pass through the very small cap. The
+spikes will even pass if the grounds of the two systems are
+not connected. It works slightly better if they are connected.
+
+The trimpot is for BIASING the transistor. It varies the
+constant voltage at the base of the transistor between 0v
+and about 1v. The transistor turns ON at about 0.7v.
+
+The trimpot can be turned through 3 basic stages:
+1. Transistor is always OFF.
+2. Transistor is not-quite on, and sensitive to spikes.
+2. Transistor is always ON.
+
+Setup is quite simple, you turn the trimpot right down
+(transistor OFF, output to PIC = +5v)
+then run the motor and slowly turn it up until you get
+good reliable triggering. With each spike, the transistor
+will briefly turn on and there will be a short 0v pulse
+to the PIC. Ten or twenty microseconds length is typical.
+
+
+-------------
+Important Notes!!
+-------------
+
+D1.
+If the motor is small you don't need the diode. If the
+motor is large, or a small high-current motor like
+in dustbuster vacuum cleaner's etc, use the diode.
+I would guess for under 2amp motor running you don't need
+the diode.
+
+R1.
+The resistor R1 is not needed with most circuits.
+Especially with DC motors in tools where the power leads
+are long. If the 12v battery (etc), is close to the motor
+you may need a small resistor here, try 0.5 ohm for
+a small motor or 0.1 ohm for a larger motor. This makes
+the spike more likely to go to the encoder circuit than
+back to the battery.
+
+C1.
+The values of the two capacitors, C1 and C2 are fairly
+critical. I can't give exact values as it all depends
+on the type of motor you are using. A value of 100pF to
+470pF is a good start for C1. If C1 is too small you will
+miss some pulses, and they will be short and weak. If it
+is too large you may get extra pulses.
+
+C2.
+You may not need C2 at all, but C2 will help reduce
+the short fast spike to a "hump" that is lower and longer.
+Hence it can increase the length of the pulse at the
+output, which is a good thing. Try using a C2 that is
+about the same value as C1, maybe going to twice as large
+as C1. A CRO will help a lot when tuning these.
+
+Motor.
+This circuit works best where there is a bit of motor
+load. This makes the motor draw more current and the
+tiny spikes at the commutator are larger. You will find
+that the circuit gives the most reliable output pulses
+when the motor is under some load. Generally I have found
+this circuit works well with almost every motor, even with
+some unloaded motors like spinning a small mirror or paper
+disk, etc. Do NOT put a capacitor directly between the
+motor terminals. If RF filtering is needed use a capacitor
+across the motor power, leaving R1 in series with the motor.
+
+Adjustment.
+The easiest way is to set the trimpot so the transistor
+is fully off, (output=5v) and run the motor at it's
+minimum load. Then turn the trimpot until the triggering
+and output pulses become reliable. After that, when motor
+load is increased the pulses will become slightly longer
+and more reliable. When it is done you should check that
+disconnecting the motor still gives 5v at the output,
+so the PIC only gets 5v or 0v levels at it's input pin.
+
+Filtering.
+As the encoder senses fast spikes it may pick up extra
+pulses from noise in the system. If the encoder is mounted
+more than a few inches from the motor you should use coax
+shielded cable for the main wire to C1. Only connect the
+shield at the circuit end, not the motor end. If you
+get the parts values tuned right for your motor this
+circuit will perform quite well, and you will not get
+many extra spikes.
+
+Software.
+A simple software averaging is enough, like measuring how
+many pulses are made in 0.1 seconds, etc. With most motor
+speeds this number will be in the hundreds and the rare
+"suspect" extra pulse will not cause any great effect.
+You should be able to control motor speed quite well and
+even measure the number of revolutions over a given time
+period.
+
+:o)
+-Roman
+
+</pre>
+
+<p>
+
+</p><p>Questions:
+</p><ul>
+   <li>
+
+</li></ul>
+<p></p><p clear="LEFT" style="clear:left;"> 
+</p><table><tbody><tr><td>
+<script async="" src="./Simple encoder-less encoder for speed control small DC motor_files/f(3).txt"></script>
+<!-- see also bigger -->
+<ins class="adsbygoogle" style="display:inline-block;width:336px;height:280px" data-ad-client="ca-pub-3554665142518411" data-ad-slot="6287729651" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><ins id="aswift_1_anchor" style="display:block;border:none;height:280px;margin:0;padding:0;position:relative;visibility:visible;width:336px;background-color:transparent;"><iframe width="336" height="280" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;width:336px;height:280px;" src="./Simple encoder-less encoder for speed control small DC motor_files/saved_resource.html"></iframe></ins></ins></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</td><td id="adtopright">
+</td></tr></tbody></table>
+<p><b>See also:</b></p><blockquote>
+  <script async="" src="./Simple encoder-less encoder for speed control small DC motor_files/f(3).txt"></script>
+  <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-3554665142518411" data-ad-slot="9013514236" data-adsbygoogle-status="done"><ins id="aswift_2_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><ins id="aswift_2_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent;"><iframe width="728" height="90" frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_2" name="aswift_2" style="left:0;position:absolute;top:0;width:728px;height:90px;" src="./Simple encoder-less encoder for speed control small DC motor_files/saved_resource(1).html"></iframe></ins></ins></ins>
+  <script> (adsbygoogle = window.adsbygoogle || []).push({}); </script>
+</blockquote>
+<hr><table><tbody><tr><td><small>file: /Techref/au/net/ezy/www/http/~fastvid/encoder.htm, <span id="lt"> NaNKB (3 imgs) in 1.572s is NaNKBps</span>, updated: 2005/11/10 15:17, local time: 2018/5/24 16:05, <script type="text/javascript"><!--
+ eol();
+ for (var j=0;j<document.images.length;j++) 		
+  { document.images[j].onload = new Function('eol();'); };	
+//-->
+</script>
+
+</small><form action="http://www.piclist.com/techref/search.asp#result" method="POST">
+<div id="upperright" onmouseover="this.style.backgroundColor=&#39;#FFFF00&#39;;this.style.borderStyle=&#39;outset&#39;;" onmouseout="this.style.backgroundColor=&#39;#FFFFFF&#39;;this.style.borderStyle=&#39;ridge&#39;;" style="position:absolute;top:0;right:0;width:200px;text-align:right;color:gray;background-color:#FFFFFF;border-width:2px;"><small><sup>
+<a style="color:#AF4040;text-decoration:none;" title="Go to the top page" href="http://www.piclist.com/techref/index.htm">TOP</a> 
+<a style="color:#AF4040;text-decoration:none;" title="Monthly Change Log for the site" href="http://www.piclist.com/techref/new201805.txt">NEW</a>
+
+<script type="text/javascript">
+<!--- Hide script from old browsers.
+document.write('<A style="color:#AF4040;text-decoration:none;" TITLE="More pages like this." HREF="/techref/search');
+document.write('.asp\077from=%2FTechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm">MORE<\/A> ');
+// End the hiding here. -->
+</script><a style="color:#AF4040;text-decoration:none;" title="More pages like this." href="http://www.piclist.com/techref/search.asp?from=%2FTechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm">MORE</a> 
+<a style="color:#AF4040;text-decoration:none;" title="I&#39;m willing to pay for help, please refer me to a qualified consultant" href="mailto:webmaster@piclist.com?subject=I%20need%20someone%20to%20help%20me%20with%3A%20">
+HELP</a>
+<a style="color:#AF4040;text-decoration:none;" title="Advanced search" href="http://www.piclist.com/techref/search.asp">
+FIND:</a>&nbsp;
+<input style="background-color:transparent;padding:0px;border-width:1px;font-size:small;border-style:solid;border-color:#AF0000" title="Free text search" type="TEXT" id="search" name="qu" size="20" maxlength="100" value="Search" onclick="this.value=&#39;&#39;;">
+<input name="FreeText" type="HIDDEN" value="ON"> 
+<input name="from" type="HIDDEN" value="/Techref/au/net/ezy/www/http/~fastvid/encoder.htm">
+</sup></small></div>
+</form>
+<div id="upperleft" onmouseover="this.style.backgroundColor=&#39;#FFFF00&#39;;this.style.borderStyle=&#39;outset&#39;;" onmouseout="this.style.backgroundColor=&#39;transparent&#39;;this.style.borderStyle=&#39;none&#39;;" style="position:absolute;top:0;left:0;color:gray;filter:progid:DXImageTransform.Microsoft.Alpha(opacity=75);"><small>
+<a href="http://www.piclist.com/techref/indexok.asp?top"> </a>
+<sup>170.210.83.114:<a style="color:#AF4040" rel="nofollow" href="http://www.piclist.com/techref/login/default.asp?req=403%3Bhttp%3A%2F%2Fwww%2Epiclist%2Ecom%3A80%2Ftechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm">LOG IN</a></sup></small></div><div align="CENTER" style="position:absolute;top:0;left:20%;width:40%"><div id="fb-root" class=" fb_reset"><font color="#FF0000"><b>©2018 <a title="Why does RIP/GRAB/SPIDERing lead to ads and sponsors? Click here." href="http://www.piclist.com/dontripthissite.htm" style="color:red">PLEASE DON'T RIP!</a></b></font><font color="#008000"><b> <a title="Click to copy link HTML to your clipboard" onclick="window.clipboardData.setData(&#39;Text&#39;,&#39;&lt;A HREF=&quot;http://www.piclist.com/techref/au/net/ezy/www/http/~fastvid/encoder.htm&quot;&gt; Simple encoder-less encoder for speed control small DC motor&lt;/A&gt;&#39;);">DO:&nbsp;LINK</a></b></font>&nbsp;/&nbsp;<a title="Digg this!" href="http://digg.com/submit?phase=2&amp;url=http%3A%2F%2Fwww%2Epiclist%2Ecom%2Ftechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm&amp;title=+Simple+encoder%2Dless+encoder+for+speed+control+small+DC+motor">DIGG!</a>&nbsp;/&nbsp;<a title="Suggest to Make!" href="http://makezine.com/cs/user/create/link?x-t=suggestlink.form&amp;url=http%3A%2F%2Fwww%2Epiclist%2Ecom%2Ftechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm&amp;description=+Simple+encoder%2Dless+encoder+for+speed+control+small+DC+motor&amp;title=www%2Epiclist%2Ecom">MAKE!</a> <div id="___plusone_0" style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 24px; height: 15px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 24px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 15px;" tabindex="0" vspace="0" width="100%" id="I0_1527203159216" name="I0_1527203159216" src="./Simple encoder-less encoder for speed control small DC motor_files/fastbutton.html" data-gapiattached="true" title="G+"></iframe></div><script src="./Simple encoder-less encoder for speed control small DC motor_files/all.js"></script><fb:like href="http://www.piclist.com/techref/au/net/ezy/www/http/~fastvid/encoder.htm" send="false" layout="button_count" width="70" show_faces="false" action="recommend" font="" class=" fb_iframe_widget" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=recommend&amp;app_id=128618207221084&amp;container_width=0&amp;href=http%3A%2F%2Fwww.piclist.com%2Ftechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F~fastvid%2Fencoder.htm&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;send=false&amp;show_faces=false&amp;width=70"><span style="vertical-align: bottom; width: 105px; height: 20px;"><iframe name="f39107d2c6c08cc" width="70px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like Facebook Social Plugin" src="./Simple encoder-less encoder for speed control small DC motor_files/like.html" style="border: none; visibility: visible; width: 105px; height: 20px;" class=""></iframe></span></fb:like><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="f34c14909b3a06" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" src="./Simple encoder-less encoder for speed control small DC motor_files/ping.html" style="display: none;"></iframe></div></div><div style="position: absolute; top: -10000px; height: 0px; width: 0px;"><div><iframe name="fb_xdm_frame_http" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_http" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./Simple encoder-less encoder for speed control small DC motor_files/RQ7NiRXMcYA.html" style="border: none;"></iframe><iframe name="fb_xdm_frame_https" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" id="fb_xdm_frame_https" aria-hidden="true" title="Facebook Cross Domain Communication Frame" tabindex="-1" src="./Simple encoder-less encoder for speed control small DC motor_files/RQ7NiRXMcYA(1).html" style="border: none;"></iframe></div></div></div>
+</div>
+<script type="text/javascript" language="JavaScript">
+<!--- Hide script from old browsers.
+if (AJS) AJS.getElement("upperright").style.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=75);";
+
+var old = 1;
+var to;
+
+function scrollHold() {
+var pos=1;
+	if (to) clearTimeout(to);
+	if (window.innerHeight) {
+		pos = window.pageYOffset;
+		}
+	else if (document.documentElement && document.documentElement.scrollTop) {
+		pos = document.documentElement.scrollTop;
+		}
+	else if (document.body) {
+		pos = document.body.scrollTop;
+		}
+	if (pos < 0) pos = 1;
+	else pos += 1;
+	if (pos != old) {
+		AJS.getElement("upperright").style.top = pos;
+		AJS.getElement("upperleft").style.top = pos;
+		}
+	old = pos;
+	if (window.onscroll==null) {to=setInterval('scrollHold()',100);}
+}
+
+window.onscroll = scrollHold;
+scrollHold();
+
+// End the hiding here. -->
+</script>
+</td></tr>
+</tbody></table>
+<hr><table bgcolor="#F0F0F0"><tbody><tr><td>&nbsp;</td><td><small>©2018 These pages are served without commercial sponsorship. (No popup ads, etc...).Bandwidth abuse increases hosting cost forcing sponsorship or shutdown. This server aggressively defends against automated copying for any reason including offline viewing, duplication, etc... Please respect this requirement and <font face="Comic Sans MS" color="#FF0000">DO NOT RIP THIS SITE</font>. <a href="http://www.piclist.com/dontripthissite.htm">Questions?</a><div id="fb-root">Please <i>DO</i> link to this page! <a href="http://digg.com/submit?phase=2&amp;url=http://www.piclist.com/techref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm&amp;title=+Simple+encoder%2Dless+encoder+for+speed+control+small+DC+motor">Digg it!</a>&nbsp;/&nbsp;<a title="Suggest to Make!" href="http://makezine.com/cs/user/create/link?x-t=suggestlink.form&amp;url=http%3A%2F%2Fwww%2Epiclist%2Ecom%2Ftechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm&amp;description=+Simple+encoder%2Dless+encoder+for+speed+control+small+DC+motor&amp;title=www%2Epiclist%2Ecom">MAKE!</a>&nbsp;/&nbsp;<div id="___plusone_1" style="text-indent: 0px; margin: 0px; padding: 0px; background: transparent; border-style: none; float: none; line-height: normal; font-size: 1px; vertical-align: baseline; display: inline-block; width: 24px; height: 15px;"><iframe ng-non-bindable="" frameborder="0" hspace="0" marginheight="0" marginwidth="0" scrolling="no" style="position: static; top: 0px; width: 24px; margin: 0px; border-style: none; left: 0px; visibility: visible; height: 15px;" tabindex="0" vspace="0" width="100%" id="I1_1527203159222" name="I1_1527203159222" src="./Simple encoder-less encoder for speed control small DC motor_files/fastbutton(1).html" data-gapiattached="true" title="G+"></iframe></div><script src="./Simple encoder-less encoder for speed control small DC motor_files/all(1).js"></script><fb:like href="http://www.piclist.com/techref/au/net/ezy/www/http/~fastvid/encoder.htm" send="false" layout="button_count" width="450" show_faces="true" action="recommend" font="" class=" fb_iframe_widget" fb-xfbml-state="rendered" fb-iframe-plugin-query="action=recommend&amp;app_id=128618207221084&amp;container_width=0&amp;href=http%3A%2F%2Fwww.piclist.com%2Ftechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F~fastvid%2Fencoder.htm&amp;layout=button_count&amp;locale=en_US&amp;sdk=joey&amp;send=false&amp;show_faces=true&amp;width=450"><span style="vertical-align: bottom; width: 105px; height: 20px;"><iframe name="f1a13c7898297fc" width="450px" height="1000px" frameborder="0" allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media" title="fb:like Facebook Social Plugin" src="./Simple encoder-less encoder for speed control small DC motor_files/like(1).html" style="border: none; visibility: visible; width: 105px; height: 20px;" class=""></iframe></span></fb:like></div><br><tt>&lt;A HREF="http://www.piclist.com/techref/au/net/ezy/www/http/~fastvid/encoder.htm"&gt;  Simple encoder-less encoder for speed control small DC motor&lt;/A&gt;</tt></small></td></tr></tbody></table><hr>
+<div style="float:left;width:600px">
+<a name="form"> </a>
+<form action="http://www.piclist.com/techref/update.asp" method="POST">
+
+<input name="private" type="HIDDEN" value="on">
+<input name="id" type="HIDDEN" value="170.210.83.114">
+<input name="url" type="HIDDEN" value="/Techref/au/net/ezy/www/http/~fastvid/encoder.htm">
+After you find an appropriate page, you are invited to 
+<input type="Submit" value="Post"> your 
+<select size="4" name="act">
+  <option value="Questions:">question</option>
+  <option value="Comments:" selected="">comment</option>
+  <option value="See also:">link</option>
+  <option value="Code:">preformated text</option>
+	</select>
+to this <a href="http://www.piclist.com/idea/websites.htm"><i>massmind</i></a> site! <small>(posts will be visible only to you before review)</small>
+Just type in the box and press the Post button.
+(<a href="http://www.piclist.com/techref/language/html/index.htm">HTML</a> welcomed, but not the &lt;A tag: 
+Instead, use the link box to link to another page. 
+<a href="http://www.piclist.com/techref/idea/website/codetutorial.htm">A tutorial is available</a>
+<a href="http://www.piclist.com/techref/private.asp?req=membership">Members</a> can 
+<a rel="nofollow" href="http://www.piclist.com/techref/login/default.asp?req=403%3Bhttp%3A%2F%2Fwww%2Epiclist%2Ecom%3A80%2Ftechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm">login</a> 
+to post directly, become page editors, and be credited for their posts. 
+<br>
+<script type="text/javascript">
+<!--- Hide script from old browsers.
+doButton("Bold Ctrl+B","doTag(\'txt\',\'b\')","<b>&nbsp;B <\/b>");
+doButton("Italic Ctrl+I","doTag(\'txt\',\'i\')","<i>&nbsp;I <\/i>");
+doButton("Underline Ctrl+U","doTag(\'txt\',\'u\')","<u>&nbsp;u <\/u>");
+doButton("Blockquote","doTagAttrib(\'txt\',\'blockquote\')",'<img src="/images/bq.gif" alt="Blockquote"> ','','');
+document.write('<span id="spell_container" style="background-color:silver;border-style:outset;border-width:thin"><\/span>');
+// End the hiding here. -->
+</script><a style="cursor:hand;background-color:silver;border-style:outset;border-width:thin" title="Bold Ctrl+B" onclick="javascript:doTag(&#39;txt&#39;,&#39;b&#39;);"><b>&nbsp;B </b></a> <a style="cursor:hand;background-color:silver;border-style:outset;border-width:thin" title="Italic Ctrl+I" onclick="javascript:doTag(&#39;txt&#39;,&#39;i&#39;);"><i>&nbsp;I </i></a> <a style="cursor:hand;background-color:silver;border-style:outset;border-width:thin" title="Underline Ctrl+U" onclick="javascript:doTag(&#39;txt&#39;,&#39;u&#39;);"><u>&nbsp;u </u></a> <a style="cursor:hand;background-color:silver;border-style:outset;border-width:thin" title="Blockquote" onclick="javascript:doTagAttrib(&#39;txt&#39;,&#39;blockquote&#39;);"><img src="./Simple encoder-less encoder for speed control small DC motor_files/bq.gif" alt="Blockquote"> </a> <span id="spell_container" style="background-color:silver;border-style:outset;border-width:thin"></span>
+
+<br><textarea id="txt" name="txt" rows="4" cols="65" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" onchange="storeCaret(this);" onblur="javascript:if (this.form.act.selectedIndex==1 &amp;&amp; this.value.indexOf(&#39;?&#39;)&gt;0) {this.form.act.selectedIndex=0};"></textarea>
+<small>
+	<br>Link?&nbsp;Put&nbsp;it&nbsp;here:&nbsp;<input name="file" type="TEXT" size="60" onblur="javascript:if (this.value.indexOf(&#39;http&#39;)&gt;-1||this.value.indexOf(&#39;www&#39;)&gt;-1) {this.form.act.selectedIndex=2};alert(&#39;Changed post type to \&#39;link\&#39;&#39;);">
+	<br>if&nbsp;you&nbsp;want&nbsp;a&nbsp;response, 
+	please&nbsp;enter&nbsp;your&nbsp;email&nbsp;address:&nbsp;<input name="email" type="TEXT" size="40">
+	<input type="Submit" value="Post">
+<br>Attn spammers: All posts are reviewed before being made visible to anyone other than the poster. 
+	</small>
+</form>
+<script type="text/javascript">
+<!--- 
+AJS.getElement("txt").onkeydown=doKey;
+var googie1 = new GoogieSpell("/images/", "http://www.piclist.com/techref/spell.asp?lang=");
+googie1.setSpellContainer("spell_container");
+googie1.decorateTextarea("txt");
+// -->
+</script>
+</div>
+<table style="background:#f8f8f8;"><tbody><tr><td>Did you find what you needed? From: "<i><a href="https://www.google.com.ar/">https://www.google.com.ar/</a></i>" 
+<ul>
+<li>
+<script type="text/javascript">
+<!--- Hide script from old browsers.
+document.write('<I>&quot;Not quite. <A HREF="/techref/search.asp\077from=%2FTechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm"> Look for more pages like this one.&quot;<\/A><\/I> ')
+// End the hiding here. -->
+</script><i>"Not quite. <a href="http://www.piclist.com/techref/search.asp?from=%2FTechref%2Fau%2Fnet%2Fezy%2Fwww%2Fhttp%2F%7Efastvid%2Fencoder%2Ehtm"> Look for more pages like this one."</a></i> 
+
+
+</li><li><form action="http://www.piclist.com/techref/search.asp#result" method="POST">
+<input name="FreeText" type="HIDDEN" value="on"> 
+<input name="from" type="HIDDEN" value="/Techref/au/net/ezy/www/http/~fastvid/encoder.htm">
+ <i>"No. I'm looking for: 
+<input type="TEXT" name="SearchString" size="40" maxlength="100" value=""><input type="SUBMIT" name="Action" value="Fetch">"</i></form>
+</li><li><a href="http://www.piclist.com/techref/search.asp">
+<i>"No. Take me to the search page."</i></a>
+</li><li><a href="http://www.piclist.com/techref/index.htm">
+<i>"No. Take me to the top so I can drill down by catagory"</i></a>
+</li><li><a href="mailto:webmaster@piclist.com?subject=I%20need%20someone%20to%20help%20me%20with%3A%20">
+<i>"No. I'm willing to pay for help, please refer me to a qualified consultant"</i></a>
+
+</li><li><form action="http://www.piclist.com/techref/update.asp" method="POST">
+
+<input name="act" type="HIDDEN" value="Interested:">
+<input name="private" type="HIDDEN" value="on">
+<input name="id" type="HIDDEN" value="170.210.83.114">
+<input name="url" type="HIDDEN" value="/Techref/au/net/ezy/www/http/~fastvid/encoder.htm">
+<i>"No. But I'm interested. <input type="Submit" value="Email"> me 
+
+at <input name="email" type="TEXT" value="">
+
+when this page is expanded."</i></form>
+
+</li></ul>
+</td></tr></tbody></table>
+
+
+<hr style="clear:both;">
+<table width="30%" bgcolor="#F0F0F0" align="LEFT"><tbody><tr><td>&nbsp;</td><td>
+<!-- piclist.com -->
+<!--  Simple encoder-less encoder for speed control small DC motor -->
+<!--  Simple encoder-less encoder for speed control small DC motor --><font size="-3">
+<script type="text/javascript">
+<!-- Begin -
+
+var x,y,r,s,box
+
+function openbox(thisbox) {
+	if(document.all) {
+		s=thisbox.split(" ")[0]
+		thisbox=thisbox.split(" ")[1]
+		r=thisbox.split(".");
+//		window.status='x'+x+'y'+y+"l"+r.length
+		thisbox='';
+		for (i=r.length-1;i>=0;i--) {
+			thisbox+='/'+r[i];
+//			window.status += '/'+r[i]
+			};
+		box = window.event.toElement;
+		x=box.offsetLeft;
+		y=box.offsetTop;
+		box = document.all.popupbox.style;
+		box.visibility="HIDDEN";
+//		box.position="relative";
+//		box.pixelLeft=x;
+//		box.pixelTop=y+20;
+		popupbox.innerHTML="<img height=48 width=48 alt='' src='http://www.piclist.com/images/picons/domains/"+thisbox+"/"+s+"/unknown/face.gif' onload=\"box.visibility='visible';\">";
+//		window.status='x'+x+'y'+y+r.length
+		}
+	}
+
+function closebox() {
+	if (box) { box.visibility="HIDDEN"; }
+	}
+
+// - End -->
+</script>
+<span id="popupbox" style="position:relative;float:right;"><img src="./Simple encoder-less encoder for speed control small DC motor_files/null.gif" height="48" width="48" alt=""></span>
+<b><a name="2018">PICList 2018</a> <a href="http://www.piclist.com/support">contributors</a>:</b>
+  <br>o
+    List host: <a href="http://www.piclist.com/techref/piclist/support.htm#LIST">MIT</a>,
+	Site host <a href="http://techref.massmind.org/techref/piclist/support.htm#SITE">massmind.org</a>,
+    Top posters @20180524 <a title="73 posts!" onmouseover="openbox(&#39;apptechnz gmail.com &#39;)" onmouseout="closebox()">RussellMc,</a> <a title="57 posts!" onmouseover="openbox(&#39;david.vanhorn backcountryaccess.com &#39;)" onmouseout="closebox()">Van Horn, David,</a> <a title="36 posts!" onmouseover="openbox(&#39;shb7 cornell.edu &#39;)" onmouseout="closebox()">Sean Breheny,</a> <a title="35 posts!" onmouseover="openbox(&#39;isaacbavaresco gmail.com &#39;)" onmouseout="closebox()">Isaac M. Bavaresco,</a> <a title="30 posts!" onmouseover="openbox(&#39;bobblick outlook.com &#39;)" onmouseout="closebox()">Bob Blick,</a> <a title="29 posts!" onmouseover="openbox(&#39;dcb.home gmail.com &#39;)" onmouseout="closebox()">David C Brown,</a> <a title="27 posts!" onmouseover="openbox(&#39;picdude3 narwani.org &#39;)" onmouseout="closebox()">Neil,</a> <a title="23 posts!" onmouseover="openbox(&#39;alan.b.pearce stfc.ac.uk &#39;)" onmouseout="closebox()">alan.b.pearce,</a> <a title="22 posts!" onmouseover="openbox(&#39;brent eds.co.nz &#39;)" onmouseout="closebox()">Brent Brown,</a> <a title="21 posts!" onmouseover="openbox(&#39;goflo3 gmail.com &#39;)" onmouseout="closebox()">John Gardner,</a> 
+  <br>* Page Editors: 
+  James Newton, 
+  <a name="dcary" onmouseover="openbox(&#39;d.cary+2004 ieee.org&#39;)" onmouseout="closebox()">David Cary</a>, 
+  and <a href="http://www.piclist.com/techref/idea/website/pageedit.htm"><i>YOU</i></a>!
+  <br>*
+    Roman Black of <a href="http://www.blackrobotics.com/">Black Robotics</a>
+    donates from sales of 
+    <a href="http://www.piclist.com/techref/io/stepper/linistep/index.htm">Linistep
+    stepper controller kits</a>.
+  <br>* Ashley Roll of <a href="http://www.digitalnemesis.com/">Digital Nemesis</a>
+    donates from sales of 
+    <a href="http://www.piclist.com/techref/io/serial/RCL1.htm">RCL-1 RS232 to
+    TTL converters</a>.
+  <br>* Monthly <a href="http://www.piclist.com/techref/piclist/support.htm#subscribe" title="Send a small amount each month">Subscribe</a>rs:
+ Gregg Rew.
+ <i> on-going support is MOST appreciated!</i>
+  <br>* <a href="http://www.piclist.com/techref/piclist/support.htm#contribute" title="Donate to support our site">Contributors</a>: 
+<a title="$40">Richard Seriani, Sr.</a>
+</font>
+
+
+</td></tr></tbody></table> 
+<table width="30%" bgcolor="#F0F0F0" align="RIGHT"><tbody><tr><td>&nbsp;</td><td>
+<h2>Welcome to www.piclist.com!</h2>
+</td></tr></tbody></table>
+<p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+</p><p>&nbsp;
+.
+
+
+<!--  Place this tag after the last plusone tag -->
+<script type="text/javascript">
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+</script>
+
+
+
+</p><ins class="adsbygoogle adsbygoogle-noablate" data-adsbygoogle-status="done" style="display: none;"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:NaNpx;margin:0;padding:0;position:relative;visibility:visible;width:NaNpx;background-color:transparent;"><ins id="aswift_0_anchor" style="display:block;border:none;height:NaNpx;margin:0;padding:0;position:relative;visibility:visible;width:NaNpx;background-color:transparent;"><iframe frameborder="0" marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;width:NaNpx;height:NaNpx;" src="./Simple encoder-less encoder for speed control small DC motor_files/saved_resource(2).html"></iframe></ins></ins></ins><iframe id="google_osd_static_frame_9021298451989" name="google_osd_static_frame" style="display: none; width: 0px; height: 0px;" src="./Simple encoder-less encoder for speed control small DC motor_files/saved_resource(3).html"></iframe><iframe name="oauth2relay377337492" id="oauth2relay377337492" src="./Simple encoder-less encoder for speed control small DC motor_files/postmessageRelay.html" tabindex="-1" aria-hidden="true" style="width: 1px; height: 1px; position: absolute; top: -100px;"></iframe></body></html>
