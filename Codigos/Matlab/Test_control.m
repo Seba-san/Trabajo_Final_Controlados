@@ -1,6 +1,6 @@
 %% Inicio
 %s=InicializacionSerial('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
-s=InicializacionSerial('COM6',115200);%Velocidad: 115200 baudios
+s=InicializacionSerial('COM5',115200);%Velocidad: 115200 baudios
 %% Fin
 fclose(s)
 %clear all;clc
