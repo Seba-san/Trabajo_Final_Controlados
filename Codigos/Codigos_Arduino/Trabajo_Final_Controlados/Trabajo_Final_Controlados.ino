@@ -7,7 +7,7 @@ Controlados controlados1;
 
 
 // #   #   #   # Constantes $1
-const int cantMarcasEncoder = 18; //Es la cantidad de huecos que tiene el encoder de cada motor.
+const int cantMarcasEncoder = 9; //Es la cantidad de huecos que tiene el encoder de cada motor.
 const int cantMarcasEncoderB = 9; //$ BORRAR!!! SOLO PARA PRUEBAS
 const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 1024;//1024;//32;//8 32 64
@@ -118,7 +118,7 @@ void loop() { //$3
   //sensor=controlados1.leerSensorDeLinea();
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  EnviarTX_online(freqB);
+  EnviarTX_online(freqA);
   //EnviarTX_online(uA[2]);
   //EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);//$.$
   //Serial.println(sensor,BIN);
@@ -166,8 +166,8 @@ long suma=0;
     interruptOFF; // Es importante poner esto antes de hacer el calculo para evitar que modifique las variables en la interrupcion. Se observaron problemas de medicion.
     bufferVelB[2*cantMarcasEncoderB-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
     suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
-    //freqB=float((F_CPU*60.0)/(suma));
-    freqB=(float)suma;//BORRAR ESTA PORQUERIA, ES SOLO PARA DEBUGGEAR $.$
+    freqB=float((F_CPU*60.0)/(suma));
+    //freqB=(float)suma;//BORRAR ESTA PORQUERIA, ES SOLO PARA DEBUGGEAR $.$
     interruptON;
   }
   else{
