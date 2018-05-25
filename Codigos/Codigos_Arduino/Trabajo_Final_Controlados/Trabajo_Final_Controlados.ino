@@ -118,9 +118,9 @@ void loop() { //$3
   //sensor=controlados1.leerSensorDeLinea();
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  //EnviarTX_online(freqA);
+  EnviarTX_online(freqB);
   //EnviarTX_online(uA[2]);
-  EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);//$.$
+  //EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);//$.$
   //Serial.println(sensor,BIN);
   //digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
   }
@@ -166,7 +166,8 @@ long suma=0;
     interruptOFF; // Es importante poner esto antes de hacer el calculo para evitar que modifique las variables en la interrupcion. Se observaron problemas de medicion.
     bufferVelB[2*cantMarcasEncoderB-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
     suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
-    freqB=float((F_CPU*60.0)/(suma));
+    //freqB=float((F_CPU*60.0)/(suma));
+    freqB=(float)suma;//BORRAR ESTA PORQUERIA, ES SOLO PARA DEBUGGEAR $.$
     interruptON;
   }
   else{

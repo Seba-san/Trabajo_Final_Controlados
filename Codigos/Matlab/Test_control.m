@@ -9,7 +9,7 @@ disp('Puerto Cerrado')
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test(s)
-Env_instruccion(s,'PWM',[0 10]); 
+Env_instruccion(s,'PWM',[0 100]); 
 % pause(1)
 % Env_instruccion(s,'setpoint',[0,100]); 
 N=36*10;
@@ -63,14 +63,14 @@ Env_instruccion(s,'PWM',[0 0]);
 
 %% Espectro de la medicion
 Fs=200;
-x=(16e6*60./medicion)/18;
+x=(16e6*60./medicion);
 % x=x-mean(x);
 t=0:1/Fs:(N-1)/Fs;
 figure();plot(t,x,'.');
 
 y=fftshift(fft(x))/length(x);
 f=linspace(-Fs/2,Fs/2,length(y));
-figure();plot(f,abs(y),'.');
+% figure();plot(f,abs(y),'.');
 %% Separo los tiempos en dos partes
 t1=[];
 ind1=[];
