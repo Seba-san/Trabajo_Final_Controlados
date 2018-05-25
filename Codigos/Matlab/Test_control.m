@@ -9,7 +9,7 @@ disp('Puerto Cerrado')
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test(s)
-Env_instruccion(s,'PWM',[0 30]); 
+Env_instruccion(s,'PWM',[0 5]); 
 % pause(1)
 % Env_instruccion(s,'setpoint',[0,100]); 
 N=36*10;

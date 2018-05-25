@@ -173,4 +173,5 @@ long suma=0;
      suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
      freqB=0; // Hay que calcularla aca porque sino da cualquier valor.
   }
+  EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);
 }
