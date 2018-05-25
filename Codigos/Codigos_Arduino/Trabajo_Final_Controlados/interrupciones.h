@@ -8,6 +8,8 @@
 #define ins_stop 251 // baja de transmitir online
 #define ins_test 249
 #define ins_setpoint 248
+#define ins_aumentar_k 247
+#define ins_disminuir_k 246
 
 // Variables para la comunicacion
 extern bool Motores_ON,tx_activada, online;

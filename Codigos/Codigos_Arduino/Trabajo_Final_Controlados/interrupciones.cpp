@@ -20,14 +20,14 @@ void  timer_interrupt(void){
   }
   bitWrite(Bandera,0,1); // Esta bandera le avisa al resto de las funciones que se produjo una interrupcion por timer
 
-  if (soft_prescaler>=1){ // $VER ponerlo en 2 para 200Hz por interrupt. 
+  if (soft_prescaler>=2){ // $VER ponerlo en 2 para 200Hz por interrupt. 
     soft_prescaler=0;
     bitWrite(Bandera,5,1);
     }
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si sea controlada. $interrup
       // Esta funcion mete mucho tiempo de computo 120 uS
-     // int auxA=uA[2],auxB=uB[2];
-     // controlados1.actualizarDutyCycleMotores((int)(auxA),(int)auxB);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
+      int auxA=uA[2],auxB=uB[2];
+      controlados1.actualizarDutyCycleMotores((int)(auxA),(int)auxB);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
     }
 }
 
@@ -102,6 +102,12 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
         case ins_setpoint://Instrucción 248: cambiar el valor del setpoint
           trama_activa=3;
           break;
+          case ins_aumentar_k://Instrucción 248: cambiar el valor del setpoint i
+          trama_activa=5;
+          break;
+           case ins_disminuir_k://Instrucción 248: cambiar el valor del setpoint
+          trama_activa=6;
+          break;
         default://No hace nada si no recibe una instrucción válida
           break;}
     }
@@ -123,6 +129,16 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
       }
     else if (trama_activa==4){
       set_pointB=dato*10; // Actualiza el valor del setpoint de B
+      trama_activa=0;
+      }
+    else if (trama_activa==5){
+     ParametrosA[0]=dato/1000.0 +ParametrosA[0]; // Actualiza el valor del setpoint de B
+       ParametrosB[0]=dato/1000.0 + ParametrosB[0];
+      trama_activa=0;
+      }
+    else if (trama_activa==6){
+      ParametrosA[0]=-dato/1000.0 +ParametrosA[0]; // Actualiza el valor del setpoint de B
+       ParametrosB[0]=-dato/1000.0 + ParametrosB[0];
       trama_activa=0;
       }
   }

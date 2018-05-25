@@ -14,10 +14,12 @@ switch info
     case 'setpoint'
         instruccion=248;
         parametro=10;
-    case 'parametros'
+    case 'Kmas'
         instruccion=247;
-    case 'Ucontrol'
+        parametro=0.001;
+    case 'Kmenos'
         instruccion=246;
+         parametro=0.001;
         
 end
 EscribirSerial(s,instruccion);
