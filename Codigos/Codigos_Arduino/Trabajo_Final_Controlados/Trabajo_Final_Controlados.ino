@@ -1,3 +1,6 @@
+#define controlador 0
+
+
 #include "includes.h"
 
 Controlados controlados1;
@@ -112,10 +115,10 @@ void loop() { //$3
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
   unsigned char sensor;
   digitalWrite(LED_BUILTIN,HIGH);//$$$BORRAR
-  sensor=controlados1.leerSensorDeLinea();
+  //sensor=controlados1.leerSensorDeLinea();
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  EnviarTX_online(freqA);
+  //EnviarTX_online(freqA);
   //EnviarTX_online(uA[2]);
   //Serial.println(sensor,BIN);
   digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR

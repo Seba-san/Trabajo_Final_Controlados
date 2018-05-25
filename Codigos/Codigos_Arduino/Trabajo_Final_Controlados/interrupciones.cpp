@@ -27,7 +27,9 @@ void  timer_interrupt(void){
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si sea controlada. $interrup
       // Esta funcion mete mucho tiempo de computo 120 uS
       int auxA=uA[2],auxB=uB[2];
+      #if (controlador==1)
       controlados1.actualizarDutyCycleMotores((int)(auxA),(int)auxB);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
+      #endif
     }
 }
 
