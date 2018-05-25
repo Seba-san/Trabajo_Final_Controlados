@@ -9,46 +9,34 @@ s=InicializacionSerial(InfoHard.SerialPorts{1},115200);%Velocidad: 115200 baudio
 fclose(instrfindall);       %cierra todos los puertos activos y ocultos
 %% Ensayo al escalon
 N=300;%Cantidad de muestras a tomar
+Fs=200;%Frec de envío de datos
+tiempo=0:1/Fs:(N-1)/Fs;%Genero a mano el vector de tiempos (asumo que el nano trabaja a frec cte sin problema)
 wA=[];
-tiempo=[];
 %Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos
 PWMA=[];                   
 PWM=10;
-%Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupciï¿½n po flanco
-Env_instruccion(s,'Ucontrol',PWM);
+Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupciï¿½n po flanco
 pause(3);
 Comunic_test(s)
 Env_instruccion(s,'online');
 flushinput(s);  %Vacia el buffer de entrada
 for k=1:N %Ojo con el tope que pone el nano
     if k==20
-        PWM=50;
-        Env_instruccion(s,'Ucontrol',PWM);
+        PWM=60;
+        Env_instruccion(s,'PWM',[PWM PWM]);
     end
-    identificador=0;
-    flushinput(s);
-    while identificador~=255
-        identificador=str2double(fscanf(s));
-    end
-    dato1=str2double(fscanf(s));%Actualmente el nano estï¿½ enviando la vel en rpm y el tiempo en us.
-    dato2=str2double(fscanf(s));
-%     flushinput(s);
-    wA=[wA dato1];
-    tiempo=[tiempo dato2];
+    w=str2double(fscanf(s));
+    wA=[wA w];
     PWMA=[PWMA PWM];
 end
-M=length(tiempo);
-tiempo=tiempo(2:M);
-wA=wA(2:M);
-PWMA=PWMA(2:M);
-Env_instruccion(s,'Ucontrol',0);
+Env_instruccion(s,'PWM',[0 0]);
 Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
 name=datestr(now,'yymmddhhMMss');
 name=strcat('respuesta_escalon_motorA',name,'.mat');
 %save(name,'tiempo','PWMA','wA') 
 figure(1);plot(tiempo,PWMA,tiempo,wA,'.');%ylim([0 1500])
 %legend('Seï¿½al de PWM','Seï¿½al de vel ang');
-title('Respuesta del Motor B');
+title('Respuesta del Motor A');
 xlabel('tiempo (us)');ylabel('Vel Ang (rpm) / PWM') %Revisar la unidad!! $
 % figure(2);plot(diff(tiempo-tiempo(1))*1e-6,'.');%ylim([0 10e-3])
 %% Grï¿½fico de la Respuesta del motor B
