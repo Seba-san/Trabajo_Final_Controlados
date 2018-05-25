@@ -27,7 +27,9 @@ void  timer_interrupt(void){
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si sea controlada. $interrup
       // Esta funcion mete mucho tiempo de computo 120 uS
       int auxA=uA[2],auxB=uB[2];
+      #if (controlador==1)
       controlados1.actualizarDutyCycleMotores((int)(auxA),(int)auxB);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
+      #endif
     }
 }
 
@@ -50,6 +52,7 @@ ISR(PCINT1_vect){
 
   if(A0!=MA){//Si A0 es distinto a MA es porque el estado del motor A cambió y eso fue lo que generó la interrupción.   
     bitWrite(estadoEncoder,0,A0);//Almaceno el estado del encoder para la proxima interrupción.
+  if(A0==1 && MA==0){//Solo actualizo los valores cuando la señal del encoder tuvo un flanco ascendente
     TCNT2anteriorA=TCNT2actualA;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
     TCNT2actualA=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
     if (bitRead(TIFR2,1)){ // me fijo si hay overflow
@@ -59,9 +62,18 @@ ISR(PCINT1_vect){
     cantOVerflow_actualA=cantOVerflowA;
     cantOVerflowA=0;
     bitWrite(Bandera,2,1);
+    }
   }
   if(A1!=MB){//Si A1 es distinto a MB es porque el estado del motor B cambió y eso fue lo que generó la interrupción.    
+  
     bitWrite(estadoEncoder,1,A1);//Almaceno el estado del encoder para la proxima interrupción.
+  if(A1==1 && MB==0){//Solo actualizo los valores cuando la señal del encoder tuvo un flanco ascendente
+    //Debuggeando $.$
+    int basura=0;
+    basura=bitRead(Bandera,4);
+    if(basura==1){digitalWrite(13,HIGH);}
+    //
+    
     TCNT2anteriorB=TCNT2actualB;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
     TCNT2actualB=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
     if (bitRead(TIFR2,1)){ // me fijo si hay overflow
@@ -71,6 +83,7 @@ ISR(PCINT1_vect){
     cantOVerflow_actualB=cantOVerflowB;
     cantOVerflowB=0;
     bitWrite(Bandera,4,1);
+  }
   }
 }
 
