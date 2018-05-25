@@ -63,7 +63,15 @@ ISR(PCINT1_vect){
     bitWrite(Bandera,2,1);
   }
   if(A1!=MB){//Si A1 es distinto a MB es porque el estado del motor B cambió y eso fue lo que generó la interrupción.    
+  
     bitWrite(estadoEncoder,1,A1);//Almaceno el estado del encoder para la proxima interrupción.
+  if(A1==1 && MB==0){//Solo actualizo los valores cuando la señal del encoder tuvo un flanco ascendente
+    //Debuggeando $.$
+    int basura=0;
+    basura=bitRead(Bandera,4);
+    if(basura==1){digitalWrite(13,HIGH);}
+    //
+    
     TCNT2anteriorB=TCNT2actualB;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
     TCNT2actualB=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
     if (bitRead(TIFR2,1)){ // me fijo si hay overflow
@@ -73,6 +81,7 @@ ISR(PCINT1_vect){
     cantOVerflow_actualB=cantOVerflowB;
     cantOVerflowB=0;
     bitWrite(Bandera,4,1);
+  }
   }
 }
 

@@ -3,13 +3,13 @@
 s=InicializacionSerial('COM5',115200);%Velocidad: 115200 baudios
 %% Fin
 fclose(instrfindall);       %cierra todos los puertos activos y ocultos
-%clear all;close all;clc
+clear all;close all;clc
 disp('Puerto Cerrado')
 %%
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test(s)
-Env_instruccion(s,'PWM',[0 5]); 
+Env_instruccion(s,'PWM',[0 10]); 
 % pause(1)
 % Env_instruccion(s,'setpoint',[0,100]); 
 N=36*10;
@@ -61,6 +61,16 @@ Env_instruccion(s,'setpoint',[0,0]);
 % close all
 Env_instruccion(s,'PWM',[0 0]); 
 
+%% Espectro de la medicion
+Fs=200;
+x=(16e6*60./medicion)/18;
+% x=x-mean(x);
+t=0:1/Fs:(N-1)/Fs;
+figure();plot(t,x,'.');
+
+y=fftshift(fft(x))/length(x);
+f=linspace(-Fs/2,Fs/2,length(y));
+figure();plot(f,abs(y),'.');
 %% Separo los tiempos en dos partes
 t1=[];
 ind1=[];
@@ -77,6 +87,12 @@ for k=1:length(medicion)
 end
 figure();plot(ind1,t1,'r.',ind2,t2,'b.');
 %%
-M=18*10;
+M=18*3;
 figure();subplot(211);plot(medicion(1:M),'o');hold on;plot(medicion(1:M));
 subplot(212);plot(medicion(M+1:2*M),'o');hold on;plot(medicion(M+1:2*M));
+%%
+suma=[];
+for k=1:length(medicion)/2
+    suma=[suma medicion(2*k-1)+medicion(2*k)];
+end
+figure();plot(suma/16e6,'.')

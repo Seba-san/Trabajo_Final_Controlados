@@ -8,10 +8,10 @@ Controlados controlados1;
 
 // #   #   #   # Constantes $1
 const int cantMarcasEncoder = 18; //Es la cantidad de huecos que tiene el encoder de cada motor.
-const int cantMarcasEncoderB = 18; //$ BORRAR!!! SOLO PARA PRUEBAS
+const int cantMarcasEncoderB = 9; //$ BORRAR!!! SOLO PARA PRUEBAS
 const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 1024;//1024;//32;//8 32 64
-const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
+const int cota = 2000;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 unsigned long _OCR2A;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
@@ -114,14 +114,15 @@ void loop() { //$3
   }
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
   unsigned char sensor;
-  digitalWrite(LED_BUILTIN,HIGH);//$$$BORRAR
+  //digitalWrite(LED_BUILTIN,HIGH);//$$$BORRAR
   //sensor=controlados1.leerSensorDeLinea();
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
   //EnviarTX_online(freqA);
   //EnviarTX_online(uA[2]);
+  EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);//$.$
   //Serial.println(sensor,BIN);
-  digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
+  //digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
   }
 }
 
@@ -173,5 +174,4 @@ long suma=0;
      suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
      freqB=0; // Hay que calcularla aca porque sino da cualquier valor.
   }
-  EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);
 }
