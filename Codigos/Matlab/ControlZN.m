@@ -52,7 +52,7 @@ end
 function [w_interp,pwm_interp,t]=interpLineal(entrada,salida,tiempo,figuras)
 % Aparentemente hay un problema con los datos, en lo que sigue voy a
 % utilizar una interpolacion LINEAL entre los puntos.
-Fs=2e3;
+Fs=400;%2e3;
 Ts=1/Fs;
 t=min(tiempo):1/Fs:max(tiempo);
 

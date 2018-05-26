@@ -1,4 +1,4 @@
-#define controlador 0
+#define controlador 1
 
 
 #include "includes.h"
@@ -46,8 +46,8 @@ float set_pointA=300,set_pointB=300; // Set_point esta en RPM
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
-float ParametrosA[]={0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
-float ParametrosB[]={0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
+float ParametrosB[]={0.050118,-0.04911,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
 
 volatile float freqA;
 volatile float freqB;
@@ -118,8 +118,8 @@ void loop() { //$3
   //sensor=controlados1.leerSensorDeLinea();
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  EnviarTX_online(freqA);
-  //EnviarTX_online(uA[2]);
+  EnviarTX_online(freqB);
+  EnviarTX_online(uB[2]);
   //EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);//$.$
   //Serial.println(sensor,BIN);
   //digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR

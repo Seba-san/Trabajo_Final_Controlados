@@ -9,9 +9,9 @@ disp('Puerto Cerrado')
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test(s)
-Env_instruccion(s,'PWM',[50 100]); 
+% Env_instruccion(s,'PWM',[50 100]); 
 % pause(1)
-% Env_instruccion(s,'setpoint',[0,100]); 
+Env_instruccion(s,'setpoint',[500,500]); 
 N=36*10;
 medicion=zeros(1,N);
 control=zeros(1,N);
@@ -30,7 +30,7 @@ while (veces<1)
     
     
     medicion(i)=str2double(fscanf(s));
-   % control(i)=str2double(fscanf(s));
+    control(i)=str2double(fscanf(s));
     %medicion(i)=16e6*60/suma;
     flushinput(s);
 %     flushinput(s);
@@ -41,10 +41,12 @@ while (veces<1)
     
     m1=1:1:i;m2=i+1:1:N;
     %figure(1)
+    subplot(211)
     plot(m1,medicion(1:i),'.','color',[~a 0 a]); hold on;plot(m2,medicion(i+1:N),'.','color',[a 0 ~a]); hold off;
 %     ylim([limite_inf limite_sup]);
  % figure(2)
-   % plot(m1,control(1:i),'.','color',[~a 0 a]); hold on;plot(m2,control(i+1:N),'.','color',[a 0 ~a]); hold off; ylim([0 110]);
+    subplot(212)
+    plot(m1,control(1:i),'.','color',[~a 0 a]); hold on;plot(m2,control(i+1:N),'.','color',[a 0 ~a]); hold off; ylim([0 110]);
    
     pause(0.001)
     i=i+1;

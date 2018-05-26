@@ -1,6 +1,6 @@
 %% Inicializaciï¿½n de serial
 clear all;clc;close all;
-cd('C:\Users\Tania\Dropbox\Trabajo final - Controlados\Codigos\Matlab')
+% cd('C:\Users\Tania\Dropbox\Trabajo final - Controlados\Codigos\Matlab')
 InfoHard=instrhwinfo('serial');%Busco cuï¿½l puerto tengo conectado con esta instrucciï¿½n
 %En InfoHard.SerialPorts me guarda celdas con los puertos disponibles. Uso
 %la primer celda y chau.
@@ -19,7 +19,7 @@ PWMA=[];
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos
                             %sin identificador de trama
 for PWM=0:1:100 %Ojo con el tope que pone el nano
-    Env_instruccion(s,'PWM',[PWM 0]);
+    Env_instruccion(s,'PWM',[0 PWM]);
     clc;disp(['PWM= ' num2str(PWM)])
     pause(0.1);
     for k=1:R
@@ -27,8 +27,7 @@ for PWM=0:1:100 %Ojo con el tope que pone el nano
         for m=1:16
             dato(m)=DatoRx_online(s);
         end
-        tiempo=sum(dato)/8;
-        wA=[wA 16e6/tiempo];%Frec angular en Hz
+        wA=[wA dato];%Frec angular en Hz
         PWMA=[PWMA PWM];
         %Acï¿½ no sï¿½ si ponerle un delay $
     end
@@ -36,10 +35,13 @@ end
 Env_instruccion(s,'PWM',[0 0]);
 Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
 name=datestr(now,'yymmddhhMMss');
-name=strcat(name,'.mat');
+name=strcat('curva_ent_sal_motorB',name,'.mat');
 %save(name,'wA','PWMA') 
-%% Grï¿½fico de la Respuesta del motor B
-figure(1);
-plot(PWMA,wA,'.');
-title('Respuesta del Motor B');
-xlabel('RPM');ylabel('frec de giro') %Revisar la unidad!! $
+%% Gráfico de la Respuesta del motor
+figure();
+a=201;b=1602;%Para limitar el PWM al rango de 10 a 80%
+f=fit(PWMA(a:b)',mean(wA(:,a:b))','poly1');%Ajuste recta
+plot(f,'r');hold on;plot(PWMA,wA,'b.');
+legend('Recta Ajustada','Datos Medidos')
+title('Respuesta del Motor A');
+xlabel('PWM');ylabel('frec de giro (rpm)')
