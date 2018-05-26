@@ -23,29 +23,30 @@ Librería para el Trabajo Final de Controlados
 //Obs: no supe cómo hacerlo como vector para que sea más elegante el código y no
 //quise perder tiempo en eso. Probablemente pueda mejorarse.
 //$REVISAR QUE ESTÉN BIEN
-#define rx_1 16
+#define rx_1 16 // A2
 #define port1 PINC
 #define bit1 2
-#define rx_2 17
+#define rx_2 17 // A3
 #define port2 PINC
 #define bit2 3
-#define rx_3 18
+#define rx_3 18 // A4
 #define port3 PINC
 #define bit3 4
-#define rx_4 19
+#define rx_4 19 // A5
 #define port4 PINC
 #define bit4 5
 //ESTE PIN ES ANALÓGICO!!!$ (por eso le pongo PORTC)
 #define rx_5 A6
 #define port5 PORTC
 #define bit5 6
-#define rx_6 2
+
+#define rx_6 2 // D2
 #define port6 PIND
 #define bit6 2
-#define rx_7 3
+#define rx_7 3 // D3
 #define port7 PIND
 #define bit7 3
-#define rx_8 4
+#define rx_8 4 // D4
 #define port8 PIND
 #define bit8 4
 
@@ -204,7 +205,7 @@ void Controlados::configPinesSensorLinea()
 	pinMode(rx_2,INPUT_PULLUP);
 	pinMode(rx_3,INPUT_PULLUP);
 	pinMode(rx_4,INPUT_PULLUP);
-	pinMode(rx_5,INPUT_PULLUP);
+	//pinMode(rx_5,INPUT_PULLUP); // Este es el pin analogico
 	pinMode(rx_6,INPUT_PULLUP);
 	pinMode(rx_7,INPUT_PULLUP);
 	pinMode(rx_8,INPUT_PULLUP);
