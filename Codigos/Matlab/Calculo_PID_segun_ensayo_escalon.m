@@ -38,8 +38,9 @@ Fsnano=200;
 Ts2=1/Fsnano;
 tipo={'P';'PI';'PID'};
 clear A B C D E F;
+figura=[1,0,0];
 for k=1:3
-    [Kp,Ki,Kd]=ControlZN(tipo{k},'ZN',entrada,salida,tiempo,1,1);
+    [Kp,Ki,Kd]=ControlZN(tipo{k},'ZN',entrada,salida,tiempo,0,figura(k));
     Tf=0;%No sé qué poner en Tf porque ZN no me lo da.
     control=c2d(tf(pid(Kp,Ki,Kd,Tf)),Ts2,'tustin');
     [A(k,1),B(k,1),C(k,1),D(k,1),E(k,1)]=tf2ctesNano(cell2mat(control.num),cell2mat(control.den),tipo{k});

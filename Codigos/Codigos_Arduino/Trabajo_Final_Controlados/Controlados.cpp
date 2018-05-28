@@ -200,7 +200,7 @@ void Controlados::modoStop()
 
 void Controlados::configPinesSensorLinea()
 {
-	pinMode(rx_1,INPUT_PULLUP); // $ ojo con esto, puede despolarizar los fotodiodos.
+	pinMode(rx_1,INPUT_PULLUP);
 	pinMode(rx_2,INPUT_PULLUP);
 	pinMode(rx_3,INPUT_PULLUP);
 	pinMode(rx_4,INPUT_PULLUP);
@@ -212,63 +212,87 @@ void Controlados::configPinesSensorLinea()
 
 unsigned char Controlados::leerSensorDeLinea()
 {
-	//Esta función lee el sensor de línea (valor de los LEDs puestos en rx_1 a
-	//rx_8) y determina en función de ellos un valor para el error entre el
-	//centro del robot y la línea.
-	//$PROBLEMA: no está acomodado para funcionar automáticamente según los
-	//pines de rx_1:8, sino que está puesto a mano acá cuáles son los pines que
-	//usa.
+	//Esta función lee el sensor de línea y determina en función de eso un valor
+	//para el ángulo de error etre el robot y la línea. Para eso supone que el
+	//centro del robot (punto medio entre las dos ruedas) está siempre encima de
+	//la línea.
 
-	uint8_t LED[8];unsigned char byteSensor; int aux;int error;
-/*
-
-	//1<<bitn mueve el 1 del byte bitn lugares a la izq, entonces si bitn=3
-	//1<<bitn=b00001000, lo que permite recuperar el bit 3 del registro
-	//portn haciendo: portn&(1<<bitn). Así, LED[n-1] guarda un 0 o un 1 que
-	//refleja el estado del LED número n en la posición bitn; desplazando
-	LED[0]=~(port1&(1<<bit1))>>bit1;//$CORRER
-	LED[1]=~(port2&(1<<bit2))>>bit2;
-	LED[2]=~(port3&(1<<bit3))>>bit3;
-	LED[3]=~(port4&(1<<bit4))>>bit4;
-
-	//Acá hago algo distinto porque el pin es analógico
-	aux=analogRead(A6);//Lectura del bit analógico
-	LED[4]=~(aux&512>>9);//aux&512 me da un 1 seguido de 9 ceros si aux>=512
-	                    //y sino me da todos ceros.
-
-	LED[5]=~(port6&(1<<bit6))>>bit6;
-	LED[6]=~(port7&(1<<bit7))>>bit7;
-	LED[7]=~(port8&(1<<bit8))>>bit8;
-
-	//Junto todos los bits en un byte:
-	aux=(unsigned char) LED[0]|(LED[1]<<1)|(LED[2]<<2)|(LED[3]<<3)|(LED[4]<<4)|(LED[5]<<5)|(LED[6]<<6)|(LED[7]<<7);
-	return aux;//Devuelvo como valor de salida aux
-
-	//Si hay más de
- */
-
-  //Segundo intento
+	uint8_t LED[8];unsigned char byteSensor; int aux;float error;
+  
   LED[0]=bitRead(port1,bit1);
   LED[1]=bitRead(port2,bit2);
   LED[2]=bitRead(port3,bit3);
   LED[3]=bitRead(port4,bit4);
-
   //Acá hago algo distinto porque el pin es analógico
   aux=analogRead(A6);//Lectura del bit analógico
-  LED[4]=(aux&512>>9);//aux&512 me da un 1 seguido de 9 ceros si aux>=512
-                      //y sino me da todos ceros.
-
+  if(aux>512){LED[4]=1;}
+  else{LED[4]=0;}
   LED[5]=bitRead(port6,bit6);
   LED[6]=bitRead(port7,bit7);
   LED[7]=bitRead(port8,bit8);
-
   //Junto todos los bits en un byte:
   byteSensor=0;
   for(int k=0;k<8;k++){
     bitWrite(byteSensor,k,LED[k]);
   }
   return byteSensor;//Lo devuelvo como valor de salida
+
+  //Lógica: el byte de los LEDs debería mostrar todos 0s si no está la línea
+  //(fondo blanco, línea negra), o 1 o 2 LEDs en 1 si la línea está abajo de                //$$$$REVISAR EL GROSOR DE LA LÍNEA
+  //los mismos. Tabulamos el valor de error que implica cada caso con un
+  //switch case.
+  switch (byteSensor){
+    case 1:   //Línea debajo del LED 1
+      error=;
+      break;
+    case 3:   //Línea debajo de los LEDs 1 y 2
+      error=;
+      break;
+    case 2:   //Línea debajo del LED 2
+      error=;
+      break;
+    case 6:   //Línea debajo de los LEDs 2 y 3
+      error=;
+      break;
+    case 4:   //Línea debajo del LED 3
+      error=;
+      break;
+    case 12:  //Línea debajo de los LEDs 3 y 4
+      error=;
+      break;
+    case 8:   //Línea debajo del LED 4
+      error=;
+      break;
+    case 24:  //Línea debajo de los LEDs 4 y 5
+      error=;
+      break;
+    case 16:  //Línea debajo del LED 5
+      error=;
+      break;
+    case 48:  //Línea debajo de los LEDs 5 y 6
+      error=;
+      break;
+    case 32:  //Línea debajo del LED 6
+      error=;
+      break;
+    case 96:  //Línea debajo de los LEDs 6 y 7
+      error=;
+      break;
+    case 64:  //Línea debajo del LED 7
+      error=;
+      break;
+    case 192: //Línea debajo de los LEDs 7 y 8
+      error=;
+      break;
+    case 128: //Línea debajo del LED 8
+      error=;
+      break;
+    case 0:   //Se perdió la línea (VER QUÉ HACEMOS EN ESTE CASO)
+      break;
+    default:  //La lectura del sensor es errónea (VER QUÉ HACEMOS EN ESTE CASO)
+      break;}
 }
+
  void Controlados::configTimer2Contador(){
   int a=2000,b=32;
   Controlados::configTimer2Contador(a, b,0);

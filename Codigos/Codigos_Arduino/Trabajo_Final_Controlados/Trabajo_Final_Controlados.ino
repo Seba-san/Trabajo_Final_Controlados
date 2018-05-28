@@ -74,10 +74,6 @@ void setup() { // $2
   //Config pines de encoders:
   pinMode(14, INPUT);//A0 = pin 14 del nano
   pinMode(15, INPUT);//A1 = pin 15 del nano
-
-  //$$$BORRAR:
-  pinMode(16, OUTPUT);//A1 = pin 15 del nano
-  pinMode(17, OUTPUT);//A1 = pin 15 del nano
   
  controlados1.configPinesMotores();
  controlados1.modoStop();
@@ -91,8 +87,9 @@ void setup() { // $2
  bitWrite(estadoEncoder,0,encoderAux);
  encoderAux=bitRead(PINC,1);
  bitWrite(estadoEncoder,1,encoderAux);
- 
- controlados1.modoAdelante();
+
+ //$.$
+ //controlados1.modoAdelante();
  _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
 }
@@ -114,15 +111,15 @@ void loop() { //$3
   }
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
   unsigned char sensor;
-  //digitalWrite(LED_BUILTIN,HIGH);//$$$BORRAR
-  //sensor=controlados1.leerSensorDeLinea();
+  digitalWrite(LED_BUILTIN,HIGH);//$$$BORRAR
+  sensor=controlados1.leerSensorDeLinea();
+  digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  EnviarTX_online(freqB);
-  EnviarTX_online(uB[2]);
+  //EnviarTX_online(freqB);
+  //EnviarTX_online(uB[2]);
   //EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);//$.$
-  //Serial.println(sensor,BIN);
-  //digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
+  Serial.println(sensor,BIN);
   }
 }
 
