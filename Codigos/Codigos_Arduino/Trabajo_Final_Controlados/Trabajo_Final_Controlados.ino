@@ -1,4 +1,4 @@
-#define controlador 1
+#define controlador 1 //Sacarlo, no anda $$$
 
 
 #include "includes.h"
@@ -42,12 +42,15 @@ int soft_prescaler=0;
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
 float set_pointA=300,set_pointB=300; // Set_point esta en RPM
+float wref=300;//Velocidad lineal del centro del robot.
+float beta=0;//Ángulo entre el eje central del robot y la línea (en radianes)
+float dw=0;//Variación de velocidad angular.
 
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
 float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
-float ParametrosB[]={0.050118,-0.04911,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float ParametrosB[]={0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
 
 volatile float freqA;
 volatile float freqB;
@@ -58,6 +61,7 @@ unsigned char estadoEncoder=0;//En esta variable guardo el valor de las entradas
 // #   #   #   # Declaracion de Funciones
 void medirVelocidadA(unsigned char);
 void medirVelocidadB(unsigned char);
+void medirBeta(void);
 
 
 void setup() { // $2
@@ -88,8 +92,7 @@ void setup() { // $2
  encoderAux=bitRead(PINC,1);
  bitWrite(estadoEncoder,1,encoderAux);
 
- //$.$
- //controlados1.modoAdelante();
+ controlados1.modoAdelante();
  _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
 }
@@ -110,16 +113,13 @@ void loop() { //$3
   medirVelocidadB(1);
   }
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
-  unsigned char sensor;
-  digitalWrite(LED_BUILTIN,HIGH);//$$$BORRAR
-  sensor=controlados1.leerSensorDeLinea();
-  digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
-  PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
+  medirBeta();//Actualizo la medición de velocidad
+  PID_total();//PID del sistema en su conjunto
+  PID_offline_Motores(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
   //EnviarTX_online(freqB);
   //EnviarTX_online(uB[2]);
-  //EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);//$.$
-  Serial.println(sensor,BIN);
+  Serial.println(1000*beta);
   }
 }
 
@@ -173,3 +173,12 @@ long suma=0;
      freqB=0; // Hay que calcularla aca porque sino da cualquier valor.
   }
 }
+
+void medirBeta(void){
+  float betaAux;
+  betaAux=controlados1.leerSensorDeLinea();
+  //Si beta=3 es porque el sensor tiró un valor erróneo o perdió la línea.
+  //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
+  if(betaAux!=3){beta=betaAux;}
+}
+

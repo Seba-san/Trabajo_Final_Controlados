@@ -18,7 +18,8 @@ extern bool online, tx_activada;
 
 extern void tic(void);
 extern void toc(void);
-extern void PID_offline(void);
+extern void PID_offline_Motores(void);
+extern void PID_total(void);
 extern void EnviarTX(int cantidad,const char identificador, unsigned long *datos);
 extern void EnviarTX_online(float);
 extern void EnviarTX_online(int);

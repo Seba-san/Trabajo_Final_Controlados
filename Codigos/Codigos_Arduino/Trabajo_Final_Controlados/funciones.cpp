@@ -1,9 +1,9 @@
 #include "funciones.h"
 #include "Arduino.h"  
 
-void PID_offline (void){ //$9 PID
+void PID_offline_Motores (void){ //$9 PID
 /* La idea de esta funcion es que realice los calculos que no requieren que esten sincronizados.
- Luego, en la interrupcion por overflow, que e hagan solo los calculos necesarios y se aplique la señal de control.
+ Luego, en la interrupcion por overflow, que se hagan solo los calculos necesarios y se aplique la señal de control.
 */
   for(int k=0;k<2;k++)
     {
@@ -22,6 +22,19 @@ void PID_offline (void){ //$9 PID
   if (uB[2]<windup_bottom){uB[2]=windup_bottom;}
 }
 
+void PID_total(void){//PID del sistema en su conjunto
+  /*
+  for(int k=0;k<2;k++)
+    {
+     errorBeta[k]=errorBeta[k+1];//Desplazamiento a la derecha de los datos del buffer
+     dw[k]=dw[k+1];
+    }  
+  errorBeta[2]=((float)(0)-beta);//El ángulo deseado es siempre 0
+  dw[2]=Parametros[0]*errorBeta[2]+Parametros[1]*errorBeta[1]+Parametros[2]*errorBeta[0]+Parametros[3]*dw[1]+Parametros[4]*dw[0];
+  if (dw[2]>windup_top){dw[2]=windup_top;} //Cambiar nombres de windup_top y _bottom $$$$$
+  if (dw[2]<windup_bottom){dw[2]=windup_bottom;}
+  */
+}
 
  //  #####################  Modulos de comunicaciones 
  

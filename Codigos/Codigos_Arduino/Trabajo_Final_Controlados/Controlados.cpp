@@ -210,14 +210,17 @@ void Controlados::configPinesSensorLinea()
 	pinMode(rx_8,INPUT_PULLUP);
 }
 
-unsigned char Controlados::leerSensorDeLinea()
+float Controlados::leerSensorDeLinea()
 {
 	//Esta función lee el sensor de línea y determina en función de eso un valor
 	//para el ángulo de error etre el robot y la línea. Para eso supone que el
 	//centro del robot (punto medio entre las dos ruedas) está siempre encima de
 	//la línea.
+  //Si hay un error en la medición o se perdió la línea, devuelve beta=3 para
+  //que desde afuera de la función se lo tome como no valido. En este caso, desde
+  //el main se debe indicar que hay que mantener el valor anterior.
 
-	uint8_t LED[8];unsigned char byteSensor; int aux;float error;
+	uint8_t LED[8];unsigned char byteSensor; int aux;float beta;
   
   LED[0]=bitRead(port1,bit1);
   LED[1]=bitRead(port2,bit2);
@@ -235,62 +238,81 @@ unsigned char Controlados::leerSensorDeLinea()
   for(int k=0;k<8;k++){
     bitWrite(byteSensor,k,LED[k]);
   }
-  return byteSensor;//Lo devuelvo como valor de salida
-
+  
   //Lógica: el byte de los LEDs debería mostrar todos 0s si no está la línea
   //(fondo blanco, línea negra), o 1 o 2 LEDs en 1 si la línea está abajo de                //$$$$REVISAR EL GROSOR DE LA LÍNEA
   //los mismos. Tabulamos el valor de error que implica cada caso con un
   //switch case.
+  //Los valores correspondientes salen de un ensayo. Como el sensor actual es
+  //medio pelo hay un par de casos con 3 o 4 LEDs prendidos, un intervalo de
+  //beta donde puede dar varias configuraciones del sensor e intervalos de beta
+  //poco uniformes. A futuro se debe mejorar el hardware del sensor.
   switch (byteSensor){
     case 1:   //Línea debajo del LED 1
-      error=;
+      beta=-0.6981317;
       break;
     case 3:   //Línea debajo de los LEDs 1 y 2
-      error=;
+      beta=-0.53232542;
+      break;
+    case 7:   //Línea debajo del LED 2
+      beta=-0.32288591;
       break;
     case 2:   //Línea debajo del LED 2
-      error=;
+      beta=-0.32288591;
       break;
     case 6:   //Línea debajo de los LEDs 2 y 3
-      error=;
+      beta=-0.20071286;
       break;
     case 4:   //Línea debajo del LED 3
-      error=;
+      beta=-0.16580628;
       break;
     case 12:  //Línea debajo de los LEDs 3 y 4
-      error=;
+      beta=-0.06981317;
       break;
     case 8:   //Línea debajo del LED 4
-      error=;
+      beta=0.052359878;
       break;
     case 24:  //Línea debajo de los LEDs 4 y 5
-      error=;
+      beta=0.161442956;
       break;
     case 16:  //Línea debajo del LED 5
-      error=;
+      beta=0.253072742;
       break;
     case 48:  //Línea debajo de los LEDs 5 y 6
-      error=;
+      beta=0.327249235;
       break;
     case 32:  //Línea debajo del LED 6
-      error=;
+      beta=0.327249235;
       break;
-    case 96:  //Línea debajo de los LEDs 6 y 7
-      error=;
+    case 80:  //Línea debajo del LED 6 (el 6 anda más o menos, entonces se pueden prender sólo el 5 y el 7)
+      beta=0.327249235;
+      break;
+    case 112:  //Línea debajo del LED 6 (LEDs 5-6-7 prendidos)
+      beta=0.327249235;
+      break;
+    case 240:  //Línea debajo del LED 6 (LEDs 5-6-7-8 prendidos)
+      beta=0.327249235;
+      break;
+    case 96:  //Línea debajo de los LEDs 6 y 7 (no se dió nunca...le doy el valor de los casos de arriba)
+      beta=0.327249235;
       break;
     case 64:  //Línea debajo del LED 7
-      error=;
+      beta=0.410152374;
       break;
     case 192: //Línea debajo de los LEDs 7 y 8
-      error=;
+      beta=0.567232007;
       break;
     case 128: //Línea debajo del LED 8
-      error=;
+      beta=0.772308194;
       break;
-    case 0:   //Se perdió la línea (VER QUÉ HACEMOS EN ESTE CASO)
+    case 0:   //Se perdió la línea
+      beta=3;//Le doy un valor absurdo y afuera de la rutina si detecto este valor lo doy por no valido
       break;
-    default:  //La lectura del sensor es errónea (VER QUÉ HACEMOS EN ESTE CASO)
+    default:  //La lectura del sensor es errónea
+      beta=3;//Le doy un valor absurdo y afuera de la rutina si detecto este valor lo doy por no valido
       break;}
+
+return beta;//Lo devuelvo como valor de salida
 }
 
  void Controlados::configTimer2Contador(){
