@@ -32,10 +32,9 @@ end
 Env_instruccion(s,'PWM',[0 0]);
 Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
 name=datestr(now,'yymmddhhMMss');
-direccion='../../Mediciones/';
 name1='respuesta_escalon_motorB_';
 name2='10_40_';
-name=strcat(direccion,name1,name2,name,'.mat');
+name=strcat(name1,name2,name,'.mat');
 %save(name,'tiempo','PWMA','wA') 
 figure(1);plot(tiempo,PWMA,tiempo,wA,'.');%ylim([0 1500])
 legend('Señal de PWM','Señal de vel ang');

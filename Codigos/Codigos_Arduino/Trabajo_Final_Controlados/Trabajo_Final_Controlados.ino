@@ -1,5 +1,3 @@
-//#define controlador 1 //Sacarlo, no anda $$$
-
 
 #include "includes.h"
 
@@ -13,6 +11,7 @@ const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow c
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 2000;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 unsigned long _OCR2A;
+const int controlador=1;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
 
@@ -47,10 +46,10 @@ float beta=0;//Ángulo entre el eje central del robot y la línea (en radianes)
 float dw=0;//Variación de velocidad angular.
 
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
-//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
+//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0}; Andando tambien: { 0.12649 ,   -0.12348  , 0, 1, 0}; ZN
 
 float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
-float ParametrosB[]={0.12115  ,  -0.11309  ,       0  ,  1  ,  0};//{0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float ParametrosB[]={2.242  ,   -4.1374  ,  1.9088 ,   0  ,  1};//{ 0.12649 ,   -0.12348  , 0, 1, 0};//{ 0.25007  ,  -0.23902, 0 ,1 ,0};//{0.14865 ,-0.14113,0,1,0};//{0.12115  ,  -0.11309  ,       0  ,  1  ,  0};//{0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
 
 volatile float freqA;
 volatile float freqB;
@@ -115,10 +114,14 @@ void loop() { //$3
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
   //medirBeta();//Actualizo la medición de velocidad
   //PID_total();//PID del sistema en su conjunto
+  if (controlador==1){
   PID_offline_Motores(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
-  // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
   EnviarTX_online(freqB);
   EnviarTX_online(uB[2]);
+  }
+  // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
+  //EnviarTX_online(freqB);
+  //EnviarTX_online(uB[2]);
   //Serial.println(1000*beta);
   }
 }

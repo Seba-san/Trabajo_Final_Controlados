@@ -256,14 +256,14 @@ function [K,L,T]=ParametrosDelEnsayo3(entrada,salida,tiempo,figuras)
 PmR='K*(1-exp(-(x-L)/T))';%P mas Retardo (no me acuerdo que es la P)
 [~,indice]=max(diff(entrada));
 tiempo2=tiempo-tiempo(indice);
-PuntosIniciales=[max(entrada) 1/200 0.1];
-f1 = fit(tiempo2(indice:end)',salida(indice:end)',PmR);%,'Start',PuntosIniciales);
+PuntosIniciales=[max(entrada)  ]
+f1 = fit(tiempo2(indice:end)',salida(indice:end)',PmR);
 K=f1.K/max(entrada);
 L=f1.L;T=f1.T;
-% if figuras
-%    plot(f1,tiempo,salida)
-%    title('Respuesta temporal curva fiteada')
-% end
+if figuras
+   plot(f1,tiempo(indice:end)',salida(indice:end)')
+   title('Respuesta temporal curva fiteada')
+end
 
 
 end

@@ -1,5 +1,5 @@
 %% Inicio
-s=InicializacionSerial('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
+s=InicializacionSerial('/dev/ttyUSB1',115200);%Velocidad: 115200 baudios
 %s=InicializacionSerial('COM5',115200);%Velocidad: 115200 baudios
 %% Fin
 fclose(instrfindall);       %cierra todos los puertos activos y ocultos
@@ -11,21 +11,23 @@ Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin 
 Comunic_test(s)
 % Env_instruccion(s,'PWM',[50 100]); 
 % pause(1)
-Env_instruccion(s,'setpoint',[300,300]); 
+RPM=300;
+Env_instruccion(s,'setpoint',[RPM,RPM]); 
 N=36*10;
 medicion=zeros(1,N);
 control=zeros(1,N);
 i=1;
-a=1;veces=0;
+a=1;veces=2;
 pause(1)
 limite_sup=1e3; %limite del grafico
 limite_inf=0;
 try
 %     close(1)
 end
-figure()
+figure(1)
  flushinput(s);
-while (veces<1)
+ veces_=0;
+while (veces_<veces)
     %figure(1)
     
     
@@ -52,9 +54,13 @@ while (veces<1)
     i=i+1;
     if (i>N ) 
         i=1;a=~a;
-        veces=veces+1;
+        veces_=veces_+1;
+        
     end
     
+    if i>N/2
+      %  Env_instruccion(s,'setpoint',[RPM*2,RPM*2]); 
+    end
     
 end
 Env_instruccion(s,'stop'); 
