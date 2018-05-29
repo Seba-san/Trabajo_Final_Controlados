@@ -31,8 +31,8 @@ void PID_total(void){//PID del sistema en su conjunto
     }  
   errorBeta[2]=((float)(0)-beta);//El ángulo deseado es siempre 0
   dw[2]=Parametros[0]*errorBeta[2]+Parametros[1]*errorBeta[1]+Parametros[2]*errorBeta[0]+Parametros[3]*dw[1]+Parametros[4]*dw[0];
-  if (dw[2]>windup_top){dw[2]=windup_top;} //Cambiar nombres de windup_top y _bottom $$$$$
-  if (dw[2]<windup_bottom){dw[2]=windup_bottom;}
+  if (dw[2]>windup_top_dw){dw[2]=windup_top_dw;} //Cambiar nombres de windup_top y _bottom $$$$$
+  if (dw[2]<windup_bottom_dw){dw[2]=windup_bottom_dw;}
   */
 }
 

@@ -1,5 +1,5 @@
 #define controlador 1 //Sacarlo, no anda $$$
-
+#define N 1000 //cantidad de muestras a tomar en el ensayo al escalón
 
 #include "includes.h"
 
@@ -44,17 +44,21 @@ float errorA[3],errorB[3];
 float set_pointA=300,set_pointB=300; // Set_point esta en RPM
 float wref=300;//Velocidad lineal del centro del robot.
 float beta=0;//Ángulo entre el eje central del robot y la línea (en radianes)
-float dw=0;//Variación de velocidad angular.
+float dw[3]={0,0,0},errorBeta[3]={0,0,0};//Variación de velocidad angular.
+
+unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
 
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
 float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[]={0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float Parametros[]={0,0,0,0,0};//PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
 int windup_top=100,windup_bottom=10;
+int windup_top_dw=100,windup_bottom_dw=-100;//Definir bien
 
 unsigned char estadoEncoder=0;//En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -79,21 +83,22 @@ void setup() { // $2
   pinMode(14, INPUT);//A0 = pin 14 del nano
   pinMode(15, INPUT);//A1 = pin 15 del nano
   
- controlados1.configPinesMotores();
- controlados1.modoStop();
- controlados1.configTimerMotores();
- controlados1.configTimer2Contador(FsEncoders,preescaler,1);//Configuro el timer2 como contador con interrupción. La frecuencia va desde 500000 hasta 1997.
- controlados1.actualizarDutyCycleMotores(0,0);
+  controlados1.configPinesMotores();
+  controlados1.modoStop();
+  controlados1.configTimerMotores();
+  controlados1.configTimer2Contador(FsEncoders,preescaler,1);//Configuro el timer2 como contador con interrupción. La frecuencia va desde 500000 hasta 1997.
+  controlados1.actualizarDutyCycleMotores(0,0);
+  
+  //Antes de prender los motores guardo el valor de los encoderes en la variable estadoEncoder para que cuando se genere la primer interrupción por
+  int encoderAux;
+  encoderAux=bitRead(PINC,0);
+  bitWrite(estadoEncoder,0,encoderAux);
+  encoderAux=bitRead(PINC,1);
+  bitWrite(estadoEncoder,1,encoderAux);
 
- //Antes de prender los motores guardo el valor de los encoderes en la variable estadoEncoder para que cuando se genere la primer interrupción por
- int encoderAux;
- encoderAux=bitRead(PINC,0);
- bitWrite(estadoEncoder,0,encoderAux);
- encoderAux=bitRead(PINC,1);
- bitWrite(estadoEncoder,1,encoderAux);
-
- controlados1.modoAdelante();
- _OCR2A=OCR2A;
+  //$.$
+  //controlados1.modoAdelante();
+  _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
 }
 
@@ -113,13 +118,15 @@ void loop() { //$3
   medirVelocidadB(1);
   }
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
-  medirBeta();//Actualizo la medición de velocidad
-  PID_total();//PID del sistema en su conjunto
+  medirBeta();//Actualizo la medición de ángulo
+  //PID_total();//PID del sistema en su conjunto
   PID_offline_Motores(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
   //EnviarTX_online(freqB);
   //EnviarTX_online(uB[2]);
-  Serial.println(1000*beta);
+  Serial.print(beta);
+  Serial.print(" ");
+  Serial.println(byteSensor,BIN);
   }
 }
 
@@ -176,7 +183,7 @@ long suma=0;
 
 void medirBeta(void){
   float betaAux;
-  betaAux=controlados1.leerSensorDeLinea();
+  betaAux=controlados1.leerSensorDeLinea(&byteSensor);
   //Si beta=3 es porque el sensor tiró un valor erróneo o perdió la línea.
   //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
   if(betaAux!=3){beta=betaAux;}

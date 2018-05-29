@@ -210,7 +210,7 @@ void Controlados::configPinesSensorLinea()
 	pinMode(rx_8,INPUT_PULLUP);
 }
 
-float Controlados::leerSensorDeLinea()
+float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
 {
 	//Esta función lee el sensor de línea y determina en función de eso un valor
 	//para el ángulo de error etre el robot y la línea. Para eso supone que el
@@ -220,7 +220,7 @@ float Controlados::leerSensorDeLinea()
   //que desde afuera de la función se lo tome como no valido. En este caso, desde
   //el main se debe indicar que hay que mantener el valor anterior.
 
-	uint8_t LED[8];unsigned char byteSensor; int aux;float beta;
+	uint8_t LED[8]; int aux;float beta;
   
   LED[0]=bitRead(port1,bit1);
   LED[1]=bitRead(port2,bit2);
@@ -234,9 +234,9 @@ float Controlados::leerSensorDeLinea()
   LED[6]=bitRead(port7,bit7);
   LED[7]=bitRead(port8,bit8);
   //Junto todos los bits en un byte:
-  byteSensor=0;
+  *byteSensor=0;
   for(int k=0;k<8;k++){
-    bitWrite(byteSensor,k,LED[k]);
+    bitWrite(*byteSensor,k,LED[k]);
   }
   
   //Lógica: el byte de los LEDs debería mostrar todos 0s si no está la línea
@@ -247,7 +247,7 @@ float Controlados::leerSensorDeLinea()
   //medio pelo hay un par de casos con 3 o 4 LEDs prendidos, un intervalo de
   //beta donde puede dar varias configuraciones del sensor e intervalos de beta
   //poco uniformes. A futuro se debe mejorar el hardware del sensor.
-  switch (byteSensor){
+  switch (*byteSensor){
     case 1:   //Línea debajo del LED 1
       beta=-0.6981317;
       break;
