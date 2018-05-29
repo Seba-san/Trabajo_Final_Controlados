@@ -1,14 +1,17 @@
+#define controlador 1
+
+
 #include "includes.h"
 
 Controlados controlados1;
 
 
 // #   #   #   # Constantes $1
-const int cantMarcasEncoder = 18; //Es la cantidad de huecos que tiene el encoder de cada motor.
-const int cantMarcasEncoderB = 18; //$ BORRAR!!! SOLO PARA PRUEBAS
+const int cantMarcasEncoder = 9; //Es la cantidad de huecos que tiene el encoder de cada motor.
+const int cantMarcasEncoderB = 9; //$ BORRAR!!! SOLO PARA PRUEBAS
 const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 1024;//1024;//32;//8 32 64
-const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
+const int cota = 2000;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 unsigned long _OCR2A;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
@@ -43,8 +46,8 @@ float set_pointA=300,set_pointB=300; // Set_point esta en RPM
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
-float ParametrosA[]={0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
-float ParametrosB[]={0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
+float ParametrosB[]={0.050118,-0.04911,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
 
 volatile float freqA;
 volatile float freqB;
@@ -71,10 +74,6 @@ void setup() { // $2
   //Config pines de encoders:
   pinMode(14, INPUT);//A0 = pin 14 del nano
   pinMode(15, INPUT);//A1 = pin 15 del nano
-
-  //$$$BORRAR:
-  pinMode(16, OUTPUT);//A1 = pin 15 del nano
-  pinMode(17, OUTPUT);//A1 = pin 15 del nano
   
  controlados1.configPinesMotores();
  controlados1.modoStop();
@@ -88,8 +87,9 @@ void setup() { // $2
  bitWrite(estadoEncoder,0,encoderAux);
  encoderAux=bitRead(PINC,1);
  bitWrite(estadoEncoder,1,encoderAux);
- 
- controlados1.modoAdelante();
+
+ //$.$
+ //controlados1.modoAdelante();
  _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
 }
@@ -113,12 +113,13 @@ void loop() { //$3
   unsigned char sensor;
   digitalWrite(LED_BUILTIN,HIGH);//$$$BORRAR
   sensor=controlados1.leerSensorDeLinea();
+  digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
   PID_offline(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-  EnviarTX_online(freqA);
-  //EnviarTX_online(uA[2]);
-  //Serial.println(sensor,BIN);
-  digitalWrite(LED_BUILTIN,LOW);//$$$BORRAR
+  //EnviarTX_online(freqB);
+  //EnviarTX_online(uB[2]);
+  //EnviarTX_online(bufferVelB[2*cantMarcasEncoderB-1]);//$.$
+  Serial.println(sensor,BIN);
   }
 }
 
@@ -163,6 +164,7 @@ long suma=0;
     bufferVelB[2*cantMarcasEncoderB-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
     suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
     freqB=float((F_CPU*60.0)/(suma));
+    //freqB=(float)suma;//BORRAR ESTA PORQUERIA, ES SOLO PARA DEBUGGEAR $.$
     interruptON;
   }
   else{

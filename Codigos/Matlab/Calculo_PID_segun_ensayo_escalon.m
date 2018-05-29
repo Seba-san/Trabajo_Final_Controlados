@@ -6,13 +6,13 @@
 % controlador sobre esta estimaciï¿½n de la planta.
 %% Ensayo al escalï¿½n - Cargo los datos
 clear all;close all;%clc;
-%cd('C:\Users\Tania\Documents\ING\Carrera de Grado\Controlados\Trabajo Final con Seba\Git con Seba\Trabajo_Final_Controlados_git\Codigos\Matlab')
-load('../../Mediciones/respuesta_escalon_motorB180523193004.mat')
-load('../../Mediciones/respuesta_escalon_motorB180523184621.mat')
-%load('..\..\Mediciones\respuesta_escalon_motorB180523193004.mat')
+
+cd('C:\Users\Tania\Documents\ING\Carrera de Grado\Controlados\Trabajo Final con Seba\Git con Seba\Trabajo_Final_Controlados_git\Codigos\Matlab')
+load('../../Mediciones\Ensayos 25-05-18\respuesta_escalon_motorB_180525211446')
 % load('../../Mediciones/respuesta_escalon_180503210331.mat')
-tiempo=tiempo*1e-6;%Acomodo la unidad del tiempo.
-%% Grï¿½fico de la Respuesta al escalï¿½n
+% tiempo=tiempo*1e-6;%Acomodo la unidad del tiempo.
+%% Gráfico de la Respuesta al escalón
+
 figure(1);
 plot(tiempo,PWMA,tiempo,wA,'.');
 legend('Seï¿½al de PWM','Seï¿½al de vel ang');
@@ -40,9 +40,10 @@ Fsnano=200;
 Ts2=1/Fsnano;
 tipo={'P';'PI';'PID'};
 clear A B C D E F;
+figura=[1,0,0];
 for k=1:3
-    [Kp,Ki,Kd]=ControlZN(tipo{k},'ZN',entrada,salida,tiempo,0,1);
-    Tf=0;%No sï¿½ quï¿½ poner en Tf porque ZN no me lo da.
+    [Kp,Ki,Kd]=ControlZN(tipo{k},'ZN',entrada,salida,tiempo,0,figura(k));
+    Tf=0;%No sé qué poner en Tf porque ZN no me lo da.
     control=c2d(tf(pid(Kp,Ki,Kd,Tf)),Ts2,'tustin');
     [A(k,1),B(k,1),C(k,1),D(k,1),E(k,1)]=tf2ctesNano(cell2mat(control.num),cell2mat(control.den),tipo{k});
 end
