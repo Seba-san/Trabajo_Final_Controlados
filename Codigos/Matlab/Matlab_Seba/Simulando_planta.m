@@ -10,13 +10,37 @@ load('../../Mediciones/respuesta_escalon_motorB_40_80_180529195226.mat');
 wAm(:,2)=wA;PWMAm(:,2)=PWMA;tiempom(:,2)=tiempo;
 load('../../Mediciones/respuesta_escalon_motorB_10_80_180529195249.mat');
 wAm(:,3)=wA;PWMAm(:,3)=PWMA;tiempom(:,3)=tiempo;
-%%
-
 % Simulando planta
-load('planta.mat');load('planta2.mat');load('planta3.mat')
-%P2D es el sistema
-%Planta_estimada=tf(P2D.Kp,[T 1],'InputDelay',P2D.Td);
-sys=idtf(P2D3);
+load('planta3.mat')
+%P2D 3es el sistema
+sys=idtf(P2D3); % Se puede tunear usando el PID Tuner en continuo y luego se dicretiza
+
+for i=1:3
+figure()
+ lsim(sys,PWMAm(:,i)',tiempom(:,i)')
+    hold on
+    plot(tiempom(:,i),wAm(:,i),'.')
+    hold off
+%C = pidtune(sys_sr,'PI');
+end
+%%
+% Para pasar el controlador de discreto a continuo
+
+
+Kp=C0.Kp;Kd=C0.Kd;Ki=C0.Ki;
+tipo='PI';
+Fsnano=200;
+% Ts2=0.015;
+Ts2=1/Fsnano;
+clear A B C D E F;
+Tf=0;%No s� qu� poner en Tf porque ZN no me lo da.
+control=c2d(tf(pid(Kp,Ki,Kd,Tf)),Ts2,'tustin'); 
+[A,B,C,D,E]=tf2ctesNano(cell2mat(control.num),cell2mat(control.den),tipo);
+ctes=table(A,B,C,D,E);
+ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
+% Transferencia del controlador: H(z)=(A+Bz^-1+Cz^-2)/(1-Dz^-1-Ez^-2)
+
+%% DE ACA PARA ABAJO ES BASURA!!! #### (no borrar)
 sys_d=c2d(sys,1/200,'tustin')
 sys_d2=feedback(sys_d*0.1,1);
   lsim(sys_d,PWMA(20:end),tiempo(20:end))
@@ -60,17 +84,7 @@ title ('Controlado')
 figure (3);
 step(sys_srd)
 title ('Sin controlar')
-%%
-sys_sr=tf(7.228e04,[1 165.3 6827]);
-sys_sr=sys;
-for i=1:3
-figure()
- lsim(sys_sr,PWMAm(:,i)',tiempom(:,i)')
-    hold on
-    plot(tiempom(:,i),wAm(:,i),'.')
-    hold off
-%C = pidtune(sys_sr,'PI');
-end
+
 
 
 %%
