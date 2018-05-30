@@ -48,8 +48,8 @@ float dw=0;//Variación de velocidad angular.
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0}; Andando tambien: { 0.12649 ,   -0.12348  , 0, 1, 0}; ZN
 
-float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
-float ParametrosB[]={2.242  ,   -4.1374  ,  1.9088 ,   0  ,  1};//{ 0.12649 ,   -0.12348  , 0, 1, 0};//{ 0.25007  ,  -0.23902, 0 ,1 ,0};//{0.14865 ,-0.14113,0,1,0};//{0.12115  ,  -0.11309  ,       0  ,  1  ,  0};//{0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float ParametrosA[]={ 0.12649 ,   -0.12348  , 0, 1, 0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
+float ParametrosB[]={ 0.12649 ,   -0.12348  , 0, 1, 0};//{ 0.12649 ,   -0.12348  , 0, 1, 0};//{ 0.25007  ,  -0.23902, 0 ,1 ,0};//{0.14865 ,-0.14113,0,1,0};//{0.12115  ,  -0.11309  ,       0  ,  1  ,  0};//{0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
 
 volatile float freqA;
 volatile float freqB;
@@ -120,10 +120,14 @@ void loop() { //$3
   EnviarTX_online(uB[2]);
   }
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
+  if (controlador==0){
+     EnviarTX_online(freqB);
+  }
+  }
   //EnviarTX_online(freqB);
   //EnviarTX_online(uB[2]);
   //Serial.println(1000*beta);
-  }
+  
 }
 
 void medirVelocidadA(unsigned char interrupcionA)

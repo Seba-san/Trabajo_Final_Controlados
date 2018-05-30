@@ -21,8 +21,8 @@ Comunic_test(s)
 Env_instruccion(s,'online');
 flushinput(s);  %Vacia el buffer de entrada
 for k=1:N %Ojo con el tope que pone el nano
-    if k==20
-        PWM=40;
+    if k==80
+        PWM=80;
         Env_instruccion(s,'PWM',[PWM PWM]);
     end
     w=str2double(fscanf(s));
@@ -34,8 +34,8 @@ Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
 name=datestr(now,'yymmddhhMMss');
 direccion='../../Mediciones/';
 name1='respuesta_escalon_motorB_';
-name2='10_40_';
-name=strcat(direccion,name1,name2,name,'.mat');
+name2='10_80_';
+name=strcat(direccion,name,name1,name2,'.mat');
 %save(name,'tiempo','PWMA','wA') 
 figure(1);plot(tiempo,PWMA,tiempo,wA,'.');%ylim([0 1500])
 legend('Señal de PWM','Señal de vel ang');

@@ -1,5 +1,5 @@
 %% Inicio
-s=InicializacionSerial('/dev/ttyUSB1',115200);%Velocidad: 115200 baudios
+s=InicializacionSerial('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
 %s=InicializacionSerial('COM5',115200);%Velocidad: 115200 baudios
 %% Fin
 fclose(instrfindall);       %cierra todos los puertos activos y ocultos
@@ -17,7 +17,7 @@ N=36*10;
 medicion=zeros(1,N);
 control=zeros(1,N);
 i=1;
-a=1;veces=2;
+a=1;veces=1;
 pause(1)
 limite_sup=1e3; %limite del grafico
 limite_inf=0;
@@ -59,7 +59,7 @@ while (veces_<veces)
     end
     
     if i>N/2
-      %  Env_instruccion(s,'setpoint',[RPM*2,RPM*2]); 
+       % Env_instruccion(s,'setpoint',[RPM*2,RPM*2]); 
     end
     
 end
