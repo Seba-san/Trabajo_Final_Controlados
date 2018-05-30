@@ -3,7 +3,7 @@ s=InicializacionSerial('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
 %s=InicializacionSerial('COM5',115200);%Velocidad: 115200 baudios
 %% Fin
 fclose(instrfindall);       %cierra todos los puertos activos y ocultos
-clear all;close all;clc
+%clear all;close all;clc
 disp('Puerto Cerrado')
 %%
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
@@ -11,12 +11,14 @@ Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin 
 Comunic_test(s)
 % Env_instruccion(s,'PWM',[50 100]); 
 % pause(1)
-RPM=300;
+
+RPM=300; 
 Env_instruccion(s,'setpoint',[RPM,RPM]); 
 N=36*10;
 medicion=zeros(1,N);
 control=zeros(1,N);
 i=1;
+RPMn=zeros(1,N);RPMn(1)=RPM;
 a=1;veces=1;
 pause(1)
 limite_sup=1e3; %limite del grafico
@@ -43,23 +45,31 @@ while (veces_<veces)
     
     m1=1:1:i;m2=i+1:1:N;
     %figure(1)
-    subplot(211)
-    plot(m1,medicion(1:i),'.','color',[~a 0 a]); hold on;plot(m2,medicion(i+1:N),'.','color',[a 0 ~a]); hold off;
-%     ylim([limite_inf limite_sup]);
+    subplot(311)
+    plot(m1,medicion(1:i),'.','color',[~a 0 a]); hold on;plot(m2,medicion(i+1:N),'.','color',[a 0 ~a]); hold off;ylim([0 1200])
+    ylabel('RPM')
+    %     ylim([limite_inf limite_sup]);
  % figure(2)
-    subplot(212)
+    subplot(312)
     plot(m1,control(1:i),'.','color',[~a 0 a]); hold on;plot(m2,control(i+1:N),'.','color',[a 0 ~a]); hold off; ylim([0 110]);
-   
+   ylabel('U_{control}')
+    subplot(313)
+    plot(m1,RPMn(1:i),'.','color',[~a 0 a]); hold on;plot(m2,RPMn(i+1:N),'.','color',[a 0 ~a]); hold off; 
+   ylabel('set point')
     pause(0.001)
     i=i+1;
-    if (i>N ) 
-        i=1;a=~a;
+    if (i>(N-1) ) 
+        i=2;a=~a;
         veces_=veces_+1;
         
     end
     
-    if i>N/2
-       % Env_instruccion(s,'setpoint',[RPM*2,RPM*2]); 
+    if i==N/2
+        RPM2=400;
+        RPMn(i)=RPM2;
+        Env_instruccion(s,'setpoint',[RPM2,RPM2]); 
+    else
+         RPMn(i)= RPMn(i-1);
     end
     
 end
