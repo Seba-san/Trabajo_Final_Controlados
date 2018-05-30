@@ -4,7 +4,7 @@
 #define controlador 1 //Sacarlo, no anda $$$
 #define N 100  //cantidad de muestras a tomar en el ensayo al escalón
 #define n0 10 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
-#define dW 100  //
+#define dW 100  //Valor final del escalón
 
 #include "includes.h"
 
@@ -143,14 +143,9 @@ void loop() { //$3
         set_pointA=wref-dW;
         set_pointB=wref+dW;
       }
-      //PID_total();//PID del sistema en su conjunto
-      PID_offline_Motores(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
-      // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
-      //EnviarTX_online(freqB);
-      //EnviarTX_online(uB[2]);
+      PID_offline_Motores();
     }
-    else{
-      //Esto creo que es redundante, pero por si acaso
+    else{//Esto creo que es redundante, pero por si acaso
       controlados1.modoStop();//Paro los motores
     }
   }

@@ -14,6 +14,7 @@ load('../../Mediciones/respuesta_escalon_motorB_10_40_180529151917.mat')
 % load('../../Mediciones/respuesta_escalon_180503210331.mat')
 % tiempo=tiempo*1e-6;%Acomodo la unidad del tiempo.
 %% Gr�fico de la Respuesta al escal�n
+
 figure(1);
 plot(tiempo,PWMA,tiempo,wA,'.');
 legend('Se�al de PWM','Se�al de vel ang');

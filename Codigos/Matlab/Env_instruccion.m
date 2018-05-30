@@ -18,7 +18,8 @@ switch info
         instruccion=247;
     case 'Ucontrol'
         instruccion=246;
-        
+    case 'devolver ensayo'
+        instruccion=245;
 end
 EscribirSerial(s,instruccion);
 %  if instruccion==247
