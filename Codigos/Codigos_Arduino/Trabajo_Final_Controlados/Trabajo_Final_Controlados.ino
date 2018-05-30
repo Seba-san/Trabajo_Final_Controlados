@@ -1,5 +1,4 @@
 #define controlador 1 //Sacarlo, no anda $$$
-#define N 1000 //cantidad de muestras a tomar en el ensayo al escalón
 
 #include "includes.h"
 

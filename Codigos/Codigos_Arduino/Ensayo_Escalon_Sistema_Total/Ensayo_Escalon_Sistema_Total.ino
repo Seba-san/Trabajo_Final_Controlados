@@ -2,7 +2,8 @@
 
 
 #define controlador 1 //Sacarlo, no anda $$$
-#define N 1000  //cantidad de muestras a tomar en el ensayo al escalón
+#define N 100  //cantidad de muestras a tomar en el ensayo al escalón
+#define n0 10 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
 #define dW 100  //
 
 #include "includes.h"
@@ -54,7 +55,7 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 //Variables para el Ensayo al Escalón:
 unsigned char sensor[N];
-int contador=0;
+int contador=0,parar=0;
 
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
@@ -128,9 +129,15 @@ void loop() { //$3
   medirVelocidadB(1);
   }
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
-    if (contador<1000){
+    if (contador<N){
       medirBeta();//Actualizo la medición de ángulo
-      sensor[contador]=beta;//Guardo la medición de ángulo 
+      if(parar==1){//Perdí la línea
+        controlados1.modoStop();//Paro los motores
+        contador=N;//Para que no vuelva a entrar a esta parte
+      }
+      else{
+        sensor[contador]=beta;//Guardo la medición de ángulo 
+      }
       contador++;//Aumento el índice de las muestras
       if(contador==n0){
         set_pointA=wref-dW;
@@ -141,9 +148,10 @@ void loop() { //$3
       // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
       //EnviarTX_online(freqB);
       //EnviarTX_online(uB[2]);
-      Serial.print(beta);
-      Serial.print(" ");
-      Serial.println(byteSensor,BIN);
+    }
+    else{
+      //Esto creo que es redundante, pero por si acaso
+      controlados1.modoStop();//Paro los motores
     }
   }
 }
@@ -204,6 +212,6 @@ void medirBeta(void){
   betaAux=controlados1.leerSensorDeLinea(&byteSensor);
   //Si beta=3 es porque el sensor tiró un valor erróneo o perdió la línea.
   //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
-  if(betaAux!=3){beta=betaAux;}
+  if(betaAux==4){parar=1;}//Aviso que pare porque perdió la línea
+  else if(betaAux!=3){beta=betaAux;}
 }
-
