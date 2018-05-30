@@ -11,7 +11,7 @@ const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow c
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 2000;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 unsigned long _OCR2A;
-const int controlador=1;
+const int controlador=0;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
 
@@ -171,7 +171,7 @@ long suma=0;
     bufferVelB[2*cantMarcasEncoderB-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
     suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
     freqB=float((F_CPU*60.0)/(suma));
-    //freqB=(float)suma;//BORRAR ESTA PORQUERIA, ES SOLO PARA DEBUGGEAR $.$
+    
     interruptON;
   }
   else{

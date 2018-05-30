@@ -113,3 +113,17 @@ ctes=table(A,B,C,D,E);
 
 ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
 % Transferencia del controlador: H(z)=(A+Bz^-1+Cz^-2)/(1-Dz^-1-Ez^-2)
+%% fft
+X=wA(110:end)-mean(wA(110:end));
+Fs = 200;            % Sampling frequency                    
+T = 1/Fs;             % Sampling period       
+L = length(X);             % Length of signal
+Y = fft(X);
+P2 = abs(Y/L);
+P1 = P2(1:L/2+1);
+P1(2:end-1) = 2*P1(2:end-1);
+f = Fs*(0:(L/2))/L;
+plot(f,P1) 
+title('Single-Sided Amplitude Spectrum of X(t)')
+xlabel('f (Hz)')
+ylabel('|P1(f)|')
