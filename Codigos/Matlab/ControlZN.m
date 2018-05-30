@@ -23,8 +23,10 @@ if nargin<5
 end
 if tangente==1
     [K,L,T]=ParametrosDelEnsayo(entrada,salida,tiempo,figuras);    
-else
+elseif tangente==0
     [K,L,T,tao]=ParametrosDelEnsayo2(entrada,salida,tiempo,figuras);
+elseif tangente==2
+     [K,L,T]=ParametrosDelEnsayo3(entrada,salida,tiempo,figuras);   
 end
 % Muestro el ajuste del sistema
     if figuras
@@ -248,4 +250,20 @@ Kp=T/(K*L)*[1+3*L/T;0.9+3*L/(12*T);1.35+L/(4*T)];
 Ki=Kp.*[0;(((30+3*(L/T))/(9+20*(L/T)))*L)^-1;(((32+6*(L/T))/(13+8*(L/T)))*L)^-1];
 Kd=Kp.*[0;0;4*L/(11+2*(L/T))];
 Parametros=table(Kp,Ki,Kd,'RowName',{'P';'PI';'PID'});
+end
+function [K,L,T]=ParametrosDelEnsayo3(entrada,salida,tiempo,figuras)
+% Señal en el tiempo a fitear
+PmR='K*(1-exp(-(x-L)/T))';%P mas Retardo (no me acuerdo que es la P)
+[~,indice]=max(diff(entrada));
+tiempo2=tiempo-tiempo(indice);
+PuntosIniciales=[max(entrada) 1/200 0.1];
+f1 = fit(tiempo2(indice:end)',salida(indice:end)',PmR);%,'Start',PuntosIniciales);
+K=f1.K/max(entrada);
+L=f1.L;T=f1.T;
+% if figuras
+%    plot(f1,tiempo,salida)
+%    title('Respuesta temporal curva fiteada')
+% end
+
+
 end

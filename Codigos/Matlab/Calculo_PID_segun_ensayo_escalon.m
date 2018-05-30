@@ -9,7 +9,8 @@ clear all;close all;%clc;
 
 %cd('C:\Users\Tania\Documents\ING\Carrera de Grado\Controlados\Trabajo Final con Seba\Git con Seba\Trabajo_Final_Controlados_git\Codigos\Matlab')
 cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
-load('../../Mediciones/Ensayos 25-05-18/respuesta_escalon_motorB_180525211446')
+%load('../../Mediciones/Ensayos 25-05-18/respuesta_escalon_motorB_180525211446')
+load('../../Mediciones/respuesta_escalon_motorB_10_40_180529151917.mat')
 % load('../../Mediciones/respuesta_escalon_180503210331.mat')
 % tiempo=tiempo*1e-6;%Acomodo la unidad del tiempo.
 %% Gr�fico de la Respuesta al escal�n
@@ -36,19 +37,7 @@ legend('Se�al de PWM','Se�al de vel ang');
 title('Respuesta del Motor B');
 xlabel('tiempo');ylabel('Vel Ang (rpm) / PWM') %Revisar la unidad!! $
 
-%%
-% Este código utiliza los parametros de ZN para estimar la forma de la
-% planta y luego los compara.
-% Considera una funcion de transferencia: Kp*e^(-sL)/(Ts+1)
-estimadoZN=tf(K,[T 1],'InputDelay',L)
-save('../../tmp/sisestimado.mat','estimadoZN')
 
-load('../../tmp/sisestimado.mat')
-lsim(estimadoZN,entrada,tiempo)
-hold on 
-plot(tiempo,entrada,tiempo,salida,'.');
-hold off
-step(estimadoZN)
 %% PID Discreto con Ziegler - Nichols
 Fsnano=200;
 % Ts2=0.015;

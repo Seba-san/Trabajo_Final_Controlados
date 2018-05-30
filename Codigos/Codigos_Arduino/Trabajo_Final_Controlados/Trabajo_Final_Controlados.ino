@@ -1,4 +1,3 @@
-#define controlador 1 //Sacarlo, no anda $$$
 
 #include "includes.h"
 
@@ -12,6 +11,7 @@ const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow c
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 2000;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 unsigned long _OCR2A;
+const int controlador=0;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
 
@@ -48,10 +48,10 @@ float dw[3]={0,0,0},errorBeta[3]={0,0,0};//Variación de velocidad angular.
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
 
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
-//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
+//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0}; Andando tambien: { 0.12649 ,   -0.12348  , 0, 1, 0}; ZN
 
-float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
-float ParametrosB[]={0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float ParametrosA[]={ 0.12649 ,   -0.12348  , 0, 1, 0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
+float ParametrosB[]={0.025506,-0.022009,0,1,0};//{0.029213,-0.025653,0,1,0};//{ 0.12649 ,   -0.12348  , 0, 1, 0};//{ 0.25007  ,  -0.23902, 0 ,1 ,0};//{0.14865 ,-0.14113,0,1,0};//{0.12115  ,  -0.11309  ,       0  ,  1  ,  0};//{0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
 float Parametros[]={0,0,0,0,0};//PID del sistema total
 
 volatile float freqA;
@@ -120,7 +120,14 @@ void loop() { //$3
   medirBeta();//Actualizo la medición de ángulo
   //PID_total();//PID del sistema en su conjunto
   PID_offline_Motores(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
+  EnviarTX_online(freqB);
+  EnviarTX_online(uB[2]);
+  }
   // Si no me equivoco lo mejor seria tomar muestras a 66Hz (considerando 500RPM como minimo) eso da 15mS de Ts.
+  if (controlador==0){
+     EnviarTX_online(freqB);
+  }
+  }
   //EnviarTX_online(freqB);
   //EnviarTX_online(uB[2]);
   Serial.print(beta);
@@ -170,7 +177,7 @@ long suma=0;
     bufferVelB[2*cantMarcasEncoderB-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
     suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
     freqB=float((F_CPU*60.0)/(suma));
-    //freqB=(float)suma;//BORRAR ESTA PORQUERIA, ES SOLO PARA DEBUGGEAR $.$
+   
     interruptON;
   }
   else{

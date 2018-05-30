@@ -8,7 +8,8 @@
 #define ins_stop 251 // baja de transmitir online
 #define ins_test 249
 #define ins_setpoint 248
-
+// Variables de control general
+extern const int controlador;
 // Variables para la comunicacion
 extern bool Motores_ON,tx_activada, online;
 extern unsigned char trama_activa;
