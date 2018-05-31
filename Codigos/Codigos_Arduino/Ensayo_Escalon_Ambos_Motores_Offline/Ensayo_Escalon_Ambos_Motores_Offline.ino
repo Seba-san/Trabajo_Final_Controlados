@@ -2,6 +2,8 @@
 #define N 200  //cantidad de muestras a tomar en el ensayo al escalón
 #define n0 20 //cantidad de muestras a la que se hace el cambio de velocidad (van a haber n0 muestras a PWM1 y la n0+1 será parte del transitorio)
 
+
+#include <EEPROM.h>
 #include "includes.h"
 Controlados controlados1;
 
@@ -23,7 +25,8 @@ float w[N];//Vector para guardar las mediciones del ensayo
 int contador=0,contador2=0;
 int enviar_datos=0;//Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int PWM1=10;//Valor inicial del escalón
-int PWM2=30;//Valor final del escalón
+int PWM2=80;//Valor final del escalón
+int Escribir=0;//Le indico que escriba en la eeprom con un 1 y que lea con un 0
 
 // #   #   #   # Variables
 unsigned char trama_activa=0;//Lo pongo en unsigned char para que ocupe 1 byte (int ocupa 2)
@@ -78,7 +81,7 @@ void setup() { // $2
  controlados1.configTimerMotores();
  controlados1.configTimer2Contador(FsEncoders,preescaler,1);//Configuro el timer2 como contador con interrupción. La frecuencia va desde 500000 hasta 1997.
  controlados1.actualizarDutyCycleMotores(PWM1,PWM1);
-
+ 
  //Antes de prender los motores guardo el valor de los encoderes en la variable estadoEncoder para que cuando se genere la primer interrupción por
  int encoderAux;
  encoderAux=bitRead(PINC,0);
@@ -86,12 +89,17 @@ void setup() { // $2
  encoderAux=bitRead(PINC,1);
  bitWrite(estadoEncoder,0,encoderAux);
 
- controlados1.modoAdelante();
- _OCR2A=OCR2A;
+  
+  _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
   
- 
- delay(1000);//Le doy 250 ms para que se estabilice en la velocidad inicial
+  pinMode(13, INPUT);//Uso el pin del LED para ver qué hacer, si escribir o no
+  //ACA PONER QUE LEA EL LED Y PONGA ALGUN VALOR EN "ESCRBIR", ASI MARCAMOS CON UN JUMPER
+
+  
+  if (digitalRead(13)){ Escribir=1;delay(1000);}
+  if(Escribir){controlados1.modoAdelante();}//Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
+  //delay(1000);//Le doy 250 ms para que se estabilice en la velocidad inicial
 }
 
 void loop() { //$3
@@ -124,11 +132,27 @@ void loop() { //$3
     }
     else{
       controlados1.modoStop();//Paro los motores
+      //Grabo en la EEPROM
+      if(Escribir){
+        int addr=0;
+        for(int ind;ind<N;ind++){
+          EEPROM.put(addr, w[ind]);//put escribe cualquier cosa, incluido float
+          addr = addr + 4;//La siguiente escritura debería estar 4 bytes después (porque un float ocupa 4 bytes)
+          //Ver si necesito esto:
+          //if (addr == EEPROM.length()){addr = 0;}
+        }
+      }
     }
   }
   }
   if(enviar_datos==1){//La compu me pidió que le envíe los resultados del ensayo
     enviar_datos=0;//Para que lo transmita una sola vez
+    int eeAddress=0;
+        for(int ind;ind<N;ind++){
+          //Piso la variable auxiliar w con lo que haya escrito en la eeprom
+          EEPROM.get(eeAddress,w[ind]);//Para leer cualquier tipo de variable uso get en vez de read
+          eeAddress = eeAddress + 4;//La siguiente escritura debería estar 4 bytes después (porque un float ocupa 4 bytes)
+        }
     online=false;
     tx_activada=true; //Para ahorrar problemas fuerzo las banderas, así no lo tengo que hacer desde Matlab
     //long vector[]={1,2,4};

@@ -13,4 +13,4 @@ Comunic_test(s)
 Env_instruccion(s,'devolver ensayo');
 [Dato]=DatoRx(s)
 %% Gráfico
-figure(1);plot(Dato.datos,'.')
+figure();plot(Dato.datos,'.')
