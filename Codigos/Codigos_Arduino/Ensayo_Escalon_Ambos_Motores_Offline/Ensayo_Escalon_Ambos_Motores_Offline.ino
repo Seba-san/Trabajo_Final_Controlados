@@ -76,6 +76,7 @@ void setup() { // $2
  controlados1.modoStop();
  controlados1.configTimerMotores();
  controlados1.configTimer2Contador(FsEncoders,preescaler,1);//Configuro el timer2 como contador con interrupción. La frecuencia va desde 500000 hasta 1997.
+ controlados1.actualizarDutyCycleMotores(PWM1,PWM1);
 
  //Antes de prender los motores guardo el valor de los encoderes en la variable estadoEncoder para que cuando se genere la primer interrupción por
  int encoderAux;
@@ -84,13 +85,12 @@ void setup() { // $2
  encoderAux=bitRead(PINC,1);
  bitWrite(estadoEncoder,0,encoderAux);
 
+ controlados1.modoAdelante();
  _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
   
  
- controlados1.actualizarDutyCycleMotores(PWM1,PWM1);
- controlados1.modoAdelante();
- delay(1000);//Le doy 50 ms para que se estabilice en la velocidad inicial
+ //delay(1000);//Le doy 50 ms para que se estabilice en la velocidad inicial
 }
 
 void loop() { //$3
