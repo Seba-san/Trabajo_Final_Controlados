@@ -27,7 +27,7 @@ void  timer_interrupt(void){
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si sea controlada. $interrup
       // Esta funcion mete mucho tiempo de computo 120 uS
       int auxA=uA[2],auxB=uB[2];
-      controlados1.actualizarDutyCycleMotores((int)(auxA),(int)auxB);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
+      //controlados1.actualizarDutyCycleMotores((int)(auxA),(int)auxB);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
     }
 }
 
@@ -105,6 +105,7 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
           break;
         case ins_resultado_ensayo://Instrucción 245: Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
           enviar_datos=1;
+          //Serial.println(1);//Respondo un 1 para que Matlab sepa que recibió la instrucción
         default://No hace nada si no recibe una instrucción válida
           break;}
     }

@@ -1,8 +1,6 @@
 #include "Arduino.h"
 #include "Controlados.h"
 
-#define N 60  //cantidad de muestras a tomar en el ensayo al escalón
-
 // Instrucciones traducidas
 #define ins_PWM 250 // instrucciones traducidas.
 #define ins_trama 253
@@ -14,7 +12,6 @@
 #define ins_resultado_ensayo 245 //Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
 
 //Variables Ensayo Escalón Offline
-extern float w[N];//Vector para guardar las mediciones del ensayo
 extern int enviar_datos;
 
 // Variables para la comunicacion

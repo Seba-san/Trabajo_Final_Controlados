@@ -1,7 +1,6 @@
-#define N 60  //cantidad de muestras a tomar en el ensayo al escalón. Ojo! N también hay que definirlo igual en interrupciones.h
-#define n0 10 //cantidad de muestras a la que se hace el cambio de velocidad (van a haber n0 muestras a PWM1 y la n0+1 será parte del transitorio)
-#define PWM1 10  //Valor inicial del escalón
-#define PWM2 30  //Valor final del escalón
+#define D 300 //cantidad de muestras para generar un delay
+#define N 200  //cantidad de muestras a tomar en el ensayo al escalón
+#define n0 20 //cantidad de muestras a la que se hace el cambio de velocidad (van a haber n0 muestras a PWM1 y la n0+1 será parte del transitorio)
 
 #include "includes.h"
 Controlados controlados1;
@@ -21,8 +20,10 @@ int Bandera=0; // bandera para administrar procesos fuera de interrupciones
 
 //Variables para el Ensayo al Escalón:
 float w[N];//Vector para guardar las mediciones del ensayo
-int contador=0;
+int contador=0,contador2=0;
 int enviar_datos=0;//Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
+int PWM1=10;//Valor inicial del escalón
+int PWM2=30;//Valor final del escalón
 
 // #   #   #   # Variables
 unsigned char trama_activa=0;//Lo pongo en unsigned char para que ocupe 1 byte (int ocupa 2)
@@ -90,7 +91,7 @@ void setup() { // $2
   interruptON;//Activo las interrupciones
   
  
- //delay(1000);//Le doy 50 ms para que se estabilice en la velocidad inicial
+ delay(1000);//Le doy 250 ms para que se estabilice en la velocidad inicial
 }
 
 void loop() { //$3
@@ -109,24 +110,30 @@ void loop() { //$3
   medirVelocidadB(1);
   }
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0);
+  if(contador2<D){
+    contador2++;
+  }
+  else{
     if (contador<N){
       w[contador]=freqA;//Guardo la medición de velocidad del motor A
-      //w[contador]=freqA;//Guardo la medición de velocidad del motor B
+      //w[contador]=freqB;//Guardo la medición de velocidad del motor B
       contador++;//Aumento el índice de las muestras
       if(contador==n0){//Inicio el escalón
-        //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-        //controlados1.actualizarDutyCycleMotores(PWM2,PWM2);
+        controlados1.actualizarDutyCycleMotores(PWM2,PWM2);
       }
     }
     else{
-      //controlados1.modoStop();//Paro los motores
+      controlados1.modoStop();//Paro los motores
     }
+  }
   }
   if(enviar_datos==1){//La compu me pidió que le envíe los resultados del ensayo
     enviar_datos=0;//Para que lo transmita una sola vez
     online=false;
-    tx_activada==true; //Para ahorrar problemas fuerzo las banderas, así no lo tengo que hacer desde Matlab
-    EnviarTX(N,1,&w[0]);//Le digo que transmita N números empezando por w[0]. Para eso le doy el puntero de la variable
+    tx_activada=true; //Para ahorrar problemas fuerzo las banderas, así no lo tengo que hacer desde Matlab
+    //long vector[]={1,2,4};
+    //EnviarTX(3,'1',vector);
+    EnviarTX(N,'A',w);//Le digo que transmita N números empezando por w[0]. Para eso le doy el puntero de la variable
   }
 }
 
