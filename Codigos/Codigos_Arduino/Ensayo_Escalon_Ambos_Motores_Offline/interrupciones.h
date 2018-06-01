@@ -22,6 +22,7 @@ extern float uA[3],uB[3];
 extern float set_pointA,set_pointB;
 extern float ParametrosA[5],ParametrosB[5];
 extern unsigned char estadoEncoder;
+extern int controlador;
 
 // Variables para interrupcion por Overflow
 extern int soft_prescaler,Bandera;
