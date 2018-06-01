@@ -52,27 +52,31 @@ ISR(PCINT1_vect){
 
   if(A0!=MA){//Si A0 es distinto a MA es porque el estado del motor A cambió y eso fue lo que generó la interrupción.   
     bitWrite(estadoEncoder,0,A0);//Almaceno el estado del encoder para la proxima interrupción.
-    TCNT2anteriorA=TCNT2actualA;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
-    TCNT2actualA=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
-    if (bitRead(TIFR2,1)){ // me fijo si hay overflow
-    timer_interrupt();
-    bitSet(TIFR2,1); // borro bandera para que no entre de nuevo
-    }
-    cantOVerflow_actualA=cantOVerflowA;
-    cantOVerflowA=0;
-    bitWrite(Bandera,2,1);
+    if(A0==1 && MA==0){//Solo actualizo los valores cuando la señal del encoder tuvo un flanco ascendente
+      TCNT2anteriorA=TCNT2actualA;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
+      TCNT2actualA=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
+      if (bitRead(TIFR2,1)){ // me fijo si hay overflow
+      timer_interrupt();
+      bitSet(TIFR2,1); // borro bandera para que no entre de nuevo
+      }
+      cantOVerflow_actualA=cantOVerflowA;
+      cantOVerflowA=0;
+      bitWrite(Bandera,2,1);
+      }
   }
   if(A1!=MB){//Si A1 es distinto a MB es porque el estado del motor B cambió y eso fue lo que generó la interrupción.    
     bitWrite(estadoEncoder,1,A1);//Almaceno el estado del encoder para la proxima interrupción.
-    TCNT2anteriorB=TCNT2actualB;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
-    TCNT2actualB=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
-    if (bitRead(TIFR2,1)){ // me fijo si hay overflow
-    timer_interrupt();
-    bitSet(TIFR2,1); // borro bandera para que no entre de nuevo
+    if(A1==1 && MB==0){//Solo actualizo los valores cuando la señal del encoder tuvo un flanco ascendente
+      TCNT2anteriorB=TCNT2actualB;//Ahora el valor actual pasa a ser el anterior de la próxima interrupción.
+      TCNT2actualB=TCNT2;//Almaceno enseguida el valor del timer para que no cambie mientras hago las cuentas.
+      if (bitRead(TIFR2,1)){ // me fijo si hay overflow
+      timer_interrupt();
+      bitSet(TIFR2,1); // borro bandera para que no entre de nuevo
+      }
+      cantOVerflow_actualB=cantOVerflowB;
+      cantOVerflowB=0;
+      bitWrite(Bandera,4,1);
     }
-    cantOVerflow_actualB=cantOVerflowB;
-    cantOVerflowB=0;
-    bitWrite(Bandera,4,1);
   }
 }
 
