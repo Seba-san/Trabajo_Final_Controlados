@@ -8,12 +8,12 @@
 Controlados controlados1;
 
 // #   #   #   # Constantes $1
-const int cantMarcasEncoder = 18; //Es la cantidad de huecos que tiene el encoder de cada motor.
+const int cantMarcasEncoder = 9; //Es la cantidad de huecos que tiene el encoder de cada motor.
 const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 unsigned long _OCR2A;
-int controlador=1;
+int controlador=0;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
 // #   #   #   # Variable Basura
@@ -25,7 +25,7 @@ int Bandera=0; // bandera para administrar procesos fuera de interrupciones
 float w[N];//Vector para guardar las mediciones del ensayo
 int contador=0,contador2=0;
 int enviar_datos=0;//Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
-int PWM1=10;//Valor inicial del escalón
+int PWM1=40;//Valor inicial del escalón
 int PWM2=80;//Valor final del escalón
 int Escribir=0;//Le indico que escriba en la eeprom con un 1 y que lea con un 0
 float fin=500;//Velocidad final en rpm cuando el controlador está activado
@@ -126,8 +126,8 @@ void loop() { //$3
   }
   else{
     if (contador<N){
-      w[contador]=freqA;//Guardo la medición de velocidad del motor A
-      //w[contador]=freqB;//Guardo la medición de velocidad del motor B
+      //w[contador]=freqA;//Guardo la medición de velocidad del motor A
+      w[contador]=freqB;//Guardo la medición de velocidad del motor B
       contador++;//Aumento el índice de las muestras
       if(contador==n0){//Inicio el escalón
         if(controlador){
@@ -165,9 +165,7 @@ void loop() { //$3
         }
     online=false;
     tx_activada=true; //Para ahorrar problemas fuerzo las banderas, así no lo tengo que hacer desde Matlab
-    //long vector[]={1,2,4};
-    //EnviarTX(3,'1',vector);
-    EnviarTX(N,'A',w);//Le digo que transmita N números empezando por w[0]. Para eso le doy el puntero de la variable
+    EnviarTX(N,'A',w);
   }
 }
 
