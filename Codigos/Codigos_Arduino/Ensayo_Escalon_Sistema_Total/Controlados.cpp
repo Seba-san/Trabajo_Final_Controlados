@@ -306,7 +306,7 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
       beta=0.772308194;
       break;
     case 0:   //Se perdió la línea
-      beta=3;//Le doy un valor absurdo y afuera de la rutina si detecto este valor lo doy por no valido
+      beta=4;//Le doy un valor absurdo y afuera de la rutina si detecto este valor lo doy por no valido
       break;
     default:  //La lectura del sensor es errónea
       beta=3;//Le doy un valor absurdo y afuera de la rutina si detecto este valor lo doy por no valido

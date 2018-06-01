@@ -128,14 +128,16 @@ void loop() { //$3
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
     PID_offline_Motores();
     medirBeta();//Actualizo la medición de ángulo
+    Serial.println(byteSensor,DEC);
     if(contador2<D){
-      //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
-      contador2++;
+      if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
+      //contador2++;
     }
     else{
       if (contador<N){
         if(parar==1){//Perdí la línea
           controlados1.modoStop();//Paro los motores, pero sigo midiendo
+          contador=N+1;
         }
         sensor[contador]=byteSensor;//Guardo la medición de ángulo 
         contador++;//Aumento el índice de las muestras
@@ -228,5 +230,5 @@ void medirBeta(void){
   //Si beta=3 es porque el sensor tiró un valor erróneo o perdió la línea.
   //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
   if(betaAux==4){parar=1;}//Aviso que pare porque perdió la línea
-  else if(betaAux!=3){beta=betaAux;}
+  else if(betaAux!=4){beta=betaAux;}
 }
