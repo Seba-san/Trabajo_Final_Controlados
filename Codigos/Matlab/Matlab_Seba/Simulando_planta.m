@@ -15,11 +15,45 @@ load('../../Mediciones/180531222559resp_escalon_mB_con_carga_10_80.mat');
 RPM_B(1,:)=Dato.datos;PWM_B(1,1:n0)=10;PWM_B(1,(n0+1):end)=80;
 load('../../Mediciones/180531222925resp_escalon_mB_con_carga_40_80.mat');
 RPM_B(2,:)=Dato.datos;PWM_B(2,1:n0)=40;PWM_B(2,(n0+1):end)=80;
+load('../../Mediciones/modelos.mat','sisAup','sisBup')
+%save('../../Mediciones/modelos.mat','sisAup','sisBup')
 %%
+
 l=1:1:200;
 figure()
 plot(l,RPM_A(2,:),'.',l,RPM_B(2,:),'.')
 
+%%
+% Ajusto el PID en continuo
+sys=sisAup;
+C0 = pid(1,1,0);  
+opt = pidtuneOptions('DesignFocus','reference-tracking','CrossoverFrequency',10);%'PhaseMargin',10
+[C,info] = pidtune(sys,C0,opt); %% Hay que ajustar ambos sistemas con los mismos requisitos
+T_pi = feedback(C*sys, 1);
+figure (1);
+%hold on
+step(T_pi)
+%hold off
+title ('Controlado')
+figure (2);
+%hold on
+step(sys)
+%hold off
+title ('Sin controlar')
+
+%%
+Kp=C.Kp;Kd=C.Kd;Ki=C.Ki;
+tipo='PI';
+Fsnano=200;
+% Ts2=0.015;
+Ts2=1/Fsnano;
+clear A B C D E F;
+Tf=0;%No s� qu� poner en Tf porque ZN no me lo da.
+control=c2d(tf(pid(Kp,Ki,Kd,Tf)),Ts2,'tustin'); 
+[A,B,C,D,E]=tf2ctesNano(cell2mat(control.num),cell2mat(control.den),tipo);
+ctes=table(A,B,C,D,E);
+ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
+% Transferencia del controlador: H(z)=(A+Bz^-1+Cz^-2)/(1-Dz^-1-Ez^-2)
 
 %%
 % Cargo todas las mediciones
