@@ -16,6 +16,11 @@ name=strcat(direccion,name,name1,name2,'.mat');
 %save(name,'Dato') 
 %% Gráfico
 figure(1);plot(Dato.datos,'.');%hold on;plot(Datos1.datos,'.');hold off
+byteSensor=Dato.datos;
+for k=1:length(byteSensor)
+    beta(k)=ConversionSensor(byteSensor(k));
+end
+figure(2);plot(beta,'.');%hold on;plot(Datos1.datos,'.');hold off
 %% Fin
 fclose(instrfindall);%cierra todos los puertos activos y ocultos
 %clear all;close all;clc
