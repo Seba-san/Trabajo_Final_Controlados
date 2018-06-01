@@ -39,12 +39,26 @@ void PID_total(void){//PID del sistema en su conjunto
  //  #####################  Modulos de comunicaciones 
  
 // Ver como mejorar sustancialmente esta funcion. Esta media fea.
-void EnviarTX(int cantidad,const char identificador, unsigned long *datos){ //  $8 ojo, datos es un puntero
+void EnviarTX(int cantidad,const char identificador, float *datos){ //  $8 ojo, datos es un puntero
  if (online==false && tx_activada==true){ 
   Serial.println(0xFF,DEC); // inicio
   Serial.println(cantidad,DEC);// cantidad de datos
   Serial.println(identificador);// identificador, se puede sacar, pero para fines debuggeros puede ayudar
   float a;
+  for (int i=0;i<cantidad;i++){
+    a=*(datos+i); // como datos es un puntero, necesito guardar en "a" el apuntador.
+    Serial.println(a,DEC);
+  }
+  Serial.println(0xFE,DEC); // fin
+ }
+}
+
+void EnviarTX(int cantidad,const char identificador, unsigned char *datos){ //  $8 ojo, datos es un puntero
+ if (online==false && tx_activada==true){ 
+  Serial.println(0xFF,DEC); // inicio
+  Serial.println(cantidad,DEC);// cantidad de datos
+  Serial.println(identificador);// identificador, se puede sacar, pero para fines debuggeros puede ayudar
+  unsigned char a;
   for (int i=0;i<cantidad;i++){
     a=*(datos+i); // como datos es un puntero, necesito guardar en "a" el apuntador.
     Serial.println(a,DEC);

@@ -31,7 +31,6 @@ extern volatile unsigned long cantOVerflowA,cantOVerflowB;
 extern volatile unsigned long TCNT2anteriorA,TCNT2anteriorB;//Valor anterior del contador (para corregir la medición)
 extern volatile unsigned long TCNT2actualA,TCNT2actualB;//Almaceno el valor del timer para que no me jodan posibles actualizaciones.
 extern volatile unsigned long cantOVerflow_actualA,cantOVerflow_actualB;
-extern volatile float freqA,freqB;
 
 // funciones
 extern Controlados controlados1;

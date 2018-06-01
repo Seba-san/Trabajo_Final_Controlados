@@ -111,7 +111,7 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
           break;
         case ins_resultado_ensayo://Instrucción 245: Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
           enviar_datos=1;
-          //Serial.println(1);//Respondo un 1 para que Matlab sepa que recibió la instrucción
+          break;
         default://No hace nada si no recibe una instrucción válida
           break;}
     }
