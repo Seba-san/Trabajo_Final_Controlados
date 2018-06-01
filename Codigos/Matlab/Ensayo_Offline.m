@@ -12,5 +12,11 @@ disp('Puerto Cerrado')
 Comunic_test(s)
 Env_instruccion(s,'devolver ensayo');
 [Dato]=DatoRx(s)
+name=datestr(now,'yymmddhhMMss');
+direccion='../../Mediciones/';
+name1='resp_escalon_mB_con_carga_';
+name2='40_80_PI';
+name=strcat(direccion,name,name1,name2,'.mat');
+%save(name,'Dato') 
 %% Gráfico
-figure();plot(Dato.datos,'.')
+figure(1);plot(Dato.datos,'.')

@@ -13,6 +13,7 @@ const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow c
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 unsigned long _OCR2A;
+int controlador=1;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
 // #   #   #   # Variable Basura
@@ -27,6 +28,8 @@ int enviar_datos=0;//Bandera con la que Matlab le indica al nano que le devuelva
 int PWM1=10;//Valor inicial del escalón
 int PWM2=80;//Valor final del escalón
 int Escribir=0;//Le indico que escriba en la eeprom con un 1 y que lea con un 0
+float fin=500;//Velocidad final en rpm cuando el controlador está activado
+float inicio=800;
 
 // #   #   #   # Variables
 unsigned char trama_activa=0;//Lo pongo en unsigned char para que ocupe 1 byte (int ocupa 2)
@@ -46,7 +49,7 @@ int soft_prescaler=0;
 // Variables del PID
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
-float set_pointA=200,set_pointB=200; // Set_point esta en RPM
+float set_pointA=inicio,set_pointB=inicio; // Set_point esta en RPM
 float ParametrosA[]={0.10679,-0.099861,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 float ParametrosB[]={0.10679,-0.099861,0,1,0};
 
@@ -99,7 +102,6 @@ void setup() { // $2
   
   if (digitalRead(13)){ Escribir=1;delay(1000);}
   if(Escribir){controlados1.modoAdelante();}//Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
-  //delay(1000);//Le doy 250 ms para que se estabilice en la velocidad inicial
 }
 
 void loop() { //$3
@@ -118,6 +120,7 @@ void loop() { //$3
   medirVelocidadB(1);
   }
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0);
+  PID_offline();
   if(contador2<D){
     contador2++;
   }
@@ -127,11 +130,18 @@ void loop() { //$3
       //w[contador]=freqB;//Guardo la medición de velocidad del motor B
       contador++;//Aumento el índice de las muestras
       if(contador==n0){//Inicio el escalón
+        if(controlador){
+          set_pointA=fin;
+          set_pointB=fin;
+        }
+        else{
         controlados1.actualizarDutyCycleMotores(PWM2,PWM2);
+        }
       }
     }
     else{
       controlados1.modoStop();//Paro los motores
+      delay(1000);
       //Grabo en la EEPROM
       if(Escribir){
         int addr=0;
