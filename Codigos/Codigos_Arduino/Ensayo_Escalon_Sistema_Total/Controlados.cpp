@@ -227,7 +227,7 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
   //los resultados fueron bastante asimétricos y poco uniformes, con zonas
   //inestables y puntos ciegos. A futuro se debe mejorar el hardware del sensor.
   //Resultado del Ensayo:
-  float betaEnsayo[]={0.772308194,0.567232007,0.410152374,0.327249235,0.327249235,0.327249235,0.253072742,0.161442956,0.052359878,-0.06981317,-0.16580628,-0.20071286,-0.32288591,-0.53232542,-0.6981317};
+  float betaEnsayo[]={-0.6981317,-0.53232542,-0.32288591,-0.20071286,-0.16580628,-0.06981317,0.052359878,0.161442956,0.253072742,0.327249235,0.327249235,0.327249235,0.410152374,0.567232007,0.772308194};
   //Obs: en éste ensayo no se distinguía entre las configuraciones 7-6, 6 y 6-5.
 
 	uint8_t LED[8]; int aux, suma, sumaPonderada;float beta;
@@ -249,7 +249,7 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
     bitWrite(*byteSensor,k,LED[k]);
   }
   suma=LED[0]+LED[1]+LED[2]+LED[3]+LED[4]+LED[5]+LED[6]+LED[7];
-  sumaPonderada=2*(LED[0]+LED[1]+LED[2]+LED[3]+LED[4]+LED[5]+LED[6]+LED[7]);
+  sumaPonderada=2*(LED[0]+2*LED[1]+3*LED[2]+4*LED[3]+5*LED[4]+6*LED[5]+7*LED[6]+8*LED[7]);
   //Piso el valor de aux para hacer el switch case, total es int y ya no lo uso
   if(suma==0){beta=3;}//Si suma=0 es poque no detectó la línea, así que le doy el valor de error
   else{

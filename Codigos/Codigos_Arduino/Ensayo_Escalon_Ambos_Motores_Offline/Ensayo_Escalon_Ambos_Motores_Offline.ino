@@ -51,8 +51,8 @@ int soft_prescaler=0;
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
 float set_pointA=inicio,set_pointB=inicio; // Set_point esta en RPM
-float ParametrosA[]={0.12012,-0.11435,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
-float ParametrosB[]={0.12012,-0.11435,0,1,0};
+float ParametrosA[]={0.073817,-0.06814,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
+float ParametrosB[]={0.077848,-0.072512,0,1,0};
 
 volatile float freqA;
 volatile float freqB;
