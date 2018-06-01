@@ -97,9 +97,6 @@ void setup() { // $2
   interruptON;//Activo las interrupciones
   
   pinMode(13, INPUT);//Uso el pin del LED para ver qué hacer, si escribir o no
-  //ACA PONER QUE LEA EL LED Y PONGA ALGUN VALOR EN "ESCRBIR", ASI MARCAMOS CON UN JUMPER
-
-  
   if (digitalRead(13)){ Escribir=1;delay(1000);}
   if(Escribir){controlados1.modoAdelante();}//Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
 }
