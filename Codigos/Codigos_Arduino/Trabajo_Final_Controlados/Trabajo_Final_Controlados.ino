@@ -96,7 +96,7 @@ void setup() { // $2
   bitWrite(estadoEncoder,1,encoderAux);
 
   //$.$
-  controlados1.modoAdelante();
+  //controlados1.modoAdelante();
   _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
 }
@@ -124,8 +124,8 @@ void loop() { //$3
   }
   else{
     PID_offline_Motores(); // $VER, analizar esto, porque va a entrar varias veces (entre 8 y 9 o mas) antes de tener una nueva medida de las RPM
-    EnviarTX_online(freqA);
-    EnviarTX_online(freqB);
+    Serial.println(byteSensor,BIN);
+    //EnviarTX_online(freqB);
   }
   //EnviarTX_online(freqB);
   //EnviarTX_online(uB[2]);

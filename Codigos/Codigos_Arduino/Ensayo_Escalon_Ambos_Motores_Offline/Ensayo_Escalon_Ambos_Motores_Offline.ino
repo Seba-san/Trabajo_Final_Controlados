@@ -13,7 +13,7 @@ const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow c
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 200;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 unsigned long _OCR2A;
-int controlador=0;
+int controlador=1;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
 // #   #   #   # Variable Basura
@@ -28,8 +28,9 @@ int enviar_datos=0;//Bandera con la que Matlab le indica al nano que le devuelva
 int PWM1=40;//Valor inicial del escalón
 int PWM2=80;//Valor final del escalón
 int Escribir=0;//Le indico que escriba en la eeprom con un 1 y que lea con un 0
-float fin=500;//Velocidad final en rpm cuando el controlador está activado
-float inicio=800;
+float inicio=400;//Velocidad inicial en rpm cuando el controlador está activado
+float fin=800;//Velocidad final en rpm cuando el controlador está activado
+
 
 // #   #   #   # Variables
 unsigned char trama_activa=0;//Lo pongo en unsigned char para que ocupe 1 byte (int ocupa 2)
@@ -50,8 +51,8 @@ int soft_prescaler=0;
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
 float set_pointA=inicio,set_pointB=inicio; // Set_point esta en RPM
-float ParametrosA[]={0.10679,-0.099861,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
-float ParametrosB[]={0.10679,-0.099861,0,1,0};
+float ParametrosA[]={0.12012,-0.11435,0,1,0};//PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
+float ParametrosB[]={0.12012,-0.11435,0,1,0};
 
 volatile float freqA;
 volatile float freqB;

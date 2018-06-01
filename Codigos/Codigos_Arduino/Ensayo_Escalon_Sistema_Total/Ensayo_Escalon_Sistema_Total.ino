@@ -1,6 +1,6 @@
 //Ensayo al escalón
 
-#define D 300 //cantidad de muestras para generar un delay
+#define D 100 //cantidad de muestras para generar un delay
 #define N 200  //cantidad de muestras a tomar en el ensayo al escalón
 #define n0 100 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
 #define dW 100  //Valor final del escalón
@@ -47,7 +47,7 @@ int soft_prescaler=0;
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
 float set_pointA=300,set_pointB=300; // Set_point esta en RPM
-float wref=300;//Velocidad lineal del centro del robot.
+float wref=400;//Velocidad lineal del centro del robot.
 volatile float beta=0;//Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3]={0,0,0},errorBeta[3]={0,0,0};//Variación de velocidad angular.
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
@@ -55,8 +55,8 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
-float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
-float ParametrosB[]={0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float ParametrosA[]={0.12012,-0.11435,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
+float ParametrosB[]={0.12012,-0.11435,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
 float Parametros[]={0,0,0,0,0};//PID del sistema total
 
 volatile float freqA;
@@ -129,6 +129,7 @@ void loop() { //$3
     PID_offline_Motores();
     medirBeta();//Actualizo la medición de ángulo
     if(contador2<D){
+      //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
       contador2++;
     }
     else{

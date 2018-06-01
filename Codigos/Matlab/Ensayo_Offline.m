@@ -11,11 +11,11 @@ Env_instruccion(s,'devolver ensayo');
 name=datestr(now,'yymmddhhMMss');
 direccion='../../Mediciones/';
 name1='resp_escalon_mB_con_carga_';
-name2='40_80';
+name2='400_800_PI';
 name=strcat(direccion,name,name1,name2,'.mat');
 %save(name,'Dato') 
 %% Gráfico
-figure(1);plot(Dato.datos,'.')
+figure(1);plot(Dato.datos,'.');%hold on;plot(Datos1.datos,'.');hold off
 %% Fin
 fclose(instrfindall);%cierra todos los puertos activos y ocultos
 %clear all;close all;clc
