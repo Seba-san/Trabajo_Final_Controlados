@@ -248,15 +248,93 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
   for(int k=0;k<8;k++){
     bitWrite(*byteSensor,k,LED[k]);
   }
+<<<<<<< HEAD
+  
+  //Lógica: el byte de los LEDs debería mostrar todos 0s si no está la línea
+  //(fondo blanco, línea negra), o 1 o 2 LEDs en 1 si la línea está abajo de                //$$$$REVISAR EL GROSOR DE LA LÍNEA
+  //los mismos. Tabulamos el valor de error que implica cada caso con un
+  //switch case.
+  //Los valores correspondientes salen de un ensayo. Como el sensor actual es
+  //medio pelo hay un par de casos con 3 o 4 LEDs prendidos, un intervalo de
+  //beta donde puede dar varias configuraciones del sensor e intervalos de beta
+  //poco uniformes. A futuro se debe mejorar el hardware del sensor.
+  switch (*byteSensor){
+    case 1:   //Línea debajo del LED 1
+      beta=-0.6981317;
+      break;
+    case 3:   //Línea debajo de los LEDs 1 y 2
+      beta=-0.53232542;
+      break;
+    case 7:   //Línea debajo del LED 2
+      beta=-0.32288591;
+      break;
+    case 2:   //Línea debajo del LED 2
+      beta=-0.32288591;
+      break;
+    case 6:   //Línea debajo de los LEDs 2 y 3
+      beta=-0.20071286;
+      break;
+    case 4:   //Línea debajo del LED 3
+      beta=-0.16580628;
+      break;
+    case 12:  //Línea debajo de los LEDs 3 y 4
+      beta=-0.06981317;
+      break;
+    case 8:   //Línea debajo del LED 4
+      beta=0.052359878;
+      break;
+    case 24:  //Línea debajo de los LEDs 4 y 5
+      beta=0.161442956;
+      break;
+    case 16:  //Línea debajo del LED 5
+      beta=0.253072742;
+      break;
+    case 48:  //Línea debajo de los LEDs 5 y 6
+      beta=0.327249235;
+      break;
+    case 32:  //Línea debajo del LED 6
+      beta=0.327249235;
+      break;
+    case 80:  //Línea debajo del LED 6 (el 6 anda más o menos, entonces se pueden prender sólo el 5 y el 7)
+      beta=0.327249235;
+      break;
+    case 112:  //Línea debajo del LED 6 (LEDs 5-6-7 prendidos)
+      beta=0.327249235;
+      break;
+    case 240:  //Línea debajo del LED 6 (LEDs 5-6-7-8 prendidos)
+      beta=0.327249235;
+      break;
+    case 96:  //Línea debajo de los LEDs 6 y 7 (no se dió nunca...le doy el valor de los casos de arriba)
+      beta=0.327249235;
+      break;
+    case 64:  //Línea debajo del LED 7
+      beta=0.410152374;
+      break;
+    case 192: //Línea debajo de los LEDs 7 y 8
+      beta=0.567232007;
+      break;
+    case 128: //Línea debajo del LED 8
+      beta=0.772308194;
+      break;
+    case 0:   //Se perdió la línea
+      beta=4;//Le doy un valor absurdo y afuera de la rutina si detecto este valor lo doy por no valido
+      break;
+    default:  //La lectura del sensor es errónea
+      beta=3;//Le doy un valor absurdo y afuera de la rutina si detecto este valor lo doy por no valido
+      break;}
+
+return beta;//Lo devuelvo como valor de salida
+=======
   suma=LED[0]+LED[1]+LED[2]+LED[3]+LED[4]+LED[5]+LED[6]+LED[7];
   sumaPonderada=2*(LED[0]+2*LED[1]+3*LED[2]+4*LED[3]+5*LED[4]+6*LED[5]+7*LED[6]+8*LED[7]);
   //Piso el valor de aux para hacer el switch case, total es int y ya no lo uso
   if(suma==0){beta=3;}//Si suma=0 es poque no detectó la línea, así que le doy el valor de error
   else{
-    aux=float(sumaPonderada)/float(suma);//Potencial fuente de error: la división de enteros. $.$ Ver si es problema
+    aux=sumaPonderada/suma;//Potencial fuente de error: la división de enteros. $.$ Ver si es problema
     beta=betaEnsayo[aux-2];
   }
   return beta;//Lo devuelvo como valor de salida
+>>>>>>> a60f427e9f3a4f3b295526554744328367ef1f9a
 }
 
  void Controlados::configTimer2Contador(){

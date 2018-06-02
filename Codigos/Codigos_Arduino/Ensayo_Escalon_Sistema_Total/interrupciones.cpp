@@ -106,6 +106,9 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
         case ins_setpoint://Instrucción 248: cambiar el valor del setpoint
           trama_activa=3;
           break;
+        case ins_resultado_ensayo://Instrucción 245: Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
+          enviar_datos=1;
+          break;
         default://No hace nada si no recibe una instrucción válida
           break;}
     }

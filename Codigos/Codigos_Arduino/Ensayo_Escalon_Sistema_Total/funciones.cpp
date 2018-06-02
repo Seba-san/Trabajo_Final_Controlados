@@ -23,7 +23,7 @@ void PID_offline_Motores (void){ //$9 PID
 }
 
 void PID_total(void){//PID del sistema en su conjunto
-  /*
+ 
   for(int k=0;k<2;k++)
     {
      errorBeta[k]=errorBeta[k+1];//Desplazamiento a la derecha de los datos del buffer
@@ -33,18 +33,34 @@ void PID_total(void){//PID del sistema en su conjunto
   dw[2]=Parametros[0]*errorBeta[2]+Parametros[1]*errorBeta[1]+Parametros[2]*errorBeta[0]+Parametros[3]*dw[1]+Parametros[4]*dw[0];
   if (dw[2]>windup_top_dw){dw[2]=windup_top_dw;} //Cambiar nombres de windup_top y _bottom $$$$$
   if (dw[2]<windup_bottom_dw){dw[2]=windup_bottom_dw;}
-  */
+   set_pointA=wref-dw[2];
+   set_pointB=wref+dw[2];
+
 }
 
  //  #####################  Modulos de comunicaciones 
  
 // Ver como mejorar sustancialmente esta funcion. Esta media fea.
-void EnviarTX(int cantidad,const char identificador, unsigned long *datos){ //  $8 ojo, datos es un puntero
+void EnviarTX(int cantidad,const char identificador, float *datos){ //  $8 ojo, datos es un puntero
  if (online==false && tx_activada==true){ 
   Serial.println(0xFF,DEC); // inicio
   Serial.println(cantidad,DEC);// cantidad de datos
   Serial.println(identificador);// identificador, se puede sacar, pero para fines debuggeros puede ayudar
   float a;
+  for (int i=0;i<cantidad;i++){
+    a=*(datos+i); // como datos es un puntero, necesito guardar en "a" el apuntador.
+    Serial.println(a,DEC);
+  }
+  Serial.println(0xFE,DEC); // fin
+ }
+}
+
+void EnviarTX(int cantidad,const char identificador, unsigned char *datos){ //  $8 ojo, datos es un puntero
+ if (online==false && tx_activada==true){ 
+  Serial.println(0xFF,DEC); // inicio
+  Serial.println(cantidad,DEC);// cantidad de datos
+  Serial.println(identificador);// identificador, se puede sacar, pero para fines debuggeros puede ayudar
+  unsigned char a;
   for (int i=0;i<cantidad;i++){
     a=*(datos+i); // como datos es un puntero, necesito guardar en "a" el apuntador.
     Serial.println(a,DEC);
