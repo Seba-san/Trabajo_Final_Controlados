@@ -47,7 +47,7 @@ int soft_prescaler=0;
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
 float set_pointA=300,set_pointB=300; // Set_point esta en RPM
-float wref=400;//Velocidad lineal del centro del robot.
+float wref=600;//Velocidad lineal del centro del robot.
 volatile float beta=0;//Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3]={0,0,0},errorBeta[3]={0,0,0};//Variación de velocidad angular.
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
