@@ -23,7 +23,6 @@ void PID_offline_Motores (void){ //$9 PID
 }
 
 void PID_total(void){//PID del sistema en su conjunto
-  /*
   for(int k=0;k<2;k++)
     {
      errorBeta[k]=errorBeta[k+1];//Desplazamiento a la derecha de los datos del buffer
@@ -33,7 +32,6 @@ void PID_total(void){//PID del sistema en su conjunto
   dw[2]=Parametros[0]*errorBeta[2]+Parametros[1]*errorBeta[1]+Parametros[2]*errorBeta[0]+Parametros[3]*dw[1]+Parametros[4]*dw[0];
   if (dw[2]>windup_top_dw){dw[2]=windup_top_dw;} //Cambiar nombres de windup_top y _bottom $$$$$
   if (dw[2]<windup_bottom_dw){dw[2]=windup_bottom_dw;}
-  */
 }
 
  //  #####################  Modulos de comunicaciones 
