@@ -173,3 +173,13 @@ title('Highpass Filtered Signal')
 xlabel('Time (s)')
 %ylim(ys)
 
+%%
+C=-100;
+T_pi = feedback(C*sys3, 1);
+figure (2);
+step(T_pi)
+title ('Controlado')
+figure (3);
+step(sys3)
+title ('Sin controlar')
+

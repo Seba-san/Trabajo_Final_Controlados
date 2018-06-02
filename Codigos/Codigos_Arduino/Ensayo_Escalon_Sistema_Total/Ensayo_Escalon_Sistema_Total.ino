@@ -48,7 +48,7 @@ int soft_prescaler=0;
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
 float set_pointA=300,set_pointB=300; // Set_point esta en RPM
-float wref=300;//Velocidad lineal del centro del robot.
+float wref=600;//Velocidad lineal del centro del robot.
 volatile float beta=0;//Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3]={0,0,0},errorBeta[3]={0,0,0};//Variación de velocidad angular.
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
@@ -58,12 +58,12 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[]={0.073817,-0.06814,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[]={0.077848,-0.072512,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[]={125,-100,0,1,0};//PID del sistema total
+float Parametros[]={107.1845,-107.0227,0,1,0};//PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
 int windup_top=100,windup_bottom=10;
-int windup_top_dw=100,windup_bottom_dw=-100;//Definir bien
+int windup_top_dw=150,windup_bottom_dw=-150;//Definir bien
 
 unsigned char estadoEncoder=0;//En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -132,7 +132,7 @@ void loop() { //$3
     medirBeta();//Actualizo la medición de ángulo
    
     PID_total();
-    Serial.println(dw[2]);
+     Serial.println(dw[2]);
     PID_offline_Motores();
     if(contador2<D){
       //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
