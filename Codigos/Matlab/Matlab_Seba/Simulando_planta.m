@@ -15,6 +15,9 @@ load('../../Mediciones/180531222559resp_escalon_mB_con_carga_10_80.mat');
 RPM_B(1,:)=Dato.datos;PWM_B(1,1:n0)=10;PWM_B(1,(n0+1):end)=80;
 load('../../Mediciones/180531222925resp_escalon_mB_con_carga_40_80.mat');
 RPM_B(2,:)=Dato.datos;PWM_B(2,1:n0)=40;PWM_B(2,(n0+1):end)=80;
+load('../../Mediciones/180601203314ensayo_escalon_angulowref_600_dw_100_PI.mat')
+% Por comodidad supongo que en la muestra 100 comienza el escalon
+dw=zeros(1,length(beta));dw(101:end)=100;
 load('../../Mediciones/modelos.mat','sisAup','sisBup')
 %save('../../Mediciones/modelos.mat','sisAup','sisBup')
 %%
@@ -229,4 +232,37 @@ plot(tiempo,outhi)
 title('Highpass Filtered Signal')
 xlabel('Time (s)')
 %ylim(ys)
+%%
 
+% Acondiciono datos
+n0=100; % A partir de cuando empieza el escalon
+Fs=200;
+% Busco los puntos de cambio
+cambio=diff(beta);
+[valor,indice]=find(cambio);
+y=[beta(100) beta(indice(1:end-1)+1)];
+tiempo=([100 indice(1:end-1)]-n0+1)*1/Fs;
+
+plot(tiempo,y,tiempo2,beta(100:154)')
+% Fiteo curva
+
+PmR='K*exp(a*x)';
+tiempo2=0:1/200:54/200;
+figure(1)
+[f1,gof] = fit(tiempo',y',PmR)
+plot(f1,tiempo,y)
+title('respuesta temporal')
+
+% Modifico los datos para usarlos en sistem-identification
+beta_interp = interp1(tiempo,y,tiempo2,'Spline');
+figure(2)
+plot(tiempo,y,'o',tiempo2,beta_interp,':.');
+title('(Default) Linear Interpolation');
+% Datos obtenidos por sistem_identification
+Kp = 43.791 ;Tp1 = 1.9377 ;
+sys=tf(Kp,[Tp1 -1]);
+% Datos obtenidos por fit
+Kp = f1.K ;Tp1 = f1.a ;
+sys2=tf(Kp,[Tp1 1]);
+% Modelo estimado mediante aproximacion polinomica discreta
+%save('modelo_beta.mat','arx111')
