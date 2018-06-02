@@ -58,7 +58,7 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[]={0.073817,-0.06814,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[]={0.077848,-0.072512,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[]={107.1845,-107.0227,0,1,0};//PID del sistema total
+float Parametros[]={83.8135,-76.8837,0,1,0};//{107.1845,-107.0227,0,1,0};//PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
