@@ -18,8 +18,8 @@ RPM_B(2,:)=Dato.datos;PWM_B(2,1:n0)=40;PWM_B(2,(n0+1):end)=80;
 load('../../Mediciones/180601203314ensayo_escalon_angulowref_600_dw_100_PI.mat')
 % Por comodidad supongo que en la muestra 100 comienza el escalon
 dw=zeros(1,length(beta));dw(101:end)=100;
-%load('../../Mediciones/modelos.mat','sisAup','sisBup')
-%save('../../Mediciones/modelos.mat','sisAup','sisBup')
+%load('../../Mediciones/modelos.mat')
+%save('../../Mediciones/modelos.mat','sisupA','sisupB')
 %%
 
 l=1:1:200;
@@ -28,7 +28,7 @@ plot(l,RPM_A(2,:),'.',l,RPM_B(2,:),'.')
 
 %%
 % Ajusto el PID en continuo
-sys=sisAup;
+sys=sisupA;
 C0 = pid(1,1,0);  
 opt = pidtuneOptions('DesignFocus','reference-tracking','CrossoverFrequency',10);%'PhaseMargin',10
 [C,info] = pidtune(sys,C0,opt); %% Hay que ajustar ambos sistemas con los mismos requisitos
