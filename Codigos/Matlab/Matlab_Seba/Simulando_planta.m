@@ -18,7 +18,7 @@ RPM_B(2,:)=Dato.datos;PWM_B(2,1:n0)=40;PWM_B(2,(n0+1):end)=80;
 load('../../Mediciones/180601203314ensayo_escalon_angulowref_600_dw_100_PI.mat')
 % Por comodidad supongo que en la muestra 100 comienza el escalon
 dw=zeros(1,length(beta));dw(101:end)=100;
-load('../../Mediciones/modelos.mat','sisAup','sisBup')
+%load('../../Mediciones/modelos.mat','sisAup','sisBup')
 %save('../../Mediciones/modelos.mat','sisAup','sisBup')
 %%
 
@@ -272,18 +272,21 @@ sys2=tf(Kp,[Tp1 1]);
 
 %%
 % Simulo los datos del ajuste de la curva exponencial
-k=f1.K;a=-f1.a;
-y2=1-k*exp(a.*tiempo2);
+k=f1.K;a=f1.a;
+y2=k*exp(a.*tiempo2);
 in=ones(1,length(y2))*100;
-plot(tiempo2,1-y2,'.')
+plot(tiempo2,y2,'.')
 % Coeficientes del sistema k(1-exp(-a*t)); usando la curva fiteada.
 Kp=0.01;Tp1=0.10561;
-sys3=tf(Kp,[Tp1 1]);
+sys3=tf(Kp,[Tp1 -1]);
+step(sys3,tiempo2)
 %%
 
 % Pruebo cosas locas
 
-
+k=f1.K;a=f1.a;
+sys4=tf(k,[1/a -1]);
+step(sys4,tiempo2)
 
 
 

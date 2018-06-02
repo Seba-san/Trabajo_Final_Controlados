@@ -1,34 +1,35 @@
 //Ensayo al escalón
 
-
-#define controlador 1 //Sacarlo, no anda $$$
-#define N 100  //cantidad de muestras a tomar en el ensayo al escalón
-#define n0 10 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
+#define D 50 //cantidad de muestras para generar un delay
+#define N 200  //cantidad de muestras a tomar en el ensayo al escalón
+#define n0 100 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
 #define dW 100  //Valor final del escalón
 
+#include <EEPROM.h>
 #include "includes.h"
-
 Controlados controlados1;
-
 
 // #   #   #   # Constantes $1
 const int cantMarcasEncoder = 9; //Es la cantidad de huecos que tiene el encoder de cada motor.
-const int cantMarcasEncoderB = 9; //$ BORRAR!!! SOLO PARA PRUEBAS
 const int FsEncoders = 400;//400;//2000;//8000 2000 // Esto significa Overflow cada 2Khz
 const int preescaler = 1024;//1024;//32;//8 32 64
 const int cota = 2000;//75;//cota=32 hace que de 0 a aprox 100rpm asuma que la velocidad es cero.
 unsigned long _OCR2A;
 // F_CPU es el valor con el que esta trabajando el clock del micro.
 
-
 // #   #   #   # Variable Basura
 int Bandera=0; // bandera para administrar procesos fuera de interrupciones
 
-
 //################
 
+//Variables para el Ensayo al Escalón:
+unsigned char sensor[N];
+int contador=0,contador2=0;
+float parar=0;
+int enviar_datos=0;//Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
+int Escribir=0;//Le indico que escriba en la eeprom con un 1 y que lea con un 0
+
 // #   #   #   # Variables
-unsigned long ticc,tocc;
 unsigned char trama_activa=0;//Lo pongo en unsigned char para que ocupe 1 byte (int ocupa 2)
 bool online;//Me indica si poner o no el identificador para la transmisión (online=true no lo transmite para ahorrar tiempo)
 bool tx_activada;//Me indica si transmitir o no.
@@ -40,34 +41,29 @@ volatile unsigned long TCNT2anteriorA=0,TCNT2anteriorB=0;//Valor anterior del co
 volatile unsigned long TCNT2actualA=0,TCNT2actualB=0;//Almaceno el valor del timer para que no me jodan posibles actualizaciones.
 volatile unsigned long cantOVerflow_actualA=0,cantOVerflow_actualB=0;//Valor anterior del contador (para corregir la medición), correspondiente al TCNT2anterior.
 unsigned long aux[6];  // este es un buffer para enviar datos en formato trama, corresponde a la funcion "EnviarTX"
-float  bufferVelA[2*cantMarcasEncoder],bufferVelB[2*cantMarcasEncoderB];//buffer donde almaceno las últimas velocidades calculadas.
+float  bufferVelA[2*cantMarcasEncoder],bufferVelB[2*cantMarcasEncoder];//buffer donde almaceno las últimas velocidades calculadas.
 bool Motores_ON=false;
 int soft_prescaler=0;
 // Variables del PID
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
 float set_pointA=300,set_pointB=300; // Set_point esta en RPM
-float wref=300;//Velocidad lineal del centro del robot.
-float beta=0;//Ángulo entre el eje central del robot y la línea (en radianes)
+float wref=600;//Velocidad lineal del centro del robot.
+volatile float beta=0;//Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3]={0,0,0},errorBeta[3]={0,0,0};//Variación de velocidad angular.
-
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
-
-//Variables para el Ensayo al Escalón:
-unsigned char sensor[N];
-int contador=0,parar=0;
 
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
-float ParametrosA[]={0.10679,-0.099861,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
-float ParametrosB[]={0.10679,-0.099861,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[]={0,0,0,0,0};//PID del sistema total
+float ParametrosA[]={0.073817,-0.06814,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
+float ParametrosB[]={0.077848,-0.072512,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float Parametros[]={83.8135,-76.8837,0,1,0};//{357.0881,-216.5218,0,1,0};//PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
 int windup_top=100,windup_bottom=10;
-int windup_top_dw=100,windup_bottom_dw=-100;//Definir bien
+int windup_top_dw=150,windup_bottom_dw=-150;//Definir bien
 
 unsigned char estadoEncoder=0;//En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -98,19 +94,22 @@ void setup() { // $2
   controlados1.configTimer2Contador(FsEncoders,preescaler,1);//Configuro el timer2 como contador con interrupción. La frecuencia va desde 500000 hasta 1997.
   controlados1.actualizarDutyCycleMotores(0,0);
   
-  //Antes de prender los motores guardo el valor de los encoderes en la variable estadoEncoder para que cuando se genere la primer interrupción por
+  //Antes de prender los motores guardo el valor de los encoderes en la variable estadoEncoder para la interrupción por flanco
   int encoderAux;
   encoderAux=bitRead(PINC,0);
   bitWrite(estadoEncoder,0,encoderAux);
   encoderAux=bitRead(PINC,1);
   bitWrite(estadoEncoder,1,encoderAux);
 
-  //$.$
   set_pointA=wref;
   set_pointB=wref;
-  controlados1.modoAdelante();
   _OCR2A=OCR2A;
   interruptON;//Activo las interrupciones
+
+  pinMode(13, INPUT);//Uso el pin del LED para ver qué hacer, si escribir o no
+  if (digitalRead(13)){ Escribir=1;delay(1000);}
+  if(Escribir){controlados1.modoAdelante();}//Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
+  controlados1.modoAdelante();
 }
 
 void loop() { //$3
@@ -128,29 +127,32 @@ void loop() { //$3
   if (bitRead(Bandera,4)){bitWrite(Bandera,4,0);// se registra cambio en la entrada B
   medirVelocidadB(1);
   }
-  if (bitRead(Bandera,5)){bitWrite(Bandera,5,0); // Se midio un tiempo de 15mS, se realiza el calculo del PID
-    if (contador<N){
-      medirBeta();//Actualizo la medición de ángulo
-      if(parar==1){//Perdí la línea
-        controlados1.modoStop();//Paro los motores
-        contador=N;//Para que no vuelva a entrar a esta parte
+  if (bitRead(Bandera,5)){
+    bitWrite(Bandera,5,0); 
+    medirBeta();//Actualizo la medición de ángulo
+   
+    PID_total();
+     Serial.println(beta);
+    PID_offline_Motores();
+    if(contador2<D){
+      //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
+      contador2++;
+    }
+    else{
+      if (1){
+        if(parar==1){//Perdí la línea
+          controlados1.modoStop();//Paro los motores, pero sigo midiendo
+        }
+        //sensor[contador]=byteSensor;//Guardo la medición de ángulo 
+        //contador++;//Aumento el índice de las muestras
+        
       }
       else{
-        sensor[contador]=beta;//Guardo la medición de ángulo 
+        controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
       }
-      contador++;//Aumento el índice de las muestras
-      if(contador==n0){
-        set_pointA=wref-dW;
-        set_pointB=wref+dW;
-      }
-      PID_offline_Motores();
-    }
-    else{//Esto creo que es redundante, pero por si acaso
-      controlados1.modoStop();//Paro los motores
-    }
-  }
+    } 
 }
-
+}
 void medirVelocidadA(unsigned char interrupcionA)
 {
 long suma=0;
@@ -180,7 +182,7 @@ void medirVelocidadB(unsigned char interrupcionB)
 {
 long suma=0;
   //Corro los valores de w en el buffer un lugar y voy sumando los valores para después calcular el promedio de velocidades:
-  for(int k=0;k<(2*cantMarcasEncoderB-1);k++)
+  for(int k=0;k<(2*cantMarcasEncoder-1);k++)
   {
     bufferVelB[k]=bufferVelB[k+1];//Desplazamiento a la derecha de los datos del buffer
     suma=suma+bufferVelB[k];
@@ -189,15 +191,15 @@ long suma=0;
   if(interrupcionB){
     // Se hace de forma separada porque se detectaron problemas de calculo asociado con los tipos de variables. Esto se resolvio separando las cuentas, queda a futuro resolverlo en una sola linea.
     interruptOFF; // Es importante poner esto antes de hacer el calculo para evitar que modifique las variables en la interrupcion. Se observaron problemas de medicion.
-    bufferVelB[2*cantMarcasEncoderB-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
-    suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
+    bufferVelB[2*cantMarcasEncoder-1]=(long)(preescaler)*(TCNT2actualB-TCNT2anteriorB+cantOVerflow_actualB*_OCR2A);
+    suma=suma+ bufferVelB[2*cantMarcasEncoder-1];
     freqB=float((F_CPU*60.0)/(suma));
     //freqB=(float)suma;//BORRAR ESTA PORQUERIA, ES SOLO PARA DEBUGGEAR $.$
     interruptON;
   }
   else{
-     bufferVelB[2*cantMarcasEncoderB-1]=0;
-     suma=suma+ bufferVelB[2*cantMarcasEncoderB-1];
+     bufferVelB[2*cantMarcasEncoder-1]=0;
+     suma=suma+ bufferVelB[2*cantMarcasEncoder-1];
      freqB=0; // Hay que calcularla aca porque sino da cualquier valor.
   }
 }
@@ -207,6 +209,9 @@ void medirBeta(void){
   betaAux=controlados1.leerSensorDeLinea(&byteSensor);
   //Si beta=3 es porque el sensor tiró un valor erróneo o perdió la línea.
   //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
-  if(betaAux==4){parar=1;}//Aviso que pare porque perdió la línea
-  else if(betaAux!=3){beta=betaAux;}
+  if(betaAux==3){
+    parar=1;//$.$
+    }//Aviso que pare porque perdió la línea
+    //else if (parar>0 && parar <1){parar=0;}
+  beta=betaAux;
 }
