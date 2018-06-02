@@ -30,6 +30,8 @@ name1='ensayo_escalon_angulo';
 name2='wref_600_dw_100_PI';
 name=strcat(direccion,name,name1,name2,'.mat');
 %save(name,'beta') 
+%%
+
 %% Fin
 fclose(instrfindall);%cierra todos los puertos activos y ocultos
 %clear all;close all;clc
