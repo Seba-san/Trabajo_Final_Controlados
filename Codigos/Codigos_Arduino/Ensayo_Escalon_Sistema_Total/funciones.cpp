@@ -23,7 +23,10 @@ void PID_offline_Motores (void){ //$9 PID
 }
 
 void PID_total(void){//PID del sistema en su conjunto
+<<<<<<< HEAD
  
+=======
+>>>>>>> 0569215b9ab4dd1e422d966dae86f593975eebfb
   for(int k=0;k<2;k++)
     {
      errorBeta[k]=errorBeta[k+1];//Desplazamiento a la derecha de los datos del buffer
@@ -33,9 +36,12 @@ void PID_total(void){//PID del sistema en su conjunto
   dw[2]=Parametros[0]*errorBeta[2]+Parametros[1]*errorBeta[1]+Parametros[2]*errorBeta[0]+Parametros[3]*dw[1]+Parametros[4]*dw[0];
   if (dw[2]>windup_top_dw){dw[2]=windup_top_dw;} //Cambiar nombres de windup_top y _bottom $$$$$
   if (dw[2]<windup_bottom_dw){dw[2]=windup_bottom_dw;}
+<<<<<<< HEAD
    set_pointA=wref-dW[2];
    set_pointB=wref+dW[2];
 
+=======
+>>>>>>> 0569215b9ab4dd1e422d966dae86f593975eebfb
 }
 
  //  #####################  Modulos de comunicaciones 
