@@ -62,7 +62,7 @@ float Parametros[]={0,0,0,0,0};//PID del sistema total
 volatile float freqA;
 volatile float freqB;
 int windup_top=100,windup_bottom=10;
-int windup_top_dw=100,windup_bottom_dw=-100;//Definir bien
+int windup_top_dw=1000,windup_bottom_dw=-1000;//Definir bien
 
 unsigned char estadoEncoder=0;//En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -128,6 +128,7 @@ void loop() { //$3
   if (bitRead(Bandera,5)){bitWrite(Bandera,5,0);
     PID_offline_Motores();
     medirBeta();//Actualizo la medición de ángulo
+    PID_total();
     if(contador2<D){
       //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
       contador2++;
