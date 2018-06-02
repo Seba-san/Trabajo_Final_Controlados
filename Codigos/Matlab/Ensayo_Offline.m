@@ -19,11 +19,20 @@ name=strcat(direccion,name,name1,name2,'.mat');
 
 %% Gráfico
 figure(1);plot(Dato.datos,'.');%hold on;plot(Datos1.datos,'.');hold off
-byteSensor=Dato.datos;
-for k=1:length(byteSensor)
-    beta(k)=ConversionSensor(byteSensor(k));
+ang=1;
+if(ang==1)
+    byteSensor=Dato.datos;
+    for k=1:length(byteSensor)
+        beta(k)=ConversionSensor(byteSensor(k),3);
+    end
+    figure(2);plot(beta,'.');%hold on;plot(Datos1.datos,'.');hold off
 end
-figure(2);plot(beta,'.');%hold on;plot(Datos1.datos,'.');hold off
+name=datestr(now,'yymmddhhMMss');
+direccion='../../Mediciones/';
+name1='ensayo_escalon_angulo';
+name2='wref_600_dw_100_PI';
+name=strcat(direccion,name,name1,name2,'.mat');
+%save(name,'beta') 
 %% Fin
 
 fclose(instrfindall);%cierra todos los puertos activos y ocultos
