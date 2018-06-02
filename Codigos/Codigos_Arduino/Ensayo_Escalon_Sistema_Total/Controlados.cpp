@@ -253,7 +253,7 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
   //Piso el valor de aux para hacer el switch case, total es int y ya no lo uso
   if(suma==0){beta=3;}//Si suma=0 es poque no detectó la línea, así que le doy el valor de error
   else{
-    aux=sumaPonderada/suma;//Potencial fuente de error: la división de enteros. $.$ Ver si es problema
+    aux=float(sumaPonderada)/float(suma);//Potencial fuente de error: la división de enteros. $.$ Ver si es problema
     beta=betaEnsayo[aux-2];
   }
   return beta;//Lo devuelvo como valor de salida

@@ -24,7 +24,8 @@ int Bandera=0; // bandera para administrar procesos fuera de interrupciones
 
 //Variables para el Ensayo al Escalón:
 unsigned char sensor[N];
-int contador=0,contador2=0,parar=0;
+int contador=0,contador2=0;
+float parar=0;
 int enviar_datos=0;//Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir=0;//Le indico que escriba en la eeprom con un 1 y que lea con un 0
 
@@ -47,7 +48,7 @@ int soft_prescaler=0;
 float uA[3],uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3],errorB[3];
 float set_pointA=300,set_pointB=300; // Set_point esta en RPM
-float wref=400;//Velocidad lineal del centro del robot.
+float wref=300;//Velocidad lineal del centro del robot.
 volatile float beta=0;//Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3]={0,0,0},errorBeta[3]={0,0,0};//Variación de velocidad angular.
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
@@ -57,12 +58,12 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[]={0.073817,-0.06814,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[]={0.077848,-0.072512,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[]={0,0,0,0,0};//PID del sistema total
+float Parametros[]={125,-100,0,1,0};//PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
 int windup_top=100,windup_bottom=10;
-int windup_top_dw=1000,windup_bottom_dw=-1000;//Definir bien
+int windup_top_dw=100,windup_bottom_dw=-100;//Definir bien
 
 unsigned char estadoEncoder=0;//En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -108,6 +109,7 @@ void setup() { // $2
   pinMode(13, INPUT);//Uso el pin del LED para ver qué hacer, si escribir o no
   if (digitalRead(13)){ Escribir=1;delay(1000);}
   if(Escribir){controlados1.modoAdelante();}//Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
+  controlados1.modoAdelante();
 }
 
 void loop() { //$3
@@ -125,53 +127,32 @@ void loop() { //$3
   if (bitRead(Bandera,4)){bitWrite(Bandera,4,0);// se registra cambio en la entrada B
   medirVelocidadB(1);
   }
-  if (bitRead(Bandera,5)){bitWrite(Bandera,5,0);
-    PID_offline_Motores();
+  if (bitRead(Bandera,5)){
+    bitWrite(Bandera,5,0); 
     medirBeta();//Actualizo la medición de ángulo
+   
     PID_total();
+    Serial.println(dw[2]);
+    PID_offline_Motores();
     if(contador2<D){
       //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
       contador2++;
     }
     else{
-      if (contador<N){
+      if (1){
         if(parar==1){//Perdí la línea
           controlados1.modoStop();//Paro los motores, pero sigo midiendo
         }
-        sensor[contador]=byteSensor;//Guardo la medición de ángulo 
-        contador++;//Aumento el índice de las muestras
-        if(contador==n0){
-          set_pointA=wref-dW;
-          set_pointB=wref+dW;
-        }
+        //sensor[contador]=byteSensor;//Guardo la medición de ángulo 
+        //contador++;//Aumento el índice de las muestras
+        
       }
       else{
         controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
-        
-        //Grabo en la EEPROM
-        if(Escribir){
-          int addr=0;
-          for(int ind;ind<N;ind++){
-            EEPROM.put(addr, sensor[ind]);//put escribe cualquier cosa, incluido float
-            addr = addr + 1;}
-        }
       }
-    }
-  }
-  if(enviar_datos==1){//La compu me pidió que le envíe los resultados del ensayo
-    enviar_datos=0;//Para que lo transmita una sola vez
-    int eeAddress=0;
-        for(int ind;ind<N;ind++){
-          //Piso la variable auxiliar sensor con lo que haya escrito en la eeprom
-          EEPROM.get(eeAddress,sensor[ind]);//Para leer cualquier tipo de variable uso get en vez de read
-          eeAddress = eeAddress + 1;
-        }
-    online=false;
-    tx_activada=true; //Para ahorrar problemas fuerzo las banderas, así no lo tengo que hacer desde Matlab
-    EnviarTX(N,'A',sensor);
-  }
+    } 
 }
-
+}
 void medirVelocidadA(unsigned char interrupcionA)
 {
 long suma=0;
@@ -229,7 +210,8 @@ void medirBeta(void){
   //Si beta=3 es porque el sensor tiró un valor erróneo o perdió la línea.
   //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
   if(betaAux==3){
-    //parar=1;//$.$
+    parar=1;//$.$
     }//Aviso que pare porque perdió la línea
+    //else if (parar>0 && parar <1){parar=0;}
   beta=betaAux;
 }
