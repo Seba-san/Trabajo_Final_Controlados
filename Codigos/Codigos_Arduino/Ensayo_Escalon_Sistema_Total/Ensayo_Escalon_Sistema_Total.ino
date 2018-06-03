@@ -49,7 +49,7 @@ int soft_prescaler = 0;
 // Variables del PID
 float uA[3], uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3], errorB[3];
-float set_pointA = 300, set_pointB = 300; // Set_point esta en RPM
+float set_pointA, set_pointB; // Set_point esta en RPM
 float wref = 500; //Velocidad lineal del centro del robot.
 volatile float beta = 0; //Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3] = {0, 0, 0}, errorBeta[3] = {0, 0, 0}; //Variación de velocidad angular.
@@ -60,12 +60,12 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {200, 0, 0, 0, 0}; //PID del sistema total
+float Parametros[] = {160.4821,-71.7003,0,1,0}; //PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
 int windup_top = 100, windup_bottom = 10;
-int windup_top_dw = 100, windup_bottom_dw = -100; //Definir bien
+int windup_top_dw = 200, windup_bottom_dw = -200; //Definir bien
 
 unsigned char estadoEncoder = 0; //En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -152,7 +152,7 @@ void loop() { //$3
     else {  //Si controlador=1 empieza a tomar muestras sin delay
       if (contador < N) {
         if (parar == 1) { //Perdí la línea
-          //controlados1.modoStop();//Paro los motores, pero sigo midiendo
+          controlados1.modoStop();//Paro los motores, pero sigo midiendo
         }
         softprescaler++;
         if (softprescaler==4){//Tomo una de cada 4 muetsras
@@ -280,7 +280,7 @@ void medirBeta(void) {
   //Si beta=3 es porque el sensor tiró un valor erróneo o perdió la línea.
   //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
   if (betaAux == 3) {
-    //parar=1;//$.$
+    parar=1;//$.$
   }//Aviso que pare porque perdió la línea
   beta = betaAux;
 }
