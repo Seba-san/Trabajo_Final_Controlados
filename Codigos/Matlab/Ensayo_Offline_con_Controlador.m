@@ -26,3 +26,10 @@ subplot(212);plot(t,wA,t,wB);
 fclose(instrfindall);%cierra todos los puertos activos y ocultos
 %clear all;close all;clc
 disp('Puerto Cerrado')
+%%
+name=datestr(now,'yymmddhhMMss');
+direccion='../../Mediciones/';
+name1='resp_escalon_sistema_total';
+name2='_wref_500';
+name=strcat(direccion,name,name1,name2,'.mat');
+%save(name,'t','beta','wA','wB')

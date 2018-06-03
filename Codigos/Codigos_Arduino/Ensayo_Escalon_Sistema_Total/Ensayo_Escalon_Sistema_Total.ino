@@ -2,7 +2,7 @@
 
 #define D 100 //cantidad de muestras para generar un delay
 #define N 100  //cantidad de muestras a tomar en el ensayo al escalón
-#define n0 100 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
+#define n0 50 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
 #define dW 100  //Valor final del escalón
 
 #include <EEPROM.h>
@@ -60,12 +60,12 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {160.4821,-71.7003,0,1,0}; //PID del sistema total
+float Parametros[] = {200,0,0,0,0};//{160.4821,-71.7003,0,1,0}; //PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
 int windup_top = 100, windup_bottom = 10;
-int windup_top_dw = 200, windup_bottom_dw = -200; //Definir bien
+int windup_top_dw = 100, windup_bottom_dw = -100; //Definir bien
 
 unsigned char estadoEncoder = 0; //En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -139,8 +139,8 @@ void loop() { //$3
   if (bitRead(Bandera, 5)) {
     bitWrite(Bandera, 5, 0);
     medirBeta();//Actualizo la medición de ángulo
-    PID_total();
-    if (controlador==1) {
+    if (controlador==1 && contador<n0) {
+      PID_total();
       set_pointA = wref - dw[2];
       set_pointB = wref + dw[2];
     }
@@ -163,7 +163,7 @@ void loop() { //$3
           contador++;//Aumento el índice de las muestras
           
         }
-        if (contador == n0 && controlador == 0) {
+        if (contador == n0){// && controlador == 0) {
           set_pointA = wref - dW;
           set_pointB = wref + dW;
         }
