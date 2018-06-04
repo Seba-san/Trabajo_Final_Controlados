@@ -23,15 +23,16 @@ subplot(212);;title('Ensayo 2')
 yyaxis right;plot(tiempo{2},angulo{2},'.');
 yyaxis left;plot(tiempo{2},-velA{2}+velB{2});grid on
 %% Quito los valores donde perdió la línea
+n0=50;%Para que tome desde el escalón
 for k=1:2
     indice=find(angulo{k}==3);%Cuando pierde la línea el sensor queda en 0
     if length(indice)>0
         K=indice(1)-1;%Elimino los valores donde perdió la línea
     end
-    angulo{k}=angulo{k}(1:K);
-    velA{k}=velA{k}(1:K);
-    velB{k}=velB{k}(1:K);
-    tiempo{k}=tiempo{k}(1:K);
+    angulo{k}=angulo{k}(n0+1:K);
+    velA{k}=velA{k}(n0+1:K);
+    velB{k}=velB{k}(n0+1:K);
+    tiempo{k}=tiempo{k}(n0+1:K);
     diferencia{k}=velB{k}-velA{k};
 end
 %% Integral de la diferencia de velocidades

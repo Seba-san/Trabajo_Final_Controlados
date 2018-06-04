@@ -40,4 +40,5 @@ direccion='../../Mediciones/';
 name1='resp_escalon_sistema_total';
 name2='';
 name=strcat(direccion,name,name1,name2,'.mat');
-%save(name,'t','beta','wA','wB')
+% Parametros=table(500,20,50,c,200/4,'VariableNames',{'wref';'dW';'n0';'controlador';'Fs'})
+%save(name,'t','beta','wA','wB','Parametros')
