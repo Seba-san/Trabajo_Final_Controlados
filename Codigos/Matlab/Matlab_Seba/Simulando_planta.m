@@ -187,7 +187,7 @@ sysA_c=feedback(sysA*Ca,1);
 rpm_A=lsim(sysA_c,wA,t);
 sysB_c=feedback(sysB*Cb,1);
 rpm_B=lsim(sysB_c,wB,t);
-dW=rpm_A-rpm_B;
+dW=rpm_B-rpm_A; % A -B o B - A???!!? segun codigo arduino B-A OJO!!
 figure(5)
 subplot(311)
 yyaxis left
@@ -196,12 +196,12 @@ yyaxis right
 plot(t,beta);ylabel('beta medido')
 subplot(312)
 yyaxis left
-plot(t,rpm_B,t,wB,t,beta);ylabel('rpm B estimadas')
+plot(t,rpm_B,t,wB);ylabel('rpm B estimadas')
 yyaxis right
 plot(t,beta);ylabel('beta medido')
 subplot(313)
 yyaxis left
-plot(t,dW,t,beta);ylabel('delta RPM estimadas')
+plot(t,dW);ylabel('delta RPM estimadas')
 yyaxis right
 plot(t,beta);ylabel('beta medido')
 
@@ -303,13 +303,57 @@ plot(t,beta)
 ylabel('beta medido')
 
 %%
+clear all
+%load('../../Mediciones/180603192250resp_escalon_sistema_total.mat')
+load('../../Mediciones/180603192511resp_escalon_sistema_total.mat')
+[indice]=find(beta==3);t=t(1:(indice(1)-1));beta=beta(1:(indice(1)-1));
+wA=wA(1:(indice(1)-1));wB=wB(1:(indice(1)-1));
+dW=wB-wA;
+sin_control_t=50;
+subplot(311)
+yyaxis left
+plot(t,wA,t(50),wA(50),'o');ylabel('rpm A')
+yyaxis right
+plot(t,beta,t(50),beta(50),'o');ylabel('beta medido')
+subplot(312)
+yyaxis left
+plot(t,wB,t(50),wB(50),'o');ylabel('rpm B ')
+yyaxis right
+plot(t,beta,t(50),beta(50),'o');ylabel('beta medido')
+subplot(313)
+yyaxis left
+plot(t,dW,t(50),dW(50),'o');ylabel('delta RPM ')
+yyaxis right
+plot(t,beta,t(50),beta(50),'o');ylabel('beta medido')
+
+load('../../Mediciones/modelos_controlados.mat')
+
+dW_est=lsim(sysb_dw,beta,t);
+plot(t,dW_est,t,dW);legend('a','b')
 
 
-sysb_dw=P1D;
+
+% Datos sin control
+
+dWsc=dW(51:end);dWcc=dW(1:50);
+betasc=beta(51:end);betacc=beta(1:50);
+figure(1)
+yyaxis left
+plot(dWsc)
+yyaxis right
+plot(betasc)
+figure(2)
+yyaxis left
+plot(dWcc)
+yyaxis right
+plot(betacc)
+%%
+Kp=sysb_dw.Kp;Tp1=sysb_dw.Tp1;
+sys=tf(Kp,[Tp1 1]); % Entra beta sale dW
+sys_inv=inv(sys);% Entra dW sale beta
 
 
-save('../../Mediciones/modelos_controlados.mat','sysb_dw')
 
-save('../../Mediciones/modelos_controlados.mat','sysA','sysB','Cb','Ca','sysb_dw')
+
 
 
