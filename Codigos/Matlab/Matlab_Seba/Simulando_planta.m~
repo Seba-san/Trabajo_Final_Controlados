@@ -306,10 +306,10 @@ ylabel('beta medido')
 
 
 sysb_dw=P1D;
-
+'../../Mediciones/modelos_controlados.mat'
 
 save('../../Mediciones/modelos_controlados.mat','sysb_dw')
 
-save('../../Mediciones/modelos_controlados.mat','sysA','sysB','Cb','Ca','sysb_dw')
+
 
 
