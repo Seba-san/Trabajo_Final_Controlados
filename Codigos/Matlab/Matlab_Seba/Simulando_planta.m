@@ -325,7 +325,7 @@ yyaxis left
 plot(t,dW,t(50),dW(50),'o');ylabel('delta RPM ')
 yyaxis right
 plot(t,beta,t(50),beta(50),'o');ylabel('beta medido')
-
+%%
 load('../../Mediciones/modelos_controlados.mat')
 
 dW_est=lsim(sysb_dw,beta,t);
