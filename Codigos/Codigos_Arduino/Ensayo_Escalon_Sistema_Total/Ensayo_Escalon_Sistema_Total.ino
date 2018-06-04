@@ -2,8 +2,8 @@
 
 #define D 100 //cantidad de muestras para generar un delay
 #define N 100  //cantidad de muestras a tomar en el ensayo al escalón
-#define n0 100 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
-#define dW 100  //Valor final del escalón
+#define n0 50 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
+#define dW -100  //Valor final del escalón
 
 #include <EEPROM.h>
 #include "includes.h"
@@ -49,7 +49,7 @@ int soft_prescaler = 0;
 // Variables del PID
 float uA[3], uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3], errorB[3];
-float set_pointA = 300, set_pointB = 300; // Set_point esta en RPM
+float set_pointA, set_pointB; // Set_point esta en RPM
 float wref = 500; //Velocidad lineal del centro del robot.
 volatile float beta = 0; //Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3] = {0, 0, 0}, errorBeta[3] = {0, 0, 0}; //Variación de velocidad angular.
@@ -60,7 +60,7 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {200, 0, 0, 0, 0}; //PID del sistema total
+float Parametros[] = {200,0,0,0,0};//{160.4821,-71.7003,0,1,0}; //PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
@@ -144,11 +144,16 @@ void loop() { //$3
   if (bitRead(Bandera, 5)) {
     bitWrite(Bandera, 5, 0);
     medirBeta();//Actualizo la medición de ángulo
+<<<<<<< HEAD
     PID_total();
 <<<<<<< HEAD
     if(contador2<D){
 =======
     if (controlador==1) {
+=======
+    if (controlador==1 && contador<n0) {
+      PID_total();
+>>>>>>> be7710a261ac2c74a4b759de08f76692d3604f25
       set_pointA = wref - dw[2];
       set_pointB = wref + dw[2];
     }
@@ -161,18 +166,19 @@ void loop() { //$3
     else {  //Si controlador=1 empieza a tomar muestras sin delay
       if (contador < N) {
         if (parar == 1) { //Perdí la línea
-          //controlados1.modoStop();//Paro los motores, pero sigo midiendo
+          controlados1.modoStop();//Paro los motores, pero sigo midiendo
         }
         softprescaler++;
         if (softprescaler==4){//Tomo una de cada 4 muetsras
           softprescaler=0;
           sensor[contador] = byteSensor; //Guardo la medición de ángulo
-          wA[contador] = set_pointA; //Guardo la medición de velocidad deseada del motor A
-          wB[contador] = set_pointB; //Guardo la medición de velocidad deseada del motor B
-          contador++;//Aumento el índice de las muestras
-          
+          //wA[contador] = set_pointA; //Guardo la medición de velocidad deseada del motor A
+          //wB[contador] = set_pointB; //Guardo la medición de velocidad deseada del motor B
+          wA[contador] = freqA; //Guardo la medición de velocidad real del motor A
+          wB[contador] = freqB; //Guardo la medición de velocidad real del motor B
+          contador++;//Aumento el índice de las muestras          
         }
-        if (contador == n0 && controlador == 0) {
+        if (contador == n0){// && controlador == 0) {
           set_pointA = wref - dW;
           set_pointB = wref + dW;
         }
@@ -289,7 +295,7 @@ void medirBeta(void) {
   //Si beta=3 es porque el sensor tiró un valor erróneo o perdió la línea.
   //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
   if (betaAux == 3) {
-    //parar=1;//$.$
+    parar=1;//$.$
   }//Aviso que pare porque perdió la línea
   beta = betaAux;
 }
