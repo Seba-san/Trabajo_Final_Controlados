@@ -3,7 +3,7 @@
 #define D 100 //cantidad de muestras para generar un delay
 #define N 100  //cantidad de muestras a tomar en el ensayo al escalón
 #define n0 50 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
-#define dW 100  //Valor final del escalón
+#define dW -100  //Valor final del escalón
 
 #include <EEPROM.h>
 #include "includes.h"
@@ -158,10 +158,11 @@ void loop() { //$3
         if (softprescaler==4){//Tomo una de cada 4 muetsras
           softprescaler=0;
           sensor[contador] = byteSensor; //Guardo la medición de ángulo
-          wA[contador] = set_pointA; //Guardo la medición de velocidad deseada del motor A
-          wB[contador] = set_pointB; //Guardo la medición de velocidad deseada del motor B
-          contador++;//Aumento el índice de las muestras
-          
+          //wA[contador] = set_pointA; //Guardo la medición de velocidad deseada del motor A
+          //wB[contador] = set_pointB; //Guardo la medición de velocidad deseada del motor B
+          wA[contador] = freqA; //Guardo la medición de velocidad real del motor A
+          wB[contador] = freqB; //Guardo la medición de velocidad real del motor B
+          contador++;//Aumento el índice de las muestras          
         }
         if (contador == n0){// && controlador == 0) {
           set_pointA = wref - dW;
