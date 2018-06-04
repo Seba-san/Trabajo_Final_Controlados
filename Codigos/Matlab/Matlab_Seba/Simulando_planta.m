@@ -16,6 +16,8 @@ RPM_B(1,:)=Dato.datos;PWM_B(1,1:n0)=10;PWM_B(1,(n0+1):end)=80;
 load('../../Mediciones/180531222925resp_escalon_mB_con_carga_40_80.mat');
 RPM_B(2,:)=Dato.datos;PWM_B(2,1:n0)=40;PWM_B(2,(n0+1):end)=80;
 load('../../Mediciones/180601203314ensayo_escalon_angulowref_600_dw_100_PI.mat')
+%load('../../Mediciones/ensayo_sabado.mat')
+load('../../Mediciones/ensayo_sabado_filtrado.mat')
 % Por comodidad supongo que en la muestra 100 comienza el escalon
 dw=zeros(1,length(beta));dw(101:end)=100;
 %load('../../Mediciones/modelos.mat')
@@ -30,10 +32,10 @@ plot(l,RPM_A(2,:),'.',l,RPM_B(2,:),'.')
 % Ajusto el PID en continuo
 sys=sisupA;
 C0 = pid(1,1,0);  
-opt = pidtuneOptions('DesignFocus','reference-tracking','CrossoverFrequency',10);%'PhaseMargin',10
+opt = pidtuneOptions('DesignFocus','disturbance-rejection','CrossoverFrequency',10);%'PhaseMargin',10
 [C,info] = pidtune(sys,C0,opt); %% Hay que ajustar ambos sistemas con los mismos requisitos
 T_pi = feedback(C*sys, 1);
-figure (1);
+figure ();
 %hold on
 step(T_pi)
 %hold off
@@ -233,7 +235,7 @@ title('Highpass Filtered Signal')
 xlabel('Time (s)')
 %ylim(ys)
 %%
-
+load('../../Mediciones/180601203314ensayo_escalon_angulowref_600_dw_100_PI.mat')
 % Acondiciono datos
 n0=100; % A partir de cuando empieza el escalon
 Fs=200;
@@ -249,9 +251,10 @@ plot(tiempo,y,tiempo2,beta(100:154)')
 title('Puntos relevantes')
 % Fiteo curva
 
-PmR='K*exp(a*x)';
+%PmR='K*exp(a*x)';
+PmR='K*x';
 figure(2)
-[f1,gof] = fit(tiempo',y',PmR)
+[f1,gof] = fit(tiempo(1:end-1)',y(1:end-1)',PmR)
 plot(f1,tiempo,y)
 title('respuesta temporal')
 
@@ -264,8 +267,10 @@ title('(Default) Linear Interpolation');
 Kp = 43.791 ;Tp1 = 1.9377 ;
 sys=tf(Kp,[Tp1 -1]);
 % Datos obtenidos por fit
-Kp = f1.K ;Tp1 = -f1.a ;
-sys2=tf(Kp,[Tp1 1]);
+Kp = f1.K ;Tp1 = 1/f1.a ;
+sys2=tf(Kp,[Tp1 -1]);
+figure(4)
+step(sys2,tiempo2)
 % Modelo estimado mediante aproximacion polinomica discreta
 %save('modelo_beta.mat','arx111')
 
@@ -287,6 +292,109 @@ step(sys3,tiempo2)
 k=f1.K;a=f1.a;
 sys4=tf(k,[1/a -1]);
 step(sys4,tiempo2)
+
+
+%%
+clear all;close all
+%load('../../Mediciones/ensayo_sabado.mat')
+load('../../Mediciones/ensayo_sabado_filtrado.mat') % Controlador P con Kp=200
+load('parametros.mat')
+wref=500; % Acordate de esto! 
+Kp=200;
+dW=wA-wB;
+figure(1)
+yyaxis left
+plot(t,dW)
+ylabel('delta W en RPM')
+yyaxis right
+plot(t,beta)
+ylabel('beta en radianes')
+title('Datos medidos')
+
+
+sys3=feedback(sys2*200,1);
+figure(2)
+tiempo2=0:1/200:54/200;
+step(sys2,tiempo2)
+title('Sin controlar')
+figure(3)
+step(sys3,tiempo2)
+title('Controlado')
+
+
+% Prueba de rendimiento
+figure(4)
+yyaxis right
+di=lsim(sys3,dW/100,t);
+plot(t,di)
+ylabel('beta simulado')
+yyaxis left
+plot(t,beta)
+ylabel('beta medido')
+title('Datos medidos vs Datos simulados')
+
+
+
+
+
+
+%%
+% Esto es para los datos con el sistema estable (ver celda de arriba )
+
+% Acondiciono datos
+Fs=200/4;
+% Busco los puntos de cambio
+cambio=diff(beta); %plot(beta);hold on;plot(cambio);hold off
+tiempo2=0:1/Fs:(length(beta)-1)*1/Fs;
+[valor,indice]=find(cambio~=0); %plot(tiempo2,beta);hold on;plot(tiempo2(indice),beta(indice),'o');hold off
+k=1;
+for i=1:length(indice)-1
+    
+    if (indice(i)+1)==indice(i+1)
+        indice_n(k)=indice(i);
+        k=k+1;
+    else
+        indice_n(k)=(indice(i)-1);
+        k=k+1;
+        indice_n(k)=(indice(i)+1);
+        k=k+1;
+    end
+end
+indice_n(1)=[];
+y=  beta(indice_n);
+tiempo=(indice_n)*1/Fs;
+
+figure(1)
+plot(tiempo,y,tiempo2,beta)
+title('Puntos relevantes')
+% Modifico los datos para usarlos en sistem-identification
+beta_interp = interp1(tiempo,y,tiempo2,'Spline');
+figure(3)
+plot(tiempo2,beta,tiempo2,beta_interp,':.');
+title('(Default) Linear Interpolation');
+
+%%
+%lsim(sys_sr,PWMA3(20:end),tiempo3(20:end))
+load('parametros.mat')
+sys3=feedback(sys2*200,1);
+figure(1)
+tiempo2=0:1/200:54/200;
+step(sys2,tiempo2)
+title('Sin controlar')
+figure(2)
+step(sys3,tiempo2)
+title('Controlado')
+
+
+% Prueba de rendimiento
+figure(2)
+yyaxis right
+di=lsim(sys3,dW/100,t);
+plot(t,di)
+ylabel('beta simulado')
+yyaxis left
+plot(t,beta)
+ylabel('beta medido')
 
 
 
