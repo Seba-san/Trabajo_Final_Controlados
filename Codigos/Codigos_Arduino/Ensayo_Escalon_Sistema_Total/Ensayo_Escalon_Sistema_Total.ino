@@ -25,7 +25,7 @@ int Bandera = 0; // bandera para administrar procesos fuera de interrupciones
 //Variables para el Ensayo al Escalón:
 unsigned char sensor[N];//Mediciones de beta
 float wA[N],wB[N];//Mediciones de velocidad ang deseada
-int contador = 0, contador2 = 0, parar = 0;
+int contador = 0, contador2 = 0, parar = 0,contadorStop=0,MaxStop=50;//MaxStop indica que si durante 20 muestras seguidas no detecta la línea tiene que detenerse
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
 int controlador = 1, girar=0;
@@ -50,7 +50,7 @@ int soft_prescaler = 0;
 float uA[3], uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3], errorB[3];
 float set_pointA, set_pointB; // Set_point esta en RPM
-float wref = 500; //Velocidad lineal del centro del robot.
+float wref = 400; //Velocidad lineal del centro del robot.
 volatile float beta = 0; //Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3] = {0, 0, 0}, errorBeta[3] = {0, 0, 0}; //Variación de velocidad angular.
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
@@ -60,7 +60,7 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {196.762,-393.4536,196.6916,1.9999,-0.99994};//Este anda :D !!!!
+float Parametros[] = {196.762,-393.4536,196.6916,1.9999,-0.99994};//{287.108,-573.8906,286.7826,2,-0.99999};//Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
 
 volatile float freqA;
 volatile float freqB;
@@ -150,15 +150,15 @@ void loop() { //$3
       set_pointB = wref + dw[2];
     }
     PID_offline_Motores();
+    if (parar == 1) { //Perdí la línea
+      controlados1.modoStop();//Paro los motores, pero sigo midiendo
+    }
     if (contador2 < D) {
       //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
       contador2++;
     }
     else {  //Si controlador=1 empieza a tomar muestras sin delay
       if (contador < N) {
-        if (parar == 1) { //Perdí la línea
-          controlados1.modoStop();//Paro los motores, pero sigo midiendo
-        }
         softprescaler++;
         if (softprescaler==4){//Tomo una de cada 4 muetsras
           softprescaler=0;
@@ -178,7 +178,7 @@ void loop() { //$3
         }
       }
       else {
-        controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
+        //controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
         if (Escribir==1) {//Grabo en la EEPROM
           Escribir=0;//No vuelve a grabar
           int addr = 0;
@@ -289,7 +289,11 @@ void medirBeta(void) {
   //Si beta=3 es porque el sensor tiró un valor erróneo o perdió la línea.
   //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
   if (betaAux == 3) {
-    parar=1;//$.$
+    contadorStop++;
+    if(contadorStop>MaxStop){parar=1;}//$.$
   }//Aviso que pare porque perdió la línea
-  beta = betaAux;
+  else{ //$.$ Nota: ahora no estaría marcando cuando pierde la línea, sino que mantiene la medición anterior
+    contadorStop=0;
+    beta = betaAux;
+  }
 }
