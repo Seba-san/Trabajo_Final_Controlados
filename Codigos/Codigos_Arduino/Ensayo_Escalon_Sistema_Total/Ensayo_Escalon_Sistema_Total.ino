@@ -3,7 +3,7 @@
 #define D 100 //cantidad de muestras para generar un delay
 #define N 100  //cantidad de muestras a tomar en el ensayo al escalón
 #define n0 50 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
-#define dW -100  //Valor final del escalón
+#define dW 20  //Valor final del escalón
 
 #include <EEPROM.h>
 #include "includes.h"
@@ -28,7 +28,7 @@ float wA[N],wB[N];//Mediciones de velocidad ang deseada
 int contador = 0, contador2 = 0, parar = 0;
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
-int controlador = 1;
+int controlador = 1, girar=0;
 int softprescaler=0;//Lo uso para bajar la frec de muestreo de la señal de salida
 
 // #   #   #   # Variables
@@ -50,7 +50,7 @@ int soft_prescaler = 0;
 float uA[3], uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3], errorB[3];
 float set_pointA, set_pointB; // Set_point esta en RPM
-float wref = 500; //Velocidad lineal del centro del robot.
+float wref = 700; //Velocidad lineal del centro del robot.
 volatile float beta = 0; //Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3] = {0, 0, 0}, errorBeta[3] = {0, 0, 0}; //Variación de velocidad angular.
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
@@ -60,17 +60,14 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {200,0,0,0,0};//{160.4821,-71.7003,0,1,0}; //PID del sistema total
+float Parametros[] = {192.6200,-192.5058,0,1,0};//Bastante suave:{44.0414,-43.9542,0,1,0};//{200,0,0,0,0};//{160.4821,-71.7003,0,1,0}; //PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
-<<<<<<< HEAD
+
 int windup_top=100,windup_bottom=10;
 int windup_top_dw=1000,windup_bottom_dw=-1000;//Definir bien
-=======
-int windup_top = 100, windup_bottom = 10;
-int windup_top_dw = 100, windup_bottom_dw = -100; //Definir bien
->>>>>>> 0569215b9ab4dd1e422d966dae86f593975eebfb
+
 
 unsigned char estadoEncoder = 0; //En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -144,14 +141,16 @@ void loop() { //$3
   if (bitRead(Bandera, 5)) {
     bitWrite(Bandera, 5, 0);
     medirBeta();//Actualizo la medición de ángulo
-<<<<<<< HEAD
     PID_total();
-<<<<<<< HEAD
     if(contador2<D){
-=======
-    if (controlador==1) {
-=======
-    if (controlador==1 && contador<n0) {
+
+    if (controlador==1 && contador<n0 && girar==1) {
+      PID_total();
+      set_pointA = wref - dw[2];
+      set_pointB = wref + dw[2];
+    }
+    else if (controlador==1 && girar==0){//Si no quiero girar entonces siempre calcula el controlador
+>>>>>>> 4e42941948c5447524447255cc4a7370f5dad129
       PID_total();
 >>>>>>> be7710a261ac2c74a4b759de08f76692d3604f25
       set_pointA = wref - dw[2];
@@ -178,7 +177,7 @@ void loop() { //$3
           wB[contador] = freqB; //Guardo la medición de velocidad real del motor B
           contador++;//Aumento el índice de las muestras          
         }
-        if (contador == n0){// && controlador == 0) {
+        if (contador == n0 && girar==1){// && controlador == 0) {
           set_pointA = wref - dW;
           set_pointB = wref + dW;
         }
