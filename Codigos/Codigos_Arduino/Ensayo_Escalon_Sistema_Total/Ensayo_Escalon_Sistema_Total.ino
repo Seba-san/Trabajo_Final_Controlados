@@ -50,7 +50,7 @@ int soft_prescaler = 0;
 float uA[3], uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3], errorB[3];
 float set_pointA, set_pointB; // Set_point esta en RPM
-float wref = 700; //Velocidad lineal del centro del robot.
+float wref = 500; //Velocidad lineal del centro del robot.
 volatile float beta = 0; //Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3] = {0, 0, 0}, errorBeta[3] = {0, 0, 0}; //Variación de velocidad angular.
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
@@ -60,7 +60,7 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {603.9628,-1138.1731,534.2212,0,1};//{200,0,0,0,0};//{192.6200,-192.5058,0,1,0};//Bastante suave:{44.0414,-43.9542,0,1,0};//{160.4821,-71.7003,0,1,0}; //PID del sistema total
+float Parametros[] = {196.762,-393.4536,196.6916,1.9999,-0.99994};//Este anda :D !!!!
 
 volatile float freqA;
 volatile float freqB;
@@ -114,8 +114,6 @@ void setup() { // $2
   if (Escribir) {
     controlados1.modoAdelante(); //Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
   }
-  //$.$
-  controlados1.modoAdelante();
 }
 
 void loop() { //$3
@@ -151,11 +149,6 @@ void loop() { //$3
       set_pointA = wref - dw[2];
       set_pointB = wref + dw[2];
     }
-
-    //$.$
-    Serial.println(set_pointB-set_pointA);
-
-    
     PID_offline_Motores();
     if (contador2 < D) {
       //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
@@ -185,8 +178,7 @@ void loop() { //$3
         }
       }
       else {
-        //$.$
-        //controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
+        controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
         if (Escribir==1) {//Grabo en la EEPROM
           Escribir=0;//No vuelve a grabar
           int addr = 0;
