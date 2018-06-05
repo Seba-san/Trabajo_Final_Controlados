@@ -29,7 +29,7 @@ end
 Fs=200/4;
 t=0:1/Fs:(length(beta)-1)/Fs;
 figure(2);subplot(211);plot(t,beta,'.');grid on
-subplot(212);plot(t,wA,t,wB);grid on
+subplot(212);plot(t,wA,t,wB);grid on;legend('wA','wB')
 %% Fin
 fclose(instrfindall);%cierra todos los puertos activos y ocultos
 %clear all;close all;clc

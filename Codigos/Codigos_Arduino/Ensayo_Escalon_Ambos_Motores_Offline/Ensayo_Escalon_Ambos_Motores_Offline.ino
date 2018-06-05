@@ -1,6 +1,6 @@
 #define D 300 //cantidad de muestras para generar un delay
-#define N 200  //cantidad de muestras a tomar en el ensayo al escalón
-#define n0 20 //cantidad de muestras a la que se hace el cambio de velocidad (van a haber n0 muestras a PWM1 y la n0+1 será parte del transitorio)
+#define N 120  //cantidad de muestras a tomar en el ensayo al escalón
+#define n0 5 //cantidad de muestras a la que se hace el cambio de velocidad (van a haber n0 muestras a PWM1 y la n0+1 será parte del transitorio)
 
 
 #include <EEPROM.h>
@@ -22,14 +22,14 @@ int Bandera=0; // bandera para administrar procesos fuera de interrupciones
 //################
 
 //Variables para el Ensayo al Escalón:
-float w[N];//Vector para guardar las mediciones del ensayo
+float wA[N],wB[N];//Vector para guardar las mediciones del ensayo
 int contador=0,contador2=0;
 int enviar_datos=0;//Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int PWM1=40;//Valor inicial del escalón
 int PWM2=80;//Valor final del escalón
 int Escribir=0;//Le indico que escriba en la eeprom con un 1 y que lea con un 0
 float inicio=400;//Velocidad inicial en rpm cuando el controlador está activado
-float fin=800;//Velocidad final en rpm cuando el controlador está activado
+float fin=600;//Velocidad final en rpm cuando el controlador está activado
 
 
 // #   #   #   # Variables
@@ -124,8 +124,8 @@ void loop() { //$3
   }
   else{
     if (contador<N){
-      //w[contador]=freqA;//Guardo la medición de velocidad del motor A
-      w[contador]=freqB;//Guardo la medición de velocidad del motor B
+      wA[contador]=freqA;//Guardo la medición de velocidad del motor A
+      wB[contador]=freqB;//Guardo la medición de velocidad del motor B
       contador++;//Aumento el índice de las muestras
       if(contador==n0){//Inicio el escalón
         if(controlador){
@@ -144,7 +144,9 @@ void loop() { //$3
       if(Escribir){
         int addr=0;
         for(int ind;ind<N;ind++){
-          EEPROM.put(addr, w[ind]);//put escribe cualquier cosa, incluido float
+          EEPROM.put(addr, wA[ind]);//put escribe cualquier cosa, incluido float
+          addr = addr + 4;//La siguiente escritura debería estar 4 bytes después (porque un float ocupa 4 bytes)
+          EEPROM.put(addr, wB[ind]);//put escribe cualquier cosa, incluido float
           addr = addr + 4;//La siguiente escritura debería estar 4 bytes después (porque un float ocupa 4 bytes)
           //Ver si necesito esto:
           //if (addr == EEPROM.length()){addr = 0;}
@@ -158,12 +160,15 @@ void loop() { //$3
     int eeAddress=0;
         for(int ind;ind<N;ind++){
           //Piso la variable auxiliar w con lo que haya escrito en la eeprom
-          EEPROM.get(eeAddress,w[ind]);//Para leer cualquier tipo de variable uso get en vez de read
+          EEPROM.get(eeAddress,wA[ind]);//Para leer cualquier tipo de variable uso get en vez de read
+          eeAddress = eeAddress + 4;//La siguiente escritura debería estar 4 bytes después (porque un float ocupa 4 bytes)
+          EEPROM.get(eeAddress,wB[ind]);//Para leer cualquier tipo de variable uso get en vez de read
           eeAddress = eeAddress + 4;//La siguiente escritura debería estar 4 bytes después (porque un float ocupa 4 bytes)
         }
     online=false;
     tx_activada=true; //Para ahorrar problemas fuerzo las banderas, así no lo tengo que hacer desde Matlab
-    EnviarTX(N,'A',w);
+    EnviarTX(N,'A',wA);
+    EnviarTX(N,'A',wB);
   }
 }
 
