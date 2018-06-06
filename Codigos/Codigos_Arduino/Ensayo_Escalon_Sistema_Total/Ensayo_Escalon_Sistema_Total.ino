@@ -113,7 +113,7 @@ void setup() { // $2
   }
   if (Escribir) {
     controlados1.modoAdelante(); //Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
-    Escribir=0;// $.$ PARA NO ESCRIBIR AL PEDO LA EEPROM SI NO LA VOY A LEER
+    //Escribir=0;// $.$ PARA NO ESCRIBIR AL PEDO LA EEPROM SI NO LA VOY A LEER
   }
 }
 
@@ -152,7 +152,11 @@ void loop() { //$3
     }
 
     //$.$
-    Serial.println(dw[2]);
+    Serial.print(dw[2]);
+    Serial.print(" ");
+    Serial.print(beta);
+    Serial.print(" ");
+    Serial.println(byteSensor,BIN);
     
     PID_offline_Motores();
     if (parar == 1) { //Perdí la línea
