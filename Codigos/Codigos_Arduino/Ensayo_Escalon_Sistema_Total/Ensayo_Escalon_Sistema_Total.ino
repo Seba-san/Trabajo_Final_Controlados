@@ -28,7 +28,7 @@ float wA[N],wB[N];//Mediciones de velocidad ang deseada
 int contador = 0, contador2 = 0, parar = 0,contadorStop=0,MaxStop=50;//MaxStop indica que si durante 20 muestras seguidas no detecta la línea tiene que detenerse
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
-int controlador = 1, girar=1,grabar=1;
+int controlador = 1, girar=0,grabar=0;
 int softprescaler=0;//Lo uso para bajar la frec de muestreo de la señal de salida
 
 // #   #   #   # Variables
@@ -60,12 +60,12 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {200,0,0,0,0};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};//{196.762,-393.4536,196.6916,1.9999,-0.99994};//Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
+float Parametros[] = {181.7336,-360.803,179.0695,2,-0.99998};//{200,0,0,0,0};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};//{196.762,-393.4536,196.6916,1.9999,-0.99994};//Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
 
 volatile float freqA;
 volatile float freqB;
 int windup_top = 100, windup_bottom = 10;
-int windup_top_dw = 300, windup_bottom_dw = -300; //Definir bien
+int windup_top_dw = 100, windup_bottom_dw = -100; //Definir bien
 
 unsigned char estadoEncoder = 0; //En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -147,8 +147,8 @@ void loop() { //$3
     }
     else if (controlador==1 && girar==0){//Si no quiero girar entonces siempre calcula el controlador
       PID_total();
-      set_pointA = wref - dw[2]*(wref/500.0);
-      set_pointB = wref + dw[2]*(wref/500.0);
+      set_pointA = wref - dw[2]*(wref/350);//*(wref/500.0);
+      set_pointB = wref + dw[2]*(wref/350);//*(wref/500.0);
     }
 
     //$.$
@@ -189,7 +189,7 @@ void loop() { //$3
         }
       }
       else {
-        controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
+        //controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
         if (Escribir==1 && grabar==1) {//Grabo en la EEPROM
           Escribir=0;//No vuelve a grabar
           int addr = 0;
