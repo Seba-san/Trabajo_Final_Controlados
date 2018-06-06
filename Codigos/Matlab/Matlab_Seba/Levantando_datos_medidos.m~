@@ -4,7 +4,7 @@ load('../../Mediciones/modelos_controlados.mat')
 load('../../Mediciones/ensayo_sabado_filtrado.mat') % Controlador P con Kp=200
 load('parametros.mat')
 wref=500; % Acordate de esto! 
-Kp=100;
+Kp=200;
 %dW=wA-wB;
 
 % Obtengo las RPM desde los sistemas controlados
@@ -33,8 +33,7 @@ plot(t,beta);ylabel('beta medido')
 dW1=dW;beta1=beta;
 parametros.Ts=1/50;
 parametros.k=0.034;
-parametros.sys=sys_cinematico;
-%parametros.sys=feedback(sys_cinematico*Kp,1);%sys_cinematico;
+parametros.sys=feedback(sys_cinematico*Kp,1);%sys_cinematico;
 %beta_estimado=est_beta(t,dW,beta(1),parametros,'discreto');
 beta_estimado=est_beta(t,dW,beta(1),parametros,'continuo');
 figure(2)
@@ -42,8 +41,7 @@ yyaxis left
 plot(t,beta);ylabel('beta medido')
 yyaxis right
 plot(t,beta_estimado);ylabel('beta estimado')
-figure(3)
-plot(t,beta-beta_estimado')
+
 
 %%
 % Otro ensayo

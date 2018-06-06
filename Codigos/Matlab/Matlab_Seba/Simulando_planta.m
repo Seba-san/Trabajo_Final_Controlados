@@ -3,6 +3,7 @@
 % con carga.
 clc;clear all; close all;
 cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
+addpath('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab/Matlab_Seba')
 %%
 % Cargando Datos.
 Fs=200;
@@ -45,12 +46,12 @@ title ('Sin controlar')
 
 %%
 Kp=C0.Kp;Kd=C0.Kd;Ki=C0.Ki;
-tipo='PI';
+tipo='PID';
 Fsnano=200;
 % Ts2=0.015;
 Ts2=1/Fsnano;
 clear A B C D E F;
-Tf=0;%No s� qu� poner en Tf porque ZN no me lo da.
+Tf=20*Kd;%No s� qu� poner en Tf porque ZN no me lo da.
 control=c2d(tf(pid(Kp,Ki,Kd,Tf)),Ts2,'tustin'); 
 [A,B,C,D,E]=tf2ctesNano(cell2mat(control.num),cell2mat(control.den),tipo);
 ctes=table(A,B,C,D,E);
