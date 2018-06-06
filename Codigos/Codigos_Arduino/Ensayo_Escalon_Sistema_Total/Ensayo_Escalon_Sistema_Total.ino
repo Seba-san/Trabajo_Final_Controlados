@@ -60,12 +60,12 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {196.762,-393.4536,196.6916,1.9999,-0.99994};//{287.108,-573.8906,286.7826,2,-0.99999};//Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
+float Parametros[] = {191.8788,-383.6318,191.7531,2,-0.99997};//{196.762,-393.4536,196.6916,1.9999,-0.99994};//{287.108,-573.8906,286.7826,2,-0.99999};//Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
 
 volatile float freqA;
 volatile float freqB;
 int windup_top = 100, windup_bottom = 10;
-int windup_top_dw = 300, windup_bottom_dw = -300; //Definir bien
+int windup_top_dw = 100, windup_bottom_dw = -100; //Definir bien
 
 unsigned char estadoEncoder = 0; //En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -113,6 +113,7 @@ void setup() { // $2
   }
   if (Escribir) {
     controlados1.modoAdelante(); //Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
+    Escribir=0;// $.$ PARA NO ESCRIBIR AL PEDO LA EEPROM SI NO LA VOY A LEER
   }
 }
 
@@ -149,6 +150,10 @@ void loop() { //$3
       set_pointA = wref - dw[2];
       set_pointB = wref + dw[2];
     }
+
+    //$.$
+    Serial.println(dw[2]);
+    
     PID_offline_Motores();
     if (parar == 1) { //Perdí la línea
       controlados1.modoStop();//Paro los motores, pero sigo midiendo
@@ -273,7 +278,6 @@ void medirVelocidadB(unsigned char interrupcionB)
     bufferVelB[2 * cantMarcasEncoder - 1] = (long)(preescaler) * (TCNT2actualB - TCNT2anteriorB + cantOVerflow_actualB * _OCR2A);
     suma = suma + bufferVelB[2 * cantMarcasEncoder - 1];
     freqB = float((F_CPU * 60.0) / (suma));
-    //freqB=(float)suma;//BORRAR ESTA PORQUERIA, ES SOLO PARA DEBUGGEAR $.$
     interruptON;
   }
   else {
