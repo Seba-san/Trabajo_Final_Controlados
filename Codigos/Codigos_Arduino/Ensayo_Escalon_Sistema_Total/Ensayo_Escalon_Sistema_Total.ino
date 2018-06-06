@@ -1,9 +1,9 @@
 //Ensayo al escalón
 
-#define D 0 //cantidad de muestras para generar un delay
+#define D 300 //cantidad de muestras para generar un delay
 #define N 100  //cantidad de muestras a tomar en el ensayo al escalón
-#define n0 50 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
-#define dW 20  //Valor final del escalón
+#define n0 10 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
+#define dW 30  //Valor final del escalón
 
 #include <EEPROM.h>
 #include "includes.h"
@@ -28,7 +28,7 @@ float wA[N],wB[N];//Mediciones de velocidad ang deseada
 int contador = 0, contador2 = 0, parar = 0,contadorStop=0,MaxStop=50;//MaxStop indica que si durante 20 muestras seguidas no detecta la línea tiene que detenerse
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
-int controlador = 1, girar=0,grabar=0;
+int controlador = 1, girar=1,grabar=1;
 int softprescaler=0;//Lo uso para bajar la frec de muestreo de la señal de salida
 
 // #   #   #   # Variables
@@ -60,7 +60,7 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};//{196.762,-393.4536,196.6916,1.9999,-0.99994};//Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
+float Parametros[] = {200,0,0,0,0};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};//{196.762,-393.4536,196.6916,1.9999,-0.99994};//Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
 
 volatile float freqA;
 volatile float freqB;
@@ -169,25 +169,27 @@ void loop() { //$3
     else {  //Si controlador=1 empieza a tomar muestras sin delay
       if (contador < N) {
         softprescaler++;
-        if (softprescaler==4){//Tomo una de cada 4 muetsras
+        //$.$ Lo dejo que tome muestras a 200Hz
+        //if (softprescaler==4){//Tomo una de cada 4 muetsras
           softprescaler=0;
           sensor[contador] = byteSensor; //Guardo la medición de ángulo
           //wA[contador] = set_pointA; //Guardo la medición de velocidad deseada del motor A
           //wB[contador] = set_pointB; //Guardo la medición de velocidad deseada del motor B
-          //wA[contador] = freqA; //Guardo la medición de velocidad real del motor A
-          //wB[contador] = freqB; //Guardo la medición de velocidad real del motor B
+          wA[contador] = freqA; //Guardo la medición de velocidad real del motor A
+          wB[contador] = freqB; //Guardo la medición de velocidad real del motor B
           //$.$
-          wA[contador]=freqB-freqA;//Guardo la medición de velocidad del motor A
-          wB[contador]=set_pointB-set_pointA;//Guardo la medición de velocidad del motor B
+          //wA[contador]=freqB-freqA;//Guardo la medición de velocidad del motor A
+          //wB[contador]=set_pointB-set_pointA;//Guardo la medición de velocidad del motor B
           contador++;//Aumento el índice de las muestras          
-        }
+        //}
         if (contador == n0 && girar==1){// && controlador == 0) {
+          
           set_pointA = wref - dW;
           set_pointB = wref + dW;
         }
       }
       else {
-        //controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
+        controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
         if (Escribir==1 && grabar==1) {//Grabo en la EEPROM
           Escribir=0;//No vuelve a grabar
           int addr = 0;
@@ -298,7 +300,7 @@ void medirBeta(void) {
   //En ese caso mantengo el valor anterior medido. Por eso sólo actualizo beta si la rutina NO devuelve un 3.
   if (betaAux == 3) {
     contadorStop++;
-    if(contadorStop>MaxStop){parar=1;}//$.$
+    if(contadorStop>MaxStop){parar=0;}//$.$
   }//Aviso que pare porque perdió la línea
   else{ //$.$ Nota: ahora no estaría marcando cuando pierde la línea, sino que mantiene la medición anterior
     contadorStop=0;
