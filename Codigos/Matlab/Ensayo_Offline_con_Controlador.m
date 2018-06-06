@@ -28,8 +28,10 @@ for k=1:length(byteSensor)
 end
 Fs=200/4;
 t=0:1/Fs:(length(beta)-1)/Fs;
-figure(2);subplot(211);plot(t,beta,'.');grid on
-subplot(212);plot(t,wA,t,wB);grid on;legend('wA','wB')
+% figure(2);subplot(211);plot(t,beta,'.');grid on
+% subplot(212);plot(t,wA,t,wB);grid on;legend('wA','wB')
+figure(1); yyaxis right;plot(t,beta,'.');grid on
+yyaxis left;plot(t,wB,t,wA);grid on;legend('wB-wA deseado','wB-wA medido')
 %% Fin
 fclose(instrfindall);%cierra todos los puertos activos y ocultos
 %clear all;close all;clc
@@ -40,5 +42,5 @@ direccion='../../Mediciones/';
 name1='resp_escalon_sistema_total';
 name2='';
 name=strcat(direccion,name,name1,name2,'.mat');
-% Parametros=table(500,20,50,c,200/4,'VariableNames',{'wref';'dW';'n0';'controlador';'Fs'})
+% Parametros=table(400,[191.8788,-383.6318,191.7531,2,-0.99997],200/4,'VariableNames',{'wref';'controlador';'Fs'})
 %save(name,'t','beta','wA','wB','Parametros')
