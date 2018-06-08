@@ -38,7 +38,8 @@ fclose(instrfindall);%cierra todos los puertos activos y ocultos
 disp('Puerto Cerrado')
 %%
 name=datestr(now,'yymmddhhMMss');
-direccion='../../Mediciones/Respuesta_Escalon_060618/';
+%direccion='../../Mediciones/Respuesta_Escalon_060618/';
+direccion='C:\Users\Tania\Dropbox\Trabajo_Final_Controlados_git\'
 name1='resp_escalon_sistema_total';
 name2='';
 name=strcat(direccion,name,name1,name2,'.mat');
