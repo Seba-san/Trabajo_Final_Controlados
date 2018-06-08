@@ -45,7 +45,7 @@ step(sys)
 title ('Sin controlar')
 
 %%
-Kp=C0.Kp;Kd=C0.Kd;Ki=C0.Ki;
+Kp=C0.Kp;Kd=C0.Kd;Ki=C0.Ki;%Tf=C0.Tf;
 tipo='PID';
 Fsnano=200;
 % Ts2=0.015;
@@ -58,6 +58,14 @@ ctes=table(A,B,C,D,E);
 ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
 % Transferencia del controlador: H(z)=(A+Bz^-1+Cz^-2)/(1-Dz^-1-Ez^-2)
 
+%%
+clear A B C D E F;
+control=tf(C0);
+C0.tf=20*C0.Kd;
+[A,B,C,D,E]=tf2ctesNano(cell2mat(control.num),cell2mat(control.den),tipo);
+ctes=table(A,B,C,D,E);
+ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
+% Transferencia del controlador: H(z)=(A+Bz^-1+Cz^-2)/(1-Dz^-1-Ez^-2)
 
 
 
@@ -94,7 +102,7 @@ opt = pidtuneOptions('DesignFocus','disturbance-rejection','CrossoverFrequency',
 [C,info] = pidtune(sys,C0,opt); %% Hay que ajustar ambos sistemas con los mismos requisitos
 T_pi = feedback(C*sys, 1);
 Cb=C;sysB=sys;
-save('../../Mediciones/modelos_controlados.mat','sysA','sysB','Cb','Ca','sysb_dw','sys_cinematico')
+save('../../Mediciones/modelos_controlados.mat','sysA','sysB','Cb','Ca','sys_cinematico','sys_cinematico2')
 %% fft
 X=wA(110:end)-mean(wA(110:end));
 Fs = 200;            % Sampling frequency                    
