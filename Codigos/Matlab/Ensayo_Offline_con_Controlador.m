@@ -31,17 +31,18 @@ t=0:1/Fs:(length(beta)-1)/Fs;
 % figure(2);subplot(211);plot(t,beta,'.');grid on
 % subplot(212);plot(t,wA,t,wB);grid on;legend('wA','wB')
 figure(1); yyaxis right;plot(t,beta,'.');grid on
-yyaxis left;plot(t,wB,t,wA);grid on;legend('wB-wA deseado','wB-wA medido')
+yyaxis left;plot(t,wB,t,wA);grid on;legend('wA medido','wB medido')
 %% Fin
 fclose(instrfindall);%cierra todos los puertos activos y ocultos
 %clear all;close all;clc
 disp('Puerto Cerrado')
 %%
 name=datestr(now,'yymmddhhMMss');
-direccion='../../Mediciones/Respuesta_Escalon_060618/';
+direccion='../../Mediciones/Respuesta_Escalon_070618/';
 name1='resp_escalon_sistema_total';
 name2='';
 name=strcat(direccion,name,name1,name2,'.mat');
-Parametros=table(350,10,300,100,30,[200,0,0,0,0],200,...
-    'VariableNames',{'wref';'n0';'D';'N';'dW';'controlador';'Fs'})
+Parametros=table(350,200,200,100,10,50,[126.5571,-252.6673,126.1102,2,-0.99999],...
+    [0.053493,-0.050442,0,1,0],[0.054997,-0.052071,0,1,0],...
+    'VariableNames',{'wref';'Fs';'D';'N';'n0';'dW';'controlador';'controladorMotorA';'controladorMotorB'})
 %save(name,'t','byteSensor','beta','wA','wB','Parametros')
