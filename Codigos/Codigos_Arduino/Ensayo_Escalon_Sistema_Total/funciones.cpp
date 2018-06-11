@@ -23,19 +23,26 @@ void PID_offline_Motores (void){ //$9 PID
 }
 
 void PID_total(void){//PID del sistema en su conjunto
+<<<<<<< HEAD
  
+=======
+>>>>>>> 4e42941948c5447524447255cc4a7370f5dad129
   for(int k=0;k<2;k++)
     {
      errorBeta[k]=errorBeta[k+1];//Desplazamiento a la derecha de los datos del buffer
      dw[k]=dw[k+1];
-    }  
-  errorBeta[2]=((float)(0)-beta);//El ángulo deseado es siempre 0
+    }
+  //errorBeta[2]=((float)(0.052359878)-beta);//El ángulo deseado es siempre 0  
+  errorBeta[2]=((float)(0.052359878)-beta);//El ángulo deseado no es 0 porque el sensor nunca mide cero
   dw[2]=Parametros[0]*errorBeta[2]+Parametros[1]*errorBeta[1]+Parametros[2]*errorBeta[0]+Parametros[3]*dw[1]+Parametros[4]*dw[0];
   if (dw[2]>windup_top_dw){dw[2]=windup_top_dw;} //Cambiar nombres de windup_top y _bottom $$$$$
   if (dw[2]<windup_bottom_dw){dw[2]=windup_bottom_dw;}
+<<<<<<< HEAD
    set_pointA=wref-dw[2];
    set_pointB=wref+dw[2];
 
+=======
+>>>>>>> 4e42941948c5447524447255cc4a7370f5dad129
 }
 
  //  #####################  Modulos de comunicaciones 
