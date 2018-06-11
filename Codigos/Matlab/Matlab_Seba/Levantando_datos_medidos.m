@@ -81,20 +81,20 @@ figure(2)
 subplot(311)
 yyaxis left
 plot(t,wA,t(t0),wA(t0),'o');ylabel('rpm A')
-title('todo el ensayo');
+title('Ensayo respuesta escalón sistema total');
 yyaxis right
-plot(t,beta,t(t0),beta(t0),'o');ylabel('beta medido');grid on;
+plot(t,beta,t(t0),beta(t0),'o');ylabel('beta medido');grid on; grid minor
 subplot(312)
 yyaxis left
 plot(t,wB,t(t0),wB(t0),'o');ylabel('rpm B ')
 yyaxis right
-plot(t,beta,t(t0),beta(t0),'o');ylabel('beta medido');grid on;
+plot(t,beta,t(t0),beta(t0),'o');ylabel('beta medido');grid on; grid minor
 subplot(313)
 yyaxis left
 plot(t,dW,t(t0),dW(t0),'o');ylabel('delta RPM ')
 yyaxis right
-plot(t,beta,t(t0),beta(t0),'o');ylabel('beta medido');grid on;
-
+plot(t,beta,t(t0),beta(t0),'o');ylabel('beta medido');grid on; grid minor
+xlabel('Tiempo(segundos)')
 
 
 % Separo  Datos sin control y con control
@@ -145,7 +145,7 @@ sys_t=2*sys_cm*sys_cinematico2
 %%
 % Reajuste de los controladores de los motores
 load('../../Mediciones/modelos_controlados2.mat')
-sys=sysB;
+sys=sysA;
 sys_=zpk([],[-1/sys.Tp1 -1/sys.Tp2],sys.Kp/(sys.Tp1*sys.Tp2),'OutputDelay',sys.Td);
 C=Cb;
 Kp=C.Kp;Ki=C.Ki;Kd=C.Kd;Tf=0;
@@ -165,3 +165,18 @@ step(sys_cm)
 hold off
 
 save('../../Mediciones/modelos_controlados2.mat','sysA','sysB','Cb','Ca','sys_cinematico2','sys_cinematico','Cct')
+
+%%
+C=Ca;
+Kp=C.Kp;Ki=C.Ki;Kd=C.Kd;Tf=0;
+control=tf(pid(Kp,Ki,Kd,Tf)); 
+z=control.num{1}(2)/control.num{1}(1);
+p=0;
+k=1/control.num{1}(1);
+control_=zpk(z,p,k)
+
+
+
+
+
+

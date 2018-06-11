@@ -1,0 +1,462 @@
+
+\documentclass[10pt,conference,a4paper,onecolumn]{article}%{IEEEtran} % altura de letra=10, conferencia, formato a4. "`argencon"' o "`IEEEtran"' es la clase del monumento, que si no es el estandar, tiene sus propias opciones, como "`conference"'.journal
+\usepackage[lmargin=2.5cm,rmargin=1.5cm,top=1.5cm,bottom=1.5cm]{geometry} % es para acomodar los margenes
+
+% Para comentar un codigo rapido es con ctrl+q y para descomendar es con ctrl+w
+%\newcommand{\CLASSINPUTbottomtextmargin}{10mm} % redefino el margen inferior
+%\usepackage[latin1]{inputenc} %acentos sin codigo extra
+%\usepackage[cp1252]{inputenc}% utf8
+\usepackage[utf8]{inputenc} %acentos sin codigo extra \usepackage[utf8]{inputenc}
+\usepackage[compress]{cite} %Es para agregar la bibliografia al final
+\usepackage{url} % para poner URL 
+%\usepackage[pdftex]{graphicx} % PDFLaTeX
+%\usepackage[dvipdfmx]{graphicx} % PDFLaTeX
+
+%\usepackage[dvips]{graphicx} % LaTeX
+%\DeclareGraphicsExtensions{.eps}
+
+\usepackage{graphicx}%es para agregar imagenes
+\usepackage{subfigure}  %es para las subfiguras
+%\DeclareGraphicsExtensions{.eps,.png}
+%\DeclareGraphicsExtensions{.png,.eps}
+%\usepackage[spanish]{babel} % es para castellanizar algunos comandos
+%\usepackage[spanish, es-tabla]{babel} % para que en vez de cuadro diga tabla
+\usepackage[spanish,es-noshorthands,es-tabla]{babel} %agrega unos caracteres extra al spanish de babel
+\usepackage{alltt} %Ver para que es esto, me parece que simplifica el "` vervatim"'
+\usepackage{listings} % es para poder cargar los codigos y que se vean bonitos
+%\usepackage{eps}  
+\usepackage{chngcntr} % para los pies de pagina
+\usepackage[hidelinks]{hyperref} % para agregar links "`[hidelinks]"' sirve para sacar el recuadro alrededor del link
+\usepackage{amsthm} % ambiente matematico
+\usepackage{amsmath} %otro ambiente matematico
+%\usepackage{slashbox} % Es para poner la linea en la tabla
+\usepackage[compress]{cite} %Es para agregar la bibliografia al final
+%\usepackage{hyperref} % para poner un indice con que linkee a todo el texto en el pdf
+\usepackage{color} % para poner textos con color 
+\usepackage{hyperref} % para poner links
+\usepackage{epsfig} % para poner color en las tablas
+\usepackage{multirow}% para poner color en las tablas
+\usepackage{colortbl}% para poner color en las tablas. Esta es la mas importante 
+%\columncolor[Modelo]{Color}[SepIzq][SepDer] (columnas) \rowcolor[Modelo]{Color}[SepIzq][SepDer] (filas) 
+% http://metodos.fam.cie.uva.es/~latex/apuntes/apuntes10.pdf
+\usepackage[table]{xcolor}% para poner color en las tablas % http://ctan.org/pkg/xcolor
+% ------------------- \newcommand
+%\renewcommand{\tablename}{Tabla} % para que diga tabla en vez de ``cuadro''
+\newcommand{\be}{\begin{equation}}  %Simplifica la escritura de ecuaciones
+\newcommand{\ee}{\end{equation}}  %Simplifica la escritura de ecuaciones
+\newcommand{\nbe}{\begin{equation*}}  %Simplifica la escritura de ecuaciones
+\newcommand{\nee}{\end{equation*}}  %Simplifica la escritura de ecuaciones
+\newcommand{\m}{\begin{bmatrix}}
+\newcommand{\fm}{\end{bmatrix}}
+\newcommand{\fig}[4]{ % Figuras asi se usa: \fig{Nombrefigura}{epigrafe}{donde? h, t, b, htb}{ancho}
+\begin{figure}[#3]
+\centering
+\includegraphics[width=#4\columnwidth]{./Figuras/#1}
+\caption{#2}\label{fig:#1}
+\end{figure}}
+
+\newcommand{\arr}[2]{ % es para poder apilar ecuaciones NO numeradas
+\begin{equation*}
+\begin{array}{#1} #2 
+\end{array}
+\end{equation*}}
+
+\newcommand{\pap}{paso a paso\  }
+\newcommand{\Mic}{microstepping}
+\newcommand{\xx}{\cellcolor{blue!50}}
+
+% --------------- FIN \newcommand ----------------------
+
+
+
+
+\begin{document} % comienza el documento, es como el main.
+
+%\title{Informe del Trabajo/Proyecto Final \\
+%Accionamiento eléctrico para un motor paso a paso unipolar de reluctancia
+%variable} % (?)
+
+
+%\vspace{1cm} % Doy un espacio de 1cm de altura entre el titulo y el autor
+\begin{titlepage}
+\centering
+\begin{Huge}
+ 
+\textbf{Pre informe}  \\
+
+\end{Huge}
+
+
+\vspace{2cm}
+\begin{figure}[h]
+\centering
+\includegraphics[width=3cm]{./imagenes/LogoUNC}
+\end{figure}
+
+\vspace{2cm}
+\normalsize
+\begin{LARGE}
+
+
+ Sistemas controlados por computadora \\
+
+
+ 
+ \end{LARGE}
+ \vspace{2cm}
+\begin{Large}
+Diseño e implementacion de un robotin
+\end{Large}
+\vspace{2cm}
+\normalsize 
+\begin{flushleft}
+Alumnos: Tania Ferreira,  Sansoni Sebastián 
+
+\end{flushleft}
+
+\vspace{1cm}
+
+
+\centering Neuquén, \the\year \\
+
+
+\vspace{1cm}
+
+
+
+\end{titlepage}
+  % \mbox es para que no corte la oracion 
+%\author{Sansoni Sebastián \\
+%\emph{Maquinas Eléctricas, Ingeniería Electrónica}\\ \emph{Docentes a cargo:  Ing. Labriola Carlos, Ing. Ávila Marcelo}\\ \emph{Año 2017} \\
+%\emph{ Departamento de Electrotecnia, Facultad de ingeniería, Universidad Nacional del Comahue }\\ \emph{Buenos Aires 1400, Neuquén Capital, Argentina}\\ \emph{\small{\texttt{sansoni.sebas@gmail.com}}}} 
+
+%\author{\IEEEauthorblockN{Sansoni Sebastián} %\vspace{0.2cm}
+%\IEEEauthorblockA{\emph{Maquinas Eléctricas, Ingeniería Electrónica}\\ \emph{Docentes a cargo:  Ing. Labriola Carlos, Ing. Ávila Marcelo}\\ \emph{Año 2017} \\
+%\emph{ Departamento de Electrotecnia, Facultad de ingeniería, Universidad Nacional del Comahue }\\ \emph{Buenos Aires 1400, Neuquén Capital, Argentina}\\ \emph{\small{\texttt{sansoni.sebas@gmail.com}}}}} 
+
+% en este entorno, ademas del nombre del autor se agregan mas caracteristicas en el titulo, por eso estan los "`bloques del autor"'. "`\IEEEauthorblockN"' pone los nombres. "`\IEEEauthorblockA{}"' las Afiliaciones (todo lo demas).\\ agrega un enter
+%\maketitle % Dice donde poner el \emph{titulo}
+
+%\newpage % comenzar una nueva pagina 
+
+%\tableofcontents
+
+%\newpage
+
+%\begin{abstract}
+
+%\end{abstract}
+%\begin{IEEEkeywords}Actitud, acelerómetro, estimación, seguimiento\end{IEEEkeywords}
+
+
+
+
+\section{Ideas}
+Cuestiones Importantes:
+\begin{itemize}
+
+
+
+\item	Modelado del sistema (cinemático vs dinámico). Robot no holonómico.
+\item	Modelado de los motores. Ensayos con carga y sin carga.
+\item	Sistema de medición de RPM y línea.
+\item	Problema del delay en la medición de los encoders.
+\item	Ziegler-Nichols: para los motores no andaba bien por el delay variable, para el sistema total no lo podíamos implementar.
+\item	PID tuner: una vez estimado el sistema da buenos resultados.
+\item	Discretización del PID: el Tf era FUNDAMENTAL para el sistema completo.
+\item	Identificación del sistema completo.
+\item	Hipótesis simplificativas.
+\item	Controlador final.
+\end{itemize}
+
+
+\section{Objetivos de la propuesta}
+
+\begin{itemize}
+\item Desarrollar e implementar un robot seguidor de linea.
+\item Identificación del sistema.
+\item Implementar un controlador PID discreto: efectos de la acción derivativa y algunas cuestiones practicas.
+
+\end{itemize}
+
+
+Respuesta escalón motores
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=15cm]{./imagenes/resp_escalon_motores}
+\end{figure}
+Motor A:
+\begin{equation}
+M_a(s)= \frac{7075.3 e^{-0.013s}}{(s+9.631)(s+67.5)}
+\end{equation}
+Controlador A:
+\begin{equation}
+C_a(s)= \frac{  19.243 (s-11.74)}{s}
+\end{equation}
+
+
+Motor B
+\begin{equation}
+M_b(s)= \frac{5042.1 e^{-0.013s}}{(s+9.988) (s+45.48)}
+\end{equation}
+
+Controlador B
+
+\begin{equation}
+C_b(s)= \frac{ 18.68 (s-10.93)}{s}
+\end{equation}
+
+
+Se ajustaron ambos motores para que con el controlador tengan una respuesta identica, la respuesta a lazo cerrado es:
+\begin{figure}[h]
+\centering
+\includegraphics[width=15cm]{./imagenes/resp_escalon_motores_controlados}
+\end{figure}
+
+
+\section{Modelo cinemático}
+
+Esta parte fue sacada del archivo "Ideas para el modelado del robot.docx"
+
+Tomando en cuenta [1], si modelamos la línea detectada como una recta, la situación geométrica del problema se asemeja a la mostrada en la figura \ref{fig:sistema1}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/sistema1.png}
+\caption{Gráfico de la línea a seguir y del robot según [1].}
+\label{fig:sistema1}
+\end{figure}
+
+
+Las ecuaciones de velocidad para este problema según [1] son:
+
+\begin{equation}
+\dot{s}=v \cos (\theta - \Psi)
+\end{equation}
+
+\begin{equation}
+\dot{d}=v \sin (\theta - \Psi)
+\end{equation}
+
+\begin{equation}
+\dot{\theta}=\omega  
+\end{equation}
+
+Donde v y $\omega$ son las velocidades lineal y angular del punto medio entre las ruedas, C. Si los motores se mueven a velocidades $\omega_R$ y $\omega_L$, estás velocidades son ([2]):
+
+\begin{equation}
+v=\frac{r(\omega _R + \omega _L)}{2}
+\end{equation}
+
+
+\begin{equation}
+\vert \omega \vert	=\frac{ \vert r(\omega _R + \omega _L) \vert }{R}
+\end{equation}
+
+Donde R es la distancia entre las ruedas. 
+En nuestro problema la segunda línea no estaría y no se tendría la información de la distancia a la recta d, sino la distancia entre el centro de la línea de sensores y el punto de intersección entre la línea de sensores y la recta a seguir, llamado e.  La situación nuestra se asemeja más a lo mostrado en la figura \ref{fig:carrito1}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/carrito1.png}
+\caption{Esquema del robot sobre la línea a seguir (azul). La línea roja representa la línea de sensores, e es la distancia medida entre el centro de los sensores y la intersección de la recta a seguir con la línea de los sensores, y $\beta $ es el ángulo entre la línea a seguir y el eje central del robot}
+\label{fig:carrito1}
+\end{figure}
+
+Tomando las ecuaciones anteriores como referencia, las velocidades en módulo serían:
+
+\begin{equation}
+\dot{e}=v \tan(\beta)
+\end{equation}
+
+\begin{equation}
+\dot{\beta}=\omega
+\end{equation}
+
+Dado que sólo poseemos la medición de e, se propone la siguiente estrategia para la medición del ángulo. Suponemos que el punto centro entre las dos ruedas se mantiene siempre sobre la línea a seguir. Bajo esta suposición, podemos calcular $\beta $ por trigonometría:
+
+\begin{equation}
+\tan(\beta)=\frac{e}{l}
+\end{equation}
+Como l es fijo, la medición de e puede traducirse en una medición del ángulo. Así, podríamos buscar minimizar el ángulo para alinear el robot con la pista. Como la medición se hace suponiendo que C está sobre la línea, si el robot no está centrado respecto a la pista el cálculo del ángulo va a indicar que hay error (a pesar de que en la realidad estén paralelos los ejes), por lo que al llevar a cero el $ \beta $ medido de esta manera se termina garantizando que el robot esté centrado respecto a la pista.
+Bajo estas simplificaciones, nos basta con mirar el comportamiento del ángulo:
+
+\begin{equation}
+\dot{\beta}=\vert \omega \vert	=\frac{ \vert r(\omega _R + \omega _L) \vert }{R}
+\end{equation}
+
+Como sólo nos interesa la diferencia entra velocidades angulares del motor, se puede mantener v constante tomando:
+
+\begin{equation}
+\omega _R = \omega _{fijo} +\Delta \omega
+\end{equation}
+
+\begin{equation}
+\omega _L = \omega _{fijo} -\Delta \omega
+\end{equation}
+
+Esto disminuiría el problema a una sola señal de control,$\Delta \omega$ , y disminuiría los efectos alineales influyendo sobre $\dot{e} $ sin embargo, como no se está tomando en cuenta la dinámica de e, no se tiene claro si esta restricción es necesaria. Se necesitaría profundizar en el análisis para poder asegurarlo.
+
+\section{Radio de giro}
+Cuando el robot gira siguiendo una curva la disposición es como se muestra en la siguiente figura:
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/carrito_girando.png}
+\caption{esquema del robot girando.}
+\label{fig:girando}
+\end{figure}
+
+En este caso la velocidad del punto  C (punto medio entre las dos ruedas del robot) tiene una componente tangencial, v, y una componente de giro, $\omega$, dadas por:
+
+\begin{equation}
+v =\frac{r(\omega _R + \omega _L) }{2}=r \omega _{fijo}
+\end{equation}
+
+\begin{equation}
+\omega =\frac{r(\omega _R - \omega _L) }{2}= \frac{ 2 r \Delta \omega} {R}
+\end{equation}
+
+Como la relación entre ambas magnitudes es:
+
+
+\begin{equation}
+v=R_{giro} \omega
+\end{equation}
+
+Obtenemos:
+\begin{equation}
+\Delta \omega= \frac{\omega _{fijo} R}{R_{giro}}  
+\end{equation}
+
+Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$ . Si definimos que $\omega _{fijo}=300 rpm $, para obtener un radio de giro mínimo de 1,5 veces R necesitaríamos $\Delta \omega =100 rpm $, mientras que para uno igual a R necesitaríamos $\Delta \omega =150 rpm $.
+
+
+\section{Ensayo al Escalón}
+
+En función de lo analizado anteriormente, podemos pensar que si el robot arranca alineado con una línea recta, y manteniendo la restricción de v constante, entonces la planta se comporta como un sistema cuya entrada es $\Delta \omega$ y su salida $\beta $, gobernado por la ecuación:
+
+\begin{equation}
+\dot{\beta}= \frac{2r\Delta\omega}{R} 
+\label{eq:sys_tot_teo} 
+\end{equation}
+
+Para realizar el ensayo al escalón se debería empezar con $\Delta \omega = \beta = \theta=0$  y luego cambiar $\Delta \omega$  abruptamente a un valor final ($\Delta \omega$  es el escalón de entrada) midiendo el valor de $\beta$ obtenido. Físicamente esto implica que el robot debe empezar andando a velocidad constante, perfectamente alineado con la línea, y luego girar hasta perder la línea (más allá de este punto no tiene sentido seguir porque se pierde la medición).
+Si el cambio de velocidad de los motores fuese automático, el robot giraría siguiendo una circunferencia perfecta como se ve a continuación:
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/carrito_Ensayo_escalon.png}
+\caption{Trayectoria seguida por el robot si empieza a girar a $\Delta \omega $ constante (verde) arrancando inicialmente alineado con la línea (gris).}
+\label{fig:carritoEsc}
+\end{figure}
+Lo que nos interesa es saber cuánto tiempo transcurre hasta que pierde la línea. Dicho punto sería cuando el último sensor de la derecha está sobre la línea verde. Si la distancia entre el eje central del robot y éste LED es $d_1$, entonces el LED se desplaza siguiendo una trayectoria circular de radio $R_{giro}$+$d_1$ …..
+Terminar de poner ideas para el cálculo
+Borrador:
+
+
+\section{Ensayo escalón carrito implementación}
+
+Necesidad de que el sistema sea lineal, esta es la respuesta de los motores en función de las RPM de entrada:
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/prueba_linealidad}
+\caption{el error medio cuadrático del ajuste de la recta es de 2.0624. REVISAR ESTO; NO TIENE SENTIDO EL EJE Y, en otra imagen parece la palabra "frecuencia de giro" pero no tiene sentido.}
+\label{fig:prueba_linealidad}
+\end{figure}
+
+Las consideración antes descriptas son válidas dentro de la región de linealidad del sistema. Como se vió anteriormente, es necesario que el dispositivo se encuentre centrado sobre la linea y moviendose a velocidad constante. 
+
+El objetivo de esta etapa es obtener el modelo del sistema; Dadas algunas complicaciones practicas, se implemento un controlador proporcional ajustado experimentalmente para que las hipótesis de que el vehiculo se encuentre centrado sobre la linea y moviendose sean lo mas "validas posibles". 
+
+Un ensayo modelo se muestra a continuacion:
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/resp_escalon_sys_total}
+\caption{El circulo marca cuando se desactiva el control y el sistema comienza a trabajar en lazo abierto. En esta caso $\Delta \omega=-50 $ RPM}
+\label{fig:ens_esc_syst}
+\end{figure}
+
+Para un conjunto de estos ensayos se estimo el siguiente sistema:
+\begin{equation}
+Sys_{tot}= \frac{0.028934}{s}  
+\label{eq:sys_tot_est}
+\end{equation}
+
+De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que $\frac{2r}{R}=0.028934 $ siendo que los parámetros medidos son $r=1.5cm$ y $R=16cm$, lo cual da $\frac{r}{R}=0.09375 $. Esta discrepancia no se pudo explicar aún.   
+
+\section{Sistema total y control}
+
+Si se parte de la suposición de que los motores se comportan de manera semejante, el diagrama del sistema total resulta:
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/sistema_total}
+\caption{}
+%\label{}
+\end{figure}
+
+
+A la hora de implementar el control se encontraron varios inconvenientes.... Poner Z-N, problemas de rozamiento y de inestabilidad; falta de linealidad a bajas RPM
+
+Referencias
+[1]: “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.
+[2]: “Robotics: Modelling, Planning and Control”, Siciliano, Sciavicco, Villani y Oriolo.
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+\section{BIBLIOGRAFÍA ORIENTATIVA}
+
+Paginas
+\begin{itemize}
+\item http://www.nongnu.org/avr-libc/
+\item https://www.microchip.com/webdoc/AVRLibcReferenceManual/index.html
+\item http://www.microchip.com/mplab/mplab-x-ide
+\item https://garretlab.web.fc2.com/en/arduino/inside/index.html
+\end{itemize}
+%\nocite{*}  % Es para agregar toda la bibliografia de manera indiscriminada. 
+\bibliographystyle{ieeetr}
+%\nocite{PainaCareli}
+%\nocite{nvidia2011nvidia}
+%\nocite{bradski2008learning}
+%\nocite{bishop2006pattern}
+%\nocite{Stereolabs}
+%\nocite{quigley2009ros}
+%\nocite{jetson}
+%\nocite{scaramuzza2011visual}
+%\nocite{fraundorfer2012visual}
+
+
+%\bibliography{biblioteca_plan}
+
+%\begin{thebibliography}{X}
+%\bibitem{Paina}Auat Cheein, F. A., Steiner, G., Perez Paina, G., \& Carelli, R. (2010). Aplicación de un EIF-SLAM en entornos agrícolas basado en detección de troncos de árboles.
+%\bibitem{Farmers}Bergerman, M., Maeta, S. M., Zhang, J., Freitas, G. M., Hamner, B., Singh, S., \& Kantor, G. (2015). Robot farmers: Autonomous orchard vehicles help tree fruit production. IEEE Robotics \& Automation Magazine, 22(1), 54-63.
+%
+%%\bibitem{libros} Salazar, M.G. and Barahona, M.L. (2017). Methods in Engineering. Prentice Hall, Englewood Cliffs, NJ, USA.
+%%\bibitem{revistas}Choleski,   R.L.   and   Kutta,   S.H.   (1982).   Reduced   noise and quadratic problem. Eng., v. 8, n. 3, p. 409-428.
+%%\bibitem{congreso}Choleski,   R.L.   and   Kutta,   S.H.   (2002). Optimum design. Proceeding Electronic Congress, New York, May. % conferencias y seminarios
+%%\bibitem{Tesis} Marcos,  A.  (2003). Evaluación de sistemas dinámicos.  Tesis doctoral, Universidad Nacional de Colombia. %o disertasiones
+%%\bibitem{documento_tecnico} Marcos, A. (2004). Respuesta de modelos no lineales. Reporte Técnico Report B5875, Offshore Technology Research Center, USA.% o repores
+%\end{thebibliography}
+
+
+
+
+\end{document}
