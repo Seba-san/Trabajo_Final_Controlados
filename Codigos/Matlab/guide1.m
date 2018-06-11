@@ -22,7 +22,7 @@ function varargout = guide1(varargin)
 
 % Edit the above text to modify the response to help guide1
 
-% Last Modified by GUIDE v2.5 10-Nov-2016 17:08:08
+% Last Modified by GUIDE v2.5 11-Jun-2018 17:53:51
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -67,7 +67,7 @@ try
 end
 handles.tmr = timer(...
     'ExecutionMode', 'fixedRate', ...       % Run timer repeatedly
-    'Period', 100e-3, ...                        % Initial period is 1 sec.
+    'Period', 5e-3, ...                        % Initial period is 1 sec.
     'TimerFcn', {@TmrFcn,handles.guifig}); % Specify callback function
 % handles.tmr = timer('ExecutionMode', 'fixedRate','Period', 1,'TimerFcn', {@TmrFcn,handles.guifig});
 guidata(handles.guifig,handles);    %Guarda la variable en handles
@@ -79,28 +79,46 @@ InfoHard=instrhwinfo('serial');%Busco cuál puerto tengo conectado con esta instr
 %En InfoHard.SerialPorts me guarda celdas con los puertos disponibles. Uso
 %la primer celda y chau.
 handles.s=InicializacionSerial(InfoHard.SerialPorts{1},2e6);
+%Acomodar!
+Env_instruccion(s,'PWM',[10 10]);%Esto es solo par ano modificar el código del nano $.$
+Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
+
 % handles.s.BytesAvailableFcnMode = 'terminator';
 % handles.s.BytesAvailableFcn = @TramaDisponible;
 % handles.s.Terminator='CR';%Configuro que el caracter de finalización sea el CR
 % fopen(handles.s);
 
-EscribirSerial(handles.s,[254 0]);%Le indico al micro que desactive el controlador
+%EscribirSerial(handles.s,[254 0]);%Le indico al micro que desactive el controlador
 set(handles.setwd,'string','Set PWM');
 
 handles.actualizar=1;
 
-handles.w=zeros(200,1);
-% handles.u=zeros(200,1);
+handles.wA=zeros(200,1);
+handles.wB=zeros(200,1);
+handles.beta=zeros(200,1);
+
+handles.Fs=200;
+% handles.tiempo=(0:1/Fs:199/Fs)';
+handles.ind=1:200;
 
 axes(handles.axes1);
-figw=plot(handles.w);        %Guardo los datos del grafico en la variable fig
+figb=plot(handles.beta);        %Guardo los datos del grafico en la variable fig
 grid on;        %ploteamos al ppio y dejamos el handle
 % ylim([-100,4e3])
-xlim([0,200]);
+xlim([-1,3]);
+ylabel('Ángulo respecto a la pista (rad)');
+xlabel('Número de Muestra');
+title('Ángulo respecto a la pista en Tiempo Real')
+
+axes(handles.axes2);
+figw=plot(handles.ind,handles.wA,handles.ind,handles.wB);        %Guardo los datos del grafico en la variable fig
+grid on;        %ploteamos al ppio y dejamos el handle
+% ylim([-100,4e3])
+xlim([0,900]);
 ylabel('Velocidad Angular (rpm)');
 xlabel('Número de Muestra');
 title('Velocidad Angular en Tiempo Real')
-    
+
 % axes(handles.axes2);
 % figu=plot(handles.u);        %Guardo los datos del grafico en la variable fig
 % grid on;        %ploteamos al ppio y dejamos el handle
@@ -110,6 +128,7 @@ title('Velocidad Angular en Tiempo Real')
 % xlabel('Número de Muestra');
 % title('Señal de Control en Tiempo Real')
 
+handles.figb=figb;
 handles.figw=figw;
 % handles.figu=figu;
 guidata(hObject, handles);  %Guarda las variables en handles
@@ -120,23 +139,42 @@ guidata(hObject, handles);  %Guarda las variables en handles
 % END USER CODE
 
 %INTENTO DE USAR INTERRUPCION POR SERIAL
-function TramaDisponible(obj,event) %No me anda :'(
-%Cambie el encabezado para ver si anda que se interrumpa por recepción en
-%vez de por timer
+% function TramaDisponible(obj,event) %No me anda :'(
+% %Cambie el encabezado para ver si anda que se interrumpa por recepción en
+% %vez de por timer
+% handles=guidata(handles);   %carga las variables
+
+
+%Funcion del TIMER (se ejecuta con el periodo del timer)
+function TmrFcn(src,event,handles)
 handles=guidata(handles);   %carga las variables
 
-w2=handles.w;
-dato=fscanf(obj,'%f');%Lee el buffer. '%f' le indica que me lo convierta a float
-if length(dato)>0 %Esto lo pongo por si llegara a leer basura, que creo que
-                  %ahí lo convierte en un elemento vacío (al menos así
-                  %funciona str2num).
-    w2(1:199)=w2(2:200);
-    w2(200)=dato;
+beta=handles.beta;
+wA=handles.wA;
+wB=handles.wB;
+
+datoBeta=fscanf(obj,'%f');%Lee el buffer. '%f' le indica que me lo convierta a float
+datowA=fscanf(obj,'%f');
+datowB=fscanf(obj,'%f');
+if length(datoBeta)>0 %Esto lo pongo por si llegara a leer basura, que creo que
+                      %ahí lo convierte en un elemento vacío (al menos así
+                      %funciona str2num).
+    beta(1:199)=beta(2:200);
+    beta(200)=datoBeta;
     if handles.actualizar==1
-        set(handles.figw,'YData',w2);    %Cambio los datos del eje Y del objeto handles.fig (cambia el grafico)
+        set(handles.figb,'YData',beta);%Cambio los datos del eje Y del objeto handles.fig (cambia el grafico)
     end    
 end
-handles.w=w2;
+if length(datowA)>0 && length(datowB)>0
+    wA(1:199)=wA(2:200);
+    wA(200)=datowA;
+    wB(1:199)=wB(2:200);
+    wB(200)=datowB;
+    if handles.actualizar==1
+        set(handles.figw,'YData',[wA wB]);    %Cambio los datos del eje Y del objeto handles.fig (cambia el grafico)
+    end    
+end
+handles.beta=beta;handles.wA=wA;handles.wB=wB;
 guidata(handles.guifig,handles);
 
 %Funcion del TIMER (se ejecuta con el periodo del timer)
@@ -305,3 +343,10 @@ else
     handles.actualizar=0;
 end
 guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function figure1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called

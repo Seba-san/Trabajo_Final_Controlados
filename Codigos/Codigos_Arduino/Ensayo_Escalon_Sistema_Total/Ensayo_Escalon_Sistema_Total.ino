@@ -29,7 +29,7 @@ float wA[N],wB[N];//Mediciones de velocidad ang deseada
 int contador = 0, contador2 = 0, parar = 0,contadorStop=0,MaxStop=20;//MaxStop indica que si durante 20 muestras seguidas no detecta la línea tiene que detenerse
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
-int controlador = 1, girar=0,grabar=0;
+int controlador = 0, girar=0,grabar=0;
 int softprescaler=0;//Lo uso para bajar la frec de muestreo de la señal de salida
 
 // #   #   #   # Variables
@@ -141,6 +141,11 @@ void loop() { //$3
   if (bitRead(Bandera, 5)) {
     bitWrite(Bandera, 5, 0);
     medirBeta();//Actualizo la medición de ángulo
+  //Serial.println(freqA);
+    EnviarTX_online(beta);
+    EnviarTX_online(freqA);
+    EnviarTX_online(freqB);
+    
     softprescaler++;
     if (softprescaler==4){//Tomo una de cada 4 muestras para una frec de muestreo del PID total de 50 Hz (PID motores a 200 Hz)
         softprescaler=0;
@@ -155,13 +160,6 @@ void loop() { //$3
         set_pointB = wref + dw[2]*(wref/350);//*(wref/500.0);
       }
     }
-    //$.$
-//    Serial.print(dw[2]);
-//    Serial.print(" ");
-//    Serial.print(beta);
-//    Serial.print(" ");
-//    Serial.println(byteSensor,BIN);
-//    
     PID_offline_Motores();
     if (parar == 1) { //Perdí la línea
       controlados1.modoStop();//Paro los motores, pero sigo midiendo
