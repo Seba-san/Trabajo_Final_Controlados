@@ -58,9 +58,9 @@ unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y par
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
-float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
-float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
-float Parametros[] = {192.6200,-192.5058,0,1,0};//Bastante suave:{44.0414,-43.9542,0,1,0};//{200,0,0,0,0};//{160.4821,-71.7003,0,1,0}; //PID del sistema total
+float ParametrosA[] = {0.053493,-0.050442,0,1,0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
+float ParametrosB[] = {0.054997,-0.052071,0,1,0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
+float Parametros[] = {126.5571,-252.6673,126.1102,2,-0.99999};//{192.6200,-192.5058,0,1,0};//Bastante suave:{44.0414,-43.9542,0,1,0};//{200,0,0,0,0};//{160.4821,-71.7003,0,1,0}; //PID del sistema total
 
 volatile float freqA;
 volatile float freqB;
@@ -139,7 +139,10 @@ void loop() { //$3
   if (bitRead(Bandera, 5)) {
     bitWrite(Bandera, 5, 0);
     medirBeta();//Actualizo la medición de ángulo
-    Serial.println(beta,DEC);
+    Serial.println(byteSensor,BIN);
+    Serial.println(freqA,DEC);
+    Serial.println(freqB,DEC);
+    
     if (controlador==1 && contador<n0 && girar==1) {
       PID_total();
       set_pointA = wref - dw[2];
@@ -195,7 +198,7 @@ void loop() { //$3
               addr = addr + 4;//Sumo 4 porque la variable es float
               EEPROM.put(addr, wB[ind]);
               addr = addr + 4;
-              Serial.println(ind,DEC);
+            //  Serial.println(ind,DEC);
             }
           }
         }
