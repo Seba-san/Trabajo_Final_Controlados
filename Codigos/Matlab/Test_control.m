@@ -28,25 +28,28 @@ flushinput(s);
 veces_=0;
 while (veces_<veces)
    %beta(i)=ConversionSensor(str2double(fscanf(s)),0);
-   flushinput(s);
+   
    beta(i)=str2double(fscanf(s));
     wA(i)=str2double(fscanf(s));
     wB(i)=str2double(fscanf(s));
-    
+   flushinput(s); 
     
     m1=1:1:i;m2=i+1:1:N;
-    subplot(311)
+    ax1=subplot(311);
+    cla(ax1);
     plot(m1,beta(1:i),'.','color',[~a 0 a]); hold on;plot(m2,beta(i+1:N),'.','color',[a 0 ~a]); hold off;ylim([-1 3])
     ylabel('beta')
     %     ylim([limite_inf limite_sup]);
-    subplot(312)
+    ax2=subplot(312);
+    cla(ax2);
     plot(m1,wA(1:i),'.','color',[~a 0 a]); hold on;plot(m2,wA(i+1:N),'.','color',[a 0 ~a]); hold off;ylim([0 1000])
-    subplot(313)
+    ax3=subplot(313);
+    cla(ax3);
     plot(m1,wB(1:i),'.','color',[~a 0 a]); hold on;plot(m2,wB(i+1:N),'.','color',[a 0 ~a]); hold off;ylim([0 1000])
 %     plot(m1,wA(1:i),'.b'); hold on;plot(m1,wB(1:i),'.k');plot(m2,wA(i+1:N),'.','color',[a 0 ~a]);
 %    ylabel('wA - wB');plot(m2,wB(i+1:N),'.','color',[a 0 ~a]); hold off; ylim([0 900]);
 %    legend('wA','wB')
-    pause(0.001)
+    pause(0.0005)
     i=i+1;
     if (i>(N-1) ) 
         i=2;a=~a;
