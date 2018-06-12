@@ -6,7 +6,6 @@ fclose(instrfindall);       %cierra todos los puertos activos y ocultos
 %clear all;close all;clc
 disp('Puerto Cerrado')
 %%
-Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test(s)
 % Env_instruccion(s,'PWM',[50 100]); 
@@ -28,8 +27,9 @@ try
 %     close(1)
 end
 figure(1)
- flushinput(s);
- veces_=0;
+Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
+flushinput(s);
+veces_=0;
 while (veces_<veces)
     %figure(1)
     
@@ -62,12 +62,12 @@ while (veces_<veces)
         
     end
     
-    if i==N/2
-        RPMn(i)=RPM2;
-        Env_instruccion(s,'setpoint',[RPM2,RPM2]); 
-    else
-         RPMn(i)= RPMn(i-1);
-    end
+%     if i==N/2
+%         RPMn(i)=RPM2;
+%         Env_instruccion(s,'setpoint',[RPM2,RPM2]); 
+%     else
+%          RPMn(i)= RPMn(i-1);
+%     end
     
 end
 Env_instruccion(s,'stop'); 
