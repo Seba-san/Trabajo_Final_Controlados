@@ -52,16 +52,16 @@ class Comunicacion
 {
 
   private:
-  int direccion;
+  int *direccion_int;
+  
 
   public:
-  void Iniciar(int direccion);
-  void modificar(int valor);
-  void modificar(float valor);
-  void modificar(long valor);
+   Comunicacion(int *_direccion);
+   
+  void modificar(int *valor);
+  
   void enviar();
-  
-  
+  void iniciar();
   };
 
 #endif

@@ -357,25 +357,43 @@ if (interrupciones){//Interrupciones por estado en pin para lectura de los encod
   }
 }
 // ############################################### COMUNICACION
-Comunicacion::Iniciar(int *_direccion){
-  direccion=_direccion; // Falta enviar la info a la pc
+ Comunicacion::Comunicacion(int *_direccion){
+  direccion_int=_direccion; 
   }
 
-Comunicacion::modificar(int valor)
+void Comunicacion::modificar(int *valor)
 {
-*direccion=valor;
+*direccion_int=valor;
 }
-Comunicacion::modificar(float valor)
+
+
+
+
+
+void Comunicacion::enviar()
 {
-*direccion=valor;
+
+ int a=*direccion_int;
+ Serial.println(a,DEC);
 }
-Comunicacion::modificar(long valor)
+void Comunicacion::iniciar()
 {
-*direccion=valor;
+  int a=direccion_int;
+ Serial.println(a,DEC);
 }
-Comunicacion::enviar()
+
+/*
+void Comunicacion::enviar()
 {
- Serial.println(*direccion,DEC);
+
+ float a=*direccion_flo;
+ Serial.println(a,DEC);
 }
-  
+void Comunicacion::iniciar()
+{
+  float a=direccion_flo;
+ Serial.println(a,DEC);
+}
+*/
+
 
