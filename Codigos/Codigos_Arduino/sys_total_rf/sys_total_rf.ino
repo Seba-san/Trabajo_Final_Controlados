@@ -139,6 +139,8 @@ void loop() { //$3
   if (bitRead(Bandera, 5)) {
     bitWrite(Bandera, 5, 0);
     medirBeta();//Actualizo la medición de ángulo
+
+    
     Serial.println(byteSensor,BIN);
     Serial.println(freqA,DEC);
     Serial.println(freqB,DEC);

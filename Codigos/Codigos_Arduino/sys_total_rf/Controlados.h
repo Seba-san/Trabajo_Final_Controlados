@@ -52,10 +52,10 @@ class Comunicacion
 {
 
   private:
-  int direccion;
+  unsigned char direccion;
 
   public:
-  void Iniciar(int direccion);
+  void Iniciar(unsigned char direccion);
   void modificar(int valor);
   void modificar(float valor);
   void modificar(long valor);

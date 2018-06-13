@@ -52,13 +52,21 @@ class Comunicacion
 {
 
   private:
-  int *direccion_int;
-  
+  int *direccion_int,tipo=0;  
+  float *direccion_flo;
+  long *direccion_long;
+  unsigned char *direccion_char;
 
   public:
    Comunicacion(int *_direccion);
+   Comunicacion(float *_direccion);
+   Comunicacion(long *_direccion);
+   Comunicacion(unsigned char *_direccion);
    
   void modificar(int *valor);
+  void modificar(float *valor);
+  void modificar(long *valor);
+  void modificar(unsigned char *valor);
   
   void enviar();
   void iniciar();

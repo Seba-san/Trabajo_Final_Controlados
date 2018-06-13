@@ -358,29 +358,88 @@ if (interrupciones){//Interrupciones por estado en pin para lectura de los encod
 }
 // ############################################### COMUNICACION
  Comunicacion::Comunicacion(int *_direccion){
-  direccion_int=_direccion; 
+  direccion_int=_direccion; tipo=0;
   }
-
 void Comunicacion::modificar(int *valor)
 {
 *direccion_int=valor;
 }
-
-
-
-
-
 void Comunicacion::enviar()
 {
-
- int a=*direccion_int;
+  int a;float b;long c; unsigned char d;
+  switch (tipo){
+  case 0:
+   a=*direccion_int;
  Serial.println(a,DEC);
+ break;
+ case 1:
+  b=*direccion_flo;
+ Serial.println(b,DEC);
+ break;
+ case 2:
+  c=*direccion_long;
+ Serial.println(c,DEC);
+ break;
+ case 3:
+  d=*direccion_char;
+ Serial.println(d,DEC);
+ break;
+ default:
+ break;
+}
 }
 void Comunicacion::iniciar()
 {
-  int a=direccion_int;
+int a;
+  switch (tipo){
+  case 0:
+   a=direccion_int;
  Serial.println(a,DEC);
+ break;
+ case 1:
+   a=direccion_flo;
+ Serial.println(a,DEC);
+ break;
+ case 2:
+   a=direccion_long;
+ Serial.println(a,DEC);
+ break;
+ case 3:
+   a=direccion_char;
+ Serial.println(a,DEC);
+ break;
+ default:
+ break;
+  }
 }
+
+Comunicacion::Comunicacion(float *_direccion){
+  direccion_flo=_direccion; tipo=1;
+  }
+Comunicacion::Comunicacion(long *_direccion){
+  direccion_long=_direccion; tipo=2;
+  }
+  Comunicacion::Comunicacion(unsigned char *_direccion){
+  direccion_char=_direccion; tipo=3;
+  }
+
+/*
+void Comunicacion::modificar(float *valor)
+{
+*direccion_flo=valor;
+}
+void Comunicacion::modificar(long *valor)
+{
+*direccion_long=valor;
+}
+void Comunicacion::modificar(unsigned char *valor)
+{
+*direccion_char=valor;
+}
+
+*/
+
+
 
 /*
 void Comunicacion::enviar()
