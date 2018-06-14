@@ -9,6 +9,8 @@
 #define ins_test 249
 #define ins_setpoint 248
 #define ins_resultado_ensayo 245 //Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
+#define ins_modoStop 244
+#define ins_modoAdelante 243
 
 //Variables Ensayo Escalón Offline
 extern int enviar_datos;

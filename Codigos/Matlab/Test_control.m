@@ -6,7 +6,7 @@ fclose(instrfindall);       %cierra todos los puertos activos y ocultos
 %clear all;close all;clc
 disp('Puerto Cerrado')
 %%
-%Env_instruccion(s,'stop')}
+%Env_instruccion(s,'stop')
 Comunic_test(s)
 Env_instruccion(s,'PWM',[0 0]); 
 setpointA=350;setpointB=setpointA;

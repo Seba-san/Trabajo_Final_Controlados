@@ -29,7 +29,7 @@ float wA[N],wB[N];//Mediciones de velocidad ang deseada
 int contador = 0, contador2 = 0, parar = 0,contadorStop=0,MaxStop=20;//MaxStop indica que si durante 20 muestras seguidas no detecta la línea tiene que detenerse
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
-int controlador = 0, girar=0,grabar=0;
+int controlador = 1, girar=0,grabar=0;
 int softprescaler=0;//Lo uso para bajar la frec de muestreo de la señal de salida
 
 // #   #   #   # Variables
@@ -116,6 +116,9 @@ void setup() { // $2
     controlados1.modoAdelante(); //Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
     //Escribir=0;// $.$ PARA NO ESCRIBIR AL PEDO LA EEPROM SI NO LA VOY A LEER
   }
+  //$.$
+  delay(2000);
+  controlados1.modoAdelante();
 }
 
 void loop() { //$3
