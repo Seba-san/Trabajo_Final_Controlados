@@ -2,7 +2,7 @@
 % Cargo todas las mediciones
 clc;clear all; close all;
 cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
-
+%%
 
 load('../../Mediciones/respuesta_escalon_motorB_10_40_180529195140.mat');
 wAm(:,1)=wA;PWMAm(:,1)=PWMA;tiempom(:,1)=tiempo;

@@ -109,6 +109,9 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
         case ins_resultado_ensayo://Instrucción 245: Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
           enviar_datos=1;
           break;
+           case ins_ack://Instrucción 244 ack
+          ack=true;
+          break;
         default://No hace nada si no recibe una instrucción válida
           break;}
     }

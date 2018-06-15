@@ -13,7 +13,7 @@ extern int soft_prescaler;
 extern int windup_top,windup_bottom,windup_top_dw,windup_bottom_dw;
 
 // Variables comunicaciones
-extern bool online, tx_activada;
+extern bool online, tx_activada,ack;
 
 
 extern void tic(void);
@@ -25,3 +25,5 @@ extern void EnviarTX(int cantidad,const char identificador, unsigned char *datos
 extern void EnviarTX_online(float);
 extern void EnviarTX_online(int);
 extern void EnviarTX_online(long);
+void transmitir (float datin);
+void transmitir_ini (unsigned char);

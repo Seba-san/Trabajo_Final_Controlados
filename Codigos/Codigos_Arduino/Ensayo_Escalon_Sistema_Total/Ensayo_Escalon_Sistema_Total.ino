@@ -29,13 +29,13 @@ float wA[N],wB[N];//Mediciones de velocidad ang deseada
 int contador = 0, contador2 = 0, parar = 0,contadorStop=0,MaxStop=1;//MaxStop indica que si durante 20 muestras seguidas no detecta la línea tiene que detenerse
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
-int controlador = 1, girar=1,grabar=1;
+int controlador = 1, girar=0,grabar=0;
 int softprescaler=0;//Lo uso para bajar la frec de muestreo de la señal de salida
 
 // #   #   #   # Variables
 unsigned char trama_activa = 0; //Lo pongo en unsigned char para que ocupe 1 byte (int ocupa 2)
 bool online;//Me indica si poner o no el identificador para la transmisión (online=true no lo transmite para ahorrar tiempo)
-bool tx_activada;//Me indica si transmitir o no.
+bool tx_activada,ack=false;//Me indica si transmitir o no.
 bool iniciar = false; // le dice al micro cuando puede iniciar.
 int PWMA; int PWMB; //Acá guardo los valores de nuevos de PWM que me mada Matlab para que actualice. La actualización efectiva se hace cuando tengo estos dos valores.
 volatile unsigned long cantOVerflowA = 0, cantOVerflowB = 0; //Variable que almacena la cantidad de veces que se desbordó el timer2 hasta que vuelvo a tener interrupción por pin de entrada.
@@ -43,7 +43,7 @@ volatile unsigned long cantOVerflowA = 0, cantOVerflowB = 0; //Variable que alma
 volatile unsigned long TCNT2anteriorA = 0, TCNT2anteriorB = 0; //Valor anterior del contador (para corregir la medición)
 volatile unsigned long TCNT2actualA = 0, TCNT2actualB = 0; //Almaceno el valor del timer para que no me jodan posibles actualizaciones.
 volatile unsigned long cantOVerflow_actualA = 0, cantOVerflow_actualB = 0; //Valor anterior del contador (para corregir la medición), correspondiente al TCNT2anterior.
-unsigned long aux[6];  // este es un buffer para enviar datos en formato trama, corresponde a la funcion "EnviarTX"
+float aux[6];  // este es un buffer para enviar datos en formato trama, corresponde a la funcion "EnviarTX"
 float  bufferVelA[2 * cantMarcasEncoder], bufferVelB[2 * cantMarcasEncoder]; //buffer donde almaceno las últimas velocidades calculadas.
 bool Motores_ON = false;
 int soft_prescaler = 0;
@@ -116,6 +116,7 @@ void setup() { // $2
     controlados1.modoAdelante(); //Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
     //Escribir=0;// $.$ PARA NO ESCRIBIR AL PEDO LA EEPROM SI NO LA VOY A LEER
   }
+ 
 }
 
 void loop() { //$3
@@ -163,9 +164,17 @@ void loop() { //$3
 //    Serial.println(byteSensor,BIN);
 //    
     PID_offline_Motores();
-    if (parar == 1) { //Perdí la línea
-      controlados1.modoStop();//Paro los motores, pero sigo midiendo
-    }
+aux[0]=1.2;
+aux[1]=1.3;
+aux[2]=1.4;
+
+
+EnviarTX(3,'t', aux);
+
+    
+   // if (parar == 1) { //Perdí la línea
+     // controlados1.modoStop();//Paro los motores, pero sigo midiendo
+   // }
     if (contador2 < D) {
       //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
       contador2++;
@@ -193,7 +202,7 @@ void loop() { //$3
         }
       }
       else {
-        controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
+      //  controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
         if (Escribir==1 && grabar==1) {//Grabo en la EEPROM
           Escribir=0;//No vuelve a grabar
           int addr = 0;

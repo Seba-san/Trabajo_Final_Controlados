@@ -41,30 +41,38 @@ void PID_total(void){//PID del sistema en su conjunto
 // Ver como mejorar sustancialmente esta funcion. Esta media fea.
 void EnviarTX(int cantidad,const char identificador, float *datos){ //  $8 ojo, datos es un puntero
  if (online==false && tx_activada==true){ 
-  Serial.println(0xFF,DEC); // inicio
+  //Serial.println(0xFF,DEC); // inicio
+  transmitir_ini(0xFF);
   Serial.println(cantidad,DEC);// cantidad de datos
   Serial.println(identificador);// identificador, se puede sacar, pero para fines debuggeros puede ayudar
   float a;
   for (int i=0;i<cantidad;i++){
     a=*(datos+i); // como datos es un puntero, necesito guardar en "a" el apuntador.
-    Serial.println(a,DEC);
+    transmitir(a);
+    //Serial.println(a,DEC);
   }
-  Serial.println(0xFE,DEC); // fin
+  //Serial.println(0xFE,DEC); // fin
+  transmitir_ini(0xFE);
  }
 }
 
 void EnviarTX(int cantidad,const char identificador, unsigned char *datos){ //  $8 ojo, datos es un puntero
  if (online==false && tx_activada==true){ 
-  Serial.println(0xFF,DEC); // inicio
-  Serial.println(cantidad,DEC);// cantidad de datos
-  Serial.println(identificador);// identificador, se puede sacar, pero para fines debuggeros puede ayudar
+  ack=false;
+  while(!ack){  Serial.println(0xFF,DEC);} // inicio
+  ack=false;
+  while(!ack){Serial.println(cantidad,DEC);}// cantidad de datos
+  ack=false;
+  while(!ack){Serial.println(identificador);}// identificador, se puede sacar, pero para fines debuggeros puede ayudar
+   ack=false;
   unsigned char a;
   for (int i=0;i<cantidad;i++){
     a=*(datos+i); // como datos es un puntero, necesito guardar en "a" el apuntador.
-    Serial.println(a,DEC);
+    while(!ack){Serial.println(a,DEC);
   }
   Serial.println(0xFE,DEC); // fin
  }
+}
 }
 
 void EnviarTX_online(float var){
@@ -85,6 +93,26 @@ void EnviarTX_online(long var){
   Serial.println(var,DEC);
   }
 }
+
+void transmitir (float datin){
+  ack=false;
+  while(ack==false){  
+  Serial.println(datin,DEC);
+  delayMicroseconds(100);
+  }  
+  
+}
+
+void transmitir_ini (unsigned char addler){
+  ack=false;
+  while(ack==false){  
+  Serial.println(addler,DEC);
+  delayMicroseconds(100);
+  }  
+}
+  
+  
+
 
 // ##################### Estas 2 funciones hacen los mismo que en matlab :-)
 void tic(){

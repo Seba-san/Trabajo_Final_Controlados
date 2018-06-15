@@ -24,13 +24,17 @@ while(255~=str2double(fscanf(s)))
         disp ('Esperando a que llegue el inicio')
     end
 end
-
-cantidad=str2double(fscanf(s));
-identificador=fgetl(s); % Hay que encontrar la forma de que se elimine el primer caracter que aparece
+Env_instruccion(s,'ack');
+flushinput(s);
+cantidad=str2double(fscanf(s))
+identificador=fgetl(s) % Hay que encontrar la forma de que se elimine el primer caracter que aparece
 datos=zeros(1,cantidad);
 tic;a=1;
 for i=1:cantidad
-    datos(i)=str2double(fscanf(s));    
+    datos(i)=str2double(fscanf(s));
+    i
+    Env_instruccion(s,'ack');
+    flushinput(s);
     t=toc;
     if t>a
         tic;
@@ -46,6 +50,7 @@ while(254~=str2double(fscanf(s)))
         disp ('Esperando a que llegue el fin')
     end
 end
+Env_instruccion(s,'ack');
 % Esto esta bajo prueba
 %flushinput(s);  %Vacia el buffer de entrada
 %flushoutput(s); %Vacia el buffer de salida

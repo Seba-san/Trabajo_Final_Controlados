@@ -9,18 +9,19 @@
 #define ins_test 249
 #define ins_setpoint 248
 #define ins_resultado_ensayo 245 //Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
-
+#define ins_ack 244
 //Variables Ensayo Escalón Offline
 extern int enviar_datos;
 
 // Variables para la comunicacion
-extern bool Motores_ON,tx_activada, online;
+extern bool Motores_ON,tx_activada, online,ack;
 extern unsigned char trama_activa;
 extern int PWMA,PWMB;
 extern float uA[3],uB[3];
 extern float set_pointA,set_pointB;
 extern float ParametrosA[5],ParametrosB[5];
 extern unsigned char estadoEncoder;
+extern bool ack;
 
 // Variables para interrupcion por Overflow
 extern int soft_prescaler,Bandera;
