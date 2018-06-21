@@ -101,7 +101,8 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
           trama_activa=1;
           break;
         case ins_test://Instrucción 249: codigo para exigir una respuesta preestablecida. Sirve para saber si hay conexion.
-          Serial.println(170,DEC);
+          Serial.write(170);
+          Serial.println(170,DEC);        
            break;
         case ins_setpoint://Instrucción 248: cambiar el valor del setpoint
           trama_activa=3;

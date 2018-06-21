@@ -54,7 +54,7 @@ float set_pointA, set_pointB; // Set_point esta en RPM
 float wref = 350; //Velocidad lineal del centro del robot.
 volatile float beta = 0; //Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3] = {0, 0, 0}, errorBeta[3] = {0, 0, 0}; //Variación de velocidad angular.
-unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
+volatile unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
 
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
@@ -158,13 +158,31 @@ void loop() { //$3
     //$.$
 //    Serial.print(dw[2]);
 //    Serial.print(" ");
-//    Serial.print(beta);
-//    Serial.print(" ");
-   Serial.println(byteSensor,BIN);
+  //Serial.println(byteSensor);
+  
+ // Serial.write(byteSensor);
+ /*byte addi;
+   addi= freqA*255.0/1000.0;
+    Serial.write(addi);
+    addi= freqB*255.0/1000.0;
+    Serial.println(addi);
+    */
+//freqB=freqB+500;
+  EnviarTx_blue();
+  /* byte addi=0;
+  
+  Serial.write(0xFF); // inicio
+  Serial.write(byteSensor);
+ addi= freqA*255.0/1000.0;
+  Serial.write(addi);
+ addi=freqB*255.0/1000.0;
+  Serial.write(addi);
+  */
+  
 //    
     PID_offline_Motores();
     if (parar == 1) { //Perdí la línea
-      controlados1.modoStop();//Paro los motores, pero sigo midiendo
+      //controlados1.modoStop();//Paro los motores, pero sigo midiendo
     }
     if (contador2 < D) {
       //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
@@ -193,7 +211,7 @@ void loop() { //$3
         }
       }
       else {
-        controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
+        //controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
         if (Escribir==1 && grabar==1) {//Grabo en la EEPROM
           Escribir=0;//No vuelve a grabar
           int addr = 0;

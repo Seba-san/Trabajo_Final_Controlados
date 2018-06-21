@@ -13,11 +13,11 @@ while a~=inicio
 a=LeerSerial(s);
 end
 dato=zeros(1,CantdeBytes);
-for i=1:CantdeBytes-1
+for i=1:CantdeBytes
 dato(i)=LeerSerial(s);
 end
 % Descomprecion
-dato(2)=dato(2)*1000/255;
-dato(3)=dato(3)*1000/255;
+dato(2)=dato(2)*1000.0/255.0;
+dato(3)=dato(3)*1000.0/255.0;
 
 end

@@ -86,6 +86,21 @@ void EnviarTX_online(long var){
   }
 }
 
+
+void EnviarTx_blue(void){ 
+  // Esta funcion esta pensada para utilizar modulos bluetooth HC-05. Los modulos tienen un ancho de banda REAL de 8000bps, aunque se pueda comunicar por rafagas (gracias al buffer)
+  // de mayor velocidad. Por lo tanto, como maximo se pueden enviar aproximadamente 4 bytes cada 5ms, por eso se usa Serial.write n vez de Serial.print;
+  byte addi=0;
+  if (online==true && tx_activada==true){
+  Serial.write(0xFF); // inicio
+  Serial.write(byteSensor);
+ addi=freqA*255.0/1000.0;
+  Serial.write(addi);
+ addi=freqB*255.0/1000.0;
+  Serial.write(addi);
+  }
+  }
+
 // ##################### Estas 2 funciones hacen los mismo que en matlab :-)
 void tic(){
     ticc=micros();

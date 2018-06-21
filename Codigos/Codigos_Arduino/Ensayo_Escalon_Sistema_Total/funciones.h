@@ -11,7 +11,7 @@ extern float set_pointA,set_pointB;// Set_point esta en RPM
 extern float ParametrosA[5],ParametrosB[5],Parametros[5];
 extern int soft_prescaler;
 extern int windup_top,windup_bottom,windup_top_dw,windup_bottom_dw;
-
+extern volatile unsigned char byteSensor;
 // Variables comunicaciones
 extern bool online, tx_activada;
 
@@ -25,3 +25,4 @@ extern void EnviarTX(int cantidad,const char identificador, unsigned char *datos
 extern void EnviarTX_online(float);
 extern void EnviarTX_online(int);
 extern void EnviarTX_online(long);
+extern void EnviarTx_blue(void);
