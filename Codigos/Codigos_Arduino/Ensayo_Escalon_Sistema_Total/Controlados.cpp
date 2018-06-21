@@ -258,7 +258,7 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
   else if (suma==8){beta=3;}//Si suma=8 es poque detecto línea de parada, así que le doy el valor de error
   else{
     aux=sumaPonderada/suma;//Potencial fuente de error: la división de enteros. $.$ Ver si es problema
-    beta=betaEnsayo[aux-2];
+    beta=-betaEnsayo[aux-2];
   }
   return beta;//Lo devuelvo como valor de salida
 }

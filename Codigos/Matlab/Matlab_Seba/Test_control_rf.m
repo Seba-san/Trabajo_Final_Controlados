@@ -13,7 +13,7 @@ disp('Puerto Cerrado')
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test_rf(s)
-% Env_instruccion(s,'PWM',[30 30]); 
+ Env_instruccion(s,'PWM',[30 30]); 
 % pause(1)
 
 % RPM=400; 
@@ -26,7 +26,7 @@ RPMA=zeros(1,N);
 RPMB=zeros(1,N);
 i=1;
 
-a=1;veces=1;
+a=1;veces=5;
 pause(1)
 limite_sup=1e3; %limite del grafico
 limite_inf=0;
@@ -40,7 +40,8 @@ while (veces_<veces)
    % Supongo [angulo][RPMA][RPMB]
     datos=DatoRx_rf(s);
     flushinput(s);
-    angulo(i)=datos(1);RPMA(i)=datos(2);RPMB(i)=datos(3);
+    beta=ConversionSensor(datos(1),0) ;
+    angulo(i)=beta;RPMA(i)=datos(2);RPMB(i)=datos(3);
     
     m1=1:1:i;m2=i+1:1:N;
     subplot(311)

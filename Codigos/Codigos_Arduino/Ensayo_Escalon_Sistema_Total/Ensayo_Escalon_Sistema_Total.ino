@@ -168,6 +168,8 @@ void loop() { //$3
     Serial.println(addi);
     */
 //freqB=freqB+500;
+//Serial.println(byteSensor,BIN);
+//Serial.println(byteSensor);
   EnviarTx_blue();
   /* byte addi=0;
   

@@ -94,9 +94,9 @@ void EnviarTx_blue(void){
   if (online==true && tx_activada==true){
   Serial.write(0xFF); // inicio
   Serial.write(byteSensor);
- addi=freqA*255.0/1000.0;
+ addi=freqA*255.0/1300.0;
   Serial.write(addi);
- addi=freqB*255.0/1000.0;
+ addi=freqB*255.0/1300.0;
   Serial.write(addi);
   }
   }

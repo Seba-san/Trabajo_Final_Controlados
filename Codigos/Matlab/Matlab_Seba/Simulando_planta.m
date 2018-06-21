@@ -1,4 +1,23 @@
 %%
+
+
+% Cargo todas las mediciones
+clc;clear all; close all;
+cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
+
+clc;clear all;
+load('../../Mediciones/180621171930respuesta_escalon_motores20_60_.mat');
+wAm.pri=wA;PWMAm.pri=PWMA;wBm.pri=wB;PWMBm.pri=PWMB;tiempom.pri=tiempo;
+load('../../Mediciones/180621181402respuesta_escalon_motores40_80_.mat');
+wAm.sec=wA;PWMAm.sec=PWMA;wBm.sec=wB;PWMBm.sec=PWMB;tiempom.sec=tiempo;
+
+wAm1.pri=wAm.pri-min(wAm.pri);
+wBm1.pri=wBm.pri-min(wBm.pri);
+wAm1.sec=wAm.sec-min(wAm.sec);
+wBm1.sec=wBm.sec-min(wBm.sec);
+PWMBm1.pri=PWMBm.pri-min(PWMBm.pri);PWMBm1.sec=PWMBm.sec-min(PWMBm.sec);
+PWMAm1.pri=PWMAm.pri-min(PWMAm.pri);PWMAm1.sec=PWMAm.sec-min(PWMAm.sec);
+%%
 % Cargo todas las mediciones
 clc;clear all; close all;
 cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
