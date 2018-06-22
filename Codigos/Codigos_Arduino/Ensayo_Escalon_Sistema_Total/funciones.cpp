@@ -93,10 +93,14 @@ void EnviarTx_blue(void){
   byte addi=0;
   if (online==true && tx_activada==true){
   Serial.write(0xFF); // inicio
+  //addi=PWMA*255.0/1000.0;
   Serial.write(byteSensor);
- addi=freqA*255.0/1300.0;
+  //Serial.write(addi);
+ addi=PWMB*255.0/500.0;
+ //addi=cont_A*255.0/1000.0;
   Serial.write(addi);
- addi=freqB*255.0/1300.0;
+ addi=(freqB-freqA)*255.0/500.0;
+ // addi=cont_B*255.0/1000.0;
   Serial.write(addi);
   }
   }

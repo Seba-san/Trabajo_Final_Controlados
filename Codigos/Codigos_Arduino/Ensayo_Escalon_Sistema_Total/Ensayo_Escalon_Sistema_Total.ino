@@ -29,7 +29,7 @@ float wA[N],wB[N];//Mediciones de velocidad ang deseada
 int contador = 0, contador2 = 0, parar = 0,contadorStop=0,MaxStop=20;//MaxStop indica que si durante 20 muestras seguidas no detecta la línea tiene que detenerse
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
-int controlador = 0, girar=0,grabar=0;
+int controlador = 1, girar=0,grabar=0;
 int softprescaler=0;//Lo uso para bajar la frec de muestreo de la señal de salida
 
 // #   #   #   # Variables
@@ -45,8 +45,8 @@ volatile unsigned long TCNT2actualA = 0, TCNT2actualB = 0; //Almaceno el valor d
 volatile unsigned long cantOVerflow_actualA = 0, cantOVerflow_actualB = 0; //Valor anterior del contador (para corregir la medición), correspondiente al TCNT2anterior.
 unsigned long aux[6];  // este es un buffer para enviar datos en formato trama, corresponde a la funcion "EnviarTX"
 float  bufferVelA[2 * cantMarcasEncoder], bufferVelB[2 * cantMarcasEncoder]; //buffer donde almaceno las últimas velocidades calculadas.
-bool Motores_ON = false;
-int soft_prescaler = 0;
+bool Motores_ON = false,controlador_motores=true;
+int soft_prescaler = 0,cont_A,cont_B,delta_cont;
 // Variables del PID
 float uA[3], uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3], errorB[3];
@@ -61,7 +61,7 @@ volatile unsigned char byteSensor;//Byte del sensor de línea. Sirve para debugg
 
 float ParametrosA[] = {0.053493,-0.050442,0,1,0};//Andando bien: {0.073817, -0.06814, 0, 1, 0};
 float ParametrosB[] = {0.054997,-0.052071,0,1,0};//{0.077848, -0.072512, 0, 1, 0};
-float Parametros[] = {126.5571,-252.6673,126.1102,2,-0.99999};//{160.6358,-317.8668,157.2313,1.9999,-0.99992};//{159.3639,-317.8766,158.5127,2,-0.99998};//{181.7336,-360.803,179.0695,2,-0.99998};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};////Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
+float Parametros[] = {200,0,0,0,0};//{126.5571,-252.6673,126.1102,2,-0.99999};//{160.6358,-317.8668,157.2313,1.9999,-0.99992};//{159.3639,-317.8766,158.5127,2,-0.99998};//{181.7336,-360.803,179.0695,2,-0.99998};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};////Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
 
 volatile float freqA;
 volatile float freqB;
@@ -141,6 +141,7 @@ void loop() { //$3
   if (bitRead(Bandera, 5)) {
     bitWrite(Bandera, 5, 0);
     medirBeta();//Actualizo la medición de ángulo
+    
     softprescaler++;
     if (softprescaler==1){//Ya no submuestreo//Tomo una de cada 4 muestras para una frec de muestreo del PID total de 50 Hz (PID motores a 200 Hz)
         softprescaler=0;
@@ -169,7 +170,12 @@ void loop() { //$3
     */
 //freqB=freqB+500;
 //Serial.println(byteSensor,BIN);
+//Serial.println(' ');
 //Serial.println(byteSensor);
+//Serial.println(' ');
+//Serial.print(cont_A);
+//Serial.print(' ');
+//Serial.println(cont_B);
   EnviarTx_blue();
   /* byte addi=0;
   

@@ -9,7 +9,7 @@ fclose(instrfindall);       %cierra todos los puertos activos y ocultos
 disp('Puerto Cerrado')
 %% Ensayo al escalon
 pause(4)
-PWM=10;
+PWM=1;
 Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
 %Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
@@ -23,24 +23,22 @@ wB=[];
 %Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos
 PWMA=[];   
 PWMB=[]; 
-PWM=300;
-dW=50;
-%Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
+PWM=40;
+Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
 % for i=1:PWM/5
 % Env_instruccion(s,'setpoint',[i*5 i*5])
 % pause(0.05)
 % end
-Env_instruccion(s,'setpoint',[PWM PWM]);
+%Env_instruccion(s,'setpoint',[PWM PWM]);
 pause(0.5);
 Comunic_test_rf(s)
 Env_instruccion(s,'online');
 flushinput(s);  %Vacia el buffer de entrada
 for i=1:N %Ojo con el tope que pone el nano
-    if i==10
-        %PWM=60;
+    if i==20
+        PWM=80;
        % Env_instruccion(s,'setpoint',[PWM PWM]); 
-        Env_instruccion(s,'PWM',[PWM-dW/2 PWM+dW/2]);
-        
+        Env_instruccion(s,'PWM',[PWM PWM]);
     end
     datos=DatoRx_rf(s);
     %flushinput(s);
@@ -55,7 +53,7 @@ Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
 name=datestr(now,'yymmddhhMMss');
 direccion='../../Mediciones/';
 name1='respuesta_escalon_motores_scontrolador';
-name2='20_60_';
+name2='40_80_';
 name=strcat(direccion,name,name1,name2,'.mat');
 %save(name,'tiempo','PWMA','wA','PWMB','wB') 
 figure(1)

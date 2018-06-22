@@ -14,16 +14,18 @@
 extern int enviar_datos;
 
 // Variables para la comunicacion
-extern bool Motores_ON,tx_activada, online;
+extern bool Motores_ON,tx_activada, online,controlador_motores;
 extern unsigned char trama_activa;
 extern int PWMA,PWMB;
 extern float uA[3],uB[3];
+extern volatile float freqA,freqB;
 extern float set_pointA,set_pointB;
 extern float ParametrosA[5],ParametrosB[5];
 extern unsigned char estadoEncoder;
 
+
 // Variables para interrupcion por Overflow
-extern int soft_prescaler,Bandera;
+extern int soft_prescaler,Bandera,cont_A,cont_B;
 extern const int cota;
 extern volatile unsigned long cantOVerflowA,cantOVerflowB;
 extern volatile unsigned long TCNT2anteriorA,TCNT2anteriorB;//Valor anterior del contador (para corregir la medición)

@@ -17,7 +17,11 @@ for i=1:CantdeBytes
 dato(i)=LeerSerial(s);
 end
 % Descomprecion
-dato(2)=dato(2)*1300.0/255.0;
-dato(3)=dato(3)*1300.0/255.0;
+%dato(1)=dato(1)*1000.0/255.0;
+%dato(2)=dato(2)*1300.0/255.0;
+%dato(3)=dato(3)*1300.0/255.0;
+dato(1)=dato(1);%;*1000.0/255.0;
+dato(2)=dato(2)*500.0/255.0;
+dato(3)=dato(3)*500.0/255.0;
 
 end
