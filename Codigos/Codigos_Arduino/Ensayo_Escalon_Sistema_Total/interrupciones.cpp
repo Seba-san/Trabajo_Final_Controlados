@@ -109,6 +109,12 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
         case ins_setpoint://Instrucción 248: cambiar el valor del setpoint
           trama_activa=3;
           break;
+          case ins_control_off://
+          controlador=0;
+          break;
+          case ins_control_on://
+          controlador=1; 
+          break;
         case ins_resultado_ensayo://Instrucción 245: Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
           enviar_datos=1;
           break;
@@ -135,6 +141,10 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
       }
     else if (trama_activa==4){
       set_pointB=dato*10; // Actualiza el valor del setpoint de B
+
+      //$.$ Revisar si esto está bien cuando tenga más neuronas:
+      wref=(set_pointA+set_pointB)/2;
+      
       trama_activa=0;
       if (set_pointA==0 && set_pointB==0){
         controlados1.actualizarDutyCycleMotores(0,0);

@@ -20,6 +20,11 @@ switch info
         instruccion=246;
     case 'devolver ensayo'
         instruccion=245;
+    case 'control_off'
+        instruccion=244;
+    case 'control_on'
+        instruccion=243;
+       
 end
 EscribirSerial(s,instruccion);
 %  if instruccion==247

@@ -9,17 +9,18 @@
 #define ins_test 249
 #define ins_setpoint 248
 #define ins_resultado_ensayo 245 //Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
-
+#define ins_control_off 244
+#define ins_control_on 243
 //Variables Ensayo Escalón Offline
 extern int enviar_datos;
 
 // Variables para la comunicacion
 extern bool Motores_ON,tx_activada, online,controlador_motores;
 extern unsigned char trama_activa;
-extern int PWMA,PWMB;
+extern int PWMA,PWMB,controlador;
 extern float uA[3],uB[3];
 extern volatile float freqA,freqB;
-extern float set_pointA,set_pointB;
+extern float set_pointA,set_pointB,wref;
 extern float ParametrosA[5],ParametrosB[5];
 extern unsigned char estadoEncoder;
 

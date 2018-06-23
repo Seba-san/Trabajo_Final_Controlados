@@ -152,8 +152,8 @@ void loop() { //$3
       }
       else if (controlador==1 && girar==0){//Si no quiero girar entonces siempre calcula el controlador
         PID_total();
-        set_pointA = wref - dw[2]*(wref/350);//*(wref/500.0);
-        set_pointB = wref + dw[2]*(wref/350);//*(wref/500.0);
+        set_pointA = wref - dw[2];//*(wref/350);//*(wref/500.0);
+        set_pointB = wref + dw[2];//*(wref/350);//*(wref/500.0);
       }
     }
     //$.$

@@ -1,4 +1,4 @@
-function dato=DatoRx_rf(s)
+function [dato,a]=DatoRx_rf(s)
 
 % Supongo [inicio][angulo][RPMA][RPMB]
 % suponer inicio=0xFF
@@ -9,7 +9,7 @@ function dato=DatoRx_rf(s)
 CantdeBytes=3; 
 inicio=255;
 a=0;
-while a~=inicio
+while a~=inicio && a~=(inicio-1)
 a=LeerSerial(s);
 end
 dato=zeros(1,CantdeBytes);
@@ -21,7 +21,7 @@ end
 %dato(2)=dato(2)*1300.0/255.0;
 %dato(3)=dato(3)*1300.0/255.0;
 dato(1)=dato(1);%;*1000.0/255.0;
-dato(2)=dato(2)*500.0/255.0;
-dato(3)=dato(3)*500.0/255.0;
+dato(2)=dato(2)*600.0/255.0;
+dato(3)=dato(3)*600.0/255.0;
 
 end
