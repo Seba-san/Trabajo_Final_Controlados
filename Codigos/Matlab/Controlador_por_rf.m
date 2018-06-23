@@ -72,7 +72,7 @@ direccion='../../Mediciones/';
 name1='respuesta_escalon_systot_scontrolador';
 name2='_';
 name=strcat(direccion,name,name1,name2,'.mat');
-%save(name,'tiempo','wA'.,'betas','Parametros') 
+%save(name,'tiempo','wA','wB','control','betas','Parametros') 
 figure(1)
 yyaxis left
 plot(tiempo,wB,'r.',tiempo,wA,'b.');ylim([100 1200])

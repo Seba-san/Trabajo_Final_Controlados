@@ -47,7 +47,7 @@ end
 
 
 Kp=C0.Kp;Kd=C0.Kd;Ki=C0.Ki;
-tipo='PI';
+tipo='PID';
 Fsnano=200;
 % Ts2=0.015;
 Ts2=1/Fsnano;
