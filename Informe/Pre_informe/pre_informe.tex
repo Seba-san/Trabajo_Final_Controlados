@@ -178,14 +178,53 @@ Cuestiones Importantes:
 \item Implementar un controlador PID discreto: efectos de la acción derivativa y algunas cuestiones practicas.
 
 \end{itemize}
+\section{Introducción}
+Esto fue copiado de la propuesta presentada 19/12/17
+
+\subsection{Motivación}
+En el marco de las Jornadas Argentinas de Robótica (JAR) 2019 a realizarse en la Universidad Nacional del Comahue, se desea dar los primeros pasos en la implementación de sistemas robóticos. En particular, se desea trabajar en el inicio de un movimiento en la facultad para la utilización de la robótica educativa. \\
+La robótica educativa, también conocida como robótica pedagógica, es una disciplina que tiene por objeto la concepción, creación y puesta en funcionamiento de prototipos robóticos y programas especializados con fines pedagógicos (Ruiz-Velasco, 2007). Partiéndose de un proyecto concreto a realizar, el proceso de concepción, diseño, armado y puesta en marcha del prototipo enriquece el proceso de aprendizaje del alumno, fortaleciendo sus capacidades de liderazgo y motivándolo a resolver retos cada vez más
+complejos. \\
+Este tipo de herramienta pedagógica se encuentra dentro de la metodología ABP (aprendizajes basados en proyectos). El ABP se desarrolla en un entorno real y experimental, lo que ayuda a los alumnos a relacionar los contenidos teóricos con el mundo real y mejora la receptividad para aprender los conceptos teóricos. Los alumnos toman un papel activo en el proyecto, ya que tienen que marcar el ritmo y profundidad del aprendizaje, y fijar los objetivos de la realización del proyecto. Este tipo de metodología motiva al alumno, por lo que resulta una estrategia de particular interés para mejorar el rendimiento académico y la persistencia
+en los estudios. \\
+En la UNCo, particularmente en nuestra carrera, existe una fuerte inclinación a priorizar la enseñanza de conceptos casi exclusivamente teóricos, habiendo actualmente pocas materias que pidan la realización de proyectos concretos. Este enfoque puede traer aparejado una serie de inconvenientes: alumnos con poca capacidad para resolución de problemas reales, dificultad para relacionar los conceptos aprendidos con la vida real o para entender los mismos, falta de motivación en los alumnos, etc. Considerando esto y que actualmente la tasa de deserción en la carrera es de XXX\%, es que se desea avanzar hacia las metodologías
+ABP mencionadas, particularmente en el área de robótica. \\
+En el marco de esto, el presente trabajo busca implementar los conocimientos adquiridos en la materia en el diseño e implementación de distintas estrategias de control sobre un robot en la configuración de seguidor de línea.
+ \subsection{Seguidor de línea}
+ Los robots seguidores de línea son robots muy sencillos, que cumplen una única misión: seguir una línea marcada en el suelo (normalmente de color negro sobre un tablero blanco). Son considerados los "Hola mundo" de la robótica. La dificultad del recorrido determina la complejidad del robot y el requerimiento o no de una mayor cantidad de sensores, capacidad de procesamiento, mejoras de hardware, etc. Esta flexibilidad los hace particularmente interesantes como herramientas educativas, ya que se puede comenzar con diseños sencillos para luego avanzar en sucesivas mejoras del prototipo, pudiendo adaptarse a distintas materias de
+la carrera.\\
+En Argentina se festejan distintas competencias relacionadas con la fabricación y puesta en marcha de los seguidores de líneas, también clasificada como la modalidad “carreras”. Se destacan entre otros:
+\begin{itemize}
+\item $15^o$ Competencia Internacional de Robótica - GRS - UTN Bahía Blanca.
+\item Liga nacional de robótica - \url{http://www.lnr-argentina.com.ar}
+\item Competencia Nacional de Robótica 2017 - Instituto La Salle Florida – Bs. As.
+\item Grupo de Robotica Universidad de Mendoza (GRUM).
+\item Instituto Tecnológico del Comahue (ITC)- Neuquen.
+\end{itemize}
+A nivel internacional existe un proyecto llamado Open Lamborghuino \cite{lambo}, en el cual se detalla la construcción
+de un seguidor de línea con componentes relativamente baratos y de fácil acceso.
+
+\section{Implementación}
+Para facilitar la implementación del robot, se propone utilizar la configuración de hardware recomendada en open lamborghino mas un diseño propio. Se detallan a continuación:
+\begin{itemize}
+\item 2 motores N20 con reducción 1:10 \cite{motores}. 
+\item Driver para motores: TB6612FNG \cite{puenteH}.
+\item Computadora de abordo: Arduino Nano \cite{arduinoNano}.
+\item Batería de LiPo: 2S 1100mA.
+\item Comunicación inalámbrica: par de Módulos bluetooth HC-05 o similar.  
+\item Estructura fabricada en la impresora 3D de la facultad.
+
+\end{itemize}
 
 
+
+\section{Datos medidos}
 Respuesta escalón motores
 
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm]{./imagenes/resp_escalon_motores}
+\includegraphics[width=15cm]{./imagenes/resp_escalon_motores_2}
 \end{figure}
 Motor A:
 \begin{equation}
@@ -212,7 +251,7 @@ C_b(s)= \frac{ 18.68 (s-10.93)}{s}
 Se ajustaron ambos motores para que con el controlador tengan una respuesta identica, la respuesta a lazo cerrado es:
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm]{./imagenes/resp_escalon_motores_controlados}
+\includegraphics[width=15cm]{./imagenes/resp_escalon_motores_controlados_2}
 \end{figure}
 
 
@@ -403,9 +442,19 @@ Si se parte de la suposición de que los motores se comportan de manera semejant
 
 A la hora de implementar el control se encontraron varios inconvenientes.... Poner Z-N, problemas de rozamiento y de inestabilidad; falta de linealidad a bajas RPM
 
-Referencias
-[1]: “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.
-[2]: “Robotics: Modelling, Planning and Control”, Siciliano, Sciavicco, Villani y Oriolo.
+
+\begin{thebibliography}{X}
+%\bibitem{Farmers}Bergerman, M., Maeta, S. M., Zhang, J., Freitas, G. M., Hamner, B., Singh, S., \& Kantor, G. (2015). Robot farmers: Autonomous orchard vehicles help tree fruit production. IEEE Robotics \& Automation Magazine, 22(1), 54-63.
+%\bibitem “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.
+%\bibitem “Robotics: Modelling, Planning and Control”, Siciliano, Sciavicco, Villani y Oriolo.
+\bibitem{lambo} \url{http://lamborghino.com}. 
+\bibitem{motores}\url{https://www.pololu.com/product/3061}
+\bibitem{puenteH}\url{ https://www.pololu.com/file/0J86/TB6612FNG.pdf}
+\bibitem{arduinoNano} \url{https://store.arduino.cc/usa/arduino-nano}
+\end{thebibliography}
+%Referencias
+%[1]: “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.
+%[2]: “Robotics: Modelling, Planning and Control”, Siciliano, Sciavicco, Villani y Oriolo.
 
 
 

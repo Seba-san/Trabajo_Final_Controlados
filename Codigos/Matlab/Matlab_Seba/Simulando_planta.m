@@ -148,7 +148,7 @@ rpm_B=lsim(sysB_c,wB,t);
 dW=rpm_B-rpm_A; % A -B o B - A???!!? segun codigo arduino B-A OJO!!
 %sys_cinematica=feedback(sys_sinematica,1);
 %beta_simulado=lsim(sys_sinematica,dW,t);
-sys_t=series(sysA_c,sys_sinematica);
+sys_t=series(sysA_c,sys_cinematico);
 beta_simulado=lsim(sys_t,dW,t);
 plot(t,beta,t,beta_simulado)
 
@@ -315,6 +315,9 @@ plot(betacc)
 Kp=sysb_dw.Kp;Tp1=sysb_dw.Tp1;
 sys=tf(Kp,[Tp1 1]); % Entra beta sale dW
 sys_inv=inv(sys);% Entra dW sale beta
+%%
+% Simulando planta con datos RF
+
 
 
 
