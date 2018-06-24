@@ -136,11 +136,11 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
       else {Motores_ON=true;}
       }
     else if (trama_activa==3){
-      set_pointA=dato*10; // Actualiza el valor del setpoint de A
+      set_pointA=dato*1000.0/255.0; // Actualiza el valor del setpoint de A
       trama_activa=4;
       }
     else if (trama_activa==4){
-      set_pointB=dato*10; // Actualiza el valor del setpoint de B
+      set_pointB=dato*1000.0/255.0; // Actualiza el valor del setpoint de B
 
       //$.$ Revisar si esto está bien cuando tenga más neuronas:
       wref=(set_pointA+set_pointB)/2;

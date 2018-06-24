@@ -8,13 +8,21 @@ fclose(instrfindall);       %cierra todos los puertos activos y ocultos
 %clear all;close all;clc
 disp('Puerto Cerrado')
 %% Ensayo al escalon
+Comunic_test_rf(s)
 pause(4)
-PWM=10;
-Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
-Env_instruccion(s,'control_on'); 
+Env_instruccion(s,'control_on');
+PWM=2;
+Env_instruccion(s,'PWM',[PWM PWM])
+%Env_instruccion(s,'control_off'); 
+RPM=400;
+for i=1:RPM/10
+Env_instruccion(s,'setpoint',[i*10 i*10]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
+pause(0.1);
+end
+%Env_instruccion(s,'control_off'); 
 %Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
-N=400; %Cantidad de muestras
+N=250; %Cantidad de muestras
 %RPMA=zeros(1,N);
 %RPMB=zeros(1,N);
 Fs=200;%Frec de env�o de datos
@@ -25,25 +33,29 @@ betas=[];
 %Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos
 control=[];   
 PWMB=[]; 
-PWM=300;
+PWM=400;
 dW=100;
 %Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
 % for i=1:PWM/5
 % Env_instruccion(s,'setpoint',[i*5 i*5])
 % pause(0.05)
 % end
+%pause(0.1);
 Env_instruccion(s,'setpoint',[PWM PWM]);
-pause(0.1);
+Env_instruccion(s,'control_on');
+
 Comunic_test_rf(s)
+
+flushinput(s);
 Env_instruccion(s,'online');
-flushinput(s);  %Vacia el buffer de entrada
 for i=1:N %Ojo con el tope que pone el nano
-    if i==200
+  % s.BytesAvailable
+    if i==80
         %PWM=60;
        % Env_instruccion(s,'setpoint',[PWM PWM]); 
-        Env_instruccion(s,'control_off'); 
-        Env_instruccion(s,'setpoint',[PWM-dW/2 PWM+dW/2]);
-        
+      flushinput(s);  %Vacia el buffer de entrada
+      Env_instruccion(s,'control_off'); 
+      Env_instruccion(s,'setpoint',[PWM-dW/2 PWM+dW/2]); 
     end
     [datos,inicio]=DatoRx_rf(s);
     if inicio==255
@@ -57,9 +69,11 @@ for i=1:N %Ojo con el tope que pone el nano
     w=datos(3); wB=[wB w];    
     %PWMA=[PWMA datos(1)];PWMB=[PWMB datos(1)];
     betas=[betas beta];
+   
 end
 % Conversion de datos
 %Parametros.PWMB=wA;
+Parametros.Fs=200;
 Parametros.dWdes=dW;
 Parametros.Wref=PWM;
 Parametros.Controlador={200,0,0,0,0};
@@ -78,7 +92,7 @@ yyaxis left
 plot(tiempo,wB,'r.',tiempo,wA,'b.');ylim([100 1200])
 ylabel('Vel Ang (rpm)'); legend('Motor B','Motor A','Location','northwest')
 yyaxis right
-plot(tiempo,betas,'r.',tiempo,control,'b');ylim([-1 1])
+plot(tiempo,betas,'r.',tiempo,control,'b');ylim([-1 3.1])
 %legend('Señal de PWM');
 title('Respuesta escalón ambos Motores');
 xlabel('tiempo (s)'); %Revisar la unidad!! $

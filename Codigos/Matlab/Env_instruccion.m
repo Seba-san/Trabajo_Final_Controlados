@@ -13,7 +13,7 @@ switch info
         instruccion=251;
     case 'setpoint'
         instruccion=248;
-        parametro=10;
+        parametro=255/1000;
     case 'parametros'
         instruccion=247;
     case 'Ucontrol'
@@ -33,7 +33,7 @@ EscribirSerial(s,instruccion);
 if (nargin==3) 
     for i=1:length(datos)
        
-    EscribirSerial(s,fix(datos(i)/parametro));
+    EscribirSerial(s,fix(datos(i)*parametro));
     end
 end
 

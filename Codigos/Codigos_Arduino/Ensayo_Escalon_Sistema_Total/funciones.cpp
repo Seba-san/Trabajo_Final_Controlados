@@ -103,10 +103,10 @@ void EnviarTx_blue(void){
   //addi=PWMA*255.0/1000.0;
   Serial.write(byteSensor);
   //Serial.write(addi);
- addi=freqA*255.0/600.0;
+ addi=freqA*255.0/1000.0;
  //addi=cont_A*255.0/1000.0;
   Serial.write(addi);
- addi=freqB*255.0/600.0;
+ addi=freqB*255.0/1000.0;
  // addi=cont_B*255.0/1000.0;
   Serial.write(addi);
   }
