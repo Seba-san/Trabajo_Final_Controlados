@@ -164,7 +164,7 @@ sys_cm=control*sys_*inv(1+control*sys_);
 step(sys_cm)
 hold off
 
-save('../../Mediciones/modelos_controlados2.mat','sysA','sysB','Cb','Ca','sys_cinematico2','sys_cinematico','Cct')
+%save('../../Mediciones/modelos_controlados2.mat','sysA','sysB','Cb','Ca','sys_cinematico2','sys_cinematico','Cct')
 
 %%
 C=Ca;

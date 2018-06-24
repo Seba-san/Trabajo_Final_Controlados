@@ -58,34 +58,7 @@ ctes=table(A,B,C,D,E);
 ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
 % Transferencia del controlador: H(z)=(A+Bz^-1+Cz^-2)/(1-Dz^-1-Ez^-2)
 
-%%
-clear A B C D E F;
-control=tf(C0);
-C0.tf=20*C0.Kd;
-[A,B,C,D,E]=tf2ctesNano(cell2mat(control.num),cell2mat(control.den),tipo);
-ctes=table(A,B,C,D,E);
-ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
-% Transferencia del controlador: H(z)=(A+Bz^-1+Cz^-2)/(1-Dz^-1-Ez^-2)
 
-
-
-%%
-% ### Lo paso a la forma apropiada para programarlo
-mm=C0;
-Primero=tf(mm.Kp,1);
-Segundo=tf([mm.Ts*mm.Ki 0],[1 -1],mm.Ts);
-if (PIDF==1)
-Tercero=tf(mm.kd*[1 -1],mm.Tf*[1 -1]+mm.Ts*[1 0],mm.Ts);
-else
-Tercero=tf(mm.kd*[1 -1],mm.Ts*[1 0],mm.Ts); 
-end
-Pid=Primero+Segundo+Tercero;pipi=Pid; % Supongo que esta en la forma PID paralelo
-num=pipi.Numerator{1};
-den=pipi.Denominator{1};
-num=num/den(1);den=den/den(1); % hay que dividir por den(1) porque es el coeficiente de u(k).
-disp('A B C D E')
-CUCU=[num -den(2:size(den,2))];
-sprintf('%f, %f, %f, %f, %f',CUCU)
 %%
 %Obtengo el modelo de los motores implementados
 
@@ -103,31 +76,7 @@ opt = pidtuneOptions('DesignFocus','disturbance-rejection','CrossoverFrequency',
 T_pi = feedback(C*sys, 1);
 Cb=C;sysB=sys;
 save('../../Mediciones/modelos_controlados.mat','sysA','sysB','Cb','Ca','sys_cinematico','sys_cinematico2')
-%% fft
-X=wA(110:end)-mean(wA(110:end));
-Fs = 200;            % Sampling frequency                    
-T = 1/Fs;             % Sampling period       
-L = length(X);             % Length of signal
-Y = fft(X);
-P2 = abs(Y/L);
-P1 = P2(1:L/2+1);
-P1(2:end-1) = 2*P1(2:end-1);
-f = Fs*(0:(L/2))/L;
-plot(f,P1) 
-title('Single-Sided Amplitude Spectrum of X(t)')
-xlabel('f (Hz)')
-ylabel('|P1(f)|')
-%%
-%Diseño de predictor de smith
-% PI
-ancho_de_banda=50;%hz
-wc=2*pi*ancho_de_banda;
-Cpi = pidtune(sys,pidstd(1,1),wc)
 
-Tpi = feedback([sys*Cpi,1],1,1,1);  % closed-loop model [ysp;d]->y
-Tpi.InputName = {'ysp' 'd'};
-
-step(Tpi), grid on
 
 %%
 load('../../Mediciones/180601203314ensayo_escalon_angulowref_600_dw_100_PI.mat')
