@@ -33,9 +33,10 @@ plot(P1(1),P1(2),'bx',P2(1),P2(2),'rx',real(x),y,'k.' );
 %%
 % En funcion a los datos simuladores puedo generar puntos de la trayectoria
 % para estimar el radio de giro.
-for k=50:80
+for k=1:80
+    k
 for i=1:80
-k
+
 P1=[Pos(1,i) Pos(2,i)]; P2=[Pos(1,k) Pos(2,k)];
 
 
@@ -59,6 +60,6 @@ end
 wref=(wA+wB)/2;
 dW=wB-wA;
 Rg=L*(wref(1:80)./dW(1:80)-1/2);
-plot(tiempo(1:80),Rg(1:80),'b.',tiempo(1:80),R(1:80),'r.');ylim([0 5])
+plot(tiempo(1:80),Rg(1:80),'b.',tiempo(1:80),R(1:80),'r.');ylim([-5 5])
 pause(1)
 end

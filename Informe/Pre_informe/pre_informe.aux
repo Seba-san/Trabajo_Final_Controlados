@@ -28,28 +28,38 @@
 \citation{motores}
 \citation{puenteH}
 \citation{arduinoNano}
+\citation{pathfoll}
+\citation{planning}
 \@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Seguidor de l\IeC {\'\i }nea}{2}{subsection.3.2}}
 \@writefile{toc}{\contentsline {section}{\numberline {4}Implementaci\IeC {\'o}n}{2}{section.4}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Datos medidos}{2}{section.5}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Modelo cinem\IeC {\'a}tico}{3}{section.6}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}Radio de giro}{4}{section.7}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Gr\IeC {\'a}fico de la l\IeC {\'\i }nea a seguir y del robot seg\IeC {\'u}n [1].}}{5}{figure.1}}
-\newlabel{fig:sistema1}{{1}{5}{Gráfico de la línea a seguir y del robot según [1]}{figure.1}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Ensayo al Escal\IeC {\'o}n}{5}{section.8}}
-\newlabel{eq:sys_tot_teo}{{20}{5}{Ensayo al Escalón}{equation.8.20}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Ensayo escal\IeC {\'o}n carrito implementaci\IeC {\'o}n}{5}{section.9}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Modelado del sistema}{2}{section.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Modelo cinem\IeC {\'a}tico}{2}{subsection.5.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Robot diferencial. }}{3}{figure.1}}
+\newlabel{fig:robot_diferencial}{{1}{3}{Robot diferencial}{figure.1}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.1}Modelado 1}{3}{subsubsection.5.1.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Esquema del robot sobre la l\IeC {\'\i }nea a seguir (azul). La l\IeC {\'\i }nea roja representa la l\IeC {\'\i }nea de sensores, $e$ es la distancia medida entre el centro de los sensores y la intersecci\IeC {\'o}n de la recta a seguir con la l\IeC {\'\i }nea de los sensores, y $\beta $ es el \IeC {\'a}ngulo entre la l\IeC {\'\i }nea a seguir y el eje central del robot}}{3}{figure.2}}
+\newlabel{fig:carrito1}{{2}{3}{Esquema del robot sobre la línea a seguir (azul). La línea roja representa la línea de sensores, $e$ es la distancia medida entre el centro de los sensores y la intersección de la recta a seguir con la línea de los sensores, y $\beta $ es el ángulo entre la línea a seguir y el eje central del robot}{figure.2}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {5.1.2}Radio de giro}{4}{subsubsection.5.1.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces esquema del robot girando.}}{4}{figure.3}}
+\newlabel{fig:girando}{{3}{4}{esquema del robot girando}{figure.3}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Modelado de los motores}{5}{section.6}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}Sistema de medici\IeC {\'o}n de RPM y sensores de linea}{5}{section.7}}
+\@writefile{toc}{\contentsline {section}{\numberline {8}Obtenci\IeC {\'o}n de los par\IeC {\'a}metros}{5}{section.8}}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Ajuste fallido por medio de Z-N}{5}{section.9}}
+\@writefile{toc}{\contentsline {section}{\numberline {10}Datos medidos}{5}{section.10}}
+\@writefile{toc}{\contentsline {section}{\numberline {11}Ensayo al Escal\IeC {\'o}n}{6}{section.11}}
+\newlabel{eq:sys_tot_teo}{{20}{6}{Ensayo al Escalón}{equation.11.20}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {12}Ensayo escal\IeC {\'o}n carrito implementaci\IeC {\'o}n}{6}{section.12}}
+\newlabel{eq:sys_tot_est}{{21}{6}{Ensayo escalón carrito implementación}{equation.12.21}{}}
 \bibcite{lambo}{1}
 \bibcite{motores}{2}
 \bibcite{puenteH}{3}
 \bibcite{arduinoNano}{4}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Esquema del robot sobre la l\IeC {\'\i }nea a seguir (azul). La l\IeC {\'\i }nea roja representa la l\IeC {\'\i }nea de sensores, e es la distancia medida entre el centro de los sensores y la intersecci\IeC {\'o}n de la recta a seguir con la l\IeC {\'\i }nea de los sensores, y $\beta $ es el \IeC {\'a}ngulo entre la l\IeC {\'\i }nea a seguir y el eje central del robot}}{6}{figure.2}}
-\newlabel{fig:carrito1}{{2}{6}{Esquema del robot sobre la línea a seguir (azul). La línea roja representa la línea de sensores, e es la distancia medida entre el centro de los sensores y la intersección de la recta a seguir con la línea de los sensores, y $\beta $ es el ángulo entre la línea a seguir y el eje central del robot}{figure.2}{}}
-\newlabel{eq:sys_tot_est}{{21}{6}{Ensayo escalón carrito implementación}{equation.9.21}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Sistema total y control}{6}{section.10}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces esquema del robot girando.}}{7}{figure.3}}
-\newlabel{fig:girando}{{3}{7}{esquema del robot girando}{figure.3}{}}
+\bibcite{pathfoll}{5}
+\bibcite{planning}{6}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Trayectoria seguida por el robot si empieza a girar a $\Delta \omega $ constante (verde) arrancando inicialmente alineado con la l\IeC {\'\i }nea (gris).}}{7}{figure.4}}
 \newlabel{fig:carritoEsc}{{4}{7}{Trayectoria seguida por el robot si empieza a girar a $\Delta \omega $ constante (verde) arrancando inicialmente alineado con la línea (gris)}{figure.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {13}Sistema total y control}{7}{section.13}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces el error medio cuadr\IeC {\'a}tico del ajuste de la recta es de 2.0624. REVISAR ESTO; NO TIENE SENTIDO EL EJE Y, en otra imagen parece la palabra "frecuencia de giro" pero no tiene sentido.}}{8}{figure.5}}
 \newlabel{fig:prueba_linealidad}{{5}{8}{el error medio cuadrático del ajuste de la recta es de 2.0624. REVISAR ESTO; NO TIENE SENTIDO EL EJE Y, en otra imagen parece la palabra "frecuencia de giro" pero no tiene sentido}{figure.5}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces El circulo marca cuando se desactiva el control y el sistema comienza a trabajar en lazo abierto. En esta caso $\Delta \omega =-50 $ RPM}}{8}{figure.6}}

@@ -216,6 +216,165 @@ Para facilitar la implementación del robot, se propone utilizar la configuraci�
 
 \end{itemize}
 
+\section{Modelado del sistema}
+Las ecuaciones cinemáticas son aquellas que relacionan la velocidad de giro de cada una de las ruedas con las variables de posición del robot en el plano.
+\begin{equation}
+\vec{x}= (x,y,\phi )
+\end{equation}
+ 
+Considerando al robot como un cuerpo rígido, la velocidad lineal del centro de masa se obtiene a partir del promedio de las velocidades lineales de cada una de sus
+ruedas. La velocidad lineal de cada rueda se obtiene como el producto de la velocidad angular (velocidad de giro) y el radio de ellas. La velocidad del centro de masa
+queda definida por:
+\begin{equation}
+V_{cm}= \frac{r}{2} (w_l-w_r) 
+\end{equation}
+
+
+
+\subsection{Modelo cinemático}
+
+Esta parte fue sacada del archivo "Ideas para el modelado del robot.docx"
+% Agregado, es un choreo de pathfoll
+Según \cite{pathfoll}, el robot que se desea modelar se lo conoce como robot diferencial ya que cuenta con 2 ruedas y un punto de apoyo. Esta clase de robots son no holonómicos ya que tiene restricciones a la hora de realizar movimientos sobre el plano, por ejemplo, no puede realizar movimientos laterales. Teniendo en cuenta la figura \ref{fig:robot_diferencial} ,la posición y orientación del dispositivo  esta dada por las siguientes ecuaciones cinemáticas
+
+\begin{equation}
+\dot{x}=v\cos\theta \quad \dot{y}=v\sin\theta \quad \dot{\theta}=\omega
+\end{equation}
+
+Donde $(x,y)$ indican la posición del robot en el espacio carteciano y $\theta $, conocida como orientación, es el angulo entre el $x$ del sistema de cordenadas y el eje homologo del objeto.  De esta manera $(x,y,\theta)^T$ definen la postura.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=6cm]{./imagenes/robot_diferencial.png}
+\caption{Robot diferencial. }%\cite{pathfoll} .}
+\label{fig:robot_diferencial}
+\end{figure}
+
+
+%
+%Tomando en cuenta \cite{pathfoll}, si modelamos la línea detectada como una recta, la situación geométrica del problema se asemeja a la mostrada en la figura \ref{fig:sistema1}.
+%
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=10cm]{./imagenes/sistema1.png}
+%\caption{Gráfico de la línea a seguir y del robot según \cite{pathfoll}.}
+%\label{fig:sistema1}
+%\end{figure}
+%
+%
+%Las ecuaciones de velocidad para este problema según \cite{pathfoll} son:
+%
+%\begin{equation}
+%\dot{s}=v \cos (\theta - \Psi)
+%\end{equation}
+%
+%\begin{equation}
+%\dot{d}=v \sin (\theta - \Psi)
+%\end{equation}
+%
+%\begin{equation}
+%\dot{\theta}=\omega  
+%\end{equation}
+%
+%Donde v y $\omega$ son las velocidades lineal y angular del punto medio entre las ruedas, C.
+ Si los motores se mueven a velocidades $\omega_R$ y $\omega_L$, estás velocidades son \cite{planning}:
+
+\begin{equation}
+v=\frac{r(\omega _R + \omega _L)}{2}
+\end{equation}
+
+
+\begin{equation}
+\vert \omega \vert	=\frac{ \vert r(\omega _R - \omega _L) \vert }{L}
+\end{equation}
+
+Donde L es la distancia entre las ruedas. 
+
+\subsubsection{Modelado 1}
+Se toma como hipótesis que el vehículo se encuentra siempre sobre la linea a seguir.  Por lo que la señal de error se toma como la distancia entre el centro de la línea de sensores y el punto de intersección entre la línea de sensores y la recta a seguir. Esta situación se muestra en la figura \ref{fig:carrito1}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/carrito1.png}
+\caption{Esquema del robot sobre la línea a seguir (azul). La línea roja representa la línea de sensores, $e$ es la distancia medida entre el centro de los sensores y la intersección de la recta a seguir con la línea de los sensores, y $\beta $ es el ángulo entre la línea a seguir y el eje central del robot}
+\label{fig:carrito1}
+\end{figure}
+
+Tomando las ecuaciones anteriores como referencia, las velocidades en módulo serían:
+
+\begin{equation}
+\dot{e}=v \tan(\beta)
+\end{equation}
+
+\begin{equation}
+\dot{\beta}=\omega
+\end{equation}
+
+Dado que sólo poseemos la medición de $e$, se propone la siguiente estrategia para la medición del ángulo. Suponemos que el punto centro entre las dos ruedas se mantiene siempre sobre la línea a seguir. Bajo esta suposición, podemos calcular $\beta $ por trigonometría:
+
+\begin{equation}
+\tan(\beta)=\frac{e}{l}
+\end{equation}
+Como $l$ es fijo, la medición de $e$ puede traducirse en una medición del ángulo. Así, de esta manera, podríamos buscar minimizar el ángulo para alinear el robot con la pista. Como la medición se hace suponiendo que C está sobre la línea, si el robot no está centrado respecto a la pista el cálculo del ángulo va a indicar una medición errónea, por lo que al llevar a cero el $ \beta $ medido de esta manera se termina garantizando que el robot esté centrado respecto a la pista.
+Bajo estas simplificaciones, nos basta con mirar el comportamiento del ángulo:
+
+\begin{equation}
+\dot{\beta}=\vert \omega \vert	=\frac{ \vert r(\omega _R - \omega _L) \vert }{L}
+\end{equation}
+
+Como sólo nos interesa la diferencia entra velocidades angulares del motor, se puede mantener $v$ constante tomando:
+
+\begin{equation}
+\omega _R = \omega _{fijo} +\Delta \omega
+\end{equation}
+
+\begin{equation}
+\omega _L = \omega _{fijo} -\Delta \omega
+\end{equation}
+
+Esto disminuiría el problema a una sola señal de control, $\Delta \omega$, y disminuiría los efectos alineales influyendo sobre $\dot{e} $ sin embargo, como no se está tomando en cuenta la dinámica de e, no se tiene claro si esta restricción es necesaria. Se necesitaría profundizar en el análisis para poder asegurarlo.
+
+\subsubsection{Radio de giro}
+Cuando el robot gira siguiendo una curva la disposición es como se muestra en la siguiente figura:
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/carrito_girando.png}
+\caption{esquema del robot girando.}
+\label{fig:girando}
+\end{figure}
+
+En este caso la velocidad del punto  C (punto medio entre las dos ruedas del robot) tiene una componente tangencial, v, y una componente de giro, $\omega$, dadas por: REVISAR ESTAS ECUACIONES; ESTAN MAL!
+
+\begin{equation}
+v =\frac{r(\omega _R + \omega _L) }{2}=r \omega _{fijo}
+\end{equation}
+
+\begin{equation}
+\omega =\frac{r(\omega _R - \omega _L) }{2}= \frac{  r \Delta \omega} {R}
+\end{equation}
+
+Como la relación entre ambas magnitudes es:
+
+
+\begin{equation}
+v=R_{giro} \omega
+\end{equation}
+
+Obtenemos:
+\begin{equation}
+\Delta \omega= \frac{\omega _{fijo} R}{R_{giro}}  
+\end{equation}
+
+Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$ . Si definimos que $\omega _{fijo}=300 rpm $, para obtener un radio de giro mínimo de 1,5 veces R necesitaríamos $\Delta \omega =100 rpm $, mientras que para uno igual a R necesitaríamos $\Delta \omega =150 rpm $.
+
+\section{Modelado de los motores}
+
+\section{Sistema de medición de RPM y sensores de linea}
+
+\section{Obtención de los parámetros}
+
+\section{Ajuste fallido por medio de Z-N}
 
 
 \section{Datos medidos}
@@ -253,125 +412,6 @@ Se ajustaron ambos motores para que con el controlador tengan una respuesta iden
 \centering
 \includegraphics[width=15cm]{./imagenes/resp_escalon_motores_controlados_2}
 \end{figure}
-
-
-\section{Modelo cinemático}
-
-Esta parte fue sacada del archivo "Ideas para el modelado del robot.docx"
-
-Tomando en cuenta [1], si modelamos la línea detectada como una recta, la situación geométrica del problema se asemeja a la mostrada en la figura \ref{fig:sistema1}.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=10cm]{./imagenes/sistema1.png}
-\caption{Gráfico de la línea a seguir y del robot según [1].}
-\label{fig:sistema1}
-\end{figure}
-
-
-Las ecuaciones de velocidad para este problema según [1] son:
-
-\begin{equation}
-\dot{s}=v \cos (\theta - \Psi)
-\end{equation}
-
-\begin{equation}
-\dot{d}=v \sin (\theta - \Psi)
-\end{equation}
-
-\begin{equation}
-\dot{\theta}=\omega  
-\end{equation}
-
-Donde v y $\omega$ son las velocidades lineal y angular del punto medio entre las ruedas, C. Si los motores se mueven a velocidades $\omega_R$ y $\omega_L$, estás velocidades son ([2]):
-
-\begin{equation}
-v=\frac{r(\omega _R + \omega _L)}{2}
-\end{equation}
-
-
-\begin{equation}
-\vert \omega \vert	=\frac{ \vert r(\omega _R + \omega _L) \vert }{R}
-\end{equation}
-
-Donde R es la distancia entre las ruedas. 
-En nuestro problema la segunda línea no estaría y no se tendría la información de la distancia a la recta d, sino la distancia entre el centro de la línea de sensores y el punto de intersección entre la línea de sensores y la recta a seguir, llamado e.  La situación nuestra se asemeja más a lo mostrado en la figura \ref{fig:carrito1}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=10cm]{./imagenes/carrito1.png}
-\caption{Esquema del robot sobre la línea a seguir (azul). La línea roja representa la línea de sensores, e es la distancia medida entre el centro de los sensores y la intersección de la recta a seguir con la línea de los sensores, y $\beta $ es el ángulo entre la línea a seguir y el eje central del robot}
-\label{fig:carrito1}
-\end{figure}
-
-Tomando las ecuaciones anteriores como referencia, las velocidades en módulo serían:
-
-\begin{equation}
-\dot{e}=v \tan(\beta)
-\end{equation}
-
-\begin{equation}
-\dot{\beta}=\omega
-\end{equation}
-
-Dado que sólo poseemos la medición de e, se propone la siguiente estrategia para la medición del ángulo. Suponemos que el punto centro entre las dos ruedas se mantiene siempre sobre la línea a seguir. Bajo esta suposición, podemos calcular $\beta $ por trigonometría:
-
-\begin{equation}
-\tan(\beta)=\frac{e}{l}
-\end{equation}
-Como l es fijo, la medición de e puede traducirse en una medición del ángulo. Así, podríamos buscar minimizar el ángulo para alinear el robot con la pista. Como la medición se hace suponiendo que C está sobre la línea, si el robot no está centrado respecto a la pista el cálculo del ángulo va a indicar que hay error (a pesar de que en la realidad estén paralelos los ejes), por lo que al llevar a cero el $ \beta $ medido de esta manera se termina garantizando que el robot esté centrado respecto a la pista.
-Bajo estas simplificaciones, nos basta con mirar el comportamiento del ángulo:
-
-\begin{equation}
-\dot{\beta}=\vert \omega \vert	=\frac{ \vert r(\omega _R + \omega _L) \vert }{R}
-\end{equation}
-
-Como sólo nos interesa la diferencia entra velocidades angulares del motor, se puede mantener v constante tomando:
-
-\begin{equation}
-\omega _R = \omega _{fijo} +\Delta \omega
-\end{equation}
-
-\begin{equation}
-\omega _L = \omega _{fijo} -\Delta \omega
-\end{equation}
-
-Esto disminuiría el problema a una sola señal de control,$\Delta \omega$ , y disminuiría los efectos alineales influyendo sobre $\dot{e} $ sin embargo, como no se está tomando en cuenta la dinámica de e, no se tiene claro si esta restricción es necesaria. Se necesitaría profundizar en el análisis para poder asegurarlo.
-
-\section{Radio de giro}
-Cuando el robot gira siguiendo una curva la disposición es como se muestra en la siguiente figura:
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=10cm]{./imagenes/carrito_girando.png}
-\caption{esquema del robot girando.}
-\label{fig:girando}
-\end{figure}
-
-En este caso la velocidad del punto  C (punto medio entre las dos ruedas del robot) tiene una componente tangencial, v, y una componente de giro, $\omega$, dadas por:
-
-\begin{equation}
-v =\frac{r(\omega _R + \omega _L) }{2}=r \omega _{fijo}
-\end{equation}
-
-\begin{equation}
-\omega =\frac{r(\omega _R - \omega _L) }{2}= \frac{ 2 r \Delta \omega} {R}
-\end{equation}
-
-Como la relación entre ambas magnitudes es:
-
-
-\begin{equation}
-v=R_{giro} \omega
-\end{equation}
-
-Obtenemos:
-\begin{equation}
-\Delta \omega= \frac{\omega _{fijo} R}{R_{giro}}  
-\end{equation}
-
-Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$ . Si definimos que $\omega _{fijo}=300 rpm $, para obtener un radio de giro mínimo de 1,5 veces R necesitaríamos $\Delta \omega =100 rpm $, mientras que para uno igual a R necesitaríamos $\Delta \omega =150 rpm $.
-
 
 \section{Ensayo al Escalón}
 
@@ -451,6 +491,9 @@ A la hora de implementar el control se encontraron varios inconvenientes.... Pon
 \bibitem{motores}\url{https://www.pololu.com/product/3061}
 \bibitem{puenteH}\url{ https://www.pololu.com/file/0J86/TB6612FNG.pdf}
 \bibitem{arduinoNano} \url{https://store.arduino.cc/usa/arduino-nano}
+\bibitem{pathfoll} \textit{Path Following Mobile Robot in the Presence of Velocity Constraints}, Bak, Poulsen y Ravn.
+\bibitem{planning} \textit{Robotics: Modelling, Planning and Control}, Siciliano, Sciavicco, Villani y Oriolo.
+
 \end{thebibliography}
 %Referencias
 %[1]: “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.

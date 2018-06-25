@@ -15,7 +15,7 @@ Ainv=[cos(tita)/r sin(tita)/r L/r;...
 %%
 %load('/tmp/180607213207resp_escalon_sistema_total.mat')
 %load('/home/seba/Dropbox/Facultad/Trabajo_Final_Controlados_git/180607231105resp_escalon_sistema_total.mat')
-load('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Mediciones/180622220141respuesta_escalon_systot_scontrolador_.mat')
+%load('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Mediciones/180622220141respuesta_escalon_systot_scontrolador_.mat')
 % Este procesamiento es necesario para las ultimas mediciones
 indice=find(control==0);betas2=betas(indice);wA2=wA(indice);wB2=wB(indice);tiempo2=tiempo(indice);
 indice=find(betas2<3);betas2=betas2(indice);wA2=wA2(indice);wB2=wB2(indice);tiempo2=tiempo2(indice);
