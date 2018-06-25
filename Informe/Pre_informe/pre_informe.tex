@@ -286,7 +286,7 @@ v=\frac{r(\omega _R + \omega _L)}{2}
 
 
 \begin{equation}
-\vert \omega \vert	=\frac{ \vert r(\omega _R - \omega _L) \vert }{L}
+\vert \omega_{C} \vert	=\frac{ \vert r(\omega _R - \omega _L) \vert }{L}
 \end{equation}
 
 Donde L es la distancia entre las ruedas. 
@@ -304,7 +304,7 @@ Se toma como hipótesis que el vehículo se encuentra siempre sobre la linea a s
 Tomando las ecuaciones anteriores como referencia, las velocidades en módulo serían:
 
 \begin{equation}
-\dot{\beta}=\omega
+\dot{\beta}=\omega_C
 \end{equation}
 
 Dado que sólo poseemos la medición de $e$, se propone la siguiente estrategia para la medición del ángulo. Suponemos que el punto centro entre las dos ruedas se mantiene siempre sobre la línea a seguir. Bajo esta suposición, podemos calcular $\beta $ por trigonometría:
@@ -321,7 +321,7 @@ Como $l$ es fijo, y $e$ es lo que el sensor de linea mide, se puede calcular el 
 Bajo estas simplificaciones, nos basta con mirar el comportamiento de $\beta$:
 
 \begin{equation}
-\dot{\beta}=\vert \omega \vert	=\frac{ \vert r(\omega _R - \omega _L) \vert }{L}
+\dot{\beta}=\vert \omega_C \vert	=\frac{ \vert r(\omega _R - \omega _L) \vert }{L}
 \end{equation}
 
 Como sólo nos interesa la diferencia entra velocidades angulares del motor, se puede mantener $v$ constante tomando:
@@ -365,14 +365,14 @@ v =\frac{r(\omega _R + \omega _L) }{2}=r \omega_{fijo}
 \end{equation}
 
 \begin{equation}
-\omega_{cm} =\frac{r(\omega _R - \omega _L) }{L}= \frac{  r \Delta \omega} {L}
+\omega_{C} =\frac{r(\omega _R - \omega _L) }{L}= \frac{  r \Delta \omega} {L}
 \end{equation}
 
 Como la relación entre ambas magnitudes es:
 
 
 \begin{equation}
-v=R_{giro} \omega_{cm}
+v=R_{giro} \omega_{C}
 \end{equation}
 
 obtenemos:
@@ -387,11 +387,45 @@ Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta 
 %Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$ . Si definimos que $\omega _{fijo}=300 rpm $, para obtener un radio de giro mínimo de 1,5 veces R necesitaríamos $\Delta \omega =100 rpm $, mientras que para uno igual a R necesitaríamos $\Delta \omega =150 rpm $.
 
 \section{Modelado de los motores}
-Según \cite{alex} el modelado del motor esta dado por:
+Según \cite{alex} se puede modelar el motor según la siguiente ecuación diferencial:
 \begin{equation}
-
+J\ddot{\theta}=\frac{k_2}{R}V_i-\frac{k_2 k_2}{R} \dot{\theta}-k_3\dot{\theta} 
+\end{equation}
+donde $k_1$ es la constante que relaciona la fuerzamagneto motriz con la velocidad angular; $k_2$ relaciona la cupla motora con la corriente; $k_3$ relaciona la velocidad angular con el torque de fricción; $R$ es la resistencia del bobinado; $J$ es el momento de inercia del eje y $V_i$ es la tension entre los bornes del motor.
+La función de transferencia entonces resulta
+\begin{equation}
+\frac{\theta}{V_i}=\frac{k_2}{Rs(sJ+\frac{k_2k_1}{R}+k_3)}
 \end{equation}
 
+considerando que $\theta$ es proporcional al desplazamiento del dispositivo $x$ y $V_i$ es proporcional a la señal de control, simplificando resulta:
+\begin{equation}
+\frac{\theta}{V_i}=\frac{k_2/{JR}}{s(s+\frac{k_2k_1}{JR}+ \frac{k_3}{J} )}
+\end{equation} 
+escribiendo genéricamente 
+\begin{equation}
+\frac{\theta}{V_i}=\frac{a}{s(s+b)}
+\end{equation}
+ donde a y b son parámetros a determinar. Por cuestiones de practicidad (segun tania) en vez de usar $\theta$ se usa $\dot{\theta}$ , lo que produce la siguiente funcion de transferencia
+ \begin{equation}
+ \frac{\omega}{V_i}=\frac{a}{(s+b)}
+ \end{equation}
+ 
+ \section{Modelado de los motores2 }
+ 
+ Según \cite{dorf} la función de transferencia de la combinacion motor-carga despreciando el torque de la perturbacion resulta
+ \begin{equation}
+ \frac{\theta(s)}{V_f(s)}=\frac{K_m}{s(Js+b)(L_fs+R_f)}
+ \end{equation}
+ donde $\theta$ es la posición angular,$V_f$ es la tension de exitacion, $K_m$ es la constante que relaciona la corriente con el par del motor, $J$ es el momento de inercia del eje, $b$ es la constante de friccion del eje, $L_f$  y $R_f$ es la autoinductancia y resistencia del bobinado. Simplificando la función de transferencia resulta
+ \begin{equation}
+ \frac{\theta(s)}{V_f(s)}=\frac{k}{s(s+a)(s+b)}
+ \end{equation}
+ donde $k$,$a$,$b$ son constantes a determinar mediante la identificación.\\
+ Por practicidad en vez de usar $\theta$ se usa $\dot{\theta}$, lo que produce la siguiente funcion de transferencia
+ \begin{equation}
+ \frac{\dot{\theta}(s)}{V_f(s)}=\frac{k}{(s+a)(s+b)}
+ \end{equation}
+  
 \section{Sistema de medición de RPM y sensores de linea}
 
 \section{Obtención de los parámetros}
@@ -516,6 +550,7 @@ A la hora de implementar el control se encontraron varios inconvenientes.... Pon
 \bibitem{pathfoll} \textit{Path Following Mobile Robot in the Presence of Velocity Constraints}, Bak, Poulsen y Ravn.
 \bibitem{planning} \textit{Robotics: Modelling, Planning and Control}, Siciliano, Sciavicco, Villani y Oriolo.
 \bibitem{alex} Tesis de alexei.
+\bibitem{dorf} Dorf 10ma edicion; pagina 58.
 \end{thebibliography}
 %Referencias
 %[1]: “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.

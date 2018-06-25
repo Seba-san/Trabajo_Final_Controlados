@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.4.5)  25 JUN 2018 17:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.4.5)  25 JUN 2018 20:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -812,7 +812,7 @@ verted-to.pdf ./imagenes/LogoUNC.eps>
 (epstopdf)             \includegraphics on input line 93.
 Package epstopdf Info: Output file is already uptodate.
 
-<./imagenes/LogoUNC-eps-converted-to.pdf, id=76, 443.6575pt x 452.69125pt>
+<./imagenes/LogoUNC-eps-converted-to.pdf, id=80, 443.6575pt x 452.69125pt>
 File: ./imagenes/LogoUNC-eps-converted-to.pdf Graphic file (type pdf)
 
 <use ./imagenes/LogoUNC-eps-converted-to.pdf>
@@ -828,7 +828,7 @@ e{page.1}) has been already used, duplicate ignored
                    \relax 
 l.197 \begin{itemize}
                       [1]
-<./imagenes/robot_diferencial.png, id=100, 347.2975pt x 265.99374pt>
+<./imagenes/robot_diferencial.png, id=104, 347.2975pt x 265.99374pt>
 File: ./imagenes/robot_diferencial.png Graphic file (type png)
 
 <use ./imagenes/robot_diferencial.png>
@@ -839,14 +839,14 @@ Package pdftex.def Info: ./imagenes/robot_diferencial.png used on input line 24
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[2] <./imagenes/carrito1.png, id=120, 307.1475pt x 268.75406pt>
+[2] <./imagenes/carrito1.png, id=124, 307.1475pt x 268.75406pt>
 File: ./imagenes/carrito1.png Graphic file (type png)
 
 <use ./imagenes/carrito1.png>
 Package pdftex.def Info: ./imagenes/carrito1.png used on input line 299.
 (pdftex.def)             Requested size: 284.52756pt x 248.9791pt.
  [3 <./imagenes/robot_diferencial.png> <./imagenes/carrito1.png>]
-<./imagenes/carrito_girando.png, id=134, 276.28218pt x 241.65282pt>
+<./imagenes/carrito_girando.png, id=138, 276.28218pt x 241.65282pt>
 File: ./imagenes/carrito_girando.png Graphic file (type png)
 
 <use ./imagenes/carrito_girando.png>
@@ -863,19 +863,19 @@ erted-to.pdf>
 (epstopdf)                    size: 33905 bytes
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/resp_escalon_mo
 tores_2-eps-converted-to.pdf ./imagenes/resp_escalon_motores_2.eps>
-(epstopdf)             \includegraphics on input line 404.
+(epstopdf)             \includegraphics on input line 442.
 Package epstopdf Info: Output file is already uptodate.
 
-<./imagenes/resp_escalon_motores_2-eps-converted-to.pdf, id=145, 501.875pt x 38
+<./imagenes/resp_escalon_motores_2-eps-converted-to.pdf, id=151, 501.875pt x 38
 4.43625pt>
 File: ./imagenes/resp_escalon_motores_2-eps-converted-to.pdf Graphic file (type
  pdf)
  <use ./imagenes/resp_escalon_motores_2-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/resp_escalon_motores_2-eps-converted-to.pdf
- used on input line 404.
+ used on input line 442.
 (pdftex.def)             Requested size: 426.79134pt x 326.9366pt.
 
-[5 <./imagenes/resp_escalon_motores_2-eps-converted-to.pdf>]
+[5]
 Package epstopdf Info: Source file: <./imagenes/resp_escalon_motores_controlado
 s_2.eps>
 (epstopdf)                    date: 2018-06-25 15:33:32
@@ -887,25 +887,29 @@ s_2-eps-converted-to.pdf>
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/resp_escalon_mo
 tores_controlados_2-eps-converted-to.pdf ./imagenes/resp_escalon_motores_contro
 lados_2.eps>
-(epstopdf)             \includegraphics on input line 431.
+(epstopdf)             \includegraphics on input line 469.
 Package epstopdf Info: Output file is already uptodate.
 
-<./imagenes/resp_escalon_motores_controlados_2-eps-converted-to.pdf, id=167, 50
+<./imagenes/resp_escalon_motores_controlados_2-eps-converted-to.pdf, id=173, 50
 5.89pt x 384.43625pt>
 File: ./imagenes/resp_escalon_motores_controlados_2-eps-converted-to.pdf Graphi
 c file (type pdf)
 
 <use ./imagenes/resp_escalon_motores_controlados_2-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/resp_escalon_motores_controlados_2-eps-conv
-erted-to.pdf used on input line 431.
+erted-to.pdf used on input line 469.
 (pdftex.def)             Requested size: 426.79134pt x 324.33208pt.
 
-<./imagenes/carrito_Ensayo_escalon.png, id=168, 264.23718pt x 246.1697pt>
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[6 <./imagenes/resp_escalon_motores_2-eps-converted-to.pdf>]
+<./imagenes/carrito_Ensayo_escalon.png, id=193, 264.23718pt x 246.1697pt>
 File: ./imagenes/carrito_Ensayo_escalon.png Graphic file (type png)
 
 <use ./imagenes/carrito_Ensayo_escalon.png>
 Package pdftex.def Info: ./imagenes/carrito_Ensayo_escalon.png used on input li
-ne 448.
+ne 486.
 (pdftex.def)             Requested size: 284.52756pt x 265.08926pt.
 
 
@@ -920,22 +924,21 @@ Package epstopdf Info: Source file: <./imagenes/prueba_linealidad.eps>
 (epstopdf)                    size: 103259 bytes
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/prueba_linealid
 ad-eps-converted-to.pdf ./imagenes/prueba_linealidad.eps>
-(epstopdf)             \includegraphics on input line 463.
+(epstopdf)             \includegraphics on input line 501.
 Package epstopdf Info: Output file is already uptodate.
 
-<./imagenes/prueba_linealidad-eps-converted-to.pdf, id=169, 421.575pt x 316.181
+<./imagenes/prueba_linealidad-eps-converted-to.pdf, id=194, 421.575pt x 316.181
 24pt>
 File: ./imagenes/prueba_linealidad-eps-converted-to.pdf Graphic file (type pdf)
 
  <use ./imagenes/prueba_linealidad-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/prueba_linealidad-eps-converted-to.pdf used
- on input line 463.
+ on input line 501.
 (pdftex.def)             Requested size: 284.52756pt x 213.39865pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[6 <./imagenes/resp_escalon_motores_controlados_2-eps-converted-to.pdf>]
 Package epstopdf Info: Source file: <./imagenes/resp_escalon_sys_total.eps>
 (epstopdf)                    date: 2018-06-25 15:33:32
 (epstopdf)                    size: 49890 bytes
@@ -945,16 +948,16 @@ erted-to.pdf>
 (epstopdf)                    size: 12639 bytes
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/resp_escalon_sy
 s_total-eps-converted-to.pdf ./imagenes/resp_escalon_sys_total.eps>
-(epstopdf)             \includegraphics on input line 475.
+(epstopdf)             \includegraphics on input line 513.
 Package epstopdf Info: Output file is already uptodate.
 
-<./imagenes/resp_escalon_sys_total-eps-converted-to.pdf, id=186, 421.575pt x 31
+<./imagenes/resp_escalon_sys_total-eps-converted-to.pdf, id=195, 421.575pt x 31
 6.18124pt>
 File: ./imagenes/resp_escalon_sys_total-eps-converted-to.pdf Graphic file (type
  pdf)
  <use ./imagenes/resp_escalon_sys_total-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/resp_escalon_sys_total-eps-converted-to.pdf
- used on input line 475.
+ used on input line 513.
 (pdftex.def)             Requested size: 284.52756pt x 213.39865pt.
 
 
@@ -969,47 +972,45 @@ pdf>
 (epstopdf)                    size: 69940 bytes
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/sistema_total-e
 ps-converted-to.pdf ./imagenes/sistema_total.eps>
-(epstopdf)             \includegraphics on input line 495.
+(epstopdf)             \includegraphics on input line 533.
 Package epstopdf Info: Output file is already uptodate.
 
-<./imagenes/sistema_total-eps-converted-to.pdf, id=189, 563.10374pt x 262.9825p
+<./imagenes/sistema_total-eps-converted-to.pdf, id=198, 563.10374pt x 262.9825p
 t>
 File: ./imagenes/sistema_total-eps-converted-to.pdf Graphic file (type pdf)
  <use ./imagenes/sistema_total-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/sistema_total-eps-converted-to.pdf used on 
-input line 495.
+input line 533.
 (pdftex.def)             Requested size: 284.52756pt x 132.87933pt.
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 522.
-[7 <./imagenes/carrito_Ensayo_escalon.png>] [8 <./imagenes/prueba_linealidad-ep
+[7 <./imagenes/resp_escalon_motores_controlados_2-eps-converted-to.pdf>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 561.
+
+[8 <./imagenes/carrito_Ensayo_escalon.png>] [9 <./imagenes/prueba_linealidad-ep
 s-converted-to.pdf> <./imagenes/resp_escalon_sys_total-eps-converted-to.pdf> <.
 /imagenes/sistema_total-eps-converted-to.pdf>]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 522.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 561.
  (./pre_informe.aux
 LaTeX Info: Redefining \. on input line 19.
 LaTeX Info: Redefining \% on input line 19.
 )
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 522.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 522.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 561.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 561.
 Package rerunfilecheck Info: File `pre_informe.out' has not changed.
-(rerunfilecheck)             Checksum: 1D89385C1AA3B597EFF82DF1CF5CD60B;1126.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 522.
+(rerunfilecheck)             Checksum: 32D3141AEB2DFCC6373404D24FFE426C;1188.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 561.
  ) 
 Here is how much of TeX's memory you used:
- 9428 strings out of 493029
- 132844 string characters out of 6136235
- 247666 words of memory out of 5000000
- 12757 multiletter control sequences out of 15000+600000
+ 9443 strings out of 493029
+ 133006 string characters out of 6136235
+ 247718 words of memory out of 5000000
+ 12760 multiletter control sequences out of 15000+600000
  7031 words of font info for 26 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 34i,7n,35p,675b,403s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,7n,35p,675b,448s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
@@ -1017,15 +1018,15 @@ ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/tex
 mf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist
 /fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/
 type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
-i10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pf
-b>
-Output written on pre_informe.pdf (9 pages, 442054 bytes).
+ublic/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
+7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on pre_informe.pdf (10 pages, 454381 bytes).
 PDF statistics:
- 284 PDF objects out of 1000 (max. 8388607)
- 238 compressed objects within 3 object streams
- 63 named destinations out of 1000 (max. 500000)
- 195 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 311 PDF objects out of 1000 (max. 8388607)
+ 263 compressed objects within 3 object streams
+ 75 named destinations out of 1000 (max. 500000)
+ 203 words of extra memory for PDF output out of 10000 (max. 10000000)
 
