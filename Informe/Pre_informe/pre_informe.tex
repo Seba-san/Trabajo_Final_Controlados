@@ -235,13 +235,14 @@ V_{cm}= \frac{r}{2} (w_l-w_r)
 
 Esta parte fue sacada del archivo "Ideas para el modelado del robot.docx"
 % Agregado, es un choreo de pathfoll
-Según \cite{pathfoll}, el robot que se desea modelar se lo conoce como robot diferencial ya que cuenta con 2 ruedas y un punto de apoyo. Esta clase de robots son no holonómicos ya que tiene restricciones a la hora de realizar movimientos sobre el plano, por ejemplo, no puede realizar movimientos laterales. Teniendo en cuenta la figura \ref{fig:robot_diferencial} ,la posición y orientación del dispositivo  esta dada por las siguientes ecuaciones cinemáticas
+Según \cite{pathfoll}, el robot que se desea modelar se lo conoce como robot diferencial ya que cuenta con 2 ruedas y un punto de apoyo. Esta clase de robots son no holonómicos ya que tiene restricciones a la hora de realizar movimientos sobre el plano, por ejemplo, no puede realizar movimientos laterales. Teniendo en cuenta la figura \ref{fig:robot_diferencial}, y suponiendo que no hay deslizamiento, la posición y orientación del dispositivo  esta dada por las ecuaciones cinemáticas \ref{eq:ec_cinem}.
 
 \begin{equation}
 \dot{x}=v\cos\theta \quad \dot{y}=v\sin\theta \quad \dot{\theta}=\omega
+\label{eq:ec_cinem}
 \end{equation}
 
-Donde $(x,y)$ indican la posición del robot en el espacio carteciano y $\theta $, conocida como orientación, es el angulo entre el $x$ del sistema de cordenadas y el eje homologo del objeto.  De esta manera $(x,y,\theta)^T$ definen la postura.
+Donde $(x,y)$ indican la posición del robot en el espacio carteciano y $\theta $, conocida como orientación, es el angulo entre el eje $x$ del sistema de cordenadas y el eje homologo del objeto.  De esta manera $(x,y,\theta)^T$ definen la postura.
 
 \begin{figure}[h]
 \centering
@@ -291,20 +292,16 @@ v=\frac{r(\omega _R + \omega _L)}{2}
 Donde L es la distancia entre las ruedas. 
 
 \subsubsection{Modelado 1}
-Se toma como hipótesis que el vehículo se encuentra siempre sobre la linea a seguir.  Por lo que la señal de error se toma como la distancia entre el centro de la línea de sensores y el punto de intersección entre la línea de sensores y la recta a seguir. Esta situación se muestra en la figura \ref{fig:carrito1}
+Se toma como hipótesis que el vehículo se encuentra siempre sobre la linea a seguir.  Por lo que la señal de error se toma como la distancia entre el centro de la línea de sensores y el punto de intersección entre la línea de sensores y la recta a seguir. Esta situación se muestra en la figura \ref{fig:carrito1}.
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=10cm]{./imagenes/carrito1.png}
-\caption{Esquema del robot sobre la línea a seguir (azul). La línea roja representa la línea de sensores, $e$ es la distancia medida entre el centro de los sensores y la intersección de la recta a seguir con la línea de los sensores, y $\beta $ es el ángulo entre la línea a seguir y el eje central del robot}
+\caption{Esquema del robot sobre la línea a seguir (azul). La línea roja representa la línea de sensores, $e$ es la distancia medida entre el centro de los sensores y la intersección de la recta a seguir con la línea de los sensores, y $\beta $ es el ángulo entre la línea a seguir y el eje central del robot.}
 \label{fig:carrito1}
 \end{figure}
 
 Tomando las ecuaciones anteriores como referencia, las velocidades en módulo serían:
-
-\begin{equation}
-\dot{e}=v \tan(\beta)
-\end{equation}
 
 \begin{equation}
 \dot{\beta}=\omega
@@ -315,8 +312,13 @@ Dado que sólo poseemos la medición de $e$, se propone la siguiente estrategia 
 \begin{equation}
 \tan(\beta)=\frac{e}{l}
 \end{equation}
-Como $l$ es fijo, la medición de $e$ puede traducirse en una medición del ángulo. Así, de esta manera, podríamos buscar minimizar el ángulo para alinear el robot con la pista. Como la medición se hace suponiendo que C está sobre la línea, si el robot no está centrado respecto a la pista el cálculo del ángulo va a indicar una medición errónea, por lo que al llevar a cero el $ \beta $ medido de esta manera se termina garantizando que el robot esté centrado respecto a la pista.
-Bajo estas simplificaciones, nos basta con mirar el comportamiento del ángulo:
+Redaccion 1:\\
+Como $l$ es fijo, la medición de $e$ puede traducirse en una medición del ángulo. Así, de esta manera, podríamos buscar minimizar el ángulo para alinear el robot con la pista. Como la medición se hace suponiendo que C está sobre la línea , si el robot no está centrado respecto a la pista el cálculo del ángulo va a indicar una medición errónea (ya que la suposición de que $\beta=\theta$ no es válida), por lo que al llevar a cero el $ \beta $ medido de esta manera se termina garantizando que el robot esté centrado respecto a la pista.
+
+Redaccion 2:\\
+Como $l$ es fijo, y $e$ es lo que el sensor de linea mide, se puede calcular el valor de $\beta$. De esta manera, se podría buscar minimizar este angulo, considerando que $\beta$ es la medición de la orientación del robot en el espacio, es decir $\beta \approx \theta$. Esta hipótesis sera valida siempre y cuendo el centro del dispositivo este sobre la linea. Suponer esto tiene sentido siempre y cuendo todo el sistema controlado sea lo suficientemente rápido y preciso para corregir cualquier perturbación antes de que el centro se desplace y eche por tierra el modelado del sistema.
+
+Bajo estas simplificaciones, nos basta con mirar el comportamiento de $\beta$:
 
 \begin{equation}
 \dot{\beta}=\vert \omega \vert	=\frac{ \vert r(\omega _R - \omega _L) \vert }{L}
@@ -325,18 +327,30 @@ Bajo estas simplificaciones, nos basta con mirar el comportamiento del ángulo:
 Como sólo nos interesa la diferencia entra velocidades angulares del motor, se puede mantener $v$ constante tomando:
 
 \begin{equation}
-\omega _R = \omega _{fijo} +\Delta \omega
+\omega _R = \omega _{fijo} + \frac{\Delta \omega}{2} 
 \end{equation}
 
 \begin{equation}
-\omega _L = \omega _{fijo} -\Delta \omega
+\omega _L = \omega _{fijo} -\frac{\Delta \omega}{2}
 \end{equation}
 
-Esto disminuiría el problema a una sola señal de control, $\Delta \omega$, y disminuiría los efectos alineales influyendo sobre $\dot{e} $ sin embargo, como no se está tomando en cuenta la dinámica de e, no se tiene claro si esta restricción es necesaria. Se necesitaría profundizar en el análisis para poder asegurarlo.
+Esto disminuiría el problema a una sola señal de control, $\Delta \omega$. Restaría realizar un análisis mas profundo sobre la dinámica de $e$.
+Suponiendo el esquema de la figura \ref{fig:carrito1}, pero con un sensor de linea radial centrado en el centro con radio $T$ (como se ve en la figura...) resulta
+% y disminuiría los efectos alineales influyendo sobre $\dot{e} $ sin embargo, como no se está tomando en cuenta la dinámica de e, no se tiene claro si esta restricción es necesaria. Se necesitaría profundizar en el análisis para poder asegurarlo.
+\begin{equation}
+e=T \sin (\beta)  \Longrightarrow \dot{e}=T \cos (\beta) \dot{\beta}  \Longrightarrow \dot{e} = T \omega \cos(\beta)
+\end{equation}
+
+si $\vert\beta\vert<10^o$ resulta que  
+\begin{equation}
+\dot{e} = T \omega \quad \wedge \quad  e=T \beta
+\end{equation}
+
+En caso de que esta suposición no se cumpla entraran en juego las no linealidades antes vistas.
 
 \subsubsection{Radio de giro}
 Cuando el robot gira siguiendo una curva la disposición es como se muestra en la siguiente figura:
-
+En la figura \ref{fig:girando} se muestra la disposicion del robot cuando esta siguiendo una curva.
 \begin{figure}[h]
 \centering
 \includegraphics[width=10cm]{./imagenes/carrito_girando.png}
@@ -344,31 +358,39 @@ Cuando el robot gira siguiendo una curva la disposición es como se muestra en l
 \label{fig:girando}
 \end{figure}
 
-En este caso la velocidad del punto  C (punto medio entre las dos ruedas del robot) tiene una componente tangencial, v, y una componente de giro, $\omega$, dadas por: REVISAR ESTAS ECUACIONES; ESTAN MAL!
+En este caso la velocidad del punto  C (punto medio entre las dos ruedas del robot) tiene una componente tangencial, v, y una componente de giro, $\omega$, dadas por: 
 
 \begin{equation}
-v =\frac{r(\omega _R + \omega _L) }{2}=r \omega _{fijo}
+v =\frac{r(\omega _R + \omega _L) }{2}=r \omega_{fijo}
 \end{equation}
 
 \begin{equation}
-\omega =\frac{r(\omega _R - \omega _L) }{2}= \frac{  r \Delta \omega} {R}
+\omega_{cm} =\frac{r(\omega _R - \omega _L) }{L}= \frac{  r \Delta \omega} {L}
 \end{equation}
 
 Como la relación entre ambas magnitudes es:
 
 
 \begin{equation}
-v=R_{giro} \omega
+v=R_{giro} \omega_{cm}
 \end{equation}
 
-Obtenemos:
+obtenemos:
 \begin{equation}
-\Delta \omega= \frac{\omega _{fijo} R}{R_{giro}}  
+\Delta \omega= \frac{\omega_{fijo}L}{R_{giro}}
 \end{equation}
 
-Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$ . Si definimos que $\omega _{fijo}=300 rpm $, para obtener un radio de giro mínimo de 1,5 veces R necesitaríamos $\Delta \omega =100 rpm $, mientras que para uno igual a R necesitaríamos $\Delta \omega =150 rpm $.
+Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$.
+
+
+%Redaccion anterior
+%Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$ . Si definimos que $\omega _{fijo}=300 rpm $, para obtener un radio de giro mínimo de 1,5 veces R necesitaríamos $\Delta \omega =100 rpm $, mientras que para uno igual a R necesitaríamos $\Delta \omega =150 rpm $.
 
 \section{Modelado de los motores}
+Según \cite{alex} el modelado del motor esta dado por:
+\begin{equation}
+
+\end{equation}
 
 \section{Sistema de medición de RPM y sensores de linea}
 
@@ -493,7 +515,7 @@ A la hora de implementar el control se encontraron varios inconvenientes.... Pon
 \bibitem{arduinoNano} \url{https://store.arduino.cc/usa/arduino-nano}
 \bibitem{pathfoll} \textit{Path Following Mobile Robot in the Presence of Velocity Constraints}, Bak, Poulsen y Ravn.
 \bibitem{planning} \textit{Robotics: Modelling, Planning and Control}, Siciliano, Sciavicco, Villani y Oriolo.
-
+\bibitem{alex} Tesis de alexei.
 \end{thebibliography}
 %Referencias
 %[1]: “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.

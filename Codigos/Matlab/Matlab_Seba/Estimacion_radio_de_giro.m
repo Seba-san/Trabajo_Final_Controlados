@@ -61,5 +61,5 @@ wref=(wA+wB)/2;
 dW=wB-wA;
 Rg=L*(wref(1:80)./dW(1:80)-1/2);
 plot(tiempo(1:80),Rg(1:80),'b.',tiempo(1:80),R(1:80),'r.');ylim([-5 5])
-pause(1)
+pause()
 end
