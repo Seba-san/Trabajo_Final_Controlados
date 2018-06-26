@@ -431,6 +431,51 @@ escribiendo genéricamente
 \section{Obtención de los parámetros}
 
 \section{Ajuste fallido por medio de Z-N}
+Explicar que es un controlador PID antes. Lo que sigue es un choreo del ogata\\
+
+Según \cite{ogata} como casi todos los controladores PID se ajustan en el sitio, en la literatura se han propuesto muchos tipos diferentes de reglas de sintonización, que permiten llevar a cabo una sintonización delicada y fina de los controladores PID en el sitio. Asimismo, se han desarrollado métodos automáticos de sintonización y algunos de los controladores PID poseen capacidad de sintonización automática en línea. Actualmente se usan en la industria formas modificadas del control PID, tales como el control I-PD y el control PID con dos grados de libertad.
+
+La utilidad de los controles PID estriba en que se aplican en forma casi general a la mayoría de los sistemas de control. En particular, cuando el modelo matemático de la planta no se conoce y, por lo tanto, no se pueden emplear métodos de diseño analíticos, es cuando los controles PID resultan más útiles. En el campo de los sistemas para control de procesos, es un hecho bien conocido que los esquemas de control PID básicos y modificados han demostrado su utilidad para aportar un control satisfactorio, aunque tal vez en muchas situaciones específicas no aporten un control óptimo.
+
+Las reglas de Ziegler-Nichols son muy convenientes cuando no se conocen los modelos matemáticos de las plantas. Tales reglas sugieren un conjunto de valores de $K_p$, $T_i$ y $T_d$ que darán una operación estable del sistema. No obstante, el sistema resultante puede presentar una gran sobreelongación en su respuesta escalón de forma que resulte no aceptable. En tales casos se necesitará una serie de ajustes finos hasta que se obtenga el resultado deseado. De hecho, las reglas de sintonía de Ziegler-Nichols dan una estimación razonable de los parámetros del controlador y proporcionan un punto de partida para una sintonía fina, en lugar de dar los parámetros $K_p$, $T_i$ y $T_d$ en un único intento.
+
+Tal determinación de los parámetros de los controladores PID o sintonía de controladores PID se pueden realizar mediante experimentos sobre la planta. Hay dos métodos denominados reglas de sintonía de Ziegler-Nichols: método de la respuesta al esalón y método del $K_{inestable}$.  
+
+\subsection{Metodo de Z-N: respuesta al escalón}
+Esto esta sacado del PDF que nos paso COLON:\\
+
+Según \cite{biblia_PID} este método se basa en registrar la respuesta a un escalón
+unitario del sistema a lazo abierto, para luego ajustar los tres parámetros de un modelo
+de primer orden con retardo dado por la ecuación \ref{eq:ajusteZN}.
+
+\begin{equation}
+G_s(s)=\frac{K_p}{Ts+1}e^{-sL}
+\label{eq:ajusteZN}
+\end{equation}
+
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=5cm]{./imagenes/escalon_z-n.png}
+\caption{Determinación gráfica de los parámetros de un modelo a partir de
+la respuesta escalón en forma de S}
+\label{fig:escalon_zn}
+\end{figure}
+
+
+
+
+Los parámetros del modelo \ref{eq:ajusteZN} pueden ser determinados por medio de la figura \ref{fig:escalon_zn}.La ganancia estática $K$ la obtenemos del valor final de la salida del proceso dividido el valor máximo de la entrada. 
+
+Para hallar los otros dos parámetros hay varias alternativas. Una de ellas consiste en trazar una recta tangente al punto donde de la respuesta al escalón presenta la mayor pendiente. El valor de la demora $L$ lo obtenemos de la intersección de esta recta con el eje horizontal. El valor de la constante de tiempo $T$ lo podemos obtener a partir de la distancia $t_a-t_c $, donde $t_c$ es el tiempo donde la respuesta al escalón es $0.632K$.
+Otro método, un poco más preciso, consiste en determinar los puntos $t_b$ y $t_c$ donde $s(t)$ toma los valores $0.283K$ y $0.632K$, respectivamente. Luego, la demora y la constante de tiempo la hallamos a partir de la ecuacion \ref{eq:calculo_T_L}
+
+\begin{equation}
+T=1.5(t_c -t_b) \quad	L=t_c-T
+\label{eq:calculo_T_L}
+\end{equation}
+
+
 
 
 \section{Datos medidos}
@@ -474,12 +519,12 @@ Se ajustaron ambos motores para que con el controlador tengan una respuesta iden
 En función de lo analizado anteriormente, podemos pensar que si el robot arranca alineado con una línea recta, y manteniendo la restricción de v constante, entonces la planta se comporta como un sistema cuya entrada es $\Delta \omega$ y su salida $\beta $, gobernado por la ecuación:
 
 \begin{equation}
-\dot{\beta}= \frac{2r\Delta\omega}{R} 
+\dot{\beta}= \frac{r\Delta\omega}{L} 
 \label{eq:sys_tot_teo} 
 \end{equation}
 
 Para realizar el ensayo al escalón se debería empezar con $\Delta \omega = \beta = \theta=0$  y luego cambiar $\Delta \omega$  abruptamente a un valor final ($\Delta \omega$  es el escalón de entrada) midiendo el valor de $\beta$ obtenido. Físicamente esto implica que el robot debe empezar andando a velocidad constante, perfectamente alineado con la línea, y luego girar hasta perder la línea (más allá de este punto no tiene sentido seguir porque se pierde la medición).
-Si el cambio de velocidad de los motores fuese automático, el robot giraría siguiendo una circunferencia perfecta como se ve a continuación:
+Si el cambio de velocidad de los motores fuese automático, el robot giraría siguiendo una circunferencia perfecta como se ve a en la figura \ref{fig:carritoEsc}.
 
 \begin{figure}[h]
 \centering
@@ -487,9 +532,9 @@ Si el cambio de velocidad de los motores fuese automático, el robot giraría si
 \caption{Trayectoria seguida por el robot si empieza a girar a $\Delta \omega $ constante (verde) arrancando inicialmente alineado con la línea (gris).}
 \label{fig:carritoEsc}
 \end{figure}
-Lo que nos interesa es saber cuánto tiempo transcurre hasta que pierde la línea. Dicho punto sería cuando el último sensor de la derecha está sobre la línea verde. Si la distancia entre el eje central del robot y éste LED es $d_1$, entonces el LED se desplaza siguiendo una trayectoria circular de radio $R_{giro}$+$d_1$ …..
-Terminar de poner ideas para el cálculo
-Borrador:
+%Lo que nos interesa es saber cuánto tiempo transcurre hasta que pierde la línea. Dicho punto sería cuando el último sensor de la derecha está sobre la línea verde. Si la distancia entre el eje central del robot y éste LED es $d_1$, entonces el LED se desplaza siguiendo una trayectoria circular de radio $R_{giro}$+$d_1$ …..
+%Terminar de poner ideas para el cálculo
+%Borrador:
 
 
 \section{Ensayo escalón carrito implementación}
@@ -551,6 +596,10 @@ A la hora de implementar el control se encontraron varios inconvenientes.... Pon
 \bibitem{planning} \textit{Robotics: Modelling, Planning and Control}, Siciliano, Sciavicco, Villani y Oriolo.
 \bibitem{alex} Tesis de alexei.
 \bibitem{dorf} Dorf 10ma edicion; pagina 58.
+\bibitem{paginaZN} \url{https://sites.google.com/site/picuino/ziegler-nichols}.
+\bibitem{ogata} Ogata 5ta edicion capitulo 5
+\bibitem{biblia_PID} PID que nos paso colon.
+\bibitem{paginaPID}\url{https://sites.google.com/site/picuino/ziegler-nichols}
 \end{thebibliography}
 %Referencias
 %[1]: “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.
