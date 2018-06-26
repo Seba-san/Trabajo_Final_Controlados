@@ -426,7 +426,42 @@ escribiendo genéricamente
  \frac{\dot{\theta}(s)}{V_f(s)}=\frac{k}{(s+a)(s+b)}
  \end{equation}
   
-\section{Sistema de medición de RPM y sensores de linea}
+\section{Sensores del Sistema}
+\subsection{Medición de velocidad de los Motores}
+Para la medición de velocidad de los motores se utilizaron encoders ópticos. Estos consisten en un diodo LED infrarrojo enfrentado a un fotodiodo receptor en dirección vertical, con una estructura colocada entre ambos. Ésta última fue diseñada en SolidWorks e impresa con impresora 3D y su forma se asemeja a la de jaula de ardilla. La idea del diseño es que las varillas bloqueen o dejen pasar la luz del LED, de modo que el fotodiodo genere una señal que permita detectar el paso de cada una de ellas.
+
+El fotodiodo receptor se encuentra conectado según el esquema mostrado en la figura \ref{fig:circuitoFotodiodo}.
+\begin{figure}[h]
+\centering
+\includegraphics[width=10cm]{./imagenes/circuitoFotodiodo.jpeg}
+\caption{circuito del fotodiodo y de los diodos infrarrojos.}
+\label{fig:circuitoFotodiodo}
+\end{figure}
+La señal de salida se conecta a compuertas lógicas Schmitt trigger para atenuar posibles ruidos en la señal y luego la salida de ésta se conecta al microcontrolador. La sensibilidad de los diodos receptores se calibra manualmente por medio de R2.
+
+Los diodos emisores, por su parte, se encuentran conectados en paralelo entre sí y en serie con una resitencia de $100 \Omega$ conectada a la salida de tensión de 5V del kit de desarrollo Arduino Nano. Inicialmente se había diseñado un circuito con espejo de corriente que permitía regular la intensidad de los LEDs desde el microcontrolador para poder adaptarse a cambios de luz en el ambiente, no obstante, las pruebas demostraron que se podía calibrar una intensidad que funcionase bajo todas las condiciones de luz del lugar de trabajo usado, por lo que se descartó el circuito por la simple versión actual.
+
+Se midió con el osciloscopio la señal de salida de la compuerta y se verificó que la misma es una señal cuadrada aparentemente sin ruido.
+
+Las salidas de los receptores se conectan a entradas del microcontrolador, donde se resuelve la medición de velocidad por medio de interrupciones. Para ello se utilizan pines con interrupción  por cambio de estado y se mide el tiempo entre interrupciones sucesivas. Esta medición de tiempo presenta una serie de problemas explicados a continuación.
+
+El microcontrolador ATmega328P posee un total de 3 timers. El timer1 se utilizó para generar los PWM de los motores, mientras que el timer2 se utilizó para la generación de un tiempo de muestreo constante para el sistema. Esto dejaba únicamente el timer0 disponible para realizar la medición de tiempos entre interrupciones, sin embargo, dado que el timer0 es el que utilizan las librerías de Arduino por defecto, se decidió buscar una alternativa que permitiese reservar este timer para futuros usos. Para ello se decidió utilizar el timer2 de forma simultánea para las interrupciones constantes a Ts (periodo de muestreo) y para el conteo de tiempo.
+
+\subsubsection{Idea General}
+Al inicio, cada vez que el timer2 desborda, se incrementa una variable auxiliar cantOVerflow. Cuando se detecta el primer cambio de estado o flanco (interrupción por pin), el tiempo transcurrido va a ser:
+ \begin{equation*}
+ t=\frac{Prescaler}{f_{clk_{io}}} (TCNT2+cantOVerflow\ OCR2A)
+ \end{equation*}
+Ya que la cantidad de pulsos contados por el timer es igual al valor actual del timer más cantOVerflow veces el máximo valor que cuenta.
+
+Una vez guardado el valor del timer actual, reseteamos cantOVerflow. Así, la siguiente vez que se genere una interrupción el valor de cantOVerflow reflejará la cantidad de overflows que hubo desde la interrupción pasada. Si hacemos el cálculo de tiempo como antes, tendremos un error de cálculo debido a que en realidad no transcurrieron cantOVerflow ciclos de conteo completo del timer, sino que el primero arrancó a contar desde el valor que tenía el timer cuando se hizo la interrupción anterior. Para eso agregamos una variable auxiliar de corrección cuyo valor sea siempre el valor del timer al momento de la última interrupción:
+ \begin{equation}
+ t=\frac{Prescaler}{f_{clk_{io}}} (TCNT2+cantOVerflow\ OCR2A-TCNT2_{anterior})
+ \end{equation}
+
+
+\subsection{Sensor de Línea}
+
 
 \section{Obtención de los parámetros}
 

@@ -10,10 +10,13 @@
 \BOOKMARK [3][-]{subsubsection.5.1.2}{Radio de giro}{subsection.5.1}% 10
 \BOOKMARK [1][-]{section.6}{Modelado de los motores}{}% 11
 \BOOKMARK [1][-]{section.7}{Modelado de los motores2 }{}% 12
-\BOOKMARK [1][-]{section.8}{Sistema de medici\363n de RPM y sensores de linea}{}% 13
-\BOOKMARK [1][-]{section.9}{Obtenci\363n de los par\341metros}{}% 14
-\BOOKMARK [1][-]{section.10}{Ajuste fallido por medio de Z-N}{}% 15
-\BOOKMARK [1][-]{section.11}{Datos medidos}{}% 16
-\BOOKMARK [1][-]{section.12}{Ensayo al Escal\363n}{}% 17
-\BOOKMARK [1][-]{section.13}{Ensayo escal\363n carrito implementaci\363n}{}% 18
-\BOOKMARK [1][-]{section.14}{Sistema total y control}{}% 19
+\BOOKMARK [1][-]{section.8}{Sensores del Sistema}{}% 13
+\BOOKMARK [2][-]{subsection.8.1}{Medici\363n de velocidad de los Motores}{section.8}% 14
+\BOOKMARK [3][-]{subsubsection.8.1.1}{Idea General}{subsection.8.1}% 15
+\BOOKMARK [2][-]{subsection.8.2}{Sensor de L\355nea}{section.8}% 16
+\BOOKMARK [1][-]{section.9}{Obtenci\363n de los par\341metros}{}% 17
+\BOOKMARK [1][-]{section.10}{Ajuste fallido por medio de Z-N}{}% 18
+\BOOKMARK [1][-]{section.11}{Datos medidos}{}% 19
+\BOOKMARK [1][-]{section.12}{Ensayo al Escal\363n}{}% 20
+\BOOKMARK [1][-]{section.13}{Ensayo escal\363n carrito implementaci\363n}{}% 21
+\BOOKMARK [1][-]{section.14}{Sistema total y control}{}% 22
