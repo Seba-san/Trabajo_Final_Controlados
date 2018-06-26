@@ -459,9 +459,36 @@ Una vez guardado el valor del timer actual, reseteamos cantOVerflow. Así, la si
  t=\frac{Prescaler}{f_{clk_{io}}} (TCNT2+cantOVerflow\ OCR2A-TCNT2_{anterior})
  \end{equation}
 
+Como este cálculo debe realizarse para cada motor, el código de interrupción por cambio de estado verifica cuál encoder generó la interrupción y almacena las variables necesarias para hacer el cálculo de velocidad del motor en el código principal, es decir, fuera de la interrupción para no consumir recursos del microcontrolador.
+
+Conociendo el tiempo entre interrupciones, el cálculo de velocidad correspondiente en $rpm$ se realiza según la fórmula:
+\begin{equation*}
+\omega=60 \frac{seg}{min}\ \frac{1}{D\ t}
+\end{equation*}
+
+Donde $D$ es la cantidad de varillas del encoder. 
+
+%Esto habría que revisarlo... $.$
+Para el primer modelo de encoder utilizado la señal cuadrada a la entrada del microcontrolador presentaba variaciones en el ancho del pulso debidas al movimiento de la rueda que se encontraba ligeramente descentrada. Para evitar este inconveniente y posibles asimetrías en la fabricación del encoder, se decidió calcular la velocidad con el tiempo demorado en realizar una vuelta entera. Para el modelo de encoder actual esto no debería ser necesario, sin embargo se ha mantenido en el código. El resultado de esta forma de medición equivale a agregar un filtro moving average variante en el tiempo. El efecto de esto se verá más adelante.
+
+Sabiendo que la mínima variación de tiempo está dada por la cantidad de conteos realizados por el timer, resulta evidente que mientras más rápido cambie el timer mayor precisión se tendrá en la medición de velocidad. Sabemos que el timer genera interrupciones cada:
+\begin{equation}
+T_{int}=\frac{Prescaler(1+OCRn2)}{f_{clk_{io}}}
+\end{equation}
+por lo que si se desea un $T_{int}$ pequeño se debe utilizar un prescaler lo menor posible. Dado que este mismo $T_{int}$ es el que se utiliza para generar la frecuencia de muestreo constante, se aumentar el prescaler efectivo utilizando una variable auxiliar como contador. Así, la frecuencia de muestreo del sistema será un múltiplo de $T_{int}$. Para determinar el valor del prescaler a utilizar se debe tener en cuenta que el tiempo $T_{int}$ sea suficiente para realizar las operaciones necesarias en la interrupción por overflow del timer y para que estas interrupciones no se generen con una frecuencia tan alta que impida el correcto funcionamiento de las restantes interrupciones.
 
 \subsection{Sensor de Línea}
+Los seguidores de línea utilizados regularmente consisten en una serie de fotoreceptores y LEDs infrarrojos colocados en dos líneas paralelas. La idea es que la luz emitida por el diodo LED se refleje en la superficie blanca del suelo y llegue al fotoreceptor correspondiente o sea absorbida por la línea negra posicionada en el punto intermedio entre ambos, de modo que el fotoreceptor indique ausencia de luz. La idea se muestra en la figura \ref{fig:sensorLinea}.
+%Completar!! $.$
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=10cm]{./imagenes/circuitoFotodiodo.jpeg}
+%\caption{.}
+%\label{fig:sensorLinea}
+%\end{figure}
 
+Considerando el análisis realizado en la sección 
+%SEGUIR
 
 \section{Obtención de los parámetros}
 
