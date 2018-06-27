@@ -16,7 +16,8 @@
 %\DeclareGraphicsExtensions{.eps}
 
 \usepackage{graphicx}%es para agregar imagenes
-\usepackage{subfigure}  %es para las subfiguras
+\usepackage{subcaption}  %es para las subfiguras
+%\usepackage{subfigure}  %es para las subfiguras
 %\DeclareGraphicsExtensions{.eps,.png}
 %\DeclareGraphicsExtensions{.png,.eps}
 %\usepackage[spanish]{babel} % es para castellanizar algunos comandos
@@ -426,10 +427,12 @@ escribiendo genéricamente
  \frac{\dot{\theta}(s)}{V_f(s)}=\frac{k}{(s+a)(s+b)}
  \end{equation}
   
-\section{Sensores del Sistema}
+\section{Sistemas de Medición}
 \subsection{Medición de velocidad de los Motores}
+\subsubsection{Estructura Mecánica}
 Para la medición de velocidad de los motores se utilizaron encoders ópticos. Estos consisten en un diodo LED infrarrojo enfrentado a un fotodiodo receptor en dirección vertical, con una estructura colocada entre ambos. Ésta última fue diseñada en SolidWorks e impresa con impresora 3D y su forma se asemeja a la de jaula de ardilla. La idea del diseño es que las varillas bloqueen o dejen pasar la luz del LED, de modo que el fotodiodo genere una señal que permita detectar el paso de cada una de ellas.
 
+\subsubsection{Circuito Eléctrico}
 El fotodiodo receptor se encuentra conectado según el esquema mostrado en la figura \ref{fig:circuitoFotodiodo}.
 \begin{figure}[h]
 \centering
@@ -443,25 +446,29 @@ Los diodos emisores, por su parte, se encuentran conectados en paralelo entre s�
 
 Se midió con el osciloscopio la señal de salida de la compuerta y se verificó que la misma es una señal cuadrada aparentemente sin ruido.
 
-Las salidas de los receptores se conectan a entradas del microcontrolador, donde se resuelve la medición de velocidad por medio de interrupciones. Para ello se utilizan pines con interrupción  por cambio de estado y se mide el tiempo entre interrupciones sucesivas. Esta medición de tiempo presenta una serie de problemas explicados a continuación.
+\subsubsection{Medición de Velocidad con el Microcontrolador}
+Las señales acondicionadas de los encoders (ver figura \ref{fig:circuitoFotodiodo}) se conectan a entradas del microcontrolador, donde se resuelve la medición de velocidad por medio de interrupciones. Para ello se utilizan pines con interrupción
+por cambio de estado y se mide el tiempo entre interrupciones sucesivas. Esta medición de tiempo presenta una serie de problemas explicados a continuación.
 
-El microcontrolador ATmega328P posee un total de 3 timers. El timer1 se utilizó para generar los PWM de los motores, mientras que el timer2 se utilizó para la generación de un tiempo de muestreo constante para el sistema. Esto dejaba únicamente el timer0 disponible para realizar la medición de tiempos entre interrupciones, sin embargo, dado que el timer0 es el que utilizan las librerías de Arduino por defecto, se decidió buscar una alternativa que permitiese reservar este timer para futuros usos. Para ello se decidió utilizar el timer2 de forma simultánea para las interrupciones constantes a Ts (periodo de muestreo) y para el conteo de tiempo.
+El microcontrolador ATmega328P posee un total de 3 timers. El timer1 se utilizó para generar los PWM de los motores, mientras que el timer2 se utilizó para la generación de un tiempo de muestreo constante para el sistema. Esto dejaba únicamente el timer0 disponible para realizar la medición de tiempos entre interrupciones,
+sin embargo, dado que el timer0 es el que utilizan las librerías de Arduino por defecto, se decidió buscar una alternativa que permitiese reservar este timer para futuros usos. Para ello se decidió utilizar el timer2 de forma simultánea para las interrupciones constantes a Ts (periodo de muestreo) y para el conteo de tiempo.
 
-\subsubsection{Idea General}
-Al inicio, cada vez que el timer2 desborda, se incrementa una variable auxiliar cantOVerflow. Cuando se detecta el primer cambio de estado o flanco (interrupción por pin), el tiempo transcurrido va a ser:
+Para entender cómo usar de forma conjunta el timer, consideremos lo que ocurre cuando se inicia el microcontrolador. Cada vez que el timer2 desborda se incrementa una variable auxiliar $cantOVerflow$. Cuando se detecta el primer cambio de estado o flanco (interrupción por pin), el tiempo transcurrido va a ser:
  \begin{equation*}
  t=\frac{Prescaler}{f_{clk_{io}}} (TCNT2+cantOVerflow\ OCR2A)
  \end{equation*}
-Ya que la cantidad de pulsos contados por el timer es igual al valor actual del timer más cantOVerflow veces el máximo valor que cuenta.
+Ya que la cantidad de pulsos contados por el timer es igual al valor actual del timer (registro TCNT2 del microcontrolador) más $cantOVerflow$ veces el máximo valor que cuenta (dado por el registro $OCR2A$ del microcontrolador).
 
-Una vez guardado el valor del timer actual, reseteamos cantOVerflow. Así, la siguiente vez que se genere una interrupción el valor de cantOVerflow reflejará la cantidad de overflows que hubo desde la interrupción pasada. Si hacemos el cálculo de tiempo como antes, tendremos un error de cálculo debido a que en realidad no transcurrieron cantOVerflow ciclos de conteo completo del timer, sino que el primero arrancó a contar desde el valor que tenía el timer cuando se hizo la interrupción anterior. Para eso agregamos una variable auxiliar de corrección cuyo valor sea siempre el valor del timer al momento de la última interrupción:
+Una vez guardado el valor del timer actual, reseteamos $cantOVerflow$. Así, la siguiente vez que se genere una interrupción el valor de $cantOVerflow$ reflejará la cantidad de overflows que hubo desde la interrupción pasada. Si a la siguiente interrupción por cambio de estado de la señal del encoder hacemos el cálculo de tiempo como
+antes, tendremos un error de cálculo debido a que en realidad no transcurrieron $cantOVerflow$ ciclos de conteo completos del timer, sino que el primero arrancó a contar desde el valor que tenía el timer cuando se hizo la interrupción anterior. Para eso agregamos una variable auxiliar de corrección cuyo valor sea siempre el valor del
+timer al momento de la última interrupción:
  \begin{equation}
  t=\frac{Prescaler}{f_{clk_{io}}} (TCNT2+cantOVerflow\ OCR2A-TCNT2_{anterior})
  \end{equation}
 
-Como este cálculo debe realizarse para cada motor, el código de interrupción por cambio de estado verifica cuál encoder generó la interrupción y almacena las variables necesarias para hacer el cálculo de velocidad del motor en el código principal, es decir, fuera de la interrupción para no consumir recursos del microcontrolador.
+Como este cálculo debe realizarse para cada motor, el código de interrupción por cambio de estado verifica cuál encoder generó la interrupción y almacena las variables necesarias para hacer el cálculo de velocidad del motor ($TCNT2$, $TCNT2anterior$ y $cantOverflow$ para cada motor) en el código principal, es decir, fuera de la interrupción para no consumir recursos del microcontrolador.
 
-Conociendo el tiempo entre interrupciones, el cálculo de velocidad correspondiente en $rpm$ se realiza según la fórmula:
+Conociendo el tiempo entre interrupciones, el cálculo de velocidad correspondiente en rpm se realiza según la fórmula:
 \begin{equation*}
 \omega=60 \frac{seg}{min}\ \frac{1}{D\ t}
 \end{equation*}
@@ -469,26 +476,63 @@ Conociendo el tiempo entre interrupciones, el cálculo de velocidad correspondie
 Donde $D$ es la cantidad de varillas del encoder. 
 
 %Esto habría que revisarlo... $.$
-Para el primer modelo de encoder utilizado la señal cuadrada a la entrada del microcontrolador presentaba variaciones en el ancho del pulso debidas al movimiento de la rueda que se encontraba ligeramente descentrada. Para evitar este inconveniente y posibles asimetrías en la fabricación del encoder, se decidió calcular la velocidad con el tiempo demorado en realizar una vuelta entera. Para el modelo de encoder actual esto no debería ser necesario, sin embargo se ha mantenido en el código. El resultado de esta forma de medición equivale a agregar un filtro moving average variante en el tiempo. El efecto de esto se verá más adelante.
-
-Sabiendo que la mínima variación de tiempo está dada por la cantidad de conteos realizados por el timer, resulta evidente que mientras más rápido cambie el timer mayor precisión se tendrá en la medición de velocidad. Sabemos que el timer genera interrupciones cada:
+Para el primer modelo de encoder utilizado la señal cuadrada a la entrada del microcontrolador presentaba variaciones en el ancho del pulso debidas al movimiento de la rueda que se encontraba ligeramente descentrada. Para evitar este inconveniente y las variaciones introducidas por posibles asimetrías en la fabricación del encoder,
+se decidió calcular la velocidad con el tiempo demorado en realizar una vuelta entera. Para el modelo de encoder actual esto no debería ser tan necesario, sin embargo se ha mantenido en el código. El resultado de esta forma de medición equivale a agregar un filtro moving average variante en el tiempo. El efecto de esto se verá más
+adelante.
+Sabiendo que la mínima variación de tiempo está dada por la cantidad de conteos realizados por el timer, resulta evidente que mientras más rápido cambie el timer mayor precisión se tendrá en la medición de velocidad.
+Sabemos que el timer genera interrupciones cada:
 \begin{equation}
-T_{int}=\frac{Prescaler(1+OCRn2)}{f_{clk_{io}}}
+T_{int}=\frac{Prescaler(1+OCR2A)}{f_{clk_{io}}}
 \end{equation}
-por lo que si se desea un $T_{int}$ pequeño se debe utilizar un prescaler lo menor posible. Dado que este mismo $T_{int}$ es el que se utiliza para generar la frecuencia de muestreo constante, se aumentar el prescaler efectivo utilizando una variable auxiliar como contador. Así, la frecuencia de muestreo del sistema será un múltiplo de $T_{int}$. Para determinar el valor del prescaler a utilizar se debe tener en cuenta que el tiempo $T_{int}$ sea suficiente para realizar las operaciones necesarias en la interrupción por overflow del timer y para que estas interrupciones no se generen con una frecuencia tan alta que impida el correcto funcionamiento de las restantes interrupciones.
+por lo que si se desea un $T_{int}$ pequeño se debe utilizar un prescaler lo menor posible. Dado que este mismo $T_{int}$ es el que se utiliza para generar la frecuencia de muestreo constante, se aumenta el prescaler efectivo para la determinación de $Ts$ utilizando una variable auxiliar como contador. Así, la frecuencia de muestreo del sistema será un múltiplo de $T_{int}$. Para determinar el valor del prescaler a utilizar se debe tener en cuenta que el tiempo $T_{int}$ sea suficiente para realizar las operaciones necesarias en la interrupción por overflow del timer y para que estas interrupciones no se generen con una frecuencia tan alta que impida el correcto funcionamiento de las restantes interrupciones.
 
 \subsection{Sensor de Línea}
 Los seguidores de línea utilizados regularmente consisten en una serie de fotoreceptores y LEDs infrarrojos colocados en dos líneas paralelas. La idea es que la luz emitida por el diodo LED se refleje en la superficie blanca del suelo y llegue al fotoreceptor correspondiente o sea absorbida por la línea negra posicionada en el punto intermedio entre ambos, de modo que el fotoreceptor indique ausencia de luz. La idea se muestra en la figura \ref{fig:sensorLinea}.
 %Completar!! $.$
-%\begin{figure}[h]
-%\centering
-%\includegraphics[width=10cm]{./imagenes/circuitoFotodiodo.jpeg}
-%\caption{.}
-%\label{fig:sensorLinea}
-%\end{figure}
+\begin{figure}[h]
+\centering
+\includegraphics[width=8cm]{./imagenes/sensorLinea.png}
+\caption{COMPLETAR.}
+\label{fig:sensorLinea}
+\end{figure}
 
-Considerando el análisis realizado en la sección 
-%SEGUIR
+\subsubsection{Circuito Eléctrico}
+Para alimentar este arreglo de emisores y receptores se utilizó el circuito de la figura \ref{fig:circuitoSensorLinea}. En ella se observa que los diodos se alimentan a través de espejos de corriente que permiten ajustar la sensibilidad. Las salidas de cada fotodiodo se conectan a compuertas Schmitt trigger para acomodar la señal de salida a una que permita trabajar con lógica digital. Se corroboró con el osciloscopio que la señal de salida era apropiada para la lectura digital por parte del microcontrolador.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=10cm]{./imagenes/circuitoSensorLinea}
+	\caption{circuito utilizado para alimentar los diodos LED infrarrojos y los correspondientes fotodiodos que componen el sensor de línea.}
+	\label{fig:circuitoSensorLinea}
+\end{figure}
+
+\subsubsection{Estructura Mecánica}
+La disposición física de los LEDs estaba dada inicialmente por la placa PCB utilizada en el circuito. Esto hacía que los LEDs se encontraran a alturas ligeramente variables y con leves diferencias de inclinación, además de que la placa no se encontraba centrada respecto al cuerpo del robot por estar colocada en una posición
+casi arbitraria. A pesar de estos problemas, el sensor presentaba un desempeño básico aceptable que permitió realizar las pruebas necesarias hasta lograr que el robot realizara el seguimiento de una pista. No obstante, una vez finalizado el prototipo inicial, se rediseñó la estructura para solucionar estos problemas. En esta etapa
+del trabajo se diseñaron y fabricaron dos estructuras alternativas: la primera con una disposición de los LEDs tradicional lineal y la segunda con una disposición circular. Esta última se propuso en función del análisis realizado en la sección Modelado del Sistema, según el cual podíamos trabajar con un modelo LTI simple
+si considerábamos únicamente el ángulo de desviación de la orientación del robot respecto de la línea. Las estructuras obtenidas pueden observarse en la figura \ref{fig:estructuraSensor}. 
+\begin{figure}[h!]%!: Override internal parameters LaTeX uses for determining "good" float positions.
+    \centering
+    \begin{subfigure}[h]{0.45\textwidth}
+    	\centering
+        \includegraphics[width=8cm]{./imagenes/conSensorLineal.jpg}
+        \caption{}
+    \end{subfigure}
+    \quad
+    \begin{subfigure}[h]{0.45\textwidth}
+    	\centering
+        \includegraphics[width=8cm]{./imagenes/conSensorCircular.jpg}
+        \caption{}
+    \end{subfigure}
+    \caption{esquema del robot con los dos tipos de estructuras diseñadas para fijar la disposición de los diodos según la configuración geométrica deseada: (a) lineal, y (b) circular.}
+	\label{fig:estructuraSensor}
+\end{figure}
+
+Se optó por diseñar las dos variantes para poder probar a futuro distintas estrategias de control, no obstante, la utilizada actualmente funcionaría mejor con la disposición circular. Además, para permitir variar las pruebas en etapas de desarrollo, se diseñaron las estructuras con agujeros adicionales para tener la posibilidad de agregar LEDs o modificar la distancia entre los mismos. Para las pruebas mostradas en este informe se utilizó una configuración con 8 pares de LEDs ubicados desde los extremos al centro dejando un lugar vacío entre ellos.
+\subsubsection{Valores de Lectura}
+Considerando que se deseaba obtener un valor de ángulo como lectura del sensor, se podría haber realizado una deducción geométrica de los valores de ángulo a asignar para cada lectura posible del sensor. Sin embargo, dado que el diseño inicial tenía múltiples asimetrías, que resultaba difícil identificar correctamente el centro del robot y que los diodos utilizados pueden presentar imperfecciones o diferencias de sensibilidad, se optó por realizar un ensayo donde se midiera el rango de valores de ángulo de desviación para el cual se mantenía cada medición posible del sensor. Este ensayo se realizó marcando en un papel líneas de referencia y colocando cinta en línea recta sobre el mismo. Girando el robot sobre la pista con el centro siempre sobre un punto medio de la línea, se marcaron los rangos de desviación para los cuales se mantenía cada medición del sensor.
+\subsubsection{Lectura del Sensor con el Microcontrolador}
+Las salidas de las compuertas se conectan a pines de entrada del microcontrolador. En el programa principal la medición de la línea se necesita cada vez que se calcula el PID del sistema total, por ello se programó una subrutina de medición que se llama en el main antes de calcular el controlador cada $Ts$ segundos. Dentro de esta subrutina se lee cada valor digital de entrada y se almacenan los resultados en un vector de 8 componentes. Para anticiparse a valores de mediciones atípicos y atenuar el efecto de posibles errores de medición, se calcula una suma ponderada de las entradas para obtener un número que indica debajo de cuál de los fotodiodos se encuentra el centro de la línea, siendo las posibilidades para el caso de 8 LEDs: 1, 1.5, 2, 2.5,...,7,7.5 y 8, donde los números no enteros representan el caso en el que la línea se encuentre entre dos fotodiodos. Si a este número lo multiplicamos por dos y le restamos dos, nos queda uno de los siguientes resultados: 0,1,2,...14, que pueden usarse como índice de un vector. De esta forma lo que se hace es definir un vector constante con los resultados de ángulo obtenidos por ensayo cuando la línea estaba bajo cada una de las posibilidades y utilizar el número calculado para definir con cuál de los elementos del vector quedarse como medición actual. El caso en que todos
+las entradas estén en 0 se toma como valor particular y se la asigna el número 3 para que funcione como bandera e indique que se perdió la línea. Cuando esto ocurre el programa principal mantiene para los cálculos el último valor medido.
 
 \section{Obtención de los parámetros}
 

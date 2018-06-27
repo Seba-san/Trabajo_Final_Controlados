@@ -10,13 +10,19 @@
 \BOOKMARK [3][-]{subsubsection.5.1.2}{Radio de giro}{subsection.5.1}% 10
 \BOOKMARK [1][-]{section.6}{Modelado de los motores}{}% 11
 \BOOKMARK [1][-]{section.7}{Modelado de los motores2 }{}% 12
-\BOOKMARK [1][-]{section.8}{Sensores del Sistema}{}% 13
+\BOOKMARK [1][-]{section.8}{Sistemas de Medici\363n}{}% 13
 \BOOKMARK [2][-]{subsection.8.1}{Medici\363n de velocidad de los Motores}{section.8}% 14
-\BOOKMARK [3][-]{subsubsection.8.1.1}{Idea General}{subsection.8.1}% 15
-\BOOKMARK [2][-]{subsection.8.2}{Sensor de L\355nea}{section.8}% 16
-\BOOKMARK [1][-]{section.9}{Obtenci\363n de los par\341metros}{}% 17
-\BOOKMARK [1][-]{section.10}{Ajuste fallido por medio de Z-N}{}% 18
-\BOOKMARK [1][-]{section.11}{Datos medidos}{}% 19
-\BOOKMARK [1][-]{section.12}{Ensayo al Escal\363n}{}% 20
-\BOOKMARK [1][-]{section.13}{Ensayo escal\363n carrito implementaci\363n}{}% 21
-\BOOKMARK [1][-]{section.14}{Sistema total y control}{}% 22
+\BOOKMARK [3][-]{subsubsection.8.1.1}{Estructura Mec\341nica}{subsection.8.1}% 15
+\BOOKMARK [3][-]{subsubsection.8.1.2}{Circuito El\351ctrico}{subsection.8.1}% 16
+\BOOKMARK [3][-]{subsubsection.8.1.3}{Medici\363n de Velocidad con el Microcontrolador}{subsection.8.1}% 17
+\BOOKMARK [2][-]{subsection.8.2}{Sensor de L\355nea}{section.8}% 18
+\BOOKMARK [3][-]{subsubsection.8.2.1}{Circuito El\351ctrico}{subsection.8.2}% 19
+\BOOKMARK [3][-]{subsubsection.8.2.2}{Estructura Mec\341nica}{subsection.8.2}% 20
+\BOOKMARK [3][-]{subsubsection.8.2.3}{Valores de Lectura}{subsection.8.2}% 21
+\BOOKMARK [3][-]{subsubsection.8.2.4}{Lectura del Sensor con el Microcontrolador}{subsection.8.2}% 22
+\BOOKMARK [1][-]{section.9}{Obtenci\363n de los par\341metros}{}% 23
+\BOOKMARK [1][-]{section.10}{Ajuste fallido por medio de Z-N}{}% 24
+\BOOKMARK [1][-]{section.11}{Datos medidos}{}% 25
+\BOOKMARK [1][-]{section.12}{Ensayo al Escal\363n}{}% 26
+\BOOKMARK [1][-]{section.13}{Ensayo escal\363n carrito implementaci\363n}{}% 27
+\BOOKMARK [1][-]{section.14}{Sistema total y control}{}% 28
