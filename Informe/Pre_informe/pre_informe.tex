@@ -456,7 +456,7 @@ G_s(s)=\frac{K_p}{Ts+1}e^{-sL}
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=5cm]{./imagenes/escalon_z-n.png}
+\includegraphics[width=10cm]{./imagenes/escalon_z-n.png}
 \caption{Determinación gráfica de los parámetros de un modelo a partir de
 la respuesta escalón en forma de S}
 \label{fig:escalon_zn}
@@ -465,10 +465,10 @@ la respuesta escalón en forma de S}
 
 
 
-Los parámetros del modelo \ref{eq:ajusteZN} pueden ser determinados por medio de la figura \ref{fig:escalon_zn}.La ganancia estática $K$ la obtenemos del valor final de la salida del proceso dividido el valor máximo de la entrada. 
+Los parámetros del modelo de la ecuación \ref{eq:ajusteZN} pueden ser determinados por medio de la figura \ref{fig:escalon_zn}. La ganancia estática $K$ la obtenemos del valor final de la salida del proceso dividido el valor máximo de la entrada. 
 
 Para hallar los otros dos parámetros hay varias alternativas. Una de ellas consiste en trazar una recta tangente al punto donde de la respuesta al escalón presenta la mayor pendiente. El valor de la demora $L$ lo obtenemos de la intersección de esta recta con el eje horizontal. El valor de la constante de tiempo $T$ lo podemos obtener a partir de la distancia $t_a-t_c $, donde $t_c$ es el tiempo donde la respuesta al escalón es $0.632K$.
-Otro método, un poco más preciso, consiste en determinar los puntos $t_b$ y $t_c$ donde $s(t)$ toma los valores $0.283K$ y $0.632K$, respectivamente. Luego, la demora y la constante de tiempo la hallamos a partir de la ecuacion \ref{eq:calculo_T_L}
+Otro método, un poco más preciso, consiste en determinar los puntos $t_b$ y $t_c$ donde $s(t)$ toma los valores $0.283K$ y $0.632K$, respectivamente. Luego, la demora y la constante de tiempo la hallamos a partir de la ecuación \ref{eq:calculo_T_L}
 
 \begin{equation}
 T=1.5(t_c -t_b) \quad	L=t_c-T
