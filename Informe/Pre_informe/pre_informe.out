@@ -4,36 +4,30 @@
 \BOOKMARK [2][-]{subsection.3.1}{Motivaci\363n}{section.3}% 4
 \BOOKMARK [2][-]{subsection.3.2}{Seguidor de l\355nea}{section.3}% 5
 \BOOKMARK [1][-]{section.4}{Implementaci\363n}{}% 6
-\BOOKMARK [1][-]{section.5}{Modelado del sistema}{}% 7
-\BOOKMARK [2][-]{subsection.5.1}{Modelo cinem\341tico}{section.5}% 8
-\BOOKMARK [3][-]{subsubsection.5.1.1}{Modelado 1}{subsection.5.1}% 9
-\BOOKMARK [3][-]{subsubsection.5.1.2}{Radio de giro}{subsection.5.1}% 10
-\BOOKMARK [1][-]{section.6}{Modelado de los motores}{}% 11
-\BOOKMARK [1][-]{section.7}{Modelado de los motores2 }{}% 12
-<<<<<<< HEAD
-\BOOKMARK [1][-]{section.8}{Sistemas de Medici\363n}{}% 13
-\BOOKMARK [2][-]{subsection.8.1}{Medici\363n de velocidad de los Motores}{section.8}% 14
-\BOOKMARK [3][-]{subsubsection.8.1.1}{Estructura Mec\341nica}{subsection.8.1}% 15
-\BOOKMARK [3][-]{subsubsection.8.1.2}{Circuito El\351ctrico}{subsection.8.1}% 16
-\BOOKMARK [3][-]{subsubsection.8.1.3}{Medici\363n de Velocidad con el Microcontrolador}{subsection.8.1}% 17
-\BOOKMARK [2][-]{subsection.8.2}{Sensor de L\355nea}{section.8}% 18
-\BOOKMARK [3][-]{subsubsection.8.2.1}{Circuito El\351ctrico}{subsection.8.2}% 19
-\BOOKMARK [3][-]{subsubsection.8.2.2}{Estructura Mec\341nica}{subsection.8.2}% 20
-\BOOKMARK [3][-]{subsubsection.8.2.3}{Valores de Lectura}{subsection.8.2}% 21
-\BOOKMARK [3][-]{subsubsection.8.2.4}{Lectura del Sensor con el Microcontrolador}{subsection.8.2}% 22
-\BOOKMARK [1][-]{section.9}{Obtenci\363n de los par\341metros}{}% 23
-\BOOKMARK [1][-]{section.10}{Ajuste fallido por medio de Z-N}{}% 24
-\BOOKMARK [1][-]{section.11}{Datos medidos}{}% 25
-\BOOKMARK [1][-]{section.12}{Ensayo al Escal\363n}{}% 26
-\BOOKMARK [1][-]{section.13}{Ensayo escal\363n carrito implementaci\363n}{}% 27
-\BOOKMARK [1][-]{section.14}{Sistema total y control}{}% 28
-=======
-\BOOKMARK [1][-]{section.8}{Sistema de medici\363n de RPM y sensores de linea}{}% 13
-\BOOKMARK [1][-]{section.9}{Obtenci\363n de los par\341metros}{}% 14
-\BOOKMARK [1][-]{section.10}{Ajuste fallido por medio de Z-N}{}% 15
-\BOOKMARK [2][-]{subsection.10.1}{Metodo de Z-N: respuesta al escal\363n}{section.10}% 16
-\BOOKMARK [1][-]{section.11}{Datos medidos}{}% 17
-\BOOKMARK [1][-]{section.12}{Ensayo al Escal\363n}{}% 18
-\BOOKMARK [1][-]{section.13}{Ensayo escal\363n carrito implementaci\363n}{}% 19
-\BOOKMARK [1][-]{section.14}{Sistema total y control}{}% 20
->>>>>>> Simulando_planta_ok
+\BOOKMARK [2][-]{subsection.4.1}{Estructura Mec\341nica}{section.4}% 7
+\BOOKMARK [1][-]{section.5}{Modelado del sistema}{}% 8
+\BOOKMARK [2][-]{subsection.5.1}{Modelo cinem\341tico}{section.5}% 9
+\BOOKMARK [3][-]{subsubsection.5.1.1}{Ecuaciones de Movimiento}{subsection.5.1}% 10
+\BOOKMARK [3][-]{subsubsection.5.1.2}{Restricciones de Sensores Disponibles}{subsection.5.1}% 11
+\BOOKMARK [3][-]{subsubsection.5.1.3}{Radio de giro}{subsection.5.1}% 12
+\BOOKMARK [2][-]{subsection.5.2}{Modelado de los motores}{section.5}% 13
+\BOOKMARK [2][-]{subsection.5.3}{Modelado de los motores2 }{section.5}% 14
+\BOOKMARK [1][-]{section.6}{Sistemas de Medici\363n}{}% 15
+\BOOKMARK [2][-]{subsection.6.1}{Medici\363n de velocidad de los Motores}{section.6}% 16
+\BOOKMARK [3][-]{subsubsection.6.1.1}{Estructura Mec\341nica}{subsection.6.1}% 17
+\BOOKMARK [3][-]{subsubsection.6.1.2}{Circuito El\351ctrico}{subsection.6.1}% 18
+\BOOKMARK [3][-]{subsubsection.6.1.3}{Medici\363n de Velocidad con el Microcontrolador}{subsection.6.1}% 19
+\BOOKMARK [2][-]{subsection.6.2}{Sensor de L\355nea}{section.6}% 20
+\BOOKMARK [3][-]{subsubsection.6.2.1}{Circuito El\351ctrico}{subsection.6.2}% 21
+\BOOKMARK [3][-]{subsubsection.6.2.2}{Estructura Mec\341nica}{subsection.6.2}% 22
+\BOOKMARK [3][-]{subsubsection.6.2.3}{Valores de Lectura}{subsection.6.2}% 23
+\BOOKMARK [3][-]{subsubsection.6.2.4}{Lectura del Sensor con el Microcontrolador}{subsection.6.2}% 24
+\BOOKMARK [1][-]{section.7}{Identificaci\363n de Sistemas}{}% 25
+\BOOKMARK [2][-]{subsection.7.1}{Identificaci\363n de los Motores}{section.7}% 26
+\BOOKMARK [2][-]{subsection.7.2}{Identificaci\363n de la Cinem\341tica el Robot}{section.7}% 27
+\BOOKMARK [1][-]{section.8}{Ensayo escal\363n carrito implementaci\363n}{}% 28
+\BOOKMARK [1][-]{section.9}{Controladores}{}% 29
+\BOOKMARK [1][-]{section.10}{Datos medidos}{}% 30
+\BOOKMARK [2][-]{subsection.10.1}{Ajuste fallido por medio de Z-N}{section.10}% 31
+\BOOKMARK [3][-]{subsubsection.10.1.1}{Metodo de Z-N: respuesta al escal\363n}{subsection.10.1}% 32
+\BOOKMARK [2][-]{subsection.10.2}{Sistema total y control}{section.10}% 33
