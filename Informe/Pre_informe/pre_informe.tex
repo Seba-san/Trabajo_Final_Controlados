@@ -218,12 +218,12 @@ Para facilitar la implementación del robot, se propone utilizar la configuraci�
 \end{itemize}
 
 \subsection{Estructura Mecánica}%$.$ Mejorar el nombre
-Se definió utilizar una estructura con dos ruedas y un punto de apoyo. El frente del robot se encuentra en el lado opuesto al del punto de apoyo, con una estructura para soporte de los LEDs del sensor de línea colocada en esta zona. La estructura diseñada se muestra en la figura \ref{estructura robot}.
+Se definió utilizar una estructura con dos ruedas y un punto de apoyo. El frente del robot se encuentra en el lado opuesto al del punto de apoyo, con una estructura para soporte de los LEDs del sensor de línea colocada en esta zona. La estructura diseñada se muestra en la figura \ref{fig:estructuraRobot}.
 \begin{figure}[h] %$.$ Faltan los encoders
-\label{estructura robot}
 \centering
 \includegraphics[width=8cm]{./imagenes/estructuraCompleta.jpg}
 \caption{Estructura mecánica del robot.}
+\label{fig:estructuraRobot}
 \end{figure}
 El diseño de las piezas mecánicas fue realizado por el ahora ingeniero Carrascal Cliver. Las mismas se imprimieron con impresora 3D.
 \section{Modelado del sistema}
@@ -324,9 +324,9 @@ Donde $\psi$ es la orientación de la pista. Como $\psi$ es constante, reemplaza
 
 Dado que sólo se tiene la medición de $e$, se utiliza la segunda hipótesis propuesta: que el punto C se mantiene siempre sobre la línea a seguir. Bajo esta suposición, podemos calcular $\beta $ por trigonometría:
 
-\begin{equation}
+\begin{equation*}
 \tan(\beta)=\frac{e}{l}
-\end{equation}
+\end{equation*}
 
 Como $l$ es fijo, la medición de $e$ puede traducirse en una medición del ángulo. De esta manera podríamos buscar minimizar el ángulo para alinear el robot con la pista. Como la medición se hace suponiendo que C está sobre la línea, si el robot no está centrado respecto a la pista el cálculo del ángulo va a indicar una medición errónea, por lo que al llevar a cero el $ \beta $ medido de esta manera se termina garantizando que el robot esté centrado respecto a la pista.
 
@@ -334,9 +334,9 @@ La hipótesis utilizada debería ser válida si el sistema controlado es lo sufi
 
 Como lo que se controla son las velocidades de cada motor de forma individual, resulta conveniente reemplazar  la ecuación \ref{wc} en la ecuación \ref{betaDerivada}:
 
-\begin{equation}
+\begin{equation*}
 \dot{\beta}=\omega_C=\frac{r(\omega _R - \omega _L)}{L}
-\end{equation}
+\end{equation*}
 
 Como sólo nos interesa la diferencia entre velocidades angulares del motor, se puede mantener $v$ constante tomando:
 
@@ -363,84 +363,96 @@ Esto disminuiría el problema a una sola señal de control, $\Delta \omega$.
 %En caso de que esta suposición no se cumpla entraran en juego las no linealidades antes vistas.
 
 \subsubsection{Radio de giro}
-Cuando el robot gira siguiendo una curva la disposición es como se muestra en la siguiente figura:
 En la figura \ref{fig:girando} se muestra la disposicion del robot cuando esta siguiendo una curva.
 \begin{figure}[h]
 \centering
 \includegraphics[width=10cm]{./imagenes/carrito_girando.png}
-\caption{esquema del robot girando.}
+\caption{Esquema del robot girando.}
 \label{fig:girando}
 \end{figure}
+En este caso la velocidad del punto C tiene una componente tangencial, $v$, y una componente de giro, $\omega$, dadas por: 
 
-En este caso la velocidad del punto  C (punto medio entre las dos ruedas del robot) tiene una componente tangencial, v, y una componente de giro, $\omega$, dadas por: 
-
-\begin{equation}
+\begin{equation*}
 v =\frac{r(\omega _R + \omega _L) }{2}=r \omega_{fijo}
-\end{equation}
+\end{equation*}
 
-\begin{equation}
+\begin{equation*}
 \omega_{C} =\frac{r(\omega _R - \omega _L) }{L}= \frac{  r \Delta \omega} {L}
-\end{equation}
+\end{equation*}
 
 Como la relación entre ambas magnitudes es:
 
 
-\begin{equation}
+\begin{equation*}
 v=R_{giro} \omega_{C}
-\end{equation}
+\end{equation*}
 
 obtenemos:
-\begin{equation}
+\begin{equation*}
 \Delta \omega= \frac{\omega_{fijo}L}{R_{giro}}
-\end{equation}
+\end{equation*}
 
-Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$.
+Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$. Para una velocidad $\omega_{fijo}$ constante, el máximo valor admisible de $\Delta \omega$ determinará el menor radio de giro que podrá hacer el robot.
 
 
 %Redaccion anterior
 %Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$ . Si definimos que $\omega _{fijo}=300 rpm $, para obtener un radio de giro mínimo de 1,5 veces R necesitaríamos $\Delta \omega =100 rpm $, mientras que para uno igual a R necesitaríamos $\Delta \omega =150 rpm $.
 
-\subsection{Modelado de los motores}
-Según \cite{alex} se puede modelar el motor según la siguiente ecuación diferencial:
-\begin{equation}
-J\ddot{\theta}=\frac{k_2}{R}V_i-\frac{k_2 k_2}{R} \dot{\theta}-k_3\dot{\theta} 
-\end{equation}
-donde $k_1$ es la constante que relaciona la fuerzamagneto motriz con la velocidad angular; $k_2$ relaciona la cupla motora con la corriente; $k_3$ relaciona la velocidad angular con el torque de fricción; $R$ es la resistencia del bobinado; $J$ es el momento de inercia del eje y $V_i$ es la tension entre los bornes del motor.
-La función de transferencia entonces resulta
-\begin{equation}
-\frac{\theta}{V_i}=\frac{k_2}{Rs(sJ+\frac{k_2k_1}{R}+k_3)}
-\end{equation}
-
-considerando que $\theta$ es proporcional al desplazamiento del dispositivo $x$ y $V_i$ es proporcional a la señal de control, simplificando resulta:
-\begin{equation}
-\frac{\theta}{V_i}=\frac{k_2/{JR}}{s(s+\frac{k_2k_1}{JR}+ \frac{k_3}{J} )}
-\end{equation} 
-escribiendo genéricamente 
-\begin{equation}
-\frac{\theta}{V_i}=\frac{a}{s(s+b)}
-\end{equation}
- donde a y b son parámetros a determinar. Por cuestiones de practicidad (segun tania) en vez de usar $\theta$ se usa $\dot{\theta}$ , lo que produce la siguiente funcion de transferencia
- \begin{equation}
- \frac{\omega}{V_i}=\frac{a}{(s+b)}
- \end{equation}
- 
- \subsection{Modelado de los motores2 }
+%Esto era siguiendo la tesis de Alexei, pero parece que está mal:
+%\subsection{Modelado de los motores}
+%Según \cite{alex} se puede modelar el motor según la siguiente ecuación diferencial:
+%\begin{equation}
+%J\ddot{\theta}=\frac{k_2}{R}V_i-\frac{k_2 k_2}{R} \dot{\theta}-k_3\dot{\theta} 
+%\end{equation}
+%donde $k_1$ es la constante que relaciona la fuerzamagneto motriz con la velocidad angular; $k_2$ relaciona la cupla motora con la corriente; $k_3$ relaciona la velocidad angular con el torque de fricción; $R$ es la resistencia del bobinado; $J$ es el momento de inercia del eje y $V_i$ es la tension entre los bornes del motor.
+%La función de transferencia entonces resulta
+%\begin{equation}
+%\frac{\theta}{V_i}=\frac{k_2}{Rs(sJ+\frac{k_2k_1}{R}+k_3)}
+%\end{equation}
+%
+%considerando que $\theta$ es proporcional al desplazamiento del dispositivo $x$ y $V_i$ es proporcional a la señal de control, simplificando resulta:
+%\begin{equation}
+%\frac{\theta}{V_i}=\frac{k_2/{JR}}{s(s+\frac{k_2k_1}{JR}+ \frac{k_3}{J} )}
+%\end{equation} 
+%escribiendo genéricamente 
+%\begin{equation}
+%\frac{\theta}{V_i}=\frac{a}{s(s+b)}
+%\end{equation}
+% donde a y b son parámetros a determinar. Por cuestiones de practicidad (segun tania) en vez de usar $\theta$ se usa $\dot{\theta}$ , lo que produce la siguiente funcion de transferencia
+% \begin{equation}
+% \frac{\omega}{V_i}=\frac{a}{(s+b)}
+% \end{equation}
+% 
+ \subsection{Modelado de los motores}
  \label{modeloMotores}
  
- Según \cite{dorf} la función de transferencia de la combinacion motor-carga despreciando el torque de la perturbacion resulta
- \begin{equation}
+ Los motores a utilizar son motores de DC con escobillas. Según \cite{dorf}, si se desprecia el torque de la perturbación,%$.$ para mí no se entiende qué es el torque de "perturbación", pero no sé qué es exactamente como para poder cambiarlo :( (dorf pág 58-59)
+\ la función de transferencia de la combinación motor-carga resulta
+ \begin{equation*}
  \frac{\theta(s)}{V_f(s)}=\frac{K_m}{s(Js+b)(L_fs+R_f)}
- \end{equation}
- donde $\theta$ es la posición angular,$V_f$ es la tension de exitacion, $K_m$ es la constante que relaciona la corriente con el par del motor, $J$ es el momento de inercia del eje, $b$ es la constante de friccion del eje, $L_f$  y $R_f$ es la autoinductancia y resistencia del bobinado. Simplificando la función de transferencia resulta
- \begin{equation}
+ \end{equation*}
+ donde $\theta$ es la posición angular, $V_f$ es la tension de exitacion, $K_m$ es la constante que relaciona la corriente con el par del motor, $J$ es el momento de inercia del eje, $b$ es la constante de friccion del eje, $L_f$  y $R_f$ son la autoinductancia y resistencia del bobinado, respectivamente. Simplificando la función de transferencia resulta:
+ \begin{equation*}
  \frac{\theta(s)}{V_f(s)}=\frac{k}{s(s+a)(s+b)}
- \end{equation}
- donde $k$,$a$,$b$ son constantes a determinar mediante la identificación.\\
- Por practicidad en vez de usar $\theta$ se usa $\dot{\theta}$, lo que produce la siguiente funcion de transferencia
- \begin{equation}
+ \end{equation*}
+ donde $k$, $a$ y $b$ son constantes a determinar mediante la identificación.
+ 
+Por practicidad en vez de usar $\theta$ se usa $\dot{\theta}$, lo que produce la siguiente función de transferencia
+ \begin{equation*}
  \frac{\dot{\theta}(s)}{V_f(s)}=\frac{k}{(s+a)(s+b)}
- \end{equation}
+ \end{equation*}
   
+\section{Estrategia de Control a Utilizar}
+\label{estrategia de control a usar}
+Para alcanzar los objetivos del proyecto se decidió implementar tres controladores PID en simultáneo: dos controladores para regularizar el comportamiento de los motores y el controlador para el sistema total, que se encargará de que el robot siga la pista. Los dos primeros se utilizan para que las ruedas se muevan a la velocidad requerida y para compensar asimetrías en la respuesta de los dos motores.
+Una vez implementados todos los controladores descritos el sistema total queda según se observa en el diagrama en bloque de la figura \ref{diagra en bloques sist total}.
+\begin{figure}[h]
+\centering
+\includegraphics[height=7cm]{./imagenes/sistema_total}
+\caption{Diagrama en bloques del sistema total con los tres controladores PID implementados.}
+\label{diagra en bloques sist total}
+\end{figure}
+
 \section{Sistemas de Medición}
 \subsection{Medición de velocidad de los Motores}
 \subsubsection{Estructura Mecánica}
@@ -528,13 +540,13 @@ si considerábamos únicamente el ángulo de desviación de la orientación del 
     \centering
     \begin{subfigure}[h]{0.45\textwidth}
     	\centering
-        \includegraphics[width=8cm]{./imagenes/conSensorLineal.jpg}
+        \includegraphics[width=7.5cm]{./imagenes/conSensorLineal.jpg}
         \caption{}
     \end{subfigure}
     \quad
     \begin{subfigure}[h]{0.45\textwidth}
     	\centering
-        \includegraphics[width=8cm]{./imagenes/conSensorCircular.jpg}
+        \includegraphics[width=7.5cm]{./imagenes/conSensorCircular.jpg}
         \caption{}
     \end{subfigure}
     \caption{esquema del robot con los dos tipos de estructuras diseñadas para fijar la disposición de los diodos según la configuración geométrica deseada: (a) lineal, y (b) circular.}
@@ -549,105 +561,82 @@ Las salidas de las compuertas se conectan a pines de entrada del microcontrolado
 las entradas estén en 0 se toma como valor particular y se la asigna el número 3 para que funcione como bandera e indique que se perdió la línea. Cuando esto ocurre el programa principal mantiene para los cálculos el último valor medido.
 
 \section{Identificación de Sistemas}
-Para alcanzar los objetivos planteados se decidió implementar tres controladores PID en simultáneo: el controlador para el sistema total, que se encargará de que el robot siga la pista, y dos controladores para regularizar el comportamiento de los motores. Estos últimos se utilizan para que los motores se muevan a la velocidad requerida y para compensar asimetrías en la respuesta de los dos motores.
+Para sintonizar los controladores PID ha implementar se necesita tener algún tipo de información sobre el comportamiento de la planta a controlar. En función de lo definido en la sección \ref{estrategia de control a usar}, las plantas a identificar o caracterizar son tres: los dos motores, cuyo modelado matemático se analizó en la sección \ref{modeloMotores}, y el sistema total, que incluye los motores con sus PID y la cinemática del robot analizada en la sección \ref{modelo cinematico}.
 
 A continuación se detallan los ensayos realizados para la identificación de los sistemas a controlar.
-%$.$ Todos estos controladores requieren algún tipo de conocimiento sobre la planta. A fin de obtener información del comportamiento de cada sistema se realizaron ensayos de respuesta al escalón.
 \subsection{Identificación de los Motores}
 El modelo de función de transferencia planteado matemáticamente en la sección \ref{modeloMotores} nos define como variable de salida la velocidad angular del motor y como variable de entrada la tensión aplicada. Para la implementación con el microcontrolador se utiliza una señal de PWM de alta frecuencia cuyo duty cycle modifica el valor de tensión continua aplicado al motor. Esto es factible debido a que el motor actúa como un filtro pasabajos, manteniendo la componente de continua de la señal y atenuando las restantes. Dado que esta es la señal que podemos controlar realmente, se utiliza como señal de entrada el duty cycle utilizado en los PWM.
 
-El modelo obtenido de forma teórica realiza varias simplificaciones. Una de ellas es ignorar el ciclo de histéresis de los motores y otra es no considera el efecto de una carga en el motor, que en este caso implicaría considerar la dinámica del robot sobre el suelo. Estos fenómenos hacen que el comportamiento real de los motores no sea realmente lineal. Para analizar la linealidad el sistema y el intervalo de trabajo a utilizar se diseñó un ensayo que barriera las distintas posibilidades de duty cycle para cada motor y almacenara varias muestras de las velocidades obtenidas en el estado estacionario. En la figura \ref{linealidad} se muestra la curva obtenida para el motor B. La del motor A es análoga.
+El modelo obtenido de forma teórica realiza varias simplificaciones. Una de ellas es ignorar el ciclo de histéresis de los motores y otra es no considera el efecto de una carga en el motor, que en este caso implicaría considerar la dinámica del robot sobre el suelo. Estos fenómenos hacen que el comportamiento real de los motores no sea realmente lineal. Para analizar la linealidad el sistema y el intervalo de trabajo a utilizar se diseñó un ensayo que barriera las distintas posibilidades de duty cycle para cada motor y almacenara varias muestras de las velocidades obtenidas en el estado estacionario. En la figura \ref{linealidad} se muestra la curva obtenida para el motor B. La del motor A es análoga. %$.$ Revisar que ya esté explicado en algún lado que el motor B es el derecho y el A el izquierdo
 
 %$.$ Está mal el eje Y! Corregir imagen
 \begin{figure}
 \centering
-\includegraphics[width=15cm]{./imagenes/prueba_linealidad.eps}
+\includegraphics[width=10cm]{./imagenes/prueba_linealidad.eps}
 \caption{Curva de respuesta entrada-salida para el motor B.}
 \label{linealidad}
 \end{figure}
 
 Analizando la curva de respuesta del sistema observamos que los motores comienzan a moverse recién a partir de un 5\% de duty cycle. Esto se debe a la inercia del motor. Por otra parte, la recta ajustada muestra que el comportamiento es aproximadamente lineal hasta un 80\% de duty cycle. Para garantizar un buen funcionamiento se trabajará de 10 a 80 para los ensayos de estimación del sistema.
 
-En función de las consideraciones anteriores, se diseño un ensayo que permitiese obtener la respuesta al escalón de ambos motores. Dado que nos interesa conocer el comportamiento con carga y no en vacío, se buscó que el ensayo se realizara con el robot completo funcionando en condiciones normales. Para ello se programó para que el robot anduviera en línea recta, primero a una velocidad baja y luego a uno mayor dada por un cambio repentino del duty cycle de ambos motores. Los valores obtenidos para las variables de interés se almacenaron en la EEPROM y luego fueron transmitidos a la computadora por puerto serie. La curva obtenida se muestra en la figura \ref{EscalonMotores}.
+En función de las consideraciones anteriores, se diseño un ensayo que permitiese obtener la respuesta al escalón de ambos motores. Dado que nos interesa conocer el comportamiento con carga y no en vacío, se buscó que el ensayo se realizara con el robot completo funcionando en condiciones normales. Para ello se programó que el robot anduviera en línea recta, primero a una velocidad baja y luego a una mayor dada por un cambio repentino del duty cycle de ambos motores. Las señales de interés se muestrearon a una frecuencia de 200Hz, se almacenaron en la EEPROM y luego fueron transmitidas a la computadora por puerto serie. La curva obtenida se muestra en la figura \ref{EscalonMotores}.
 \begin{figure}[h]
 \centering
-\includegraphics[width=15cm]{./imagenes/resp_escalon_motores_2}
+\includegraphics[width=10cm]{./imagenes/resp_escalon_motores_2}
 \caption{Respuesta al escalón de ambas motores a lazo abierto con carga.}
 \label{EscalonMotores}
 \end{figure}
 
 Analizando los resultados obtenidos se detectó que existía una demora en el sistema no anticipada por el modelo matemático. Ésta se debe a la dinámica del sistema de medición de velocidad, que en los análisis teóricos no se suele considerar. Específicamente, el promedio realizado al momento de medir la velocidad de cada motor genera la demora observada. Dado que se almacenan los tiempos correspondientes a un giro completo de la rueda  para realizar el cálculo de velocidad, cuando la velocidad real cambia de forma abrupta el sistema demora una vuelta en empezar a medir de forma correcta. Este comportamiento se corresponde con el de un sistema de media móvil, pero variante en el tiempo y alineal, ya que la demora depende de la velocidad de giro. Para poder continuar trabajando en el contexto de sistemas LTI se utilizará una estimación del sistema alrededor de cierto punto de trabajo. 
 
-A partir de estos datos se estimó un sistema LTI contínuo que se ajustara a cada curva utilizando la herramienta de Matlab System Identification. Las funciones de transferencias obtenidas para cada motor fueron:
-\begin{equation}
+Utilizando los datos obtenidos se estimó un sistema LTI continuo que se ajustara a cada curva utilizando la herramienta de Matlab System Identification. Las funciones de transferencias obtenidas para cada motor fueron:
+\begin{equation*}
 M_a(s)= \frac{7075.3 e^{-0.013s}}{(s+9.631)(s+67.5)}
-\end{equation}
-\begin{equation}
+\end{equation*}
+\begin{equation*}
 M_b(s)= \frac{5042.1 e^{-0.013s}}{(s+9.988) (s+45.48)}
-\end{equation}
+\end{equation*}
 
 %$.$ Utilizando esta información se ajustaron los controladores PID de cada motor, según se explicará en la sección \ref{control}. 
 \subsection{Identificación de la Cinemática el Robot}
-La cinemática del robot está gobernada por las ecuaciones obtenidas en la sección \ref{modelo cinematico}.
-
-%$:$
-En función de lo analizado anteriormente, podemos pensar que si el robot arranca alineado con una línea recta, y manteniendo la restricción de v constante, entonces la planta se comporta como un sistema cuya entrada es $\Delta \omega$ y su salida $\beta $, gobernado por la ecuación:
+En función de lo analizado en la sección \ref{modelo cinematico}, podemos pensar que si el robot arranca alineado con una línea recta, y manteniendo la restricción de $v$ constante, entonces la planta se comporta como un sistema cuya entrada es $\Delta \omega$ y su salida $\beta $, gobernado por la ecuación:
 
 \begin{equation}
 \dot{\beta}= \frac{r\Delta\omega}{L} 
 \label{eq:sys_tot_teo} 
 \end{equation}
 
-Para realizar el ensayo al escalón se debería empezar con $\Delta \omega = \beta = \theta=0$  y luego cambiar $\Delta \omega$  abruptamente a un valor final ($\Delta \omega$  es el escalón de entrada) midiendo el valor de $\beta$ obtenido. Físicamente esto implica que el robot debe empezar andando a velocidad constante, perfectamente alineado con la línea, y luego girar hasta perder la línea (más allá de este punto no tiene sentido seguir porque se pierde la medición).
+Para realizar el ensayo al escalón se debería empezar con $\Delta \omega = \beta = 0$  y luego cambiar $\Delta \omega$  abruptamente a un valor final, midiendo el valor de $\beta$ obtenido. Físicamente esto implica que el robot debe empezar andando a velocidad constante, perfectamente alineado con la línea, y luego girar hasta perder la línea (más allá de este punto no tiene sentido seguir porque se pierde la medición).
 Si el cambio de velocidad de los motores fuese automático, el robot giraría siguiendo una circunferencia perfecta como se ve a en la figura \ref{fig:carritoEsc}.
-
 \begin{figure}[h!]
 \centering
-\includegraphics[width=10cm]{./imagenes/carrito_Ensayo_escalon.png}
+\includegraphics[width=6cm]{./imagenes/carrito_Ensayo_escalon.png}
 \caption{Trayectoria seguida por el robot si empieza a girar a $\Delta \omega $ constante (verde) arrancando inicialmente alineado con la línea (gris).}
 \label{fig:carritoEsc}
 \end{figure}
 %Lo que nos interesa es saber cuánto tiempo transcurre hasta que pierde la línea. Dicho punto sería cuando el último sensor de la derecha está sobre la línea verde. Si la distancia entre el eje central del robot y éste LED es $d_1$, entonces el LED se desplaza siguiendo una trayectoria circular de radio $R_{giro}$+$d_1$ …..
-%Terminar de poner ideas para el cálculo
-%Borrador:
 
+Sin embargo, la implementación perfecta de un ensayo al escalón resulta muy difícil por dos inconvenientes. El primero es que se requiere que durante un tiempo el robot siga la línea perfectamente antes de girar. Para lograr esto se implementó un controlador proporcional ajustado a mano que permitía que el robot siga la pista. Así, el código implementado sigue la línea usando este controlador durante un breve lapso de tiempo que permita la estabilización del robot y luego desactiva el controlador y cambia abruptamente la diferencia de velocidad de los motores (manteniendo $v$ constante), siendo los valores del ensayo los tomados a partir de este instante de tiempo.
+El segundo conflicto es que la señal que realmente se puede controlar no es la diferencia real de velocidad de los motores, sino la diferencia de velocidad deseada. La diferencia entre ambas señales está dada por la dinámica de los motores con sus controladores correspondientes. Como sólo se desea estimar la sección correspondiente a la cinemática, se optó por medir las señales de entrada y salida de esta sección, es decir, $\Delta \omega$ real y $\beta$, y utilizar esas señales para estimación con el System Identification de Matlab. De esta manera, no se tiene exactamente la respuesta al escalón, pero la señal es lo suficientemente parecida como para resultar de utilidad en la estimación.
 
-\section{Ensayo escalón carrito implementación}
-
-Necesidad de que el sistema sea lineal, esta es la respuesta de los motores en función de las RPM de entrada:
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=10cm]{./imagenes/prueba_linealidad}
-\caption{el error medio cuadrático del ajuste de la recta es de 2.0624. REVISAR ESTO; NO TIENE SENTIDO EL EJE Y, en otra imagen parece la palabra "frecuencia de giro" pero no tiene sentido.}
-\label{fig:prueba_linealidad}
-\end{figure}
-
-Las consideración antes descriptas son válidas dentro de la región de linealidad del sistema. Como se vió anteriormente, es necesario que el dispositivo se encuentre centrado sobre la linea y moviendose a velocidad constante. 
-
-El objetivo de esta etapa es obtener el modelo del sistema; Dadas algunas complicaciones practicas, se implemento un controlador proporcional ajustado experimentalmente para que las hipótesis de que el vehiculo se encuentre centrado sobre la linea y moviendose sean lo mas "validas posibles". 
-
-Un ensayo modelo se muestra a continuacion:
-\begin{figure}[h!]
+En la figura \ref{fig:ensayoSistTotal} se muestra uno de los resultados de este ensayo.
+\begin{figure}
 \centering
 \includegraphics[width=10cm]{./imagenes/resp_escalon_sys_total}
-\caption{El circulo marca cuando se desactiva el control y el sistema comienza a trabajar en lazo abierto. En esta caso $\Delta \omega=-50 $ RPM}
-\label{fig:ens_esc_syst}
+\caption{Resultado del ensayo de respuesta al escalón del sistema total. El circulo marca cuando se desactiva el control y el sistema comienza a trabajar en lazo abierto. En esta caso $\Delta \omega=-50 $ RPM}
+\label{fig:ensayoSistTotal}
 \end{figure}
-
-Para un conjunto de estos ensayos se estimo el siguiente sistema:
+Utilizando un conjunto de estos ensayos se estimo el siguiente sistema:
 \begin{equation}
 Sys_{tot}= \frac{0.028934}{s}  
 \label{eq:sys_tot_est}
 \end{equation}
 
-De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que $\frac{2r}{R}=0.028934 $ siendo que los parámetros medidos son $r=1.5cm$ y $R=16cm$, lo cual da $\frac{r}{R}=0.09375 $. Esta discrepancia no se pudo explicar aún.   
+De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que $\frac{r}{R}=0.028934 $. Los parámetros medidos, si embargo, son $r=1.5cm$ y $R=16cm$, lo cual daría $\frac{r}{R}=0.09375 $. Esta discrepancia no se pudo explicar aún.   
 
 \section{Controladores}
 \label{control}
-
-\section{Datos medidos}
-
+Utilizando 
 %Motor A:
 Controlador A:
 \begin{equation}
@@ -722,13 +711,7 @@ T=1.5(t_c -t_b) \quad	L=t_c-T
 Si se parte de la suposición de que los motores se comportan de manera semejante, el diagrama del sistema total resulta:
 
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=10cm]{./imagenes/sistema_total}
-\caption{}
-%\label{}
-\end{figure}
-
+%Aca estaba la fig del diagrama en bloques. La saqué y la puse antes.
 
 A la hora de implementar el control se encontraron varios inconvenientes.... Poner Z-N, problemas de rozamiento y de inestabilidad; falta de linealidad a bajas RPM
 
