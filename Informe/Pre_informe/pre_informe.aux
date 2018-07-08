@@ -74,6 +74,7 @@
 \newlabel{fig:estructuraSensor}{{9}{9}{esquema del robot con los dos tipos de estructuras diseñadas para fijar la disposición de los diodos según la configuración geométrica deseada: (a) lineal, y (b) circular.\relax }{figure.caption.10}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {7.2.4}Lectura del Sensor con el Microcontrolador}{9}{subsubsection.7.2.4}}
 \@writefile{toc}{\contentsline {section}{\numberline {8}Identificaci\IeC {\'o}n de Sistemas}{9}{section.8}}
+\newlabel{identifSist}{{8}{9}{Identificación de Sistemas}{section.8}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Identificaci\IeC {\'o}n de los Motores}{9}{subsection.8.1}}
 \@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Curva de respuesta entrada-salida para el motor B.\relax }}{10}{figure.caption.11}}
 \newlabel{linealidad}{{10}{10}{Curva de respuesta entrada-salida para el motor B.\relax }{figure.caption.11}{}}
@@ -84,19 +85,16 @@
 \@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Trayectoria seguida por el robot si empieza a girar a $\Delta \omega $ constante (verde) arrancando inicialmente alineado con la l\IeC {\'\i }nea (gris).\relax }}{11}{figure.caption.13}}
 \newlabel{fig:carritoEsc}{{12}{11}{Trayectoria seguida por el robot si empieza a girar a $\Delta \omega $ constante (verde) arrancando inicialmente alineado con la línea (gris).\relax }{figure.caption.13}{}}
 \newlabel{eq:sys_tot_est}{{7}{11}{Identificación de la Cinemática el Robot}{equation.8.7}{}}
+\citation{ogata}
 \@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Resultado del ensayo de respuesta al escal\IeC {\'o}n del sistema total. El circulo marca cuando se desactiva el control y el sistema comienza a trabajar en lazo abierto. En esta caso $\Delta \omega =-50 $ RPM\relax }}{12}{figure.caption.14}}
 \newlabel{fig:ensayoSistTotal}{{13}{12}{Resultado del ensayo de respuesta al escalón del sistema total. El circulo marca cuando se desactiva el control y el sistema comienza a trabajar en lazo abierto. En esta caso $\Delta \omega =-50 $ RPM\relax }{figure.caption.14}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Controladores}{12}{section.9}}
-\newlabel{control}{{9}{12}{Controladores}{section.9}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Datos medidos}{12}{section.10}}
-\citation{ogata}
+\@writefile{toc}{\contentsline {section}{\numberline {9}Ajuste de los Controladores}{12}{section.9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Ajuste fallido por medio de Z-N}{12}{subsection.9.1}}
 \citation{biblia_PID}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}Ajuste fallido por medio de Z-N}{13}{subsection.10.1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {10.1.1}Metodo de Z-N: respuesta al escal\IeC {\'o}n}{13}{subsubsection.10.1.1}}
-\newlabel{eq:ajusteZN}{{10}{13}{Metodo de Z-N: respuesta al escalón}{equation.10.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Determinaci\IeC {\'o}n gr\IeC {\'a}fica de los par\IeC {\'a}metros de un modelo a partir de la respuesta escal\IeC {\'o}n en forma de S\relax }}{13}{figure.caption.16}}
-\newlabel{fig:escalon_zn}{{14}{13}{Determinación gráfica de los parámetros de un modelo a partir de la respuesta escalón en forma de S\relax }{figure.caption.16}{}}
-\newlabel{eq:calculo_T_L}{{11}{13}{Metodo de Z-N: respuesta al escalón}{equation.10.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Resultado del ensayo de respuesta al escal\IeC {\'o}n para ambos motores funcionando con los controladores PID calculados.\relax }}{13}{figure.caption.15}}
+\newlabel{fig:respEscLazoCerrado}{{14}{13}{Resultado del ensayo de respuesta al escalón para ambos motores funcionando con los controladores PID calculados.\relax }{figure.caption.15}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {9.1.1}Metodo de Z-N: respuesta al escal\IeC {\'o}n}{13}{subsubsection.9.1.1}}
+\newlabel{eq:ajusteZN}{{8}{13}{Metodo de Z-N: respuesta al escalón}{equation.9.8}{}}
 \bibcite{lambo}{1}
 \bibcite{motores}{2}
 \bibcite{puenteH}{3}
@@ -109,4 +107,7 @@
 \bibcite{ogata}{10}
 \bibcite{biblia_PID}{11}
 \bibcite{paginaPID}{12}
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}Sistema total y control}{14}{subsection.10.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Determinaci\IeC {\'o}n gr\IeC {\'a}fica de los par\IeC {\'a}metros de un modelo a partir de la respuesta escal\IeC {\'o}n en forma de S\relax }}{14}{figure.caption.16}}
+\newlabel{fig:escalon_zn}{{15}{14}{Determinación gráfica de los parámetros de un modelo a partir de la respuesta escalón en forma de S\relax }{figure.caption.16}{}}
+\newlabel{eq:calculo_T_L}{{9}{14}{Metodo de Z-N: respuesta al escalón}{equation.9.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Sistema total y control}{14}{subsection.9.2}}

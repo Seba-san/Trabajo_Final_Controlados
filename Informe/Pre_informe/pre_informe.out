@@ -25,8 +25,7 @@
 \BOOKMARK [1][-]{section.8}{Identificaci\363n de Sistemas}{}% 25
 \BOOKMARK [2][-]{subsection.8.1}{Identificaci\363n de los Motores}{section.8}% 26
 \BOOKMARK [2][-]{subsection.8.2}{Identificaci\363n de la Cinem\341tica el Robot}{section.8}% 27
-\BOOKMARK [1][-]{section.9}{Controladores}{}% 28
-\BOOKMARK [1][-]{section.10}{Datos medidos}{}% 29
-\BOOKMARK [2][-]{subsection.10.1}{Ajuste fallido por medio de Z-N}{section.10}% 30
-\BOOKMARK [3][-]{subsubsection.10.1.1}{Metodo de Z-N: respuesta al escal\363n}{subsection.10.1}% 31
-\BOOKMARK [2][-]{subsection.10.2}{Sistema total y control}{section.10}% 32
+\BOOKMARK [1][-]{section.9}{Ajuste de los Controladores}{}% 28
+\BOOKMARK [2][-]{subsection.9.1}{Ajuste fallido por medio de Z-N}{section.9}% 29
+\BOOKMARK [3][-]{subsubsection.9.1.1}{Metodo de Z-N: respuesta al escal\363n}{subsection.9.1}% 30
+\BOOKMARK [2][-]{subsection.9.2}{Sistema total y control}{section.9}% 31
