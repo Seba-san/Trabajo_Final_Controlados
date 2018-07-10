@@ -221,12 +221,12 @@ Para facilitar la implementación del robot, se propone utilizar la configuraci�
 Se definió utilizar una estructura con dos ruedas y un punto de apoyo. El frente del robot se encuentra en el lado opuesto al del punto de apoyo, con una estructura para soporte de los LEDs del sensor de línea colocada en esta zona. La estructura diseñada se muestra en la figura \ref{fig:estructuraRobot}.
 \begin{figure}[h] %$.$ Faltan los encoders
 \centering
-\includegraphics[width=8cm]{./imagenes/estructuraCompleta.jpg}
+\includegraphics[width=8cm]{./imagenes/estructuraCompleta.png}
 \caption{Estructura mecánica del robot.}
 \label{fig:estructuraRobot}
 \end{figure}
 El diseño de las piezas mecánicas fue realizado por el ahora ingeniero Carrascal Cliver. Las mismas se imprimieron con impresora 3D.
-\section{Modelado del sistema}
+\section{Modelado del sistema} \label{sec:Modelado_del_sistema}
 %Las ecuaciones cinemáticas son aquellas que relacionan la velocidad de giro de cada una de las ruedas con las variables de posición del robot en el plano.
 %\begin{equation}
 %\vec{x}= (x,y,\phi )
@@ -243,7 +243,7 @@ El diseño de las piezas mecánicas fue realizado por el ahora ingeniero Carrasc
 \label{modelo cinematico}
 \subsubsection{Ecuaciones de Movimiento}
 % Agregado, es un choreo de pathfoll
-Según \cite{pathfoll}, el robot que se desea modelar se lo conoce como robot diferencial ya que cuenta con 2 ruedas y un punto de apoyo. Esta clase de robots son no holonómicos ya que tiene restricciones a la hora de realizar movimientos sobre el plano; por ejemplo, no puede realizar movimientos laterales. En la figura \ref{fig:robot_diferencial} se muestra un esquemático de este tipo de robots.
+Según \cite{pathfoll}, el robot que se desea modelar se lo conoce como robot diferencial ya que cuenta con 2 ruedas y un punto de apoyo. Esta clase de robots son no holonómicos ya que tiene restricciones a la hora de realizar movimientos sobre el plano; por ejemplo, no puede realizar movimientos puramente laterales. En la figura \ref{fig:robot_diferencial} se muestra un esquemático de este tipo de robots.
 \begin{figure}[h]
 \centering
 \includegraphics[width=6cm]{./imagenes/robot_diferencial.png}
@@ -372,13 +372,15 @@ En la figura \ref{fig:girando} se muestra la disposicion del robot cuando esta s
 \end{figure}
 En este caso la velocidad del punto C tiene una componente tangencial, $v$, y una componente de giro, $\omega$, dadas por: 
 
-\begin{equation*}
+\begin{equation}
 v =\frac{r(\omega _R + \omega _L) }{2}=r \omega_{fijo}
-\end{equation*}
+\label{eq:v_tan}
+\end{equation}
 
-\begin{equation*}
+\begin{equation}
 \omega_{C} =\frac{r(\omega _R - \omega _L) }{L}= \frac{  r \Delta \omega} {L}
-\end{equation*}
+\label{eq:omegac}
+\end{equation}
 
 Como la relación entre ambas magnitudes es:
 
@@ -387,10 +389,10 @@ Como la relación entre ambas magnitudes es:
 v=R_{giro} \omega_{C}
 \end{equation*}
 
-obtenemos:
-\begin{equation*}
+reemplazando esto en las ecuaciones \ref{eq:v_tan}  y \ref{eq:omegac}, se obtiene:
+\begin{equation}
 \Delta \omega= \frac{\omega_{fijo}L}{R_{giro}}
-\end{equation*}
+\end{equation}
 
 Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$. Para una velocidad $\omega_{fijo}$ constante, el máximo valor admisible de $\Delta \omega$ determinará el menor radio de giro que podrá hacer el robot.
 
@@ -438,9 +440,9 @@ Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta 
  donde $k$, $a$ y $b$ son constantes a determinar mediante la identificación.
  
 Por practicidad en vez de usar $\theta$ se usa $\dot{\theta}$, lo que produce la siguiente función de transferencia
- \begin{equation*}
+ \begin{equation}
  \frac{\dot{\theta}(s)}{V_f(s)}=\frac{k}{(s+a)(s+b)}
- \end{equation*}
+ \end{equation}
   
 \section{Estrategia de Control a Utilizar}
 \label{estrategia de control a usar}
@@ -449,7 +451,7 @@ Una vez implementados todos los controladores descritos el sistema total queda s
 \begin{figure}[h]
 \centering
 \includegraphics[height=7cm]{./imagenes/sistema_total}
-\caption{Diagrama en bloques del sistema total con los tres controladores PID implementados.}
+\caption{Diagrama en bloques del sistema total con los tres controladores PID implementados. MEJORAR ESTA IMAGEN}
 \label{diagra en bloques sist total}
 \end{figure}
 
@@ -457,6 +459,8 @@ Una vez implementados todos los controladores descritos el sistema total queda s
 \subsection{Medición de velocidad de los Motores}
 \subsubsection{Estructura Mecánica}
 Para la medición de velocidad de los motores se utilizaron encoders ópticos. Estos consisten en un diodo LED infrarrojo enfrentado a un fotodiodo receptor en dirección vertical, con una estructura colocada entre ambos. Ésta última fue diseñada en SolidWorks e impresa con impresora 3D y su forma se asemeja a la de jaula de ardilla. La idea del diseño es que las varillas bloqueen o dejen pasar la luz del LED, de modo que el fotodiodo genere una señal que permita detectar el paso de cada una de ellas.
+\\
+¿Poner que hay que verificar que la estructura sea opaca para la luz IR ?
 
 \subsubsection{Circuito Eléctrico}
 El fotodiodo receptor se encuentra conectado según el esquema mostrado en la figura \ref{fig:circuitoFotodiodo}.
@@ -466,18 +470,18 @@ El fotodiodo receptor se encuentra conectado según el esquema mostrado en la fi
 \caption{circuito del fotodiodo y de los diodos infrarrojos.}
 \label{fig:circuitoFotodiodo}
 \end{figure}
-La señal de salida se conecta a compuertas lógicas Schmitt trigger para atenuar posibles ruidos en la señal y luego la salida de ésta se conecta al microcontrolador. La sensibilidad de los diodos receptores se calibra manualmente por medio de R2.
+La señal de salida se conecta a un Schmitt trigger para discretizar la señal y luego la salida de ésta se conecta al microcontrolador. La sensibilidad de los diodos receptores se calibra manualmente por medio de R2.
 
 Los diodos emisores, por su parte, se encuentran conectados en paralelo entre sí y en serie con una resitencia de $100 \Omega$ conectada a la salida de tensión de 5V del kit de desarrollo Arduino Nano. Inicialmente se había diseñado un circuito con espejo de corriente que permitía regular la intensidad de los LEDs desde el microcontrolador para poder adaptarse a cambios de luz en el ambiente, no obstante, las pruebas demostraron que se podía calibrar una intensidad que funcionase bajo todas las condiciones de luz del lugar de trabajo usado, por lo que se descartó el circuito por la simple versión actual.
 
-Se midió con el osciloscopio la señal de salida de la compuerta y se verificó que la misma es una señal cuadrada aparentemente sin ruido.
+Se midió con el osciloscopio la señal de salida de la compuerta y se verificó que la misma es una señal cuadrada, modulada por las barras de la jaula de ardilla. Esta modulación, al provenir de un sistema mecánico, copia las asimetrías del sistema.
 
 \subsubsection{Medición de Velocidad con el Microcontrolador}
 Las señales acondicionadas de los encoders (ver figura \ref{fig:circuitoFotodiodo}) se conectan a entradas del microcontrolador, donde se resuelve la medición de velocidad por medio de interrupciones. Para ello se utilizan pines con interrupción
 por cambio de estado y se mide el tiempo entre interrupciones sucesivas. Esta medición de tiempo presenta una serie de problemas explicados a continuación.
 
 El microcontrolador ATmega328P posee un total de 3 timers. El timer1 se utilizó para generar los PWM de los motores, mientras que el timer2 se utilizó para la generación de un tiempo de muestreo constante para el sistema. Esto dejaba únicamente el timer0 disponible para realizar la medición de tiempos entre interrupciones,
-sin embargo, dado que el timer0 es el que utilizan las librerías de Arduino por defecto, se decidió buscar una alternativa que permitiese reservar este timer para futuros usos. Para ello se decidió utilizar el timer2 de forma simultánea para las interrupciones constantes a Ts (periodo de muestreo) y para el conteo de tiempo.
+sin embargo, dado que el timer0 es el que utilizan las librerías de Arduino por defecto, se decidió buscar una alternativa que permitiese reservar este timer para realizar tareas de depuración. Para ello se decidió utilizar el timer2 de forma simultánea para las interrupciones constantes a Ts (periodo de muestreo) y para el conteo de tiempo.
 
 Para entender cómo usar de forma conjunta el timer, consideremos lo que ocurre cuando se inicia el microcontrolador. Cada vez que el timer2 desborda se incrementa una variable auxiliar $cantOVerflow$. Cuando se detecta el primer cambio de estado o flanco (interrupción por pin), el tiempo transcurrido va a ser:
  \begin{equation*}
@@ -492,7 +496,7 @@ timer al momento de la última interrupción:
  t=\frac{Prescaler}{f_{clk_{io}}} (TCNT2+cantOVerflow\ OCR2A-TCNT2_{anterior})
  \end{equation}
 
-Como este cálculo debe realizarse para cada motor, el código de interrupción por cambio de estado verifica cuál encoder generó la interrupción y almacena las variables necesarias para hacer el cálculo de velocidad del motor ($TCNT2$, $TCNT2anterior$ y $cantOverflow$ para cada motor) en el código principal, es decir, fuera de la interrupción para no consumir recursos del microcontrolador.
+Como este cálculo debe realizarse para cada motor, el código de interrupción por cambio de estado verifica cuál encoder generó la interrupción y almacena las variables necesarias para hacer el cálculo de velocidad del motor ($TCNT2$, $TCNT2anterior$ y $cantOverflow$ para cada motor) en el código principal, es decir, fuera de la interrupción para no consumir tiempo de ejecución con prioridad (interrupción) del microcontrolador.
 
 Conociendo el tiempo entre interrupciones, el cálculo de velocidad correspondiente en rpm se realiza según la fórmula:
 \begin{equation*}
@@ -503,7 +507,7 @@ Donde $D$ es la cantidad de varillas del encoder.
 
 %Esto habría que revisarlo... $.$
 Para el primer modelo de encoder utilizado la señal cuadrada a la entrada del microcontrolador presentaba variaciones en el ancho del pulso debidas al movimiento de la rueda que se encontraba ligeramente descentrada. Para evitar este inconveniente y las variaciones introducidas por posibles asimetrías en la fabricación del encoder,
-se decidió calcular la velocidad con el tiempo demorado en realizar una vuelta entera. Para el modelo de encoder actual esto no debería ser tan necesario, sin embargo se ha mantenido en el código. El resultado de esta forma de medición equivale a agregar un filtro moving average variante en el tiempo. El efecto de esto se verá más
+se decidió calcular la velocidad con el tiempo demorado en realizar una vuelta entera. Para el modelo de encoder actual esto no debería ser tan necesario, sin embargo se ha mantenido en el código. El resultado de esta forma de medición equivale a agregar un filtro moving average \underline{ variante en el tiempo}. El efecto de esto se verá más
 adelante.
 Sabiendo que la mínima variación de tiempo está dada por la cantidad de conteos realizados por el timer, resulta evidente que mientras más rápido cambie el timer mayor precisión se tendrá en la medición de velocidad.
 Sabemos que el timer genera interrupciones cada:
@@ -513,7 +517,13 @@ T_{int}=\frac{Prescaler(1+OCR2A)}{f_{clk_{io}}}
 por lo que si se desea un $T_{int}$ pequeño se debe utilizar un prescaler lo menor posible. Dado que este mismo $T_{int}$ es el que se utiliza para generar la frecuencia de muestreo constante, se aumenta el prescaler efectivo para la determinación de $Ts$ utilizando una variable auxiliar como contador. Así, la frecuencia de muestreo del sistema será un múltiplo de $T_{int}$. Para determinar el valor del prescaler a utilizar se debe tener en cuenta que el tiempo $T_{int}$ sea suficiente para realizar las operaciones necesarias en la interrupción por overflow del timer y para que estas interrupciones no se generen con una frecuencia tan alta que impida el correcto funcionamiento de las restantes interrupciones.
 
 \subsection{Sensor de Línea}
-Los seguidores de línea utilizados regularmente consisten en una serie de fotoreceptores y LEDs infrarrojos colocados en dos líneas paralelas. La idea es que la luz emitida por el diodo LED se refleje en la superficie blanca del suelo y llegue al fotoreceptor correspondiente o sea absorbida por la línea negra posicionada en el punto intermedio entre ambos, de modo que el fotoreceptor indique ausencia de luz. La idea se muestra en la figura \ref{fig:sensorLinea}.
+Los seguidores de línea utilizados regularmente consisten en una serie de fotodiodo y LEDs infrarrojos colocados en dos líneas paralelas. El mecanismo se detalla a continuación:
+
+Suponga que el sensor se encuentra sobre una superficie reflectante (por ej. con color blanca). Luego la luz emitida por el LED IR se reflejará y llegará al fotodiodo con una intensidad $I_{blanco}$.\\
+Ahora suponga que el sensor se encuentra sobre una superficie poco reflectante (por ej. con color negra). Luego la luz emitida por el LED IR se reflejará y llegará al fotodiodo con una intensidad $I_{negro}$.\\
+Entonces, siempre y cuando la diferencia entre estas intensidades sea mayor que la sensibilidad del sensor  $|I_{blanco} - I_{negro} |> I_{sens}$, se podrá discernir entre una superficie y la otra. \\
+Generalmente cuando cambia el color de una superficie también cambia el material de la misma, por lo que no se puede asegurar que \textit{siempre} una superficie de color negro generara una intensidad reflejada menor que una superficie de color blanco $I_{negro} <I_{blanco}$. 
+ La idea se muestra en la figura \ref{fig:sensorLinea}.
 %Completar!! $.$
 \begin{figure}[h]
 \centering
@@ -534,19 +544,19 @@ Para alimentar este arreglo de emisores y receptores se utilizó el circuito de 
 \subsubsection{Estructura Mecánica}
 La disposición física de los LEDs estaba dada inicialmente por la placa PCB utilizada en el circuito. Esto hacía que los LEDs se encontraran a alturas ligeramente variables y con leves diferencias de inclinación, además de que la placa no se encontraba centrada respecto al cuerpo del robot por estar colocada en una posición
 casi arbitraria. A pesar de estos problemas, el sensor presentaba un desempeño básico aceptable que permitió realizar las pruebas necesarias hasta lograr que el robot realizara el seguimiento de una pista. No obstante, una vez finalizado el prototipo inicial, se rediseñó la estructura para solucionar estos problemas. En esta etapa
-del trabajo se diseñaron y fabricaron dos estructuras alternativas: la primera con una disposición de los LEDs tradicional lineal y la segunda con una disposición circular. Esta última se propuso en función del análisis realizado en la sección Modelado del Sistema, según el cual podíamos trabajar con un modelo LTI simple
+del trabajo se diseñaron y fabricaron dos estructuras alternativas: la primera con una disposición de los LEDs tradicional lineal y la segunda con una disposición circular. Esta última se propuso en función del análisis realizado en la sección Modelado del Sistema [\ref{sec:Modelado_del_sistema}], según el cual podíamos trabajar con un modelo LTI simple
 si considerábamos únicamente el ángulo de desviación de la orientación del robot respecto de la línea. Las estructuras obtenidas pueden observarse en la figura \ref{fig:estructuraSensor}. 
 \begin{figure}[h!]%!: Override internal parameters LaTeX uses for determining "good" float positions.
     \centering
     \begin{subfigure}[h]{0.45\textwidth}
     	\centering
-        \includegraphics[width=7.5cm]{./imagenes/conSensorLineal.jpg}
+        \includegraphics[width=7.5cm]{./imagenes/conSensorLineal.png}
         \caption{}
     \end{subfigure}
     \quad
     \begin{subfigure}[h]{0.45\textwidth}
     	\centering
-        \includegraphics[width=7.5cm]{./imagenes/conSensorCircular.jpg}
+        \includegraphics[width=7.5cm]{./imagenes/conSensorCircular.png}
         \caption{}
     \end{subfigure}
     \caption{esquema del robot con los dos tipos de estructuras diseñadas para fijar la disposición de los diodos según la configuración geométrica deseada: (a) lineal, y (b) circular.}
@@ -558,7 +568,7 @@ Se optó por diseñar las dos variantes para poder probar a futuro distintas est
 Considerando que se deseaba obtener un valor de ángulo como lectura del sensor, se podría haber realizado una deducción geométrica de los valores de ángulo a asignar para cada lectura posible del sensor. Sin embargo, dado que el diseño inicial tenía múltiples asimetrías, que resultaba difícil identificar correctamente el centro del robot y que los diodos utilizados pueden presentar imperfecciones o diferencias de sensibilidad, se optó por realizar un ensayo donde se midiera el rango de valores de ángulo de desviación para el cual se mantenía cada medición posible del sensor. Este ensayo se realizó marcando en un papel líneas de referencia y colocando cinta en línea recta sobre el mismo. Girando el robot sobre la pista con el centro siempre sobre un punto medio de la línea, se marcaron los rangos de desviación para los cuales se mantenía cada medición del sensor.
 \subsubsection{Lectura del Sensor con el Microcontrolador}
 Las salidas de las compuertas se conectan a pines de entrada del microcontrolador. En el programa principal la medición de la línea se necesita cada vez que se calcula el PID del sistema total, por ello se programó una subrutina de medición que se llama en el main antes de calcular el controlador cada $Ts$ segundos. Dentro de esta subrutina se lee cada valor digital de entrada y se almacenan los resultados en un vector de 8 componentes. Para anticiparse a valores de mediciones atípicos y atenuar el efecto de posibles errores de medición, se calcula una suma ponderada de las entradas para obtener un número que indica debajo de cuál de los fotodiodos se encuentra el centro de la línea, siendo las posibilidades para el caso de 8 LEDs: 1, 1.5, 2, 2.5,...,7,7.5 y 8, donde los números no enteros representan el caso en el que la línea se encuentre entre dos fotodiodos. Si a este número lo multiplicamos por dos y le restamos dos, nos queda uno de los siguientes resultados: 0,1,2,...14, que pueden usarse como índice de un vector. De esta forma lo que se hace es definir un vector constante con los resultados de ángulo obtenidos por ensayo cuando la línea estaba bajo cada una de las posibilidades y utilizar el número calculado para definir con cuál de los elementos del vector quedarse como medición actual. El caso en que todos
-las entradas estén en 0 se toma como valor particular y se la asigna el número 3 para que funcione como bandera e indique que se perdió la línea. Cuando esto ocurre el programa principal mantiene para los cálculos el último valor medido.
+las entradas estén en 0 se toma como valor particular y se la asigna el número 3 para que funcione como bandera e indique que se perdió la línea. Cuando esto ocurre el programa principal mantiene para los cálculos el último valor válido medido.
 
 \section{Identificación de Sistemas}
 \label{identifSist}
@@ -566,7 +576,7 @@ Para sintonizar los controladores PID ha implementar se necesita tener algún ti
 
 A continuación se detallan los ensayos realizados para la identificación de los sistemas a controlar.
 \subsection{Identificación de los Motores}
-El modelo de función de transferencia planteado matemáticamente en la sección \ref{modeloMotores} nos define como variable de salida la velocidad angular del motor y como variable de entrada la tensión aplicada. Para la implementación con el microcontrolador se utiliza una señal de PWM de alta frecuencia cuyo duty cycle modifica el valor de tensión continua aplicado al motor. Esto es factible debido a que el motor actúa como un filtro pasabajos, manteniendo la componente de continua de la señal y atenuando las restantes. Dado que esta es la señal que podemos controlar realmente, se utiliza como señal de entrada el duty cycle utilizado en los PWM.
+El modelo de función de transferencia planteado matemáticamente en la sección \ref{modeloMotores} nos define como variable de salida la velocidad angular del motor y como variable de entrada la tensión promedio aplicada. Para la implementación con el microcontrolador se utiliza una señal de PWM de alta frecuencia (comparada con la frecuencia de corte del polo mecánico y el polo eléctrico) cuyo duty cycle modifica el valor de tensión continua aplicado al motor. Esto es factible debido a que el \textit{ sistema motor} actúa como un filtro pasabajos, manteniendo la componente de continua de la señal y atenuando las restantes. Dado que esta es la señal que podemos controlar realmente, se utiliza como señal de entrada el duty cycle utilizado en los PWM.
 
 El modelo obtenido de forma teórica realiza varias simplificaciones. Una de ellas es ignorar el ciclo de histéresis de los motores y otra es no considera el efecto de una carga en el motor, que en este caso implicaría considerar la dinámica del robot sobre el suelo. Estos fenómenos hacen que el comportamiento real de los motores no sea realmente lineal. Para analizar la linealidad el sistema y el intervalo de trabajo a utilizar se diseñó un ensayo que barriera las distintas posibilidades de duty cycle para cada motor y almacenara varias muestras de las velocidades obtenidas en el estado estacionario. En la figura \ref{linealidad} se muestra la curva obtenida para el motor B. La del motor A es análoga. %$.$ Revisar que ya esté explicado en algún lado que el motor B es el derecho y el A el izquierdo
 
@@ -578,7 +588,7 @@ El modelo obtenido de forma teórica realiza varias simplificaciones. Una de ell
 \label{linealidad}
 \end{figure}
 
-Analizando la curva de respuesta del sistema observamos que los motores comienzan a moverse recién a partir de un 5\% de duty cycle. Esto se debe a la inercia del motor. Por otra parte, la recta ajustada muestra que el comportamiento es aproximadamente lineal hasta un 80\% de duty cycle. Para garantizar un buen funcionamiento se trabajará de 10 a 80 para los ensayos de estimación del sistema.
+Analizando la curva de respuesta del sistema observamos que los motores comienzan a moverse recién a partir de un 5\% de duty cycle. Esto se debe al par de fricción estática aplicada al eje. Por otra parte, la recta ajustada muestra que el comportamiento es aproximadamente lineal hasta un 80\% de duty cycle. Para garantizar un buen funcionamiento se trabajará de 10 a 80 para los ensayos de estimación del sistema.
 
 En función de las consideraciones anteriores, se diseño un ensayo que permitiese obtener la respuesta al escalón de ambos motores. Dado que nos interesa conocer el comportamiento con carga y no en vacío, se buscó que el ensayo se realizara con el robot completo funcionando en condiciones normales. Para ello se programó que el robot anduviera en línea recta, primero a una velocidad baja y luego a una mayor dada por un cambio repentino del duty cycle de ambos motores. Las señales de interés se muestrearon a una frecuencia de 200Hz, se almacenaron en la EEPROM y luego fueron transmitidas a la computadora por puerto serie. La curva obtenida se muestra en la figura \ref{EscalonMotores}.
 \begin{figure}[h]
@@ -590,13 +600,13 @@ En función de las consideraciones anteriores, se diseño un ensayo que permitie
 
 Analizando los resultados obtenidos se detectó que existía una demora en el sistema no anticipada por el modelo matemático. Ésta se debe a la dinámica del sistema de medición de velocidad, que en los análisis teóricos no se suele considerar. Específicamente, el promedio realizado al momento de medir la velocidad de cada motor genera la demora observada. Dado que se almacenan los tiempos correspondientes a un giro completo de la rueda  para realizar el cálculo de velocidad, cuando la velocidad real cambia de forma abrupta el sistema demora una vuelta en empezar a medir de forma correcta. Este comportamiento se corresponde con el de un sistema de media móvil, pero variante en el tiempo y alineal, ya que la demora depende de la velocidad de giro. Para poder continuar trabajando en el contexto de sistemas LTI se utilizará una estimación del sistema alrededor de cierto punto de trabajo. 
 
-Utilizando los datos obtenidos se estimó un sistema LTI continuo que se ajustara a cada curva utilizando la herramienta de Matlab System Identification. Las funciones de transferencias obtenidas para cada motor fueron:
-\begin{equation*}
+Utilizando los datos obtenidos se estimó un sistema LTI continuo que se ajustara a cada curva utilizando la herramienta de Matlab System Identification \cite{Sys_ident}. Las funciones de transferencias obtenidas para cada motor fueron:
+\begin{equation}
 M_a(s)= \frac{7075.3 e^{-0.013s}}{(s+9.631)(s+67.5)}
-\end{equation*}
-\begin{equation*}
+\end{equation}
+\begin{equation}
 M_b(s)= \frac{5042.1 e^{-0.013s}}{(s+9.988) (s+45.48)}
-\end{equation*}
+\end{equation}
 
 %$.$ Utilizando esta información se ajustaron los controladores PID de cada motor, según se explicará en la sección \ref{control}. 
 \subsection{Identificación de la Cinemática el Robot}
@@ -618,7 +628,7 @@ Si el cambio de velocidad de los motores fuese automático, el robot giraría si
 %Lo que nos interesa es saber cuánto tiempo transcurre hasta que pierde la línea. Dicho punto sería cuando el último sensor de la derecha está sobre la línea verde. Si la distancia entre el eje central del robot y éste LED es $d_1$, entonces el LED se desplaza siguiendo una trayectoria circular de radio $R_{giro}$+$d_1$ …..
 
 Sin embargo, la implementación perfecta de un ensayo al escalón resulta muy difícil por dos inconvenientes. El primero es que se requiere que durante un tiempo el robot siga la línea perfectamente antes de girar. Para lograr esto se implementó un controlador proporcional ajustado a mano que permitía que el robot siga la pista. Así, el código implementado sigue la línea usando este controlador durante un breve lapso de tiempo que permita la estabilización del robot y luego desactiva el controlador y cambia abruptamente la diferencia de velocidad de los motores (manteniendo $v$ constante), siendo los valores del ensayo los tomados a partir de este instante de tiempo.
-El segundo conflicto es que la señal que realmente se puede controlar no es la diferencia real de velocidad de los motores, sino la diferencia de velocidad deseada. La diferencia entre ambas señales está dada por la dinámica de los motores con sus controladores correspondientes. Como sólo se desea estimar la sección correspondiente a la cinemática, se optó por medir las señales de entrada y salida de esta sección, es decir, $\Delta \omega$ real y $\beta$, y utilizar esas señales para estimación con el System Identification de Matlab. De esta manera, no se tiene exactamente la respuesta al escalón, pero la señal es lo suficientemente parecida como para resultar de utilidad en la estimación.
+El segundo conflicto es que la señal que realmente se puede controlar no es la diferencia real de velocidad de los motores, sino la diferencia de velocidad deseada. La diferencia entre ambas señales está dada por la dinámica de los motores con sus controladores correspondientes. Como sólo se desea estimar la sección correspondiente a la cinemática, se optó por medir las señales de entrada y salida de esta sección, es decir, $\Delta \omega$ real y $\beta$, y utilizar esas señales para estimación con el System Identification de Matlab \cite{Sys_ident} . De esta manera, no se tiene exactamente la respuesta al escalón, pero la señal es lo suficientemente parecida como para resultar de utilidad en la estimación.
 
 En la figura \ref{fig:ensayoSistTotal} se muestra uno de los resultados de este ensayo.
 \begin{figure}
@@ -633,13 +643,13 @@ Sys_{tot}= \frac{0.028934}{s}
 \label{eq:sys_tot_est}
 \end{equation}
 
-De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que $\frac{r}{R}=0.028934 $. Los parámetros medidos, si embargo, son $r=1.5cm$ y $R=16cm$, lo cual daría $\frac{r}{R}=0.09375 $. Esta discrepancia no se pudo explicar aún.   
+De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que $\frac{r}{L}=0.028934 $. Los parámetros medidos, si embargo, son $r=1.5cm$ y $L=16cm$, lo cual daría $\frac{r}{L}=0.09375 $. Esta discrepancia no se pudo explicar aún.   
 %$.$ Faltaría una imagen que muestre qué tan bien ajusta el modelo estimado.
 
 \section{Ajuste de los Controladores}
-Existen diversas estrategias para realizar la sintonización de un controlador PID. Una de las posibilidades estudiadas en la carrera es la utilización de tablas empíricas, como son los métodos de Ziegler Nichols. Inicialmente se quiso implementar el ajuste con uno de estos métodos por considerárselo más didáctico y porque no requiere un modelo completo de la planta. Más adelante se detalla el procedimiento seguido, no obstante los resultados no fueron buenos, ya que los controladores obtenidos no presentaban un desempeño satisfactorio.
+Existen diversas estrategias para realizar la sintonización de un controlador PID. Una de las posibilidades estudiadas en la carrera es la utilización de tablas empíricas, como son los métodos de Ziegler Nichols. Inicialmente se quiso implementar el ajuste con uno de estos métodos por considerárselo más didáctico y porque no requiere un modelo completo de la planta. Más adelante se detalla el procedimiento seguido, no obstante los controladores obtenidos no presentaban un desempeño satisfactorio.
 
-Otras opciones estudiadas en la carrera requieren disponer de un modelo completo del sistema a controlar. Es por esto que se realizaron las estimaciones de funciones de transferencia explicadas en la sección \ref{identifSist}. Conocidos los modelos de los sistemas, se puede realizar un ajuste con fundamentos matemáticos, pero dado que resulta más rápido y más intuitivo se optó por realizar un ajuste por software. Para ello se usó la herramienta de PID tuner de Matlab que permite un ajuste muy fácil observando la curva de salida. Esto resulta de gran utilidad ya que se puede ver en la gráfica el impacto en el comportamiento efectivo, mientras que los cálculos teóricos estudiados en la carrera utilizan restricciones sobre los parámetros matemáticos que se relacionan de forma indirecta, aproximada y menos tangible con la respuesta temporal que realmente tendrá el sistema a lazo cerrado.
+Otras opciones estudiadas en la carrera requieren disponer de un modelo completo del sistema a controlar. Es por esto que se realizaron las estimaciones de funciones de transferencia explicadas en la sección \ref{identifSist}. Conocidos los modelos de los sistemas, se puede realizar un ajuste con fundamentos matemáticos, pero dado que resulta más rápido y más intuitivo se optó por realizar un ajuste por software. Para ello se usó la herramienta de PID tuner de Matlab \cite{PID_tuner} que permite un ajuste muy fácil observando la curva de salida. Esto resulta de gran utilidad ya que se puede ver en la gráfica el impacto en el comportamiento efectivo, mientras que los cálculos teóricos estudiados en la carrera utilizan restricciones sobre los parámetros matemáticos que se relacionan de forma indirecta, aproximada y menos tangible con la respuesta temporal que realmente tendrá el sistema a lazo cerrado.
 
 Para el ajuste de los controladores de los motores se buscó que la respuesta al escalón fuese rápida y con poco sobreimpulso, ya que el impacto se vería incrementado al considerar todo el robot en su conjunto. Además, se buscó un ajuste que diera un comportamiento muy similar para ambos motores, ya que las asimetrías se traducirían en trayectorias erráticas. Los controladores obtenidos para cada motor fueron los siguientes:
 \begin{equation*}
@@ -673,7 +683,7 @@ La utilidad de los controles PID estriba en que se aplican en forma casi general
 
 Las reglas de Ziegler-Nichols son muy convenientes cuando no se conocen los modelos matemáticos de las plantas. Tales reglas sugieren un conjunto de valores de $K_p$, $T_i$ y $T_d$ que darán una operación estable del sistema. No obstante, el sistema resultante puede presentar una gran sobreelongación en su respuesta escalón de forma que resulte no aceptable. En tales casos se necesitará una serie de ajustes finos hasta que se obtenga el resultado deseado. De hecho, las reglas de sintonía de Ziegler-Nichols dan una estimación razonable de los parámetros del controlador y proporcionan un punto de partida para una sintonía fina, en lugar de dar los parámetros $K_p$, $T_i$ y $T_d$ en un único intento.
 
-Tal determinación de los parámetros de los controladores PID o sintonía de controladores PID se pueden realizar mediante experimentos sobre la planta. Hay dos métodos denominados reglas de sintonía de Ziegler-Nichols: método de la respuesta al esalón y método del $K_{inestable}$.  
+Tal determinación de los parámetros de los controladores PID o sintonía de controladores PID se pueden realizar mediante experimentos sobre la planta. Hay dos métodos denominados reglas de sintonía de Ziegler-Nichols: método de la respuesta al esalón y método del $K_{inestable}$. En este trabajo se implemento el primero, por lo que sólo se detallara ese. En caso de querer profundizar mas en el tema, puede consultar \cite{biblia_PID} \cite{paginaPID}. 
 
 \subsubsection{Metodo de Z-N: respuesta al escalón}
 %Esto esta sacado del PDF que nos paso COLON:\\
@@ -736,6 +746,8 @@ A la hora de implementar el control se encontraron varios inconvenientes.... Pon
 \bibitem{ogata} Ogata 5ta edicion capitulo 5
 \bibitem{biblia_PID} PID que nos paso colon.
 \bibitem{paginaPID}\url{https://sites.google.com/site/picuino/ziegler-nichols}
+\bibitem{Sys_ident}\url{https://la.mathworks.com/products/sysid.html}
+\bibitem{PID_tuner}\url{https://la.mathworks.com/discovery/pid-tuning.html}
 \end{thebibliography}
 %Referencias
 %[1]: “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.
