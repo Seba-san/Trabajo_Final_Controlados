@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.4.5)  10 JUL 2018 13:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.4.5)  10 JUL 2018 14:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -854,7 +854,7 @@ Package pdftex.def Info: ./imagenes/robot_diferencial.png used on input line 24
 File: ./imagenes/carrito1.png Graphic file (type png)
 
 <use ./imagenes/carrito1.png>
-Package pdftex.def Info: ./imagenes/carrito1.png used on input line 310.
+Package pdftex.def Info: ./imagenes/carrito1.png used on input line 284.
 (pdftex.def)             Requested size: 284.52756pt x 248.9791pt.
 
 
@@ -865,7 +865,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 File: ./imagenes/carrito_girando.png Graphic file (type png)
 
 <use ./imagenes/carrito_girando.png>
-Package pdftex.def Info: ./imagenes/carrito_girando.png used on input line 369.
+Package pdftex.def Info: ./imagenes/carrito_girando.png used on input line 331.
 
 (pdftex.def)             Requested size: 284.52756pt x 248.86461pt.
 
@@ -882,7 +882,7 @@ pdf>
 (epstopdf)                    size: 69940 bytes
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/sistema_total-e
 ps-converted-to.pdf ./imagenes/sistema_total.eps>
-(epstopdf)             \includegraphics on input line 453.
+(epstopdf)             \includegraphics on input line 386.
 Package epstopdf Info: Output file is already uptodate.
 
 <./imagenes/sistema_total-eps-converted-to.pdf, id=203, 563.10374pt x 262.9825p
@@ -890,7 +890,7 @@ t>
 File: ./imagenes/sistema_total-eps-converted-to.pdf Graphic file (type pdf)
  <use ./imagenes/sistema_total-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/sistema_total-eps-converted-to.pdf used on 
-input line 453.
+input line 386.
 (pdftex.def)             Requested size: 426.48543pt x 199.16928pt.
 
 
@@ -902,7 +902,7 @@ File: ./imagenes/circuitoFotodiodo.jpeg Graphic file (type jpg)
 
 <use ./imagenes/circuitoFotodiodo.jpeg>
 Package pdftex.def Info: ./imagenes/circuitoFotodiodo.jpeg used on input line 4
-69.
+02.
 (pdftex.def)             Requested size: 284.52756pt x 144.15387pt.
  [6 <./imagenes/sistema_total-eps-converted-to.pdf> <./imagenes/circuitoFotodio
 do.jpeg>]
@@ -910,7 +910,7 @@ do.jpeg>]
 File: ./imagenes/sensorLinea.png Graphic file (type png)
 
 <use ./imagenes/sensorLinea.png>
-Package pdftex.def Info: ./imagenes/sensorLinea.png used on input line 530.
+Package pdftex.def Info: ./imagenes/sensorLinea.png used on input line 463.
 (pdftex.def)             Requested size: 227.62204pt x 140.84251pt.
  [7]
 <./imagenes/circuitoSensorLinea.png, id=233, 225.09094pt x 139.27031pt>
@@ -918,14 +918,14 @@ File: ./imagenes/circuitoSensorLinea.png Graphic file (type png)
 
 <use ./imagenes/circuitoSensorLinea.png>
 Package pdftex.def Info: ./imagenes/circuitoSensorLinea.png used on input line 
-539.
+472.
 (pdftex.def)             Requested size: 284.52756pt x 176.0659pt.
 
 <./imagenes/conSensorLineal.png, id=236, 579.66562pt x 422.32782pt>
 File: ./imagenes/conSensorLineal.png Graphic file (type png)
 
 <use ./imagenes/conSensorLineal.png>
-Package pdftex.def Info: ./imagenes/conSensorLineal.png used on input line 553.
+Package pdftex.def Info: ./imagenes/conSensorLineal.png used on input line 486.
 
 (pdftex.def)             Requested size: 213.39566pt x 155.47264pt.
 
@@ -933,8 +933,8 @@ Package pdftex.def Info: ./imagenes/conSensorLineal.png used on input line 553.
 File: ./imagenes/conSensorCircular.png Graphic file (type png)
 
 <use ./imagenes/conSensorCircular.png>
-Package pdftex.def Info: ./imagenes/conSensorCircular.png used on input line 55
-9.
+Package pdftex.def Info: ./imagenes/conSensorCircular.png used on input line 49
+2.
 (pdftex.def)             Requested size: 213.39566pt x 155.47264pt.
 
 
@@ -951,7 +951,7 @@ Package epstopdf Info: Source file: <./imagenes/prueba_linealidad.eps>
 (epstopdf)                    size: 103259 bytes
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/prueba_linealid
 ad-eps-converted-to.pdf ./imagenes/prueba_linealidad.eps>
-(epstopdf)             \includegraphics on input line 586.
+(epstopdf)             \includegraphics on input line 519.
 Package epstopdf Info: Output file is already uptodate.
 
 <./imagenes/prueba_linealidad-eps-converted-to.pdf, id=256, 421.575pt x 316.181
@@ -960,7 +960,7 @@ File: ./imagenes/prueba_linealidad-eps-converted-to.pdf Graphic file (type pdf)
 
  <use ./imagenes/prueba_linealidad-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/prueba_linealidad-eps-converted-to.pdf used
- on input line 586.
+ on input line 519.
 (pdftex.def)             Requested size: 284.52756pt x 213.39865pt.
 Package epstopdf Info: Source file: <./imagenes/resp_escalon_motores_2.eps>
 (epstopdf)                    date: 2018-06-25 15:33:32
@@ -971,7 +971,7 @@ erted-to.pdf>
 (epstopdf)                    size: 33905 bytes
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/resp_escalon_mo
 tores_2-eps-converted-to.pdf ./imagenes/resp_escalon_motores_2.eps>
-(epstopdf)             \includegraphics on input line 596.
+(epstopdf)             \includegraphics on input line 529.
 Package epstopdf Info: Output file is already uptodate.
 
 <./imagenes/resp_escalon_motores_2-eps-converted-to.pdf, id=258, 501.875pt x 38
@@ -980,7 +980,7 @@ File: ./imagenes/resp_escalon_motores_2-eps-converted-to.pdf Graphic file (type
  pdf)
  <use ./imagenes/resp_escalon_motores_2-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/resp_escalon_motores_2-eps-converted-to.pdf
- used on input line 596.
+ used on input line 529.
 (pdftex.def)             Requested size: 284.52756pt x 217.95773pt.
 
 
@@ -992,7 +992,7 @@ File: ./imagenes/carrito_Ensayo_escalon.png Graphic file (type png)
 
 <use ./imagenes/carrito_Ensayo_escalon.png>
 Package pdftex.def Info: ./imagenes/carrito_Ensayo_escalon.png used on input li
-ne 624.
+ne 557.
 (pdftex.def)             Requested size: 170.71652pt x 159.04305pt.
  [11 <./imagenes/resp_escalon_motores_2-eps-converted-to.pdf> <./imagenes/carri
 to_Ensayo_escalon.png>]
@@ -1005,7 +1005,7 @@ erted-to.pdf>
 (epstopdf)                    size: 12639 bytes
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/resp_escalon_sy
 s_total-eps-converted-to.pdf ./imagenes/resp_escalon_sys_total.eps>
-(epstopdf)             \includegraphics on input line 636.
+(epstopdf)             \includegraphics on input line 569.
 Package epstopdf Info: Output file is already uptodate.
 
 <./imagenes/resp_escalon_sys_total-eps-converted-to.pdf, id=299, 421.575pt x 31
@@ -1014,7 +1014,7 @@ File: ./imagenes/resp_escalon_sys_total-eps-converted-to.pdf Graphic file (type
  pdf)
  <use ./imagenes/resp_escalon_sys_total-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/resp_escalon_sys_total-eps-converted-to.pdf
- used on input line 636.
+ used on input line 569.
 (pdftex.def)             Requested size: 284.52756pt x 213.39865pt.
 
 [12 <./imagenes/resp_escalon_sys_total-eps-converted-to.pdf>]
@@ -1029,7 +1029,7 @@ s_2-eps-converted-to.pdf>
 (epstopdf)             Command: <repstopdf --outfile=./imagenes/resp_escalon_mo
 tores_controlados_2-eps-converted-to.pdf ./imagenes/resp_escalon_motores_contro
 lados_2.eps>
-(epstopdf)             \includegraphics on input line 671.
+(epstopdf)             \includegraphics on input line 604.
 Package epstopdf Info: Output file is already uptodate.
 
 <./imagenes/resp_escalon_motores_controlados_2-eps-converted-to.pdf, id=321, 50
@@ -1039,7 +1039,7 @@ c file (type pdf)
 
 <use ./imagenes/resp_escalon_motores_controlados_2-eps-converted-to.pdf>
 Package pdftex.def Info: ./imagenes/resp_escalon_motores_controlados_2-eps-conv
-erted-to.pdf used on input line 671.
+erted-to.pdf used on input line 604.
 (pdftex.def)             Requested size: 426.79134pt x 324.33208pt.
 
 [13 <./imagenes/resp_escalon_motores_controlados_2-eps-converted-to.pdf>]
@@ -1047,27 +1047,28 @@ erted-to.pdf used on input line 671.
 File: ./imagenes/escalon_z-n.png Graphic file (type png)
 
 <use ./imagenes/escalon_z-n.png>
-Package pdftex.def Info: ./imagenes/escalon_z-n.png used on input line 703.
+Package pdftex.def Info: ./imagenes/escalon_z-n.png used on input line 636.
 (pdftex.def)             Requested size: 284.52756pt x 141.40053pt.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 758.
- [14 <./imagenes/escalon_z-n.png>] [15]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 758.
+ [14 <./imagenes/escalon_z-n.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 691.
+ [15]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 691.
 
 (./pre_informe.aux
 LaTeX Info: Redefining \. on input line 19.
 LaTeX Info: Redefining \% on input line 19.
 )
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 758.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 758.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 691.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 691.
 Package rerunfilecheck Info: File `pre_informe.out' has not changed.
 (rerunfilecheck)             Checksum: F3C5BC1664580971AFCF6604CF39D3C8;2311.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 758.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 691.
  ) 
 Here is how much of TeX's memory you used:
- 10456 strings out of 493029
- 152614 string characters out of 6136235
- 264532 words of memory out of 5000000
- 13745 multiletter control sequences out of 15000+600000
+ 10457 strings out of 493029
+ 152632 string characters out of 6136235
+ 264583 words of memory out of 5000000
+ 13746 multiletter control sequences out of 15000+600000
  7330 words of font info for 27 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,9n,40p,1383b,490s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1084,10 +1085,10 @@ cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy1
 0.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb><
 /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/s
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on pre_informe.pdf (16 pages, 887791 bytes).
+Output written on pre_informe.pdf (16 pages, 888531 bytes).
 PDF statistics:
- 437 PDF objects out of 1000 (max. 8388607)
- 374 compressed objects within 4 object streams
+ 439 PDF objects out of 1000 (max. 8388607)
+ 376 compressed objects within 4 object streams
  93 named destinations out of 1000 (max. 500000)
  334 words of extra memory for PDF output out of 10000 (max. 10000000)
 

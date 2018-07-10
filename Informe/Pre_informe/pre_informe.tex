@@ -274,32 +274,6 @@ v=\frac{r(\omega _R + \omega _L)}{2}
 
 Donde L es la distancia entre las ruedas. 
 
-%
-%Tomando en cuenta \cite{pathfoll}, si modelamos la línea detectada como una recta, la situación geométrica del problema se asemeja a la mostrada en la figura \ref{fig:sistema1}.
-%
-%\begin{figure}[h]
-%\centering
-%\includegraphics[width=10cm]{./imagenes/sistema1.png}
-%\caption{Gráfico de la línea a seguir y del robot según \cite{pathfoll}.}
-%\label{fig:sistema1}
-%\end{figure}
-%
-%
-%Las ecuaciones de velocidad para este problema según \cite{pathfoll} son:
-%
-%\begin{equation}
-%\dot{s}=v \cos (\theta - \Psi)
-%\end{equation}
-%
-%\begin{equation}
-%\dot{d}=v \sin (\theta - \Psi)
-%\end{equation}
-%
-%\begin{equation}
-%\dot{\theta}=\omega  
-%\end{equation}
-%
-%Donde v y $\omega$ son las velocidades lineal y angular del punto medio entre las ruedas, C.
 \subsubsection{Restricciones de Sensores Disponibles}%$.$ Mejorar nombre
 Dado que el único sensor disponible es el sensor de línea, no se tiene la información completa para trabajar con las ecuaciones \ref{eq:ec_cinem}. En función de esto se decidió plantear una hipótesis simplificativa que permitiese estimar la orientación del vehículo respecto a la pista. Se decidió trabajar con esta variable porque la ecuación que gobierna la orientación del robot es LTI y si la pista es una línea recta la orientación relativa a esta respondería a la misma ecuación.
 
@@ -349,18 +323,6 @@ Como sólo nos interesa la diferencia entre velocidades angulares del motor, se 
 \end{equation*}
 
 Esto disminuiría el problema a una sola señal de control, $\Delta \omega$.
-%Restaría realizar un análisis más profundo sobre la dinámica de $e$. Suponiendo el esquema de la figura \ref{fig:carrito1}, pero con un sensor de linea radial centrado en el centro con radio $T$ (como se ve en la figura...) resulta
-%% y disminuiría los efectos alineales influyendo sobre $\dot{e} $ sin embargo, como no se está tomando en cuenta la dinámica de e, no se tiene claro si esta restricción es necesaria. Se necesitaría profundizar en el análisis para poder asegurarlo.
-%\begin{equation}
-%e=T \sin (\beta)  \Longrightarrow \dot{e}=T \cos (\beta) \dot{\beta}  \Longrightarrow \dot{e} = T \omega \cos(\beta)
-%\end{equation}
-%
-%si $\vert\beta\vert<10^o$ resulta que  
-%\begin{equation}
-%\dot{e} = T \omega \quad \wedge \quad  e=T \beta
-%\end{equation}
-%
-%En caso de que esta suposición no se cumpla entraran en juego las no linealidades antes vistas.
 
 \subsubsection{Radio de giro}
 En la figura \ref{fig:girando} se muestra la disposicion del robot cuando esta siguiendo una curva.
@@ -396,39 +358,10 @@ reemplazando esto en las ecuaciones \ref{eq:v_tan}  y \ref{eq:omegac}, se obtien
 
 Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$. Para una velocidad $\omega_{fijo}$ constante, el máximo valor admisible de $\Delta \omega$ determinará el menor radio de giro que podrá hacer el robot.
 
-
-%Redaccion anterior
-%Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta \omega$ . Si definimos que $\omega _{fijo}=300 rpm $, para obtener un radio de giro mínimo de 1,5 veces R necesitaríamos $\Delta \omega =100 rpm $, mientras que para uno igual a R necesitaríamos $\Delta \omega =150 rpm $.
-
-%Esto era siguiendo la tesis de Alexei, pero parece que está mal:
-%\subsection{Modelado de los motores}
-%Según \cite{alex} se puede modelar el motor según la siguiente ecuación diferencial:
-%\begin{equation}
-%J\ddot{\theta}=\frac{k_2}{R}V_i-\frac{k_2 k_2}{R} \dot{\theta}-k_3\dot{\theta} 
-%\end{equation}
-%donde $k_1$ es la constante que relaciona la fuerzamagneto motriz con la velocidad angular; $k_2$ relaciona la cupla motora con la corriente; $k_3$ relaciona la velocidad angular con el torque de fricción; $R$ es la resistencia del bobinado; $J$ es el momento de inercia del eje y $V_i$ es la tension entre los bornes del motor.
-%La función de transferencia entonces resulta
-%\begin{equation}
-%\frac{\theta}{V_i}=\frac{k_2}{Rs(sJ+\frac{k_2k_1}{R}+k_3)}
-%\end{equation}
-%
-%considerando que $\theta$ es proporcional al desplazamiento del dispositivo $x$ y $V_i$ es proporcional a la señal de control, simplificando resulta:
-%\begin{equation}
-%\frac{\theta}{V_i}=\frac{k_2/{JR}}{s(s+\frac{k_2k_1}{JR}+ \frac{k_3}{J} )}
-%\end{equation} 
-%escribiendo genéricamente 
-%\begin{equation}
-%\frac{\theta}{V_i}=\frac{a}{s(s+b)}
-%\end{equation}
-% donde a y b son parámetros a determinar. Por cuestiones de practicidad (segun tania) en vez de usar $\theta$ se usa $\dot{\theta}$ , lo que produce la siguiente funcion de transferencia
-% \begin{equation}
-% \frac{\omega}{V_i}=\frac{a}{(s+b)}
-% \end{equation}
-% 
  \subsection{Modelado de los motores}
  \label{modeloMotores}
  
- Los motores a utilizar son motores de DC con escobillas. Según \cite{dorf}, si se desprecia el torque de la perturbación,%$.$ para mí no se entiende qué es el torque de "perturbación", pero no sé qué es exactamente como para poder cambiarlo :( (dorf pág 58-59)
+ Los motores a utilizar son motores de DC con escobillas. Según \cite[pág. 58-59]{dorf}, si se desprecia el torque de la perturbación,%$.$ para mí no se entiende qué es el torque de "perturbación", pero no sé qué es exactamente como para poder cambiarlo :( (dorf pág 58-59)
 \ la función de transferencia de la combinación motor-carga resulta
  \begin{equation*}
  \frac{\theta(s)}{V_f(s)}=\frac{K_m}{s(Js+b)(L_fs+R_f)}
@@ -454,7 +387,13 @@ Una vez implementados todos los controladores descritos el sistema total queda s
 \caption{Diagrama en bloques del sistema total con los tres controladores PID implementados. MEJORAR ESTA IMAGEN}
 \label{diagra en bloques sist total}
 \end{figure}
-
+\subsection{PID}
+ Esta parte es un choreo de \ref[pág. 25]{biblia_PID}.\\
+ 
+ \subsubsection{Discretización PID}
+ 
+ 
+  
 \section{Sistemas de Medición}
 \subsection{Medición de velocidad de los Motores}
 \subsubsection{Estructura Mecánica}
@@ -646,7 +585,7 @@ Sys_{tot}= \frac{0.028934}{s}
 De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que $\frac{r}{L}=0.028934 $. Los parámetros medidos, si embargo, son $r=1.5cm$ y $L=16cm$, lo cual daría $\frac{r}{L}=0.09375 $. Esta discrepancia no se pudo explicar aún.   
 %$.$ Faltaría una imagen que muestre qué tan bien ajusta el modelo estimado.
 
-\section{Ajuste de los Controladores}
+\section{Ajuste de los Controladores} \label{sec:ajus_control}
 Existen diversas estrategias para realizar la sintonización de un controlador PID. Una de las posibilidades estudiadas en la carrera es la utilización de tablas empíricas, como son los métodos de Ziegler Nichols. Inicialmente se quiso implementar el ajuste con uno de estos métodos por considerárselo más didáctico y porque no requiere un modelo completo de la planta. Más adelante se detalla el procedimiento seguido, no obstante los controladores obtenidos no presentaban un desempeño satisfactorio.
 
 Otras opciones estudiadas en la carrera requieren disponer de un modelo completo del sistema a controlar. Es por esto que se realizaron las estimaciones de funciones de transferencia explicadas en la sección \ref{identifSist}. Conocidos los modelos de los sistemas, se puede realizar un ajuste con fundamentos matemáticos, pero dado que resulta más rápido y más intuitivo se optó por realizar un ajuste por software. Para ello se usó la herramienta de PID tuner de Matlab \cite{PID_tuner} que permite un ajuste muy fácil observando la curva de salida. Esto resulta de gran utilidad ya que se puede ver en la gráfica el impacto en el comportamiento efectivo, mientras que los cálculos teóricos estudiados en la carrera utilizan restricciones sobre los parámetros matemáticos que se relacionan de forma indirecta, aproximada y menos tangible con la respuesta temporal que realmente tendrá el sistema a lazo cerrado.
@@ -719,7 +658,7 @@ T=1.5(t_c -t_b) \quad	L=t_c-T
 \label{eq:calculo_T_L}
 \end{equation}
 
-
+En como se menciono en la sección \ref{sec:ajus_control} este método no genero resultados satisfactorios en lo que el control de los motores respecta. Una de las causas reside en que este método es valido dentro de un rango de validez \cite[pág. 60]{biblia_PID} dado por $0.1<L/T<1$. Para el caso que nos acomete, dado por el delay de medición, el parámetro $L/T$ oscilaba entre 10 y 6, es decir $L/T \in (6,10) $. 
 \subsection{Sistema total y control}
 
 Si se parte de la suposición de que los motores se comportan de manera semejante, el diagrama del sistema total resulta:
