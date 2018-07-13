@@ -522,7 +522,7 @@ en donde los parámetros $K_p$, $K_i$ y $K_d$ son las constantes con las que se 
 
 La representación anterior es la forma clásica (o no interactuante) del controlador PID escrita para tiempo continuo. En forma de función de transferencia resulta:
 \begin{equation}
-G(s)e(s)=(K_p + K_i/s + sK_d)e(s)
+G(s)e(s)=\left(K_p + K_i/s + sK_d \right)e(s)
 \label{eq:pid_basico}
 \end{equation}
 considerando el ajuste de la ecuacion \ref{eq:ajuste_deriv}, la exprecion \ref{eq:pid_basico} resulta
@@ -536,11 +536,12 @@ G(s)e(s)=\left( K_p + K_i/s + \frac{sK_d}{1+\frac{sK_d}{N} } \right)e(s)
 
  
  \subsubsection{Discretización PID}
- \begin{itemize}
- \item Formas de discretizar
- \item discretizacion estandar, problemas
- \item Discretizacion del astrom
- \end{itemize}
+% 
+% \begin{itemize}
+% \item Formas de discretizar
+% \item discretizacion estandar, problemas
+% \item Discretizacion del astrom
+% \end{itemize}
  
  Según \cite[pág. 214]{astrom} se pueden representar una ecuación diferencial mediante su aproximación:
  
@@ -675,20 +676,20 @@ Suponga que el sensor se encuentra sobre una superficie reflectante (por ej. con
 Ahora suponga que el sensor se encuentra sobre una superficie poco reflectante (por ej. con color negra). Luego la luz emitida por el LED IR se reflejará y llegará al fotodiodo con una intensidad $I_{negro}$.\\
 Entonces, siempre y cuando la diferencia entre estas intensidades sea mayor que la sensibilidad del sensor  $|I_{blanco} - I_{negro} |> I_{sens}$, se podrá discernir entre una superficie y la otra. \\
 Generalmente cuando cambia el color de una superficie también cambia el material de la misma, por lo que no se puede asegurar que \textit{siempre} una superficie de color negro generara una intensidad reflejada menor que una superficie de color blanco $I_{negro} <I_{blanco}$. 
- La idea se muestra en la figura \ref{fig:sensorLinea}.
+ La idea se muestra en la figura \ref{fig:sensorLinea}.\\
 %Completar!! $.$
 \begin{figure}[h]
 \centering
-\includegraphics[width=8cm]{./imagenes/sensorLinea.png}
-\caption{COMPLETAR.}
+\includegraphics[width=8cm]{./imagenes/sens_rebotando2.png}%sensorLinea.png
+\caption{En esta implementación se ve el cabezal circular con 2 leds emisores. El led Rojo hace las veces de led Emisor de luz y el led Azul como fotodiodo.}
 \label{fig:sensorLinea}
 \end{figure}
-
+La región en donde se ve la luz de color rojo, es en donde los fotones inciden en la superficie y no son captados por el fotodiodo (led azul), por otro lado la región en donde solo se ve la luz azul es la zona en donde el fotodiodo posee mayor sensibilidad para captar los fotones reflejados. La superposición de los colores es el intervalo espacial en donde la luz emitida por el led rojo es recibida por el fotodiodo. Esta zona es en donde se evaluara si la zona es muy reflectante o poco reflectante, es decir, si hay una linea o no.
 \subsubsection{Circuito Eléctrico}
-Para alimentar este arreglo de emisores y receptores se utilizó el circuito de la figura \ref{fig:circuitoSensorLinea}. En ella se observa que los diodos se alimentan a través de espejos de corriente que permiten ajustar la sensibilidad. Las salidas de cada fotodiodo se conectan a compuertas Schmitt trigger para acomodar la señal de salida a una que permita trabajar con lógica digital. Se corroboró con el osciloscopio que la señal de salida era apropiada para la lectura digital por parte del microcontrolador.
+Para alimentar este arreglo de emisores y receptores se utilizó el circuito de la figura \ref{fig:circuitoSensorLinea}. En ella se observa que los diodos se alimentan a través de espejos de corriente que permiten ajustar la intensidad de luz emitida. La sensibilidad de todos los fotodiodos se ajusta por medio de $R_2$, las salidas se conectan a compuertas Schmitt trigger para acomodar la señal de salida a una que permita trabajar con lógica digital. Se corroboró con el osciloscopio que la señal de salida era apropiada para la lectura digital por parte del microcontrolador.
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=10cm]{./imagenes/circuitoSensorLinea}
+	\includegraphics[width=10cm]{./imagenes/circ_sens_lin.png}%circuitoSensorLinea
 	\caption{circuito utilizado para alimentar los diodos LED infrarrojos y los correspondientes fotodiodos que componen el sensor de línea.}
 	\label{fig:circuitoSensorLinea}
 \end{figure}
@@ -811,7 +812,7 @@ C_a(s)= \frac{  19.243 (s-11.74)}{s}
 C_b(s)= \frac{ 18.68 (s-10.93)}{s}
 \end{equation*}
 
-El ajuste se realizó en tiempo continuo, con lo cual resulta necesario realizar una discretización del controlador para poder implementarlo en el microcontrolador. La discretización utilizada fue la de Backward Euler, la cual realiza la siguiente sustitución:
+El ajuste se realizó en tiempo continuo, con lo cual resulta necesario realizar una discretización del controlador para poder implementarlo en el microcontrolador. La discretización utilizada fue la de Backward Euler (o diferencias hacia atras), la cual realiza la siguiente sustitución:
 \begin{equation*}
 s=\frac{z-1}{zh}
 \end{equation*}%$.$ esto no sé si queda bien así
@@ -886,7 +887,27 @@ A la hora de implementar el control se encontraron varios inconvenientes.... Pon
 %Acá iría el resultado de poner el bichito a seguir la pista.
 \section{Conclusiones}
 \label{sec:conclusiones}
+En función de los objetivos propuestos, se puede asegurar que se logro desarrollar e implementar un robot seguidor de linea basado en componentes fácilmente conseguibles y/o fabricables, lo cual impulsa el desarrollo de esta clase de dispositivos en la institución. 
 
+Se logro implementar todo el sistema en un microcontrolador de bajas prestaciones. El mismo cumple con los requisitos de fácil implementación, amplia documentación, bajos costos, entre otros.  
+
+Se obtuvo por medio de ensayos, los modelos de los motores, se implemento con éxito un controlador PID?? en cada motor. No se pudo estimar correctamente la planta total ni se obtuvo un modelo del sistema aceptable para alcanzar los requisitos de competición, sin embargo, el dispositivo puede seguir una curva de radio $r=40cm$ a una velocidad relativamente baja $300RPM$, esto es aproximadamente $47cm/s$ . La herramienta principal utilizada fueron los toolbox de matlab \cite{Sys_ident,PID_tuner}.
+
+
+
+Gracias al sistema ABP, se genero la necesidad y motivación de entender en un sentido amplio  la teoria de control clásica, moderna y digital vista a travez de las 3 materias curriculares de la carrera. Se hizo enfasis en la implementacion de un sistema de control de tiempo discreto ajustado por metodos estandarizados, de tal manera que sean repetibles. El enfrentamiento a distinta clase de problemas garantizo el conocimiento integro de los sistemas de control implementados. CHAMUYOOOOOOOOOOOOOOOOOOOOOOOOOO 
+ 
+Los modelos de las piezas para imprimir, los circuitos, las placas y el programa se encuentran en esta direccion LINK.
+
+  
+
+
+\section{Mejoras a futuro}
+Una de las principales trabas en el desarrollo de este proyecto fue el diseño del sistema de medición de velocidad de las ruedas. El método actual, si bien es funcional, posee la desventaja de incorporar un atraso en las mediciones, lo cual limita la rapidez del controlador. Como mejora en este campo se propone implementar medición de la contra fem del motor o determinar un método libre de distorsiones debido al ensamble. Quizás sea viable diseñar un filtro digital que estime la velocidad de las ruedas sin incorporar un atraso considerable. 
+
+Otra limitación observada a la hora de probar distintos controladores, es la resolución del sensor de linea. Como se ven en las imágenes, los datos del sensor de linea son digitales, por lo que poseen valores discretos a la salida, esto limita las capacidades del control para tomar acciones de corrección.
+
+Una última posible mejora es obtener el modelo del sistema con hipótesis mas suaves de las que se utilizaron en esta oportunidad, de forma que el control implementado pueda resolver situaciones en donde la velocidad media del robot sea mayor. Considerar que actualmente la potencia total utilizada de todo el dispositivo ronda un $30\%$ de su capacidad total, se estima que el rendimiento en pista puede mejorar sus tiempos a la mitad.   
 \begin{thebibliography}{X}
 %\bibitem{Farmers}Bergerman, M., Maeta, S. M., Zhang, J., Freitas, G. M., Hamner, B., Singh, S., \& Kantor, G. (2015). Robot farmers: Autonomous orchard vehicles help tree fruit production. IEEE Robotics \& Automation Magazine, 22(1), 54-63.
 %\bibitem “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.
