@@ -170,15 +170,11 @@ Cuestiones Importantes:
 \item	Controlador final.
 \end{itemize}
 
+\section{Resumen}
+El presente informe trata el diseño y desarrollo de un robot seguidor de línea. Este trabajo se encuentra enmarcado como proyecto de final de materia de Sistemas Controlados por Computadora, materia de la carrera Ingeniería Electrónica de la Universidad Nacional del Comahue.
 
-\section{Objetivos de la propuesta}
+El objetivo de estudio para la materia era la discretización e implementación en la vida real de un controlador PID. Con esto en mente se propuso la realización de un robot seguidor de línea del estilo utilizado en diversas competencias de robótica, donde el objetivo de diseño es que el robot sea capaz de seguir una pista en un plano horizontal de forma autónoma en el menor tiempo posible. El presente trabajo se orientó a la obtención de un seguidor de línea básico, de velocidad moderada, con perspectiva de mejorarse en versiones posteriores.
 
-\begin{itemize}
-\item Desarrollar e implementar un robot seguidor de linea.
-\item Identificación del sistema.
-\item Implementar un controlador PID discreto: efectos de la acción derivativa y algunas cuestiones practicas.
-
-\end{itemize}
 \section{Introducción}
 Esto fue copiado de la propuesta presentada 19/12/17
 
@@ -205,7 +201,19 @@ En Argentina se festejan distintas competencias relacionadas con la fabricación
 A nivel internacional existe un proyecto llamado Open Lamborghuino \cite{lambo}, en el cual se detalla la construcción
 de un seguidor de línea con componentes relativamente baratos y de fácil acceso.
 
+\section{Objetivos de la propuesta}
+\label{objetivos}
+\begin{itemize}
+\item Desarrollar e implementar un robot seguidor de linea.
+\item Identificación del sistema.
+\item Implementar un controlador PID discreto: efectos de la acción derivativa y algunas cuestiones practicas.
+
+\end{itemize}
+\section{Estructura del Trabajo}
+El siguiente trabajo se divide en XXXX secciones. En la sección \ref{sec:implementacion} se define el hardware y estructura mecánica a utilizar, con un detalle del material de trabajo disponible. En la sección \ref{sec:Modelado_del_sistema} se analiza cómo modelar matemáticamente el comportamiento del sistema. En  \ref{sec:estrategia_de_control} se define la estrategia de control a implementar. En \ref{sec:sist_de_medicion} se explican los sensores diseñados para el robot. En \ref{sec:identifSist} se aborda la identificación de sistemas realizada para poder ajustar los controladores, lo cual se detalla en la sección \ref{sec:ajus_control}. Finalmente, la sección \ref{sec:resultados} discute los resultados obtenidos al probar el sistema completo, mientras que en la sección \ref{sec:conclusiones} se dan las conclusiones del trabajo.
+
 \section{Implementación}
+\label{sec:implementacion}
 Para facilitar la implementación del robot, se propone utilizar la configuración de hardware recomendada en open lamborghino mas un diseño propio. Se detallan a continuación:
 \begin{itemize}
 \item 2 motores N20 con reducción 1:10 \cite{motores}. 
@@ -378,7 +386,7 @@ Por practicidad en vez de usar $\theta$ se usa $\dot{\theta}$, lo que produce la
  \end{equation}
   
 \section{Estrategia de Control a Utilizar}
-\label{estrategia de control a usar}
+\label{sec:estrategia_de_control}
 Para alcanzar los objetivos del proyecto se decidió implementar tres controladores PID en simultáneo: dos controladores para regularizar el comportamiento de los motores y el controlador para el sistema total, que se encargará de que el robot siga la pista. Los dos primeros se utilizan para que las ruedas se muevan a la velocidad requerida y para compensar asimetrías en la respuesta de los dos motores.
 Una vez implementados todos los controladores descritos el sistema total queda según se observa en el diagrama en bloque de la figura \ref{diagra en bloques sist total}.
 \begin{figure}[h]
@@ -388,13 +396,14 @@ Una vez implementados todos los controladores descritos el sistema total queda s
 \label{diagra en bloques sist total}
 \end{figure}
 \subsection{PID}
- Esta parte es un choreo de \ref[pág. 25]{biblia_PID}.\\
+% Esta parte es un choreo de \ref[pág. 25]{biblia_PID}.\\
  
  \subsubsection{Discretización PID}
  
  
   
 \section{Sistemas de Medición}
+\label{sec:sist_de_medicion}
 \subsection{Medición de velocidad de los Motores}
 \subsubsection{Estructura Mecánica}
 Para la medición de velocidad de los motores se utilizaron encoders ópticos. Estos consisten en un diodo LED infrarrojo enfrentado a un fotodiodo receptor en dirección vertical, con una estructura colocada entre ambos. Ésta última fue diseñada en SolidWorks e impresa con impresora 3D y su forma se asemeja a la de jaula de ardilla. La idea del diseño es que las varillas bloqueen o dejen pasar la luz del LED, de modo que el fotodiodo genere una señal que permita detectar el paso de cada una de ellas.
@@ -510,8 +519,8 @@ Las salidas de las compuertas se conectan a pines de entrada del microcontrolado
 las entradas estén en 0 se toma como valor particular y se la asigna el número 3 para que funcione como bandera e indique que se perdió la línea. Cuando esto ocurre el programa principal mantiene para los cálculos el último valor válido medido.
 
 \section{Identificación de Sistemas}
-\label{identifSist}
-Para sintonizar los controladores PID ha implementar se necesita tener algún tipo de información sobre el comportamiento de la planta a controlar. En función de lo definido en la sección \ref{estrategia de control a usar}, las plantas a identificar o caracterizar son tres: los dos motores, cuyo modelado matemático se analizó en la sección \ref{modeloMotores}, y el sistema total, que incluye los motores con sus PID y la cinemática del robot analizada en la sección \ref{modelo cinematico}.
+\label{sec:identifSist}
+Para sintonizar los controladores PID ha implementar se necesita tener algún tipo de información sobre el comportamiento de la planta a controlar. En función de lo definido en la sección \ref{sec:estrategia_de_control}, las plantas a identificar o caracterizar son tres: los dos motores, cuyo modelado matemático se analizó en la sección \ref{modeloMotores}, y el sistema total, que incluye los motores con sus PID y la cinemática del robot analizada en la sección \ref{modelo cinematico}.
 
 A continuación se detallan los ensayos realizados para la identificación de los sistemas a controlar.
 \subsection{Identificación de los Motores}
@@ -588,7 +597,7 @@ De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que 
 \section{Ajuste de los Controladores} \label{sec:ajus_control}
 Existen diversas estrategias para realizar la sintonización de un controlador PID. Una de las posibilidades estudiadas en la carrera es la utilización de tablas empíricas, como son los métodos de Ziegler Nichols. Inicialmente se quiso implementar el ajuste con uno de estos métodos por considerárselo más didáctico y porque no requiere un modelo completo de la planta. Más adelante se detalla el procedimiento seguido, no obstante los controladores obtenidos no presentaban un desempeño satisfactorio.
 
-Otras opciones estudiadas en la carrera requieren disponer de un modelo completo del sistema a controlar. Es por esto que se realizaron las estimaciones de funciones de transferencia explicadas en la sección \ref{identifSist}. Conocidos los modelos de los sistemas, se puede realizar un ajuste con fundamentos matemáticos, pero dado que resulta más rápido y más intuitivo se optó por realizar un ajuste por software. Para ello se usó la herramienta de PID tuner de Matlab \cite{PID_tuner} que permite un ajuste muy fácil observando la curva de salida. Esto resulta de gran utilidad ya que se puede ver en la gráfica el impacto en el comportamiento efectivo, mientras que los cálculos teóricos estudiados en la carrera utilizan restricciones sobre los parámetros matemáticos que se relacionan de forma indirecta, aproximada y menos tangible con la respuesta temporal que realmente tendrá el sistema a lazo cerrado.
+Otras opciones estudiadas en la carrera requieren disponer de un modelo completo del sistema a controlar. Es por esto que se realizaron las estimaciones de funciones de transferencia explicadas en la sección \ref{sec:identifSist}. Conocidos los modelos de los sistemas, se puede realizar un ajuste con fundamentos matemáticos, pero dado que resulta más rápido y más intuitivo se optó por realizar un ajuste por software. Para ello se usó la herramienta de PID tuner de Matlab \cite{PID_tuner} que permite un ajuste muy fácil observando la curva de salida. Esto resulta de gran utilidad ya que se puede ver en la gráfica el impacto en el comportamiento efectivo, mientras que los cálculos teóricos estudiados en la carrera utilizan restricciones sobre los parámetros matemáticos que se relacionan de forma indirecta, aproximada y menos tangible con la respuesta temporal que realmente tendrá el sistema a lazo cerrado.
 
 Para el ajuste de los controladores de los motores se buscó que la respuesta al escalón fuese rápida y con poco sobreimpulso, ya que el impacto se vería incrementado al considerar todo el robot en su conjunto. Además, se buscó un ajuste que diera un comportamiento muy similar para ambos motores, ya que las asimetrías se traducirían en trayectorias erráticas. Los controladores obtenidos para cada motor fueron los siguientes:
 \begin{equation*}
@@ -668,6 +677,11 @@ Si se parte de la suposición de que los motores se comportan de manera semejant
 
 A la hora de implementar el control se encontraron varios inconvenientes.... Poner Z-N, problemas de rozamiento y de inestabilidad; falta de linealidad a bajas RPM
 
+\section{Funcionamiento del Sistema Total}
+\label{sec:resultados}
+%Acá iría el resultado de poner el bichito a seguir la pista.
+\section{Conclusiones}
+\label{sec:conclusiones}
 
 \begin{thebibliography}{X}
 %\bibitem{Farmers}Bergerman, M., Maeta, S. M., Zhang, J., Freitas, G. M., Hamner, B., Singh, S., \& Kantor, G. (2015). Robot farmers: Autonomous orchard vehicles help tree fruit production. IEEE Robotics \& Automation Magazine, 22(1), 54-63.
