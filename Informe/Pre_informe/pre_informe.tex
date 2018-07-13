@@ -396,7 +396,129 @@ Una vez implementados todos los controladores descritos el sistema total queda s
 \label{diagra en bloques sist total}
 \end{figure}
 \subsection{PID}
-% Esta parte es un choreo de \ref[pág. 25]{biblia_PID}.\\
+ Esta parte es un choreo MODIFICADO de \cite[pág. 25]{biblia_PID}.\\
+
+En esta sección no se espera realizar un analisis profundo sobre el controlador PID, sino mas bien una intro cualitativa, con algunas referencias hacia \cite{biblia_PID}. Por otro lado se parte de la suposicion de que se conocen algunos principios fundamentales de control (realimentacion, lugar de las raices, polos, ceros, entre otros.)
+
+Un controlador PID esta constituido por 3 controles facilmente identificables: Proporcional (P), Integral (I) y Derivativo (D). Si bien el nombre \textit{PID} hace referencia a la estrategia de control, existen distintas maneras de implementarlo, esto es I-PD, PI-D, PI, PD, P, entre otros. 
+
+Por cuestiones didacticas, se explicara sinteticamente lo mas relevante de algunos de estos controladores.% (sos un choto, al final no vas a explicr nada).
+
+
+Considerando la figura \ref{fig:sis_generico}, se puede observar el diagrama en bloques de un sistema generico realimentado, en donde \textit{l} y \textit{n} son ruido/perturbaciones del modelo y de la medición respectivamente,   \textit{r} es la señal de referencia, esto es, el valor deseado de la señal de salida \textit{y}; \textit{e} es la diferencia entre el valor deseado y el valor medido de la salida,    \textit{u} es la salida del controlador (o accion de control) y  \textit{x} es la salida de la planta sin que este afectada por ruidos / perturbaciones.
+
+\begin{figure}[h]
+\centering
+\includegraphics[height=3cm]{./imagenes/sis_realim_generico.png}
+\caption{Diagrama en bloques de un sistema realimentado}
+\label{fig:sis_generico}
+\end{figure}
+
+
+\subsubsection{Control Proporcional}
+Un control proporcional es aquel en donde la accion de control \textit{u} es proporcional al error \textit{e}, esto es
+
+\begin{equation}
+e=r-y \quad \rightarrow u=k(e)=k (r-y)
+\end{equation}
+
+Para lograr un mejor entendimiento, vamos a hacer uso de un ejemplo:
+\paragraph{Ejemplo:} Se desea controlar la velocidad del eje de un motor de corriente continua (CC), para esto se cuenta con un generador de \textit{PWM} y un sistema de medicion de las \textit{RPM} del eje.
+
+Supongamos que deseamos que el eje del motor gire a $1000RPM$, inicialmente el eje se encuentra en reposo, por lo que la medicion del sensor sera $y=0RPM$. Dados estos datos el error sera
+
+ \begin{equation*}
+e=r-y \quad \rightarrow e=1000RPM - 0RPM =1000RPM
+\end{equation*}
+por lo que la accion de control sera $u=k 1000RPM$.
+
+En este caso el valor de $k$ representa una constante que adecua las unidades de \textit{RPM} a \textit{\% de duty} y ademas aplica un factor de ganancia, esto es:
+ \begin{equation*}
+k=k_{unidades}k_{ganancia}
+\end{equation*}
+ 
+ Dicho esto, supongamos que $k_{unidades}=1/10 \quad [\%duty/RPM]$ y que $k_{ganancia}=1$, luego la salida del controlador sera $100 \%duty$.
+ 
+ Si todo esta bien conectado, el eje se comenzara a mover, por lo que el sensor de velocidad medirá una velocidad no nula, lo cual producira una señal de control menor a la que inicialmente se obtuvo. Luego de un periodo prudente en donde el estado transitorio convergio, se observa que la velocidad final del motor resulta ser $y=700RPM$ y la acción de control por lo tanto sera $u=k(r-y)=30\quad [\%duty]$. \\
+ 
+ 
+ Gracias al anterior ejemplo se pueden observar algunas características del control proporcional:
+ \begin{enumerate}
+ \item \label{item_prop} Cuando el error \textit{e} es cero la salida es cero, por lo que siempre abra una diferencia entre el valor deseado (set point) y el valor medido, a menos claro que el set point sea cero.
+ \item Si el valor de $k_{ganancia}$ es mas grande, en el estado estacionario se puede observar que la salida del control sera mayor, por lo que el motor girara a mayor velocidad, produciendo asi, un valor mas cercano al deseado.
+ \item Si $k_{ganancia}$ es un valor elevado, cuando exista alguna perturbación en la medición, este error en la medida sera \textit{k} veces amplificado en la acción de control. 
+ \end{enumerate}
+ 
+ 
+ \subsubsection{Control Integral}
+
+Para resolver la problemática planteada en el item \ref{item_prop} del control proporcional, se plantea como solución la utilización de un control integral. 
+
+El control integral se puede interpretar como que la salida de control \textit{u} es proporcional a la integral del error \textit{e}, en símbolos
+
+
+\begin{equation}
+u=K_i \int_{t_0}^{t_1} e \,dt 
+\label{eq:control_integral}
+\end{equation}
+
+
+en la cual se observa que si el error entre la salida y el set point perdura en el tiempo, la acción de control se incrementara hasta que el error sea nulo.
+
+
+\subsubsection{Control Derivativo}
+El control derivativo, o la acción derivativa, se puede interpretar como anticiparse al error en un estado posterior al actual, por medio del calculo de la tangente de la curva del error. Para obtener esta predicción, suponga la expansión en serie de Taylor
+
+
+\begin{equation*}
+e(t_1)=e(t_0)+\frac{de(t_0)}{dt}(t_1-t_0)+... 
+\end{equation*}
+\begin{equation}
+ e(t_1) \approx e(t_0)+\frac{de(t_0)}{dt}(t_1-t_0)
+\end{equation}
+
+en ella se puede apreciar que aparece un termino del error actual y luego otro termino con la derivada del error ponderada por la diferencia temporal. A este controlador se lo conoce comúnmente como PD, el cual su estructura básica se muestra a continuación
+
+\begin{equation}
+u(t)=K_pe(t)+K_d\frac{de(t)}{dt}
+\end{equation}
+
+Según \cite[pág. 40]{biblia_PID} la acción derivativa puede traer dificultades si existe ruido de medición de alta frecuencia. Un ruido de medición sinusoidal
+\begin{equation*}
+n=a\sin(\omega t)
+\end{equation*}
+contribuye al término derivativo de la señal de control como
+\begin{equation*}
+u_n=K_d \frac{dn}{dt}=aK_d\omega\cos(\omega t)
+\end{equation*}
+
+Podemos observar que la amplitud de la señal de control puede ser arbitrariamente grande si la frecuencia $\omega$ es suficientemente alta.
+
+Por este motivo, es común que la ganancia del término derivativo sea limitada en alta frecuencia. Esto puede lograrse implementando el término derivativo como
+
+\begin{equation*}
+D'=D_{idal}(s)D_{sat}(s) =sK_d \quad  \frac{1}{1+s\frac{K_d}{K_pN}} =    \frac{sK_d}{1+s\frac{K_d}{K_pN}}
+\end{equation*}
+
+Esta modificación puede interpretarse como la derivada del error del sistema concatenada con un filtro pasa bajos con un polo colocado $K_pN$ veces mas lejos. Quiere decir que para frecuencias menores a $K_pN$ la derivada del error se amplificara como antes, pero cuando la frecuencia supere esta cota, el sistema saturara. (Pensar en el bode de este sistema, no se si hace falta poner una imagen)  
+
+\subsubsection{PID total}
+
+Dado lo visto anteriormente, si se consideran todas las acciones de control en paralelo, el sistema para tiempo continuo resulta
+
+\begin{equation}
+u(t)=K_pe(t)+K_i \int_{t_0}^{t_1} e(t) \,dt + K_d \frac{de(t)}{dt}
+\end{equation}
+
+en donde los parámetros $K_p$, $K_i$ y $K_d$ son las constantes con las que se realiza el ajuste para cada planta en particular. 
+
+La representación anterior es la forma clásica (o no interactuante) del controlador PID escrita para tiempo continuo. En forma de función de transferencia resulta:
+\begin{equation}
+G(s)=K_p + K_i/s + sK_d
+\end{equation}
+
+
+
  
  \subsubsection{Discretización PID}
  
