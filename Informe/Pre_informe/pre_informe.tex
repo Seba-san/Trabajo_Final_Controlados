@@ -500,9 +500,10 @@ Podemos observar que la amplitud de la señal de control puede ser arbitrariamen
 
 Por este motivo, es común que la ganancia del término derivativo sea limitada en alta frecuencia. Esto puede lograrse implementando el término derivativo como
 
-\begin{equation*}
+\begin{equation}
 D'=D_{idal}(s)D_{sat}(s) =sK_d \quad  \frac{1}{1+s\frac{K_d}{N}} =    \frac{sK_d}{1+s\frac{K_d}{N}}
-\end{equation*}
+\label{eq:ajuste_deriv}
+\end{equation}
 
 Esta modificación puede interpretarse como la derivada del error del sistema concatenada con un filtro pasa bajos con un polo colocado $N$ veces mas lejos. Quiere decir que para frecuencias menores a $\frac{N}{K_d}$ la derivada del error se amplificara como antes, pero cuando la frecuencia supere esta cota, el sistema saturara. Valores normales de $N$ oscilan entre 8 y 20. (Pensar en el bode de este sistema, no se si hace falta poner una imagen)  
 
@@ -518,7 +519,14 @@ en donde los parámetros $K_p$, $K_i$ y $K_d$ son las constantes con las que se 
 
 La representación anterior es la forma clásica (o no interactuante) del controlador PID escrita para tiempo continuo. En forma de función de transferencia resulta:
 \begin{equation}
-G(s)=K_p + K_i/s + sK_d
+G(s)e(s)=(K_p + K_i/s + sK_d)e(s)
+\label{eq:pid_basico}
+\end{equation}
+considerando el ajuste de la ecuacion \ref{eq:ajuste_deriv}, la exprecion \ref{eq:pid_basico} resulta
+
+\begin{equation}
+G(s)e(s)=\left( K_p + K_i/s + \frac{sK_d}{1+\frac{sK_d}{N} } \right)e(s)
+\label{eq:pid_final}
 \end{equation}
 
 
@@ -531,7 +539,70 @@ G(s)=K_p + K_i/s + sK_d
  \item Discretizacion del astrom
  \end{itemize}
  
+ Según \cite[pág. 214]{astrom} se pueden representar una ecuación diferencial mediante su aproximación:
+ 
+ \paragraph{Método de Euler:} La derivada de una variable se puede aproximar por una \textbf{diferencia adelantada}
+ 
+ \begin{equation}
+ \frac{dx(t)}{dt}\approx \frac{x(t+h)-x(t)}{h}
+ \end{equation}
   
+  o por  una \textbf{diferencia atrasada}
+  
+   \begin{equation}
+ \frac{dx(t)}{dt}\approx \frac{x(t)-x(t-h)}{h}
+ \end{equation}
+  
+  por otro lado, según \cite[pág. 46 ]{biblia_PID} la integral de una variable dada por la ecuación \ref{eq:int_var} se puede aproximar mediante  distintas formas recursivas.
+  
+\begin{equation}
+I(t)=\frac{K}{T_i}\int_0^t e(t) \,dt
+\label{eq:int_var}
+\end{equation}  
+  
+  \paragraph{Regla rectangular hacia adelante.} 
+  
+  \begin{equation}
+  I(nh)=\frac{K}{T_i}h \sum_0^{n-1}e(nh)= \frac{K}{T_i}h \sum_0^{n-2}e(nh) + h\frac{K}{T_i} e((n-1)h)=I((n-1)h)+  h\frac{K}{T_i} e((n-1)h)
+  \end{equation}
+  
+  \paragraph{Regla rectangular hacia atrás.} 
+  \begin{equation}
+  I(nh)=\frac{K}{T_i}h \sum_0^{n}e(nh)=I((n-1)h)+  h\frac{K}{T_i} e(nh)
+  \end{equation}
+  Esta aproximacion se diferencia de la anterior, en que utiliza la muestra actual de la señal $e(nh)$ en vez de la muestra anterior $e(h(n-1))$.
+  
+  \paragraph{Regla trapezoidal.} 
+  
+  \begin{equation}
+  I(nh)=\frac{K}{T_i}h \sum_{i=1}^{n}e((i-1)h)-e(ih)=I((n-1)h)+  \frac{K}{T_i} \frac{e(nh) -e((n-1)h)}{h}
+  \label{eq:aprox_trape} 
+  \end{equation}
+  
+  según \cite{astrom} en el contexto del control digital la aproximación \ref{eq:aprox_trape} suele denominarse \textit{aproximación de Tustin, o transformación bilineal.} Utilizando estos métodos la funcion de transferencia discreta $H(z)$ se obtiene simplemente sustituyendo el argumento $s$ de $G(s)$ por $s'$, donde
+  
+  \begin{equation}
+  s'=\frac{z-1}{h} \quad (Metodo\ de\ Euler)
+\end{equation}   
+  \begin{equation}
+  s'=\frac{z-1}{zh} \quad (Diferencias\ en\ retroceso)
+\end{equation}   
+\begin{equation}
+  s'=\frac{2}{h} \frac{z-1}{z+1} \quad (Aproximacion\ de\ Tustin)
+\end{equation}  
+
+considerando la expresión \ref{eq:pid_final} y teniendo en cuenta \cite[pág. 219]{astrom} el método más común para discretizar un PID es realizar una aproximación de Euler para la parte integral y una aproximación en diferencias en retroceso para la parte derivadora, lo cual origina el siguiente controlador discreto:
+
+\begin{equation}
+  u(kh)=\left(K_p + \frac{K_ih}{z-1} + K_d\frac{z-1}{zh+\frac{K_d}{N}(z-1)}	  \right) e(kh)
+\end{equation}  
+
+el cual por medio de manipulación algebraica se puede transformar en la siguiente ecuación en diferencias
+
+\begin{equation}
+u(k+1)=Ae(k)+Be(k-1)+Ce(k-2)+Du(k-1)+Eu(k-2)
+\end{equation} 
+donde los parámetros $A$,$B$,$C$,$D$ y $E$ se obtienen a partir de las constantes $h$,$Kp$,$Ki$,$Kd$ y $N$.
 \section{Sistemas de Medición}
 \label{sec:sist_de_medicion}
 \subsection{Medición de velocidad de los Motores}
@@ -831,6 +902,7 @@ A la hora de implementar el control se encontraron varios inconvenientes.... Pon
 \bibitem{paginaPID}\url{https://sites.google.com/site/picuino/ziegler-nichols}
 \bibitem{Sys_ident}\url{https://la.mathworks.com/products/sysid.html}
 \bibitem{PID_tuner}\url{https://la.mathworks.com/discovery/pid-tuning.html}
+\bibitem{astrom} Aström, Karl J. Sistemas controlados por computador. No. 04; TJ213, A8.. 1988.
 \end{thebibliography}
 %Referencias
 %[1]: “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.
