@@ -15,23 +15,27 @@
 \BOOKMARK [2][-]{subsection.7.2}{Modelado de los motores}{section.7}% 15
 \BOOKMARK [1][-]{section.8}{Estrategia de Control a Utilizar}{}% 16
 \BOOKMARK [2][-]{subsection.8.1}{PID}{section.8}% 17
-\BOOKMARK [3][-]{subsubsection.8.1.1}{Discretizaci\363n PID}{subsection.8.1}% 18
-\BOOKMARK [1][-]{section.9}{Sistemas de Medici\363n}{}% 19
-\BOOKMARK [2][-]{subsection.9.1}{Medici\363n de velocidad de los Motores}{section.9}% 20
-\BOOKMARK [3][-]{subsubsection.9.1.1}{Estructura Mec\341nica}{subsection.9.1}% 21
-\BOOKMARK [3][-]{subsubsection.9.1.2}{Circuito El\351ctrico}{subsection.9.1}% 22
-\BOOKMARK [3][-]{subsubsection.9.1.3}{Medici\363n de Velocidad con el Microcontrolador}{subsection.9.1}% 23
-\BOOKMARK [2][-]{subsection.9.2}{Sensor de L\355nea}{section.9}% 24
-\BOOKMARK [3][-]{subsubsection.9.2.1}{Circuito El\351ctrico}{subsection.9.2}% 25
-\BOOKMARK [3][-]{subsubsection.9.2.2}{Estructura Mec\341nica}{subsection.9.2}% 26
-\BOOKMARK [3][-]{subsubsection.9.2.3}{Valores de Lectura}{subsection.9.2}% 27
-\BOOKMARK [3][-]{subsubsection.9.2.4}{Lectura del Sensor con el Microcontrolador}{subsection.9.2}% 28
-\BOOKMARK [1][-]{section.10}{Identificaci\363n de Sistemas}{}% 29
-\BOOKMARK [2][-]{subsection.10.1}{Identificaci\363n de los Motores}{section.10}% 30
-\BOOKMARK [2][-]{subsection.10.2}{Identificaci\363n de la Cinem\341tica el Robot}{section.10}% 31
-\BOOKMARK [1][-]{section.11}{Ajuste de los Controladores}{}% 32
-\BOOKMARK [2][-]{subsection.11.1}{Ajuste fallido por medio de Z-N}{section.11}% 33
-\BOOKMARK [3][-]{subsubsection.11.1.1}{Metodo de Z-N: respuesta al escal\363n}{subsection.11.1}% 34
-\BOOKMARK [2][-]{subsection.11.2}{Sistema total y control}{section.11}% 35
-\BOOKMARK [1][-]{section.12}{Funcionamiento del Sistema Total}{}% 36
-\BOOKMARK [1][-]{section.13}{Conclusiones}{}% 37
+\BOOKMARK [3][-]{subsubsection.8.1.1}{Control Proporcional}{subsection.8.1}% 18
+\BOOKMARK [3][-]{subsubsection.8.1.2}{Control Integral}{subsection.8.1}% 19
+\BOOKMARK [3][-]{subsubsection.8.1.3}{Control Derivativo}{subsection.8.1}% 20
+\BOOKMARK [3][-]{subsubsection.8.1.4}{PID total}{subsection.8.1}% 21
+\BOOKMARK [3][-]{subsubsection.8.1.5}{Discretizaci\363n PID}{subsection.8.1}% 22
+\BOOKMARK [1][-]{section.9}{Sistemas de Medici\363n}{}% 23
+\BOOKMARK [2][-]{subsection.9.1}{Medici\363n de velocidad de los Motores}{section.9}% 24
+\BOOKMARK [3][-]{subsubsection.9.1.1}{Estructura Mec\341nica}{subsection.9.1}% 25
+\BOOKMARK [3][-]{subsubsection.9.1.2}{Circuito El\351ctrico}{subsection.9.1}% 26
+\BOOKMARK [3][-]{subsubsection.9.1.3}{Medici\363n de Velocidad con el Microcontrolador}{subsection.9.1}% 27
+\BOOKMARK [2][-]{subsection.9.2}{Sensor de L\355nea}{section.9}% 28
+\BOOKMARK [3][-]{subsubsection.9.2.1}{Circuito El\351ctrico}{subsection.9.2}% 29
+\BOOKMARK [3][-]{subsubsection.9.2.2}{Estructura Mec\341nica}{subsection.9.2}% 30
+\BOOKMARK [3][-]{subsubsection.9.2.3}{Valores de Lectura}{subsection.9.2}% 31
+\BOOKMARK [3][-]{subsubsection.9.2.4}{Lectura del Sensor con el Microcontrolador}{subsection.9.2}% 32
+\BOOKMARK [1][-]{section.10}{Identificaci\363n de Sistemas}{}% 33
+\BOOKMARK [2][-]{subsection.10.1}{Identificaci\363n de los Motores}{section.10}% 34
+\BOOKMARK [2][-]{subsection.10.2}{Identificaci\363n de la Cinem\341tica el Robot}{section.10}% 35
+\BOOKMARK [1][-]{section.11}{Ajuste de los Controladores}{}% 36
+\BOOKMARK [2][-]{subsection.11.1}{Ajuste fallido por medio de Z-N}{section.11}% 37
+\BOOKMARK [3][-]{subsubsection.11.1.1}{Metodo de Z-N: respuesta al escal\363n}{subsection.11.1}% 38
+\BOOKMARK [2][-]{subsection.11.2}{Sistema total y control}{section.11}% 39
+\BOOKMARK [1][-]{section.12}{Funcionamiento del Sistema Total}{}% 40
+\BOOKMARK [1][-]{section.13}{Conclusiones}{}% 41
