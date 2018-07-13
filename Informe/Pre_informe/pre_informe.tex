@@ -464,10 +464,12 @@ u=K_i \int_{t_0}^{t_1} e \,dt
 
 
 en la cual se observa que si el error entre la salida y el set point perdura en el tiempo, la acción de control se incrementara hasta que el error sea nulo.
+
 \paragraph{Problemática:} En la realidad, la acción de control posee una cota, ya que no puede ser arbitrariamente grande. 
 Suponga el ejemplo utilizado en el \textbf{Control Proporcional}, pero esta vez tiene implementado un controlador PI y ademas hay una falla en las conexiones lo que produce que el motor no funcione. El Set Point se establece en $1000RPM$, la acción de control es de $100\%duty$, pero como el motor esta mal conectado, el eje no gira produciendo que luego de unos instantes el error siga siendo de  $1000RPM$ y el termino integral incremente a medida que siga pasando el tiempo. Cuando se corrija la falla eléctrica, el eje del motor girará a una velocidad superior a la del Set Point el tiempo necesario hasta que el error negativo "des-integre" todo el error acumulado anteriormente.
 
 Como solución a esta problemática se implementan técnicas de ventaneo, tal que limiten la parte integral y no permita que diverja.  
+
 
 
 \subsubsection{Control Derivativo}
@@ -499,6 +501,7 @@ u_n=K_d \frac{dn}{dt}=aK_d\omega\cos(\omega t)
 Podemos observar que la amplitud de la señal de control puede ser arbitrariamente grande si la frecuencia $\omega$ es suficientemente alta.
 
 Por este motivo, es común que la ganancia del término derivativo sea limitada en alta frecuencia. Esto puede lograrse implementando el término derivativo como
+
 
 \begin{equation}
 D'=D_{idal}(s)D_{sat}(s) =sK_d \quad  \frac{1}{1+s\frac{K_d}{N}} =    \frac{sK_d}{1+s\frac{K_d}{N}}
