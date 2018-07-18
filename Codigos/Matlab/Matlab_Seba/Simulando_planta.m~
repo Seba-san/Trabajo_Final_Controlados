@@ -324,8 +324,7 @@ sysB_c=sys_3;
 %step(sysB_c,'b-',sysA_c,'r-')
 % syst
 sys_t=series(sysA_c,sys_cinematico2);
-Fsnano=200; Ts=1/Fsnano;
-sys_t_dis=c2d(sys_t,Ts,'tustin');
+
 %%
 % En base al controlador obtenido por medio de PID_tuner tomando como
 % entrada sys_T, obtengo el modelo en diferencias para cargarlo al nano
@@ -342,22 +341,9 @@ D=-ctesNano(con_dis,'den',2);E=-ctesNano(con_dis,'den',3);
 ctes=table(A,B,C,D,E);
 ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
 
-%%
+
 % Discretizacion segun libro: euler hacia adelante para la parte integral; 
 %diferencias en retroceso o euler hacia atras para la parte derivadora;  
-% try
-%     Tf=C0.Tf;
-% catch
-%     Tf=0;
-% end
-% 
-% cont_colon=pid(C0.Kd,C0.Ki,C0.Kd,Tf,Ts,'DFormula','BackwardEuler','IFormula','ForwardEuler')
-% tf(cont_colon)
-con_dis=tf(C0);
-A=ctesNano(con_dis,'num',1);B=ctesNano(con_dis,'num',2);C=ctesNano(con_dis,'num',3);
-D=-ctesNano(con_dis,'den',2);E=-ctesNano(con_dis,'den',3);
-% Forma vieja de levantar las constantes
-%A=con_dis.num{1}(1);B=con_dis.num{1}(2);C=con_dis.num{1}(3);D=-con_dis.den{1}(2);E=-con_dis.den{1}(3);
-ctes=table(A,B,C,D,E);
-ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
 
+int=pid(0,C0.Ki,0);
+der=pid(0,C0.Ki,0)
