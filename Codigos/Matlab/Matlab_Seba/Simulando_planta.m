@@ -4,29 +4,10 @@
 clc;clear all; close all;
 cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
 addpath('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab/Matlab_Seba')
-%%
-% Cargando Datos.
-Fs=200;
-PWM_A=zeros(2,200);PWM_B=PWM_A;
-n0=20;
-load('../../Mediciones/180531222349resp_escalon_mA_con_carga_10_80.mat');
-RPM_A(1,:)=Dato.datos; PWM_A(1,1:n0)=10;PWM_A(1,(n0+1):end)=80;
-load('../../Mediciones/180531221835resp_escalon_mA_con_carga_40_80.mat');
-RPM_A(2,:)=Dato.datos;PWM_A(2,1:n0)=40;PWM_A(2,(n0+1):end)=80;
-load('../../Mediciones/180531222559resp_escalon_mB_con_carga_10_80.mat');
-RPM_B(1,:)=Dato.datos;PWM_B(1,1:n0)=10;PWM_B(1,(n0+1):end)=80;
-load('../../Mediciones/180531222925resp_escalon_mB_con_carga_40_80.mat');
-RPM_B(2,:)=Dato.datos;PWM_B(2,1:n0)=40;PWM_B(2,(n0+1):end)=80;
-load('../../Mediciones/180601203314ensayo_escalon_angulowref_600_dw_100_PI.mat')
-%load('../../Mediciones/ensayo_sabado.mat')
-load('../../Mediciones/ensayo_sabado_filtrado.mat')
-% Por comodidad supongo que en la muestra 100 comienza el escalon
-dw=zeros(1,length(beta));dw(101:end)=100;
-%load('../../Mediciones/modelos.mat')
-%save('../../Mediciones/modelos.mat','sisupA','sisupB')
+
 
 %%
-load('../../Mediciones/modelos.mat')
+load('../../Mediciones/modelos_controlados.mat')
 % Ajusto el PID en continuo
 sys=sisupA;
 C0 = pid(1,1,0);  
@@ -59,10 +40,9 @@ ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str
 % Transferencia del controlador: H(z)=(A+Bz^-1+Cz^-2)/(1-Dz^-1-Ez^-2)
 
 
-%%
+%% 
 %Obtengo el modelo de los motores implementados
-
-load('../../Mediciones/modelos.mat')
+load('../../Mediciones/modelos_controlados.mat')
 sys=sisupA;
 C0 = pid(1,1,0);  
 opt = pidtuneOptions('DesignFocus','disturbance-rejection','CrossoverFrequency',10);%'PhaseMargin',10
@@ -75,7 +55,7 @@ opt = pidtuneOptions('DesignFocus','disturbance-rejection','CrossoverFrequency',
 [C,info] = pidtune(sys,C0,opt); %% Hay que ajustar ambos sistemas con los mismos requisitos
 T_pi = feedback(C*sys, 1);
 Cb=C;sysB=sys;
-save('../../Mediciones/modelos_controlados.mat','sysA','sysB','Cb','Ca','sys_cinematico','sys_cinematico2')
+%save('../../Mediciones/modelos_controlados.mat','sysA','sysB','Cb','Ca','sys_cinematico','sys_cinematico2')
 
 
 %%
@@ -291,7 +271,7 @@ yyaxis right
 plot(t,beta,t(50),beta(50),'o');ylabel('beta medido')
 %%
 load('../../Mediciones/modelos_controlados.mat')
-
+%load('../../Mediciones/modelos_controlados2.mat')
 dW_est=lsim(sysb_dw,beta,t);
 plot(t,dW_est,t,dW);legend('a','b')
 
@@ -316,11 +296,44 @@ Kp=sysb_dw.Kp;Tp1=sysb_dw.Tp1;
 sys=tf(Kp,[Tp1 1]); % Entra beta sale dW
 sys_inv=inv(sys);% Entra dW sale beta
 %%
-% Simulando planta con datos RF
+clc;clear all;
+load('../../Mediciones/modelos_controlados2.mat')
 
+% Obtengo los sistemas parciales
+% sysA
+sys=sysA;
+Cont=Ca;
+sys_1=tf(sys);
+sys_2=tf(sys_1.Numerator{1},sys_1.Denominator{1});
+sys_3=feedback(sys_2*Cont,1); % sistema final (sin considerar retardo)
+sys_4=feedback(sys*Cont,1);
+[sysn,sysd]=ss2tf(sys_4.A,sys_4.B,sys_4.C,sys_4.D);
+sys_5=tf(sysn,sysd);% sistema final (sin considerar retardo)
+sysA_c=sys_3;
+% sysB
+sys=sysB;
+Cont=Cb;
+sys_1=tf(sys);
+sys_2=tf(sys_1.Numerator{1},sys_1.Denominator{1});
+sys_3=feedback(sys_2*Cont,1); % sistema final (sin considerar retardo)
+sys_4=feedback(sys*Cont,1);
+[sysn,sysd]=ss2tf(sys_4.A,sys_4.B,sys_4.C,sys_4.D);
+sys_5=tf(sysn,sysd);% sistema final (sin considerar retardo)
+sysB_c=sys_3;
 
+%step(sysB_c,'b-',sysA_c,'r-')
+% syst
+sys_t=series(sysA_c,sys_cinematico2);
 
-
-
-
+%%
+% En base al controlador obtenido por medio de PID_tuner tomando como
+% entrada sys_T, obtengo el modelo en diferencias para cargarlo al nano
+C0=C;
+Fsnano=200;
+Ts=1/Fsnano;
+con=tf(C0);
+con_dis=c2d(con,Ts,'tustin');
+A=con_dis.num{1}(1);B=con_dis.num{1}(2);C=con_dis.num{1}(3);D=-con_dis.den{1}(2);E=-con_dis.den{1}(3);
+ctes=table(A,B,C,D,E);
+ctesPID=['{' num2str(ctes.A) ',' num2str(ctes.B) ',' num2str(ctes.C) ',' num2str(ctes.D) ',' num2str(ctes.E) '}']
 

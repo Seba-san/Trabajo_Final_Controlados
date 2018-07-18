@@ -9,7 +9,7 @@ cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Contro
 %load('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Mediciones/180624184237respuesta_escalon_systot_scontrolador_.mat') 
 % load('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Mediciones/180624183234respuesta_escalon_systot_scontrolador_.mat')
 % load('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Mediciones/180624183137respuesta_escalon_systot_scontrolador_.mat')
-% load('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Mediciones/180624180816respuesta_escalon_systot_scontrolador_.mat')
+ load('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Mediciones/180624180816respuesta_escalon_systot_scontrolador_.mat')
 
 %% Grafico de los Ensayos
 figure(1);subplot(211); title('Ensayo')

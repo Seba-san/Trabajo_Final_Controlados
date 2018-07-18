@@ -488,6 +488,7 @@ ti2=(max(y)-intcpt)/slope;
 L=ti1-t(1);
 T=ti2-ti1;
 K=max(y)-min(y);
+.
 
 %%
 %Pruebas locas
