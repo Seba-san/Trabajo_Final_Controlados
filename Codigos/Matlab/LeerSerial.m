@@ -1,9 +1,21 @@
-function [dato]=LeerSerial(s,CantdeBytes)
+function [dato]=LeerSerial(s)
 
-    %CantdeBytes=5; %Este par�metro se fijo en 5, podr�a modificarse
-    while(s.BytesAvailable<CantdeBytes)end   %Espera a que llegue algun byte
-    dato=fread(s,CantdeBytes,'uchar');      %Lee el serial y lo pone en pwm (si es mas de uno se pone en formato vector)
-%     dato(length(dato))=[];
-    flushinput(s);  %Vacia el buffer de entrada
-    flushoutput(s); %Vacia el buffer de salida
+tic;a=1;ii=0;
+while(s.BytesAvailable<2)
+    t=toc;
+    if t>a
+        tic;
+        disp ('Esperando a que llegue algo')
+        ii=ii+1;
+        if ii>3
+            disp ('No llego nada, se deja de esperar.')
+            break; 
+        else
+            dato=0;
+        end
+    end
+end
+if ii<3
+    dato=fread(s,1,'uint8');      %Lee el serial y lo interpreta como un entero sin signo de 8 bits; Ver: https://la.mathworks.com/help/matlab/ref/serial.fread.html#f102-512501 
+end
 end

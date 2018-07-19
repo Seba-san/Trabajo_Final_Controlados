@@ -1,5 +1,7 @@
 //Ensayo al escalón
+//Condiciones: frec de PID motores = 200 Hz, frec de PID total =200 Hz 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 #define D 50 //cantidad de muestras para generar un delay
 #define N 200  //cantidad de muestras a tomar en el ensayo al escalón
@@ -11,6 +13,12 @@
 #define n0 50 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
 #define dW 20  //Valor final del escalón
 >>>>>>> 4e42941948c5447524447255cc4a7370f5dad129
+=======
+#define D 200 //cantidad de muestras para generar un delay
+#define N 100  //cantidad de muestras a tomar en el ensayo al escalón
+#define n0 40 //cantidad de muestras a la que se hace el cambio de dw=0 a dw=dW
+#define dW 50  //Valor final del escalón
+>>>>>>> Testeos
 
 #include <EEPROM.h>
 #include "includes.h"
@@ -46,10 +54,10 @@ unsigned char trama_activa=0;//Lo pongo en unsigned char para que ocupe 1 byte (
 =======
 unsigned char sensor[N];//Mediciones de beta
 float wA[N],wB[N];//Mediciones de velocidad ang deseada
-int contador = 0, contador2 = 0, parar = 0;
+int contador = 0, contador2 = 0, parar = 0,contadorStop=0,MaxStop=20;//MaxStop indica que si durante 20 muestras seguidas no detecta la línea tiene que detenerse
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
-int controlador = 1, girar=0;
+int controlador = 1, girar=0,grabar=0;
 int softprescaler=0;//Lo uso para bajar la frec de muestreo de la señal de salida
 
 // #   #   #   # Variables
@@ -78,21 +86,26 @@ volatile float beta=0;//Ángulo entre el eje central del robot y la línea (en r
 float dw[3]={0,0,0},errorBeta[3]={0,0,0};//Variación de velocidad angular.
 =======
 float  bufferVelA[2 * cantMarcasEncoder], bufferVelB[2 * cantMarcasEncoder]; //buffer donde almaceno las últimas velocidades calculadas.
-bool Motores_ON = false;
-int soft_prescaler = 0;
+bool Motores_ON = false,controlador_motores=true;
+int soft_prescaler = 0,cont_A,cont_B,delta_cont;
 // Variables del PID
 float uA[3], uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
 float errorA[3], errorB[3];
 float set_pointA, set_pointB; // Set_point esta en RPM
-float wref = 700; //Velocidad lineal del centro del robot.
+float wref = 350; //Velocidad lineal del centro del robot.
 volatile float beta = 0; //Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3] = {0, 0, 0}, errorBeta[3] = {0, 0, 0}; //Variación de velocidad angular.
+<<<<<<< HEAD
 >>>>>>> 4e42941948c5447524447255cc4a7370f5dad129
 unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
+=======
+volatile unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
+>>>>>>> Testeos
 
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 float ParametrosA[]={0.073817,-0.06814,0,1,0};//{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[]={0.077848,-0.072512,0,1,0};//{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
@@ -106,12 +119,21 @@ int windup_top_dw=150,windup_bottom_dw=-150;//Definir bien
 float ParametrosA[] = {0.073817, -0.06814, 0, 1, 0}; //{0.092303,-0.090109,0,1,0};//{0.017045,-0.0059137,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.12562,-0.1067,0,1,0};
 float ParametrosB[] = {0.077848, -0.072512, 0, 1, 0}; //{0.095868,-0.09343,0,1,0};//{0.10679,-0.099861,0,1,0};//{0.11391,-0.095936,0,1,0};
 float Parametros[] = {192.6200,-192.5058,0,1,0};//Bastante suave:{44.0414,-43.9542,0,1,0};//{200,0,0,0,0};//{160.4821,-71.7003,0,1,0}; //PID del sistema total
+=======
+float ParametrosA[] = {0.053493,-0.050442,0,1,0};//Andando bien: {0.073817, -0.06814, 0, 1, 0};
+float ParametrosB[] = {0.054997,-0.052071,0,1,0};//{0.077848, -0.072512, 0, 1, 0};
+float Parametros[] = {200,0,0,0,0};//{126.5571,-252.6673,126.1102,2,-0.99999};//{160.6358,-317.8668,157.2313,1.9999,-0.99992};//{159.3639,-317.8766,158.5127,2,-0.99998};//{181.7336,-360.803,179.0695,2,-0.99998};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};////Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
+>>>>>>> Testeos
 
 volatile float freqA;
 volatile float freqB;
 int windup_top = 100, windup_bottom = 10;
+<<<<<<< HEAD
 int windup_top_dw = 100, windup_bottom_dw = -100; //Definir bien
 >>>>>>> 4e42941948c5447524447255cc4a7370f5dad129
+=======
+int windup_top_dw = 300, windup_bottom_dw = -300; //Definir bien
+>>>>>>> Testeos
 
 unsigned char estadoEncoder = 0; //En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 
@@ -180,6 +202,7 @@ void setup() { // $2
   }
   if (Escribir) {
     controlados1.modoAdelante(); //Sólo prendo el motor si voy a escibir las mediciones en la EEPROM
+    //Escribir=0;// $.$ PARA NO ESCRIBIR AL PEDO LA EEPROM SI NO LA VOY A LEER
   }
 >>>>>>> 4e42941948c5447524447255cc4a7370f5dad129
 }
@@ -207,44 +230,86 @@ void loop() { //$3
   if (bitRead(Bandera, 5)) {
     bitWrite(Bandera, 5, 0);
     medirBeta();//Actualizo la medición de ángulo
-    if (controlador==1 && contador<n0 && girar==1) {
-      PID_total();
-      set_pointA = wref - dw[2];
-      set_pointB = wref + dw[2];
+    
+    softprescaler++;
+    if (softprescaler==1){//Ya no submuestreo//Tomo una de cada 4 muestras para una frec de muestreo del PID total de 50 Hz (PID motores a 200 Hz)
+        softprescaler=0;
+      if (controlador==1 && contador<n0 && girar==1) {
+        PID_total();
+        set_pointA = wref - dw[2];
+        set_pointB = wref + dw[2];
+      }
+      else if (controlador==1 && girar==0){//Si no quiero girar entonces siempre calcula el controlador
+        PID_total();
+        set_pointA = wref - dw[2];//*(wref/350);//*(wref/500.0);
+        set_pointB = wref + dw[2];//*(wref/350);//*(wref/500.0);
+      }
     }
-    else if (controlador==1 && girar==0){//Si no quiero girar entonces siempre calcula el controlador
-      PID_total();
-      set_pointA = wref - dw[2];
-      set_pointB = wref + dw[2];
-    }
+    //$.$
+//    Serial.print(dw[2]);
+//    Serial.print(" ");
+  //Serial.println(byteSensor);
+  
+ // Serial.write(byteSensor);
+ /*byte addi;
+   addi= freqA*255.0/1000.0;
+    Serial.write(addi);
+    addi= freqB*255.0/1000.0;
+    Serial.println(addi);
+    */
+//freqB=freqB+500;
+//Serial.println(byteSensor,BIN);
+//Serial.println(' ');
+//Serial.println(byteSensor);
+//Serial.println(' ');
+//Serial.print(cont_A);
+//Serial.print(' ');
+//Serial.println(cont_B);
+  EnviarTx_blue();
+  /* byte addi=0;
+  
+  Serial.write(0xFF); // inicio
+  Serial.write(byteSensor);
+ addi= freqA*255.0/1000.0;
+  Serial.write(addi);
+ addi=freqB*255.0/1000.0;
+  Serial.write(addi);
+  */
+  
+//    
     PID_offline_Motores();
+    if (parar == 1) { //Perdí la línea
+      //controlados1.modoStop();//Paro los motores, pero sigo midiendo
+    }
     if (contador2 < D) {
       //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
       contador2++;
     }
     else {  //Si controlador=1 empieza a tomar muestras sin delay
       if (contador < N) {
-        if (parar == 1) { //Perdí la línea
-          controlados1.modoStop();//Paro los motores, pero sigo midiendo
-        }
-        softprescaler++;
-        if (softprescaler==4){//Tomo una de cada 4 muetsras
-          softprescaler=0;
-          sensor[contador] = byteSensor; //Guardo la medición de ángulo
-          //wA[contador] = set_pointA; //Guardo la medición de velocidad deseada del motor A
-          //wB[contador] = set_pointB; //Guardo la medición de velocidad deseada del motor B
-          wA[contador] = freqA; //Guardo la medición de velocidad real del motor A
-          wB[contador] = freqB; //Guardo la medición de velocidad real del motor B
-          contador++;//Aumento el índice de las muestras          
-        }
+        //$.$ Lo dejo que tome muestras a 200Hz. Ojo que ahora softprescaler lo uso en el PID total!! No reactivar lo de abajo sin cambiar eso!!!
+        //softprescaler++;
+        //if (softprescaler==4){//Tomo una de cada 4 muetsras
+        //softprescaler=0;
+        sensor[contador] = byteSensor; //Guardo la medición de ángulo
+        //wA[contador] = set_pointA; //Guardo la medición de velocidad deseada del motor A
+        //wB[contador] = set_pointB; //Guardo la medición de velocidad deseada del motor B
+        wA[contador] = freqA; //Guardo la medición de velocidad real del motor A
+        wB[contador] = freqB; //Guardo la medición de velocidad real del motor B
+        //$.$
+        //wA[contador]=freqB-freqA;//Guardo la medición de velocidad del motor A
+        //wB[contador]=set_pointB-set_pointA;//Guardo la medición de velocidad del motor B
+        contador++;//Aumento el índice de las muestras          
+        //}
         if (contador == n0 && girar==1){// && controlador == 0) {
+          
           set_pointA = wref - dW;
           set_pointB = wref + dW;
         }
       }
       else {
-        controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
-        if (Escribir==1) {//Grabo en la EEPROM
+        //controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
+        if (Escribir==1 && grabar==1) {//Grabo en la EEPROM
           Escribir=0;//No vuelve a grabar
           int addr = 0;
           if(controlador==0){//Sin controlador almaceno sólo el ángulo
@@ -381,7 +446,6 @@ void medirVelocidadB(unsigned char interrupcionB)
     bufferVelB[2 * cantMarcasEncoder - 1] = (long)(preescaler) * (TCNT2actualB - TCNT2anteriorB + cantOVerflow_actualB * _OCR2A);
     suma = suma + bufferVelB[2 * cantMarcasEncoder - 1];
     freqB = float((F_CPU * 60.0) / (suma));
-    //freqB=(float)suma;//BORRAR ESTA PORQUERIA, ES SOLO PARA DEBUGGEAR $.$
     interruptON;
   }
   else {
@@ -405,8 +469,16 @@ void medirBeta(void) {
   beta=betaAux;
 =======
   if (betaAux == 3) {
-    parar=1;//$.$
+    contadorStop++;
+    if(contadorStop>MaxStop){parar=1;}//$.$
   }//Aviso que pare porque perdió la línea
+<<<<<<< HEAD
   beta = betaAux;
 >>>>>>> 4e42941948c5447524447255cc4a7370f5dad129
+=======
+  else{ //$.$ Nota: ahora no estaría marcando cuando pierde la línea, sino que mantiene la medición anterior
+    contadorStop=0;
+    beta = betaAux;
+  }
+>>>>>>> Testeos
 }

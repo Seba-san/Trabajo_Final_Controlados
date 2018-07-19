@@ -227,9 +227,14 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
   //los resultados fueron bastante asimétricos y poco uniformes, con zonas
   //inestables y puntos ciegos. A futuro se debe mejorar el hardware del sensor.
   //Resultado del Ensayo:
-  float betaEnsayo[]={-0.6981317,-0.53232542,-0.32288591,-0.20071286,-0.16580628,-0.06981317,0.052359878,0.161442956,0.253072742,0.327249235,0.327249235,0.327249235,0.410152374,0.567232007,0.772308194};
+  // Primer ensayo: 
+  //float betaEnsayo[]={-0.6981317,-0.53232542,-0.32288591,-0.20071286,-0.16580628,-0.06981317,0.052359878,0.161442956,0.253072742,0.327249235,0.327249235,0.327249235,0.410152374,0.567232007,0.772308194};
   //Obs: en éste ensayo no se distinguía entre las configuraciones 7-6, 6 y 6-5.
-
+  //Ensayo 05/06/18:
+ // float betaEnsayo[]={-0.79412481,-0.6414085,-0.414515697,-0.248709418,-0.178896248,-0.13962634,-0.039269908,0.074176493,0.161442956,0.248709418,0.322885912,0.401425728,0.453785606,0.610865238,0.802851456};
+//Ensayo 22/06/18 (sensor circular, LEDs intercalados):
+  float betaEnsayo[]={-0.916297857,-0.746128255,-0.654498469,-0.545415391,-0.401425728,-0.244346095,-0.061086524,0.061086524,0.135263017,0.22252948,0.357792497,0.523598776,0.593411946,0.72431164,0.907571211};
+  
 	uint8_t LED[8]; int aux, suma, sumaPonderada;float beta;
   
   LED[0]=bitRead(port1,bit1);
@@ -252,13 +257,18 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
   sumaPonderada=2*(LED[0]+2*LED[1]+3*LED[2]+4*LED[3]+5*LED[4]+6*LED[5]+7*LED[6]+8*LED[7]);
   //Piso el valor de aux para hacer el switch case, total es int y ya no lo uso
   if(suma==0){beta=3;}//Si suma=0 es poque no detectó la línea, así que le doy el valor de error
+  else if (suma==8){beta=3;}//Si suma=8 es poque detecto línea de parada, así que le doy el valor de error
   else{
 <<<<<<< HEAD
     aux=float(sumaPonderada)/float(suma);//Potencial fuente de error: la división de enteros. $.$ Ver si es problema
 =======
     aux=sumaPonderada/suma;//Potencial fuente de error: la división de enteros. $.$ Ver si es problema
+<<<<<<< HEAD
 >>>>>>> 4e42941948c5447524447255cc4a7370f5dad129
     beta=betaEnsayo[aux-2];
+=======
+    beta=-betaEnsayo[aux-2];
+>>>>>>> Testeos
   }
   return beta;//Lo devuelvo como valor de salida
 }

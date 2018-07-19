@@ -26,7 +26,11 @@ L=0.16;%[m]
 %r= 0.01;%Valor de prueba
 r= 0.0045;%Valor estimado con el system identification.
 %r=0.015;%[m]
+<<<<<<< HEAD
 T=0.05; %[m] Distancia del centro al sensor.
+=======
+T=0.072; %[m] Distancia del centro al sensor.
+>>>>>>> Testeos
 tita=0;
 Ts=1/200;%Ts=1/Parametros.Fs;
 % ## Resolucion por partes

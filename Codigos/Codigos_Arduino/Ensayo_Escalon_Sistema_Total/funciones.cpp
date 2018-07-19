@@ -32,8 +32,10 @@ void PID_total(void){//PID del sistema en su conjunto
      errorBeta[k]=errorBeta[k+1];//Desplazamiento a la derecha de los datos del buffer
      dw[k]=dw[k+1];
     }
-  //errorBeta[2]=((float)(0.052359878)-beta);//El ángulo deseado es siempre 0  
-  errorBeta[2]=((float)(0.052359878)-beta);//El ángulo deseado no es 0 porque el sensor nunca mide cero
+  //errorBeta[2]=((float)(0)-beta);//El ángulo deseado es siempre 0  
+  //errorBeta[2]=((float)(0.052359878)-beta);//El ángulo deseado no es 0 porque el sensor nunca mide cero
+  //errorBeta[2]=((float)(-0.039269908)-beta);//El ángulo deseado no es 0 porque el sensor nunca mide cero
+  errorBeta[2]=((float)(-0.061086524)-beta);//El ángulo deseado no es 0 porque el sensor nunca mide cero
   dw[2]=Parametros[0]*errorBeta[2]+Parametros[1]*errorBeta[1]+Parametros[2]*errorBeta[0]+Parametros[3]*dw[1]+Parametros[4]*dw[0];
   if (dw[2]>windup_top_dw){dw[2]=windup_top_dw;} //Cambiar nombres de windup_top y _bottom $$$$$
   if (dw[2]<windup_bottom_dw){dw[2]=windup_bottom_dw;}
@@ -92,6 +94,31 @@ void EnviarTX_online(int var){ //  $8 funcion de envio de datos de corta duracio
 void EnviarTX_online(long var){
   if (online==true && tx_activada==true){
   Serial.println(var,DEC);
+  }
+}
+
+
+void EnviarTx_blue(void){ 
+  // Esta funcion esta pensada para utilizar modulos bluetooth HC-05. Los modulos tienen un ancho de banda REAL de 8000bps, aunque se pueda comunicar por rafagas (gracias al buffer)
+  // de mayor velocidad. Por lo tanto, como maximo se pueden enviar aproximadamente 4 bytes cada 5ms, por eso se usa Serial.write n vez de Serial.print;
+  byte addi=0;
+  if (online==true && tx_activada==true){
+    if (controlador==1){
+  Serial.write(0xFE); // inicio
+  }
+  if (controlador==0){
+    Serial.write(0xFF);
+    }
+  
+  //addi=PWMA*255.0/1000.0;
+  Serial.write(byteSensor);
+  //Serial.write(addi);
+ addi=freqA*255.0/1000.0;
+ //addi=cont_A*255.0/1000.0;
+  Serial.write(addi);
+ addi=freqB*255.0/1000.0;
+ // addi=cont_B*255.0/1000.0;
+  Serial.write(addi);
   }
 }
 

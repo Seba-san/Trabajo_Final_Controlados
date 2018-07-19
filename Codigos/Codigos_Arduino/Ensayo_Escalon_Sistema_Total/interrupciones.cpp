@@ -27,9 +27,9 @@ void  timer_interrupt(void){
 if (soft_prescaler==1){ // Lo hago en 2 pasos para que la acualizacion si sea controlada. $interrup
       // Esta funcion mete mucho tiempo de computo 120 uS
       int auxA=uA[2],auxB=uB[2];
-      //#if controlador
+      if (controlador_motores==true){
       controlados1.actualizarDutyCycleMotores((int)(auxA),(int)auxB);//Realizo la actualización simultánea de la velocidad de ambos motores. $VER que haya terminado de calcular el PID
-      //#endif
+      }
     }
 }
 
@@ -62,6 +62,7 @@ ISR(PCINT1_vect){
       cantOVerflow_actualA=cantOVerflowA;
       cantOVerflowA=0;
       bitWrite(Bandera,2,1);
+      cont_A++;
       }
   }
   if(A1!=MB){//Si A1 es distinto a MB es porque el estado del motor B cambió y eso fue lo que generó la interrupción.    
@@ -76,6 +77,7 @@ ISR(PCINT1_vect){
       cantOVerflow_actualB=cantOVerflowB;
       cantOVerflowB=0;
       bitWrite(Bandera,4,1);
+      cont_B++;
     }
   }
 }
@@ -101,10 +103,17 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
           trama_activa=1;
           break;
         case ins_test://Instrucción 249: codigo para exigir una respuesta preestablecida. Sirve para saber si hay conexion.
-          Serial.println(170,DEC);
+          Serial.write(170);
+          Serial.println(170,DEC);        
            break;
         case ins_setpoint://Instrucción 248: cambiar el valor del setpoint
           trama_activa=3;
+          break;
+          case ins_control_off://
+          controlador=0;
+          break;
+          case ins_control_on://
+          controlador=1; 
           break;
         case ins_resultado_ensayo://Instrucción 245: Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
           enviar_datos=1;
@@ -120,17 +129,32 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
       PWMB=dato;
       trama_activa=0;//Le indico al nano que terminé, por lo que el próximo byte que reciba debería ser una nueva instrucción.
       controlados1.actualizarDutyCycleMotores(PWMA,PWMB);//Realizo la actualización simultánea de la velocidad de ambos motores.
+      uA[2]=PWMA;uB[2]=PWMB; // Esto es para evitar que de un golpe inicial
+      set_pointA=freqA;set_pointB=freqB;
       controlados1.modoAdelante();
       if (!PWMA && !PWMB ){Motores_ON=false;}
       else {Motores_ON=true;}
       }
     else if (trama_activa==3){
-      set_pointA=dato*10; // Actualiza el valor del setpoint de A
+      set_pointA=dato*1000.0/255.0; // Actualiza el valor del setpoint de A
       trama_activa=4;
       }
     else if (trama_activa==4){
-      set_pointB=dato*10; // Actualiza el valor del setpoint de B
+      set_pointB=dato*1000.0/255.0; // Actualiza el valor del setpoint de B
+
+      //$.$ Revisar si esto está bien cuando tenga más neuronas:
+      wref=(set_pointA+set_pointB)/2;
+      
       trama_activa=0;
-      }
+      if (set_pointA==0 && set_pointB==0){
+        controlados1.actualizarDutyCycleMotores(0,0);
+        controlador_motores=false;
+       // controlados1.modoStop();
+        }
+        else{
+          controlador_motores=true;
+        }
+          }
+      
   }
 }
