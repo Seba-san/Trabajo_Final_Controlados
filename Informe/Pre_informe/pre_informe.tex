@@ -885,6 +885,25 @@ A la hora de implementar el control se encontraron varios inconvenientes.... Pon
 \section{Funcionamiento del Sistema Total}
 \label{sec:resultados}
 %Acá iría el resultado de poner el bichito a seguir la pista.
+Controladores a Probar:
+\begin{itemize}
+ \item P
+ \item PI
+ \item PD
+ \item PID
+ \item PIDF
+ \item PIDF ajuste manual
+\end{itemize}
+Aspectos a medir en cada caso:
+\begin{itemize}
+\item Valor maximo de Wref para seguir la pista. (Tener en cuenta el valor maximo de la accion de control, nunca supera los 500)
+\item Tiempo promedio en dar una vuelta
+\item Velocidad promedio en pista.
+\item Parametro relativo: Cuantas vueltas tarda en salirse del circuito, o es estable?
+\end{itemize}
+
+
+
 \section{Conclusiones}
 \label{sec:conclusiones}
 En función de los objetivos propuestos, se puede asegurar que se logro desarrollar e implementar un robot seguidor de linea basado en componentes fácilmente conseguibles y/o fabricables, lo cual impulsa el desarrollo de esta clase de dispositivos en la institución. 

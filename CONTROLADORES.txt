@@ -1,0 +1,50 @@
+Entrada: sys_t ; Controlador: PIDF; ajustes PID tuner: 0.1626 y 0.6 ;controller_effor_max=8.81e4; "Input rejection" ; tustin
+asentamiento:0.868 s
+
+{19973.6235,-39033.5707,19070.3927,0.44309,0.55691}
+
+Entrada: sys_t ; Controlador: PIDF; ajustes PID tuner: 0.33 y 0.44 ; controller_effor_max=338; "Reference tracking" ; tustin; asentamiento:0.955 s
+
+{335.0659,-660.7998,325.7364,1.9578,-0.95781}
+
+Entrada: sys_t ; Controlador: PIDF; ajustes PID tuner: 2 y 0.44 ;controller_effor_max=400; "Input rejection" ; tustin ; tiempo de asentamiento:11.2 s
+
+{314.9074,-617.3961,302.5428,1.5556,-0.55556}
+
+Entrada: sys_t ; Controlador: PI; ajustes PID tuner: 0.3 y 0.9 ;controller_effor_max=304; "Input rejection" ; tustin;asentamiento:1.49s
+
+{304.0071,-303.8298,0,1,0}
+
+Entrada: sys_t ; Controlador: PDF; ajustes PID tuner: 0.35 y 0.6 ;controller_effor_max=358; "Input rejection" ; tustin; asentamiento:0.93s
+
+{354.118,-344.1428,0,0.94908,0}
+
+Entrada: sys_t ; Controlador: P; ajustes PID tuner: 0.4 y 0.6 ;controller_effor_max=203; "Input rejection" ; tustin
+asentamiento:1.28s
+{202.8744,0,0,0,0}
+
+
+Entrada: sys_t_dis ; Controlador: PIDF; ajustes PID tuner: 0.33 y 0.44 ;controller_effor_max=334; "Reference Tracking" ; Derivada hacia atras, integral hacia adelante.
+asentamiento:0.953s
+
+{334.4605,-659.6808,325.2226,1.9582,-0.95817}
+
+Entrada: sys_t_dis ; Controlador: PIDF; ajustes PID tuner: 3 y 0.44 ;controller_effor_max=434; "Input Rejection" ; Derivada hacia atras, integral hacia adelante.
+asentamiento:17s
+
+{434.2492,-850.9594,416.7641,1.0099,-0.009901}
+
+Entrada: sys_t_dis ; Controlador: PI; ajustes PID tuner: 0.3 y 0.9 ;controller_effor_max=304; "Input Rejection" ; Derivada hacia atras, integral hacia adelante.
+asentamiento:1.49s
+
+{304.0495,-303.8722,0,1,0}
+
+Entrada: sys_t_dis ; Controlador: PDF; ajustes PID tuner: 0.35 y 0.6 ;controller_effor_max=372; "Reference tracking" ; Derivada hacia atras, integral hacia adelante.
+asentamiento:0.958s
+
+{371.7049,-363.3554,0,0.95238,0}
+
+Entrada: sys_t_dis ; Controlador: PDF; ajustes PID tuner: 0.35 y 0.6 ;controller_effor_max=353; "Input Rejection" ; Derivada hacia atras, integral hacia adelante.
+asentamiento:0.93s
+
+{353.3637,-343.4661,0,0.94941,0}
