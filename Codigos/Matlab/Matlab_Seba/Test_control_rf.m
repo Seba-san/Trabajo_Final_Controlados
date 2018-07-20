@@ -10,11 +10,12 @@ disp('Puerto Cerrado')
 %%
 % Probar si esta clase de instrucciones funcionan, porque el terminador
 % cambio:
+pause(2)
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test_rf(s)
  PWM=20;
- Env_instruccion(s,'control_on'); 
+ %Env_instruccion(s,'control_on'); 
 Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
  
 % pause(1)
@@ -30,14 +31,16 @@ RPMB=zeros(1,N);
 i=1;
 
 a=1;veces=1;
-pause(1)
+%pause(0.5)
 limite_sup=1e3; %limite del grafico
 limite_inf=0;
 try
      close(1)
 end
-PWM=400;
+PWM=300;
 Env_instruccion(s,'setpoint',[PWM PWM])
+pause(0.5)
+Env_instruccion(s,'control_on');
 figure(1)
  flushinput(s);
  veces_=0;
@@ -50,7 +53,7 @@ while (veces_<veces)
     
     m1=1:1:i;m2=i+1:1:N;
     subplot(311)
-    plot(m1,angulo(1:i),'.','color',[~a 0 a]); hold on;plot(m2,angulo(i+1:N),'.','color',[a 0 ~a]); hold off;ylim([-1 1])
+    plot(m1,angulo(1:i),'.','color',[~a 0 a]); hold on;plot(m2,angulo(i+1:N),'.','color',[a 0 ~a]); hold off;ylim([-1 3])
     ylabel('angulo (rad)')
     subplot(312)
     plot(m1,RPMA(1:i),'.','color',[~a 0 a]); hold on;plot(m2,RPMA(i+1:N),'.','color',[a 0 ~a]); hold off; ylim([0 1000]);
@@ -74,5 +77,12 @@ Env_instruccion(s,'setpoint',[0 0]);
 Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
 disp('FIN')
 %Env_instruccion(s,'setpoint',[0,0]); 
-
-
+%% Frenar
+Env_instruccion(s,'PWM',[0 0]);
+Env_instruccion(s,'setpoint',[0 0]);
+Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
+disp('FIN')
+%%
+dWw=RPMB-RPMA;
+figure(2)
+plot(dWw)

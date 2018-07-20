@@ -28,7 +28,7 @@ for k=0:N-1
 end 
 suma=sum(LED); 
 sumaPonderada=2*sum(LED.*(1:8)); 
-if(suma==0) 
+if(suma==0) %que pasa si vale 8?
     beta=3;%Si suma=0 es poque no detect? la l?nea, as? que le doy el valor de 
 else 
     aux=round(sumaPonderada/suma);%Potencial fuente de error: la divisi?n de enteros. $.$ Ver si es problem

@@ -113,7 +113,14 @@ void serialEvent() { // $4 esta funcion se activa sola, es por interrupciones
           controlador=0;
           break;
           case ins_control_on://
-          controlador=1; 
+          controlador=1;
+          //Reseteo las variables: ($.$ mejorar, quizas)
+          
+          for(int k=0;k < 3;k++){
+          errorA[k]=0;errorB[k]=0;
+          uA[k]=0;uB[k]=0;
+          errorBeta[k]=0;dw[k]=0;
+          }
           break;
         case ins_resultado_ensayo://Instrucción 245: Devuelve de forma secuencial los datos del ensayo al escalón almacenados en w[N]
           enviar_datos=1;

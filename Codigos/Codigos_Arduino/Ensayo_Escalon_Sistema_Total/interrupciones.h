@@ -18,7 +18,7 @@ extern int enviar_datos;
 extern bool Motores_ON,tx_activada, online,controlador_motores;
 extern unsigned char trama_activa;
 extern int PWMA,PWMB,controlador;
-extern float uA[3],uB[3];
+extern float uA[3],uB[3],errorA[3],errorB[3],errorBeta[3],dw[3];
 extern volatile float freqA,freqB;
 extern float set_pointA,set_pointB,wref;
 extern float ParametrosA[5],ParametrosB[5];

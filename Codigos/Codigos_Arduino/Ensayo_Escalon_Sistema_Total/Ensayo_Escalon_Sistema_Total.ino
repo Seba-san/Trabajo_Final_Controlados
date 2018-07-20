@@ -61,7 +61,7 @@ volatile unsigned char byteSensor;//Byte del sensor de línea. Sirve para debugg
 
 float ParametrosA[] = {0.053493,-0.050442,0,1,0};//Andando bien: {0.073817, -0.06814, 0, 1, 0};
 float ParametrosB[] = {0.054997,-0.052071,0,1,0};//{0.077848, -0.072512, 0, 1, 0};
-float Parametros[] = {200,0,0,0,0};//{126.5571,-252.6673,126.1102,2,-0.99999};//{160.6358,-317.8668,157.2313,1.9999,-0.99992};//{159.3639,-317.8766,158.5127,2,-0.99998};//{181.7336,-360.803,179.0695,2,-0.99998};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};////Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
+float Parametros[] = {334.4605,-659.6808,325.2226,1.9582,-0.95817};//{126.5571,-252.6673,126.1102,2,-0.99999};//{160.6358,-317.8668,157.2313,1.9999,-0.99992};//{159.3639,-317.8766,158.5127,2,-0.99998};//{181.7336,-360.803,179.0695,2,-0.99998};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};////Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
 
 volatile float freqA;
 volatile float freqB;
@@ -147,13 +147,13 @@ void loop() { //$3
         softprescaler=0;
       if (controlador==1 && contador<n0 && girar==1) {
         PID_total();
-        set_pointA = wref - dw[2];
-        set_pointB = wref + dw[2];
+        set_pointA = wref - dw[2]/2.0;
+        set_pointB = wref + dw[2]/2.0;
       }
       else if (controlador==1 && girar==0){//Si no quiero girar entonces siempre calcula el controlador
         PID_total();
-        set_pointA = wref - dw[2];//*(wref/350);//*(wref/500.0);
-        set_pointB = wref + dw[2];//*(wref/350);//*(wref/500.0);
+        set_pointA = wref - dw[2]/2.0;//*(wref/350);//*(wref/500.0);
+        set_pointB = wref + dw[2]/2.0;//*(wref/350);//*(wref/500.0);
       }
     }
     //$.$
