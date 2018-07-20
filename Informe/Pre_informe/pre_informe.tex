@@ -283,44 +283,88 @@ v=\frac{r(\omega _R + \omega _L)}{2}
 Donde L es la distancia entre las ruedas. 
 
 \subsubsection{Restricciones de Sensores Disponibles}%$.$ Mejorar nombre
-Dado que el único sensor disponible es el sensor de línea, no se tiene la información completa para trabajar con las ecuaciones \ref{eq:ec_cinem}. En función de esto se decidió plantear una hipótesis simplificativa que permitiese estimar la orientación del vehículo respecto a la pista. Se decidió trabajar con esta variable porque la ecuación que gobierna la orientación del robot es LTI y si la pista es una línea recta la orientación relativa a esta respondería a la misma ecuación.
 
-Las hipótesis a utilizar son que la pista es una línea recta y que el centro C del vehículo se encuentra siempre sobre el centro de la linea a seguir. Así, la señal de error $e$ se toma como la distancia entre el eje central del robot y el punto de intersección entre la línea de sensores y la recta a seguir. Esta situación se muestra en la figura \ref{fig:carrito1}.
+Suponiendo la situación mostrada en la figura \ref{fig:posturas} en donde la linea a seguir se encuentra sobre el eje $x$  y 
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=10cm]{./imagenes/carrito1.png}
-\caption{Esquema del robot sobre la línea a seguir (azul). La línea roja representa la línea de sensores, $e$ es la distancia medida entre el eje central del robot y la intersección de la recta a seguir con la línea de los sensores, y $\beta $ es el ángulo entre la línea a seguir y el eje central del robot.}
-\label{fig:carrito1}
+    \begin{subfigure}[h]{0.45\textwidth}
+    	\centering
+        \includegraphics[width=7.5cm]{./imagenes/geometria_A.png}
+        \caption{}
+    \end{subfigure}
+    \quad
+    \begin{subfigure}[h]{0.45\textwidth}
+    	\centering
+        \includegraphics[width=7.5cm]{./imagenes/geometria_B.png}
+        \caption{}
+    \end{subfigure}
+    \caption{Geometría del robot considerando dos posturas distintas: (a) $Y_0 >0 $ y $ \theta >0 $ y (b) $Y_0 >0$ y $ \theta <0$.}
+	\label{fig:posturas}
 \end{figure}
 
-Bajo la hipótesis de que la pista es una línea recta, la relación entre $\beta$ y la orientación del robot $\theta$ está dada por: \begin{equation*}
-\beta=\theta-\psi
-\end{equation*}
-Donde $\psi$ es la orientación de la pista. Como $\psi$ es constante, reemplazando en \ref{eq:ec_cinem} obtendríamos:
+con ayuda de un poco de geometría se puede demostrar que para (a) 
 
 \begin{equation}
-\label{betaDerivada}
-\dot{\beta}=\omega_C
+m= \left( T\sin(\theta) + Y_0 \right) \frac{1}{\cos(\theta)}
+\label{eq:pose1}
 \end{equation}
 
-Dado que sólo se tiene la medición de $e$, se utiliza la segunda hipótesis propuesta: que el punto C se mantiene siempre sobre la línea a seguir. Bajo esta suposición, podemos calcular $\beta $ por trigonometría:
+y para (b)
 
-\begin{equation*}
-\tan(\beta)=\frac{e}{l}
-\end{equation*}
+\begin{equation}
+m=\sqrt{Y_0^2 - T^2 + \left((T-Y_0\sin(\theta))\frac{1}{\cos(\theta)} \right)^2}
+\label{eq:pose2}
+\end{equation}
 
-Como $l$ es fijo, la medición de $e$ puede traducirse en una medición del ángulo. De esta manera podríamos buscar minimizar el ángulo para alinear el robot con la pista. Como la medición se hace suponiendo que C está sobre la línea, si el robot no está centrado respecto a la pista el cálculo del ángulo va a indicar una medición errónea, por lo que al llevar a cero el $ \beta $ medido de esta manera se termina garantizando que el robot esté centrado respecto a la pista.
+en donde $m$ es la medida del sensor en \textit{metros}, $\theta$, $X_0$ y $Y_0$ determinan la pose del dispositivo. 
+
+Suponiendo que $ | Y_0 | \approx 0$ y simplificando en \ref{eq:pose1} y \ref{eq:pose2}  resulta que
+
+\begin{equation}
+m \approx T \tan(\theta)
+\end{equation} 
+
+%Dado que el único sensor disponible es el sensor de línea, no se tiene la información completa para trabajar con las ecuaciones \ref{eq:ec_cinem}. En función de esto se decidió plantear una hipótesis simplificativa que permitiese estimar la orientación del vehículo respecto a la pista. Se decidió trabajar con esta variable porque la ecuación que gobierna la orientación del robot es LTI y si la pista es una línea recta la orientación relativa a esta respondería a la misma ecuación.
+
+%Las hipótesis a utilizar son que la pista es una línea recta y que el centro C del vehículo se encuentra siempre sobre el centro de la linea a seguir. Así, la señal de error $e$ se toma como la distancia entre el eje central del robot y el punto de intersección entre la línea de sensores y la recta a seguir. Esta situación se muestra en la figura \ref{fig:carrito1}.
+
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=10cm]{./imagenes/carrito1.png}
+%\caption{Esquema del robot sobre la línea a seguir (azul). La línea roja representa la línea de sensores, $e$ es la distancia medida entre el eje central del robot y la intersección de la recta a seguir con la línea de los sensores, y $\beta $ es el ángulo entre la línea a seguir y el eje central del robot.}
+%\label{fig:carrito1}
+%\end{figure}
+%
+%Bajo la hipótesis de que la pista es una línea recta, la relación entre $\beta$ y la orientación del robot $\theta$ está dada por: \begin{equation*}
+%\beta=\theta-\psi
+%\end{equation*}
+%Donde $\psi$ es la orientación de la pista. Como $\psi$ es constante, reemplazando en \ref{eq:ec_cinem} obtendríamos:
+%
+%\begin{equation}
+%\label{betaDerivada}
+%\dot{\beta}=\omega_C
+%\end{equation}
+%
+%Dado que sólo se tiene la medición de $e$, se utiliza la segunda hipótesis propuesta: que el punto C se mantiene siempre sobre la línea a seguir. Bajo esta suposición, podemos calcular $\beta $ por trigonometría:
+%
+%\begin{equation*}
+%\tan(\beta)=\frac{e}{l}
+%\end{equation*}
+
+Como $T$ es fijo, la medición de $m$ puede traducirse en una medición del ángulo de orientación. De esta manera podríamos buscar minimizar el ángulo para alinear el robot con la pista. Como la medición se hace suponiendo que $Y_0 \approx 0 $, si el robot no está centrado respecto a la pista el cálculo del ángulo va a indicar una medición errónea, por lo que al llevar a cero el $ \theta $ medido de esta manera se termina garantizando que el robot esté centrado respecto a la pista.
 
 La hipótesis utilizada debería ser válida si el sistema controlado es lo suficientemente rápido para corregir desviaciones antes de que el centro se desplace fuera de la pista.
 
-Como lo que se controla son las velocidades de cada motor de forma individual, resulta conveniente reemplazar  la ecuación \ref{wc} en la ecuación \ref{betaDerivada}:
+Como lo que se controla son las velocidades de cada motor de forma individual, resulta que:
 
-\begin{equation*}
-\dot{\beta}=\omega_C=\frac{r(\omega _R - \omega _L)}{L}
-\end{equation*}
 
-Como sólo nos interesa la diferencia entre velocidades angulares del motor, se puede mantener $v$ constante tomando:
+\begin{equation}
+\dot{\theta}=\omega_C=\frac{r(\omega _R - \omega _L)}{L}
+\label{eq:tita_omega}
+\end{equation}
+
+Como sólo nos interesa la diferencia entre velocidades angulares del motor, se puede mantener $v$ constante (por medio de $\omega $) tomando:
 
 \begin{equation*}
 \omega _R = \omega _{fijo} + \frac{\Delta \omega}{2} 
@@ -395,6 +439,37 @@ Una vez implementados todos los controladores descritos el sistema total queda s
 \caption{Diagrama en bloques del sistema total con los tres controladores PID implementados. MEJORAR ESTA IMAGEN}
 \label{diagra en bloques sist total}
 \end{figure}
+
+En la anterior figura, se observa que cada sistema motor $Sys_M$ cuenta con dos entradas, una llamada $\omega_{ref}$ y otra $\pm \frac{\Delta \omega}{2}$, ademas cuentan con su propia controlador, originando así un sistema realimentado llamado $Sys_{Mc}$. Luego la diferencia de velocidades de los  ejes de cada motor controlado ingresa a la planta de orientación $Sys_O$. Con ayuda de la ecuación \ref{eq:tita_omega}  se deduce:
+
+\begin{equation}
+\theta=Sys_O(s)(\omega_R - \omega_L)=Sys_O(s)\left( Setpoint_BSys_{MBc} - Setpoint_ASys_{MAc}   \right)
+\end{equation}
+
+en donde $Setpoint = \omega_{ref} \pm \frac{\Delta \omega}{2}$, luego reemplazando
+
+
+\begin{equation}
+\theta=Sys_O(s)\left(Sys_{MBc}(\omega_{ref}+\frac{\Delta \omega}{2}) - Sys_{MAc} (\omega_{ref}-\frac{\Delta \omega}{2}) \right)
+\end{equation}
+
+reordenando
+
+\begin{equation}
+\theta=Sys_O(s)\left(\omega_{ref} (Sys_{MBc}-Sys_{MAc})+  \frac{\Delta \omega}{2}( Sys_{MBc}+Sys_{MAc})  \right)
+\end{equation}
+
+luego si $Sys_{MBc} \approx Sys_{MAc}$ y ademas el termino $\omega_{ref} (Sys_{MBc}-Sys_{MAc})$ es muy pequeño comparado con $ \frac{\Delta \omega}{2}( Sys_{MBc}+Sys_{MAc}) $ resulta que
+
+\begin{equation}
+\theta=\Delta \omega Sys_O(s)Sys_{MAc}= \Delta \omega Sys_{total}
+\end{equation}
+
+por lo tanto es necesario que el sistema controlado de ambos motores se comporten lo mas parecido posible y que ademas se cumpla $\omega_{ref} (Sys_{MBc}-Sys_{MAc}) \ll  \frac{\Delta \omega}{2}( Sys_{MBc}+Sys_{MAc}) $.
+
+
+
+
 \subsection{PID}
  Esta parte es un choreo MODIFICADO de \cite[pág. 25]{biblia_PID}.\\
 
@@ -690,7 +765,7 @@ Para alimentar este arreglo de emisores y receptores se utilizó el circuito de 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=10cm]{./imagenes/circ_sens_lin.png}%circuitoSensorLinea
-	\caption{circuito utilizado para alimentar los diodos LED infrarrojos y los correspondientes fotodiodos que componen el sensor de línea.}
+	\caption{circuito utilizado para alimentar los diodos LED infrarrojos y los correspondientes fotodiodos que componen el sensor de línea. Este esquema permite ampliar la cantidad de sensores a la que se desee. En el dispositivo final se cuenta con 8 fotodiodos. }
 	\label{fig:circuitoSensorLinea}
 \end{figure}
 
@@ -720,7 +795,7 @@ Se optó por diseñar las dos variantes para poder probar a futuro distintas est
 \subsubsection{Valores de Lectura}
 Considerando que se deseaba obtener un valor de ángulo como lectura del sensor, se podría haber realizado una deducción geométrica de los valores de ángulo a asignar para cada lectura posible del sensor. Sin embargo, dado que el diseño inicial tenía múltiples asimetrías, que resultaba difícil identificar correctamente el centro del robot y que los diodos utilizados pueden presentar imperfecciones o diferencias de sensibilidad, se optó por realizar un ensayo donde se midiera el rango de valores de ángulo de desviación para el cual se mantenía cada medición posible del sensor. Este ensayo se realizó marcando en un papel líneas de referencia y colocando cinta en línea recta sobre el mismo. Girando el robot sobre la pista con el centro siempre sobre un punto medio de la línea, se marcaron los rangos de desviación para los cuales se mantenía cada medición del sensor.
 \subsubsection{Lectura del Sensor con el Microcontrolador}
-Las salidas de las compuertas se conectan a pines de entrada del microcontrolador. En el programa principal la medición de la línea se necesita cada vez que se calcula el PID del sistema total, por ello se programó una subrutina de medición que se llama en el main antes de calcular el controlador cada $Ts$ segundos. Dentro de esta subrutina se lee cada valor digital de entrada y se almacenan los resultados en un vector de 8 componentes. Para anticiparse a valores de mediciones atípicos y atenuar el efecto de posibles errores de medición, se calcula una suma ponderada de las entradas para obtener un número que indica debajo de cuál de los fotodiodos se encuentra el centro de la línea, siendo las posibilidades para el caso de 8 LEDs: 1, 1.5, 2, 2.5,...,7,7.5 y 8, donde los números no enteros representan el caso en el que la línea se encuentre entre dos fotodiodos. Si a este número lo multiplicamos por dos y le restamos dos, nos queda uno de los siguientes resultados: 0,1,2,...14, que pueden usarse como índice de un vector. De esta forma lo que se hace es definir un vector constante con los resultados de ángulo obtenidos por ensayo cuando la línea estaba bajo cada una de las posibilidades y utilizar el número calculado para definir con cuál de los elementos del vector quedarse como medición actual. El caso en que todos
+Las salidas de las compuertas se conectan a pines de entrada del microcontrolador. En el programa principal la medición de la línea se necesita cada vez que se calcula el PID del sistema total, por ello se programó una subrutina de medición que se llama en el programa principal (main) antes de calcular el controlador cada $Ts$ segundos. Dentro de esta subrutina se lee cada valor digital de entrada y se almacenan los resultados en un vector de 8 componentes. Para anticiparse a valores de mediciones atípicos y atenuar el efecto de posibles errores de medición, se calcula una suma ponderada de las entradas para obtener un número que indica debajo de cuál de los fotodiodos se encuentra el centro de la línea, siendo las posibilidades para el caso de 8 LEDs: 1, 1.5, 2, 2.5,...,7,7.5 y 8, donde los números no enteros representan el caso en el que la línea se encuentre entre dos fotodiodos. Si a este número lo multiplicamos por dos y le restamos dos, nos queda uno de los siguientes resultados: 0,1,2,...14, que pueden usarse como índice de un vector. De esta forma lo que se hace es definir un vector constante con los resultados de ángulo obtenidos por ensayo cuando la línea estaba bajo cada una de las posibilidades y utilizar el número calculado para definir con cuál de los elementos del vector quedarse como medición actual. El caso en que todos
 las entradas estén en 0 se toma como valor particular y se la asigna el número 3 para que funcione como bandera e indique que se perdió la línea. Cuando esto ocurre el programa principal mantiene para los cálculos el último valor válido medido.
 
 \section{Identificación de Sistemas}
@@ -734,7 +809,7 @@ El modelo de función de transferencia planteado matemáticamente en la sección
 El modelo obtenido de forma teórica realiza varias simplificaciones. Una de ellas es ignorar el ciclo de histéresis de los motores y otra es no considera el efecto de una carga en el motor, que en este caso implicaría considerar la dinámica del robot sobre el suelo. Estos fenómenos hacen que el comportamiento real de los motores no sea realmente lineal. Para analizar la linealidad el sistema y el intervalo de trabajo a utilizar se diseñó un ensayo que barriera las distintas posibilidades de duty cycle para cada motor y almacenara varias muestras de las velocidades obtenidas en el estado estacionario. En la figura \ref{linealidad} se muestra la curva obtenida para el motor B. La del motor A es análoga. %$.$ Revisar que ya esté explicado en algún lado que el motor B es el derecho y el A el izquierdo
 
 %$.$ Está mal el eje Y! Corregir imagen
-\begin{figure}
+\begin{figure}[h]
 \centering
 \includegraphics[width=10cm]{./imagenes/prueba_linealidad.eps}
 \caption{Curva de respuesta entrada-salida para el motor B.}
@@ -763,7 +838,7 @@ M_b(s)= \frac{5042.1 e^{-0.013s}}{(s+9.988) (s+45.48)}
 
 %$.$ Utilizando esta información se ajustaron los controladores PID de cada motor, según se explicará en la sección \ref{control}. 
 \subsection{Identificación de la Cinemática el Robot}
-En función de lo analizado en la sección \ref{modelo cinematico}, podemos pensar que si el robot arranca alineado con una línea recta, y manteniendo la restricción de $v$ constante, entonces la planta se comporta como un sistema cuya entrada es $\Delta \omega$ y su salida $\beta $, gobernado por la ecuación:
+En función de lo analizado en la sección \ref{modelo cinematico}, podemos pensar que si el robot arranca alineado con una línea recta, y manteniendo la restricción de $v$ constante, entonces la planta se comporta como un sistema cuya entrada es $\Delta \omega$ y su salida $\theta$, gobernado por la ecuación \ref{eq:tita_omega}. Para un mayor entendimiento se reemplaza $\theta$ por $\beta$ ya que si bien $\theta \approx \beta $ cuando $|Y_0| \approx 0$, no es válido en todo momento. Bejo esta justificación la ecuación se escribe de otra manera a continuación :
 
 \begin{equation}
 \dot{\beta}= \frac{r\Delta\omega}{L} 
