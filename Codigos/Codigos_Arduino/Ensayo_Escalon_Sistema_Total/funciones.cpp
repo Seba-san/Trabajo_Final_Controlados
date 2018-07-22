@@ -101,8 +101,8 @@ void EnviarTx_blue(void){
     }
   
   //addi=PWMA*255.0/1000.0;
-  Serial.write(vect_beta);
-  //Serial.write(byteSensor);vect_beta
+  //Serial.write(vect_beta);
+  Serial.write(byteSensor);//vect_beta
   //Serial.write(addi);
  addi=freqA*255.0/1000.0;
  //addi=cont_A*255.0/1000.0;
@@ -115,17 +115,27 @@ void EnviarTx_blue(void){
 void Bateria(void){
   int aux33;
 aux33=analogRead(A7);//Lectura del bit analógico
-if (aux33<900){ // Menos que 7.4 V
-  bool estadosss=false;
-  while (1){
-  Serial.write('E');
+aux33=aux33-850; // Menos que 7.4 V; la cuenta es: 7.4 X 10/16.8 X 1024 /5
+bateria=bateria + aux33/10; // hago un promedio, si se toman muchas mediciones por debajo del valor minimo, bateria <-100 
+if (bateria >50){bateria=50;}
+if (bateria<-100){ // 
+//  bool estadosss=false;
+//  while (1){
+  Serial.write(101);// Es como un 911, pero de 8 bits
   //digitalWrite(13,estadosss);
   //estadosss!=estadosss;
-  delay(1000);
+//  delay(100);
+//    //Deshabilito las interrupciones por timer1:
+//  TIMSK1=0x00;
+//    //Deshabilito las interrupciones por timer2:
+//  TIMSK2=0x00;
+//  //bitClear(SREG,7);//desactiva las interrupciones globales
+//  controlados1.actualizarDutyCycleMotores(0,0);
+  bateria=0;
   
   }
   }
-}
+
 // ##################### Estas 2 funciones hacen los mismo que en matlab :-)
 void tic(){
     ticc=micros();

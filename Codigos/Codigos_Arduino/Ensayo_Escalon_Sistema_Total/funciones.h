@@ -1,5 +1,5 @@
 #include "Arduino.h"        //Contiene todas las declaraciones de funciones y registros de arduino
-
+#include "Controlados.h"
 // variables de tic y toc
 extern unsigned long ticc,tocc;
 
@@ -15,7 +15,7 @@ extern volatile unsigned char byteSensor;
 // Variables comunicaciones
 extern bool online, tx_activada;
 extern byte vect_beta; // Variable de testeo
-
+extern int bateria;
 
 extern void tic(void);
 extern void toc(void);
@@ -28,3 +28,4 @@ extern void EnviarTX_online(int);
 extern void EnviarTX_online(long);
 extern void EnviarTx_blue(void);
 extern void Bateria(void);
+extern Controlados controlados1;

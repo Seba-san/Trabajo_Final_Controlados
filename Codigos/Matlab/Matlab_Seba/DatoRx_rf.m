@@ -11,6 +11,9 @@ inicio=255;
 a=0;
 while a~=inicio && a~=(inicio-1)
 a=LeerSerial(s);
+% if a==101
+%     disp ('Bateria baja (<7.4V), se recomienda cargar antes de continuar. Bateria < 50%')
+% end
 end
 dato=zeros(1,CantdeBytes);
 for i=1:CantdeBytes

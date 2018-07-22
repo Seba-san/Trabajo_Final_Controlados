@@ -208,6 +208,7 @@ void Controlados::configPinesSensorLinea()
 	pinMode(rx_6,INPUT_PULLUP);
 	pinMode(rx_7,INPUT_PULLUP);
 	pinMode(rx_8,INPUT_PULLUP);
+  pinMode(A7,INPUT); // Sirve para leer el nivel de la bateria  
 }
 
 float Controlados::leerSensorDeLinea(unsigned char* byteSensor)

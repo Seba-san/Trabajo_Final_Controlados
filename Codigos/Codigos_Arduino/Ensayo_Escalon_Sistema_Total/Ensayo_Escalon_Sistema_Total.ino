@@ -56,12 +56,13 @@ volatile float beta = 0; //Ángulo entre el eje central del robot y la línea (e
 float dw[3] = {0, 0, 0}, errorBeta[3] = {0, 0, 0}; //Variación de velocidad angular.
 volatile unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
 byte vect_beta; // Variable de debuggeo
+int bateria=0;
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
 float ParametrosA[] = {0.053493,-0.050442,0,1,0};//Andando bien: {0.073817, -0.06814, 0, 1, 0};
 float ParametrosB[] = {0.054997,-0.052071,0,1,0};//{0.077848, -0.072512, 0, 1, 0};
-float Parametros[] = {334.4605,-659.6808,325.2226,1.9582,-0.95817};//{126.5571,-252.6673,126.1102,2,-0.99999};//{160.6358,-317.8668,157.2313,1.9999,-0.99992};//{159.3639,-317.8766,158.5127,2,-0.99998};//{181.7336,-360.803,179.0695,2,-0.99998};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};////Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
+float Parametros[] = {434.2492,-850.9594,416.7641,1.0099,-0.009901};//{126.5571,-252.6673,126.1102,2,-0.99999};//{160.6358,-317.8668,157.2313,1.9999,-0.99992};//{159.3639,-317.8766,158.5127,2,-0.99998};//{181.7336,-360.803,179.0695,2,-0.99998};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};////Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
 
 volatile float freqA;
 volatile float freqB;
@@ -119,7 +120,7 @@ void setup() { // $2
 }
 
 void loop() { //$3
-  Bateria(); // Chequeo el estado de la bateria, si es menor que un valor, se queda aca dentro.
+  //Bateria(); // Chequeo el estado de la bateria, si es menor que un valor, se queda aca dentro.
   if (bitRead(Bandera, 0)) {
     bitWrite(Bandera, 0, 0); // timer 2 overflow
   }
