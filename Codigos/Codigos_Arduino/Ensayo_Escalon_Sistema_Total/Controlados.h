@@ -48,3 +48,6 @@ class Controlados
 };
 
 #endif
+
+
+extern byte vect_beta;

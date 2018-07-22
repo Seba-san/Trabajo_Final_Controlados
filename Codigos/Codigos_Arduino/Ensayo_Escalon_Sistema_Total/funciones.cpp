@@ -31,7 +31,7 @@ void PID_total(void){//PID del sistema en su conjunto
   //errorBeta[2]=((float)(0)-beta);//El ángulo deseado es siempre 0  
   //errorBeta[2]=((float)(0.052359878)-beta);//El ángulo deseado no es 0 porque el sensor nunca mide cero
   //errorBeta[2]=((float)(-0.039269908)-beta);//El ángulo deseado no es 0 porque el sensor nunca mide cero
-  errorBeta[2]=((float)(-0.061086524)-beta);//El ángulo deseado no es 0 porque el sensor nunca mide cero
+  errorBeta[2]=(float)(0.061086524-beta);//El ángulo deseado no es 0 porque el sensor nunca mide cero
   dw[2]=Parametros[0]*errorBeta[2]+Parametros[1]*errorBeta[1]+Parametros[2]*errorBeta[0]+Parametros[3]*dw[1]+Parametros[4]*dw[0];
   if (dw[2]>windup_top_dw){dw[2]=windup_top_dw;} //Cambiar nombres de windup_top y _bottom $$$$$
   if (dw[2]<windup_bottom_dw){dw[2]=windup_bottom_dw;}
@@ -101,7 +101,8 @@ void EnviarTx_blue(void){
     }
   
   //addi=PWMA*255.0/1000.0;
-  Serial.write(byteSensor);
+  Serial.write(vect_beta);
+  //Serial.write(byteSensor);vect_beta
   //Serial.write(addi);
  addi=freqA*255.0/1000.0;
  //addi=cont_A*255.0/1000.0;
@@ -111,7 +112,20 @@ void EnviarTx_blue(void){
   Serial.write(addi);
   }
 }
-
+void Bateria(void){
+  int aux33;
+aux33=analogRead(A7);//Lectura del bit analógico
+if (aux33<900){ // Menos que 7.4 V
+  bool estadosss=false;
+  while (1){
+  Serial.write('E');
+  //digitalWrite(13,estadosss);
+  //estadosss!=estadosss;
+  delay(1000);
+  
+  }
+  }
+}
 // ##################### Estas 2 funciones hacen los mismo que en matlab :-)
 void tic(){
     ticc=micros();

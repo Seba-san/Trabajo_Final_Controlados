@@ -14,6 +14,7 @@ extern int windup_top,windup_bottom,windup_top_dw,windup_bottom_dw;
 extern volatile unsigned char byteSensor;
 // Variables comunicaciones
 extern bool online, tx_activada;
+extern byte vect_beta; // Variable de testeo
 
 
 extern void tic(void);
@@ -26,3 +27,4 @@ extern void EnviarTX_online(float);
 extern void EnviarTX_online(int);
 extern void EnviarTX_online(long);
 extern void EnviarTx_blue(void);
+extern void Bateria(void);

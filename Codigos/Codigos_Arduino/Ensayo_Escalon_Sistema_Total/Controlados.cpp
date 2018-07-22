@@ -261,6 +261,7 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
   else{
     aux=round(float(sumaPonderada/suma));//Potencial fuente de error: la división de enteros. $.$ Ver si es problema
     beta=-betaEnsayo[aux-2];
+    vect_beta=aux;
   }
   return beta;//Lo devuelvo como valor de salida
 }

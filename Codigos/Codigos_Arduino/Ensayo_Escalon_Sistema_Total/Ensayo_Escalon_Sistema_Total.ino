@@ -29,7 +29,7 @@ float wA[N],wB[N];//Mediciones de velocidad ang deseada
 int contador = 0, contador2 = 0, parar = 0,contadorStop=0,MaxStop=20;//MaxStop indica que si durante 20 muestras seguidas no detecta la línea tiene que detenerse
 int enviar_datos = 0; //Bandera con la que Matlab le indica al nano que le devuelva el resultado del último ensayo al escalón
 int Escribir = 0; //Le indico que escriba en la eeprom con un 1 y que lea con un 0
-int controlador = 1, girar=0,grabar=0;
+int controlador = 0, girar=0,grabar=0;
 int softprescaler=0;//Lo uso para bajar la frec de muestreo de la señal de salida
 
 // #   #   #   # Variables
@@ -45,7 +45,7 @@ volatile unsigned long TCNT2actualA = 0, TCNT2actualB = 0; //Almaceno el valor d
 volatile unsigned long cantOVerflow_actualA = 0, cantOVerflow_actualB = 0; //Valor anterior del contador (para corregir la medición), correspondiente al TCNT2anterior.
 unsigned long aux[6];  // este es un buffer para enviar datos en formato trama, corresponde a la funcion "EnviarTX"
 float  bufferVelA[2 * cantMarcasEncoder], bufferVelB[2 * cantMarcasEncoder]; //buffer donde almaceno las últimas velocidades calculadas.
-bool Motores_ON = false,controlador_motores=true;
+bool Motores_ON = false,controlador_motores=false;
 int soft_prescaler = 0,cont_A,cont_B,delta_cont;
 // Variables del PID
 float uA[3], uB[3]; // historia del error cometido y la historia de las salidas de control ejecutadas.
@@ -55,7 +55,7 @@ float wref = 350; //Velocidad lineal del centro del robot.
 volatile float beta = 0; //Ángulo entre el eje central del robot y la línea (en radianes)
 float dw[3] = {0, 0, 0}, errorBeta[3] = {0, 0, 0}; //Variación de velocidad angular.
 volatile unsigned char byteSensor;//Byte del sensor de línea. Sirve para debuggear y para almacenar con menos bytes la información del sensor
-
+byte vect_beta; // Variable de debuggeo
 //Parametros PID: de las mediciones que habíamos hecho cuando hacíamos el ensayo con un sólo motor teníamos:
 //PID andando medio pedorro={0.76184,-1.2174,0.48631,0,1};//PI andando={0.10679,-0.099861,0,1,0};
 
@@ -119,6 +119,7 @@ void setup() { // $2
 }
 
 void loop() { //$3
+  Bateria(); // Chequeo el estado de la bateria, si es menor que un valor, se queda aca dentro.
   if (bitRead(Bandera, 0)) {
     bitWrite(Bandera, 0, 0); // timer 2 overflow
   }
@@ -142,20 +143,22 @@ void loop() { //$3
     bitWrite(Bandera, 5, 0);
     medirBeta();//Actualizo la medición de ángulo
     
-    softprescaler++;
-    if (softprescaler==1){//Ya no submuestreo//Tomo una de cada 4 muestras para una frec de muestreo del PID total de 50 Hz (PID motores a 200 Hz)
-        softprescaler=0;
-      if (controlador==1 && contador<n0 && girar==1) {
-        PID_total();
-        set_pointA = wref - dw[2]/2.0;
-        set_pointB = wref + dw[2]/2.0;
-      }
-      else if (controlador==1 && girar==0){//Si no quiero girar entonces siempre calcula el controlador
+//    softprescaler++;
+//    if (softprescaler==1){//Ya no submuestreo//Tomo una de cada 4 muestras para una frec de muestreo del PID total de 50 Hz (PID motores a 200 Hz)
+//        softprescaler=0;
+//    }
+//      if (controlador==1 && contador<n0 && girar==1) {
+//        PID_total();
+//        set_pointA = wref - dw[2]/2.0;
+//        set_pointB = wref + dw[2]/2.0;
+//      }
+      //else if (controlador==1 && girar==0){//Si no quiero girar entonces siempre calcula el controlador
+      if (controlador==1 ){//Si no quiero girar entonces siempre calcula el controlador
         PID_total();
         set_pointA = wref - dw[2]/2.0;//*(wref/350);//*(wref/500.0);
         set_pointB = wref + dw[2]/2.0;//*(wref/350);//*(wref/500.0);
       }
-    }
+  //}
     //$.$
 //    Serial.print(dw[2]);
 //    Serial.print(" ");
@@ -189,87 +192,87 @@ void loop() { //$3
   
 //    
     PID_offline_Motores();
-    if (parar == 1) { //Perdí la línea
-      //controlados1.modoStop();//Paro los motores, pero sigo midiendo
-    }
-    if (contador2 < D) {
-      //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
-      contador2++;
-    }
-    else {  //Si controlador=1 empieza a tomar muestras sin delay
-      if (contador < N) {
-        //$.$ Lo dejo que tome muestras a 200Hz. Ojo que ahora softprescaler lo uso en el PID total!! No reactivar lo de abajo sin cambiar eso!!!
-        //softprescaler++;
-        //if (softprescaler==4){//Tomo una de cada 4 muetsras
-        //softprescaler=0;
-        sensor[contador] = byteSensor; //Guardo la medición de ángulo
-        //wA[contador] = set_pointA; //Guardo la medición de velocidad deseada del motor A
-        //wB[contador] = set_pointB; //Guardo la medición de velocidad deseada del motor B
-        wA[contador] = freqA; //Guardo la medición de velocidad real del motor A
-        wB[contador] = freqB; //Guardo la medición de velocidad real del motor B
-        //$.$
-        //wA[contador]=freqB-freqA;//Guardo la medición de velocidad del motor A
-        //wB[contador]=set_pointB-set_pointA;//Guardo la medición de velocidad del motor B
-        contador++;//Aumento el índice de las muestras          
-        //}
-        if (contador == n0 && girar==1){// && controlador == 0) {
-          
-          set_pointA = wref - dW;
-          set_pointB = wref + dW;
-        }
-      }
-      else {
-        //controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
-        if (Escribir==1 && grabar==1) {//Grabo en la EEPROM
-          Escribir=0;//No vuelve a grabar
-          int addr = 0;
-          if(controlador==0){//Sin controlador almaceno sólo el ángulo
-            for (int ind=0; ind < N; ind++) {
-              EEPROM.put(addr, sensor[ind]);//put escribe cualquier cosa, incluido float
-              addr = addr + 1;
-            }
-          }
-          else{//Con controlador almaceno el ángulo y los setpoints
-            
-            for (int ind=0; ind < N; ind++) {
-              EEPROM.put(addr, sensor[ind]);//put escribe cualquier cosa, incluido float
-              addr = addr + 1;
-              EEPROM.put(addr, wA[ind]);
-              addr = addr + 4;//Sumo 4 porque la variable es float
-              EEPROM.put(addr, wB[ind]);
-              addr = addr + 4;
-              Serial.println(ind,DEC);
-            }
-          }
-        }
-      }
-    }
-  }
-  if (enviar_datos == 1) { //La compu me pidió que le envíe los resultados del ensayo
-    enviar_datos = 0; //Para que lo transmita una sola vez
-    int eeAddress = 0;
-    online = false;
-    tx_activada = true; //Para ahorrar problemas fuerzo las banderas, así no lo tengo que hacer desde Matlab
-    for (int ind=0; ind < N; ind++) {
-      if(controlador==0){
-        //Piso la variable auxiliar sensor con lo que haya escrito en la eeprom
-        EEPROM.get(eeAddress, sensor[ind]); //Para leer cualquier tipo de variable uso get en vez de read
-        eeAddress = eeAddress + 1;
-      }
-      else{
-        EEPROM.get(eeAddress, sensor[ind]);
-        eeAddress = eeAddress + 1;
-        EEPROM.get(eeAddress, wA[ind]);
-        eeAddress = eeAddress + 4;
-        EEPROM.get(eeAddress, wB[ind]);
-        eeAddress = eeAddress + 4;        
-      }
-    }
-    EnviarTX(N, 'b', sensor);
-    if(controlador==1){
-        EnviarTX(N, 'A', wA);
-        EnviarTX(N, 'B', wB);
-    }
+//    if (parar == 1) { //Perdí la línea
+//      //controlados1.modoStop();//Paro los motores, pero sigo midiendo
+//    }
+//    if (contador2 < D) {
+//      //if(beta<3){contador2++;}//Le pongo el if para que siga derecho hasta estar sobre la línea
+//      contador2++;
+//    }
+//    else {  //Si controlador=1 empieza a tomar muestras sin delay
+//      if (contador < N) {
+//        //$.$ Lo dejo que tome muestras a 200Hz. Ojo que ahora softprescaler lo uso en el PID total!! No reactivar lo de abajo sin cambiar eso!!!
+//        //softprescaler++;
+//        //if (softprescaler==4){//Tomo una de cada 4 muetsras
+//        //softprescaler=0;
+//        sensor[contador] = byteSensor; //Guardo la medición de ángulo
+//        //wA[contador] = set_pointA; //Guardo la medición de velocidad deseada del motor A
+//        //wB[contador] = set_pointB; //Guardo la medición de velocidad deseada del motor B
+//        wA[contador] = freqA; //Guardo la medición de velocidad real del motor A
+//        wB[contador] = freqB; //Guardo la medición de velocidad real del motor B
+//        //$.$
+//        //wA[contador]=freqB-freqA;//Guardo la medición de velocidad del motor A
+//        //wB[contador]=set_pointB-set_pointA;//Guardo la medición de velocidad del motor B
+//        contador++;//Aumento el índice de las muestras          
+//        //}
+//        if (contador == n0 && girar==1){// && controlador == 0) {
+//          
+//          set_pointA = wref - dW;
+//          set_pointB = wref + dW;
+//        }
+//      }
+//      else {
+//        //controlados1.modoStop();//Paro los motores//Esto creo que es redundante, pero por si acaso
+//        if (Escribir==1 && grabar==1) {//Grabo en la EEPROM
+//          Escribir=0;//No vuelve a grabar
+//          int addr = 0;
+//          if(controlador==0){//Sin controlador almaceno sólo el ángulo
+//            for (int ind=0; ind < N; ind++) {
+//              EEPROM.put(addr, sensor[ind]);//put escribe cualquier cosa, incluido float
+//              addr = addr + 1;
+//            }
+//          }
+//          else{//Con controlador almaceno el ángulo y los setpoints
+//            
+//            for (int ind=0; ind < N; ind++) {
+//              EEPROM.put(addr, sensor[ind]);//put escribe cualquier cosa, incluido float
+//              addr = addr + 1;
+//              EEPROM.put(addr, wA[ind]);
+//              addr = addr + 4;//Sumo 4 porque la variable es float
+//              EEPROM.put(addr, wB[ind]);
+//              addr = addr + 4;
+//              Serial.println(ind,DEC);
+//            }
+//          }
+//        }
+//      }
+//    }
+//  }
+//  if (enviar_datos == 1) { //La compu me pidió que le envíe los resultados del ensayo
+//    enviar_datos = 0; //Para que lo transmita una sola vez
+//    int eeAddress = 0;
+//    online = false;
+//    tx_activada = true; //Para ahorrar problemas fuerzo las banderas, así no lo tengo que hacer desde Matlab
+//    for (int ind=0; ind < N; ind++) {
+//      if(controlador==0){
+//        //Piso la variable auxiliar sensor con lo que haya escrito en la eeprom
+//        EEPROM.get(eeAddress, sensor[ind]); //Para leer cualquier tipo de variable uso get en vez de read
+//        eeAddress = eeAddress + 1;
+//      }
+//      else{
+//        EEPROM.get(eeAddress, sensor[ind]);
+//        eeAddress = eeAddress + 1;
+//        EEPROM.get(eeAddress, wA[ind]);
+//        eeAddress = eeAddress + 4;
+//        EEPROM.get(eeAddress, wB[ind]);
+//        eeAddress = eeAddress + 4;        
+//      }
+//    }
+//    EnviarTX(N, 'b', sensor);
+//    if(controlador==1){
+//        EnviarTX(N, 'A', wA);
+//        EnviarTX(N, 'B', wB);
+//    }
   }
 }
 
