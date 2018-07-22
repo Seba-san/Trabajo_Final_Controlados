@@ -62,12 +62,12 @@ int bateria=0;
 
 float ParametrosA[] = {0.053493,-0.050442,0,1,0};//Andando bien: {0.073817, -0.06814, 0, 1, 0};
 float ParametrosB[] = {0.054997,-0.052071,0,1,0};//{0.077848, -0.072512, 0, 1, 0};
-float Parametros[] = {353.3637,-343.4661,0,0.94941,0};//{126.5571,-252.6673,126.1102,2,-0.99999};//{160.6358,-317.8668,157.2313,1.9999,-0.99992};//{159.3639,-317.8766,158.5127,2,-0.99998};//{181.7336,-360.803,179.0695,2,-0.99998};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};////Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
+float Parametros[] = {335.0659,-660.7998,325.7364,1.9578,-0.95781};//{126.5571,-252.6673,126.1102,2,-0.99999};//{160.6358,-317.8668,157.2313,1.9999,-0.99992};//{159.3639,-317.8766,158.5127,2,-0.99998};//{181.7336,-360.803,179.0695,2,-0.99998};//{287.108,-573.8906,286.7826,2,-0.99999};//{191.8788,-383.6318,191.7531,2,-0.99997};////Este anda :D !!!!:{196.762,-393.4536,196.6916,1.9999,-0.99994};
 
 volatile float freqA;
 volatile float freqB;
 int windup_top = 100, windup_bottom = 10;
-int windup_top_dw = 300, windup_bottom_dw = -300; //Definir bien
+int windup_top_dw = 500, windup_bottom_dw = -500; //Definir bien // Con 500 se garantiza un radio de giro de 25cm a 800 RPM
 
 unsigned char estadoEncoder = 0; //En esta variable guardo el valor de las entradas de los encoders para identificar cuando se genera la interrupción cuál de los dos motores se movió
 

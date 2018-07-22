@@ -1,8 +1,14 @@
 %% Inicio
-s=InicializacionSerial_rf('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
+%s=InicializacionSerial_rf('/dev/ttyUSB0',115200);%Velocidad: 115200 baudios
 %addpath('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab/Matlab_Seba')
 %cd('/media/seba/Datos/Facultad_bk/Controlados/Trabajo_Final/Trabajo_Final_Controlados_git/Codigos/Matlab')
 %s=InicializacionSerial('COM6',115200);%Velocidad: 115200 baudios
+InfoHard=instrhwinfo('serial');%Busco cu�l puerto tengo conectado con esta instrucci�n
+%En InfoHard.SerialPorts me guarda celdas con los puertos disponibles. Uso
+%la primer celda y chau.
+s=InicializacionSerial_rf(InfoHard.SerialPorts{1},115200);%Velocidad: 115200 baudios
+
+
 %% Fin
 fclose(instrfindall);       %cierra todos los puertos activos y ocultos
 %clear all;close all;clc
@@ -38,7 +44,8 @@ limite_inf=0;
 try
      close(1)
 end
-PWM=200;
+PWM=380;
+
 Env_instruccion(s,'setpoint',[PWM PWM])
 %pause(0.5)
 Env_instruccion(s,'control_on');
