@@ -828,7 +828,7 @@ En función de las consideraciones anteriores, se diseño un ensayo que permitie
 
 Analizando los resultados obtenidos se detectó que existía una demora en el sistema no anticipada por el modelo matemático. Ésta se debe a la dinámica del sistema de medición de velocidad, que en los análisis teóricos no se suele considerar. Específicamente, el promedio realizado al momento de medir la velocidad de cada motor genera la demora observada. Dado que se almacenan los tiempos correspondientes a un giro completo de la rueda  para realizar el cálculo de velocidad, cuando la velocidad real cambia de forma abrupta el sistema demora una vuelta en empezar a medir de forma correcta. Este comportamiento se corresponde con el de un sistema de media móvil, pero variante en el tiempo y alineal, ya que la demora depende de la velocidad de giro. Para poder continuar trabajando en el contexto de sistemas LTI se utilizará una estimación del sistema alrededor de cierto punto de trabajo. 
 
-Utilizando los datos obtenidos se estimó un sistema LTI continuo que se ajustara a cada curva utilizando la herramienta de Matlab System Identification \cite{Sys_ident}. Las funciones de transferencias obtenidas para cada motor fueron:
+Utilizando los datos obtenidos se estimó un sistema LTI continuo que se ajustara a cada curva utilizando la herramienta de Matlab System Identification \cite{Sys_ident}. Las funciones de transferencias obtenidas, fueron ajustadas con un $ 95.15\%$ para el motor A y $ 96.65\%$ para el motor B. Las mismas se muestras a continuación:
 \begin{equation}
 M_a(s)= \frac{7075.3 e^{-0.013s}}{(s+9.631)(s+67.5)}
 \end{equation}
@@ -836,6 +836,7 @@ M_a(s)= \frac{7075.3 e^{-0.013s}}{(s+9.631)(s+67.5)}
 M_b(s)= \frac{5042.1 e^{-0.013s}}{(s+9.988) (s+45.48)}
 \end{equation}
 
+Cabe aclarar que la precisión del ajuste depende mayoritariamente de como fueron tomadas las muestras. En este caso la metodología de medición genera un delay variable con las $RPM$ (mayor delay a bajas $RPM$), por lo que se optó por ajustar los modelos para un ensayo escalón en el cual se producirá el mayor delay. 
 %$.$ Utilizando esta información se ajustaron los controladores PID de cada motor, según se explicará en la sección \ref{control}. 
 \subsection{Identificación de la Cinemática el Robot}
 En función de lo analizado en la sección \ref{modelo cinematico}, podemos pensar que si el robot arranca alineado con una línea recta, y manteniendo la restricción de $v$ constante, entonces la planta se comporta como un sistema cuya entrada es $\Delta \omega$ y su salida $\theta$, gobernado por la ecuación \ref{eq:tita_omega}. Para un mayor entendimiento se reemplaza $\theta$ por $\beta$ ya que si bien $\theta \approx \beta $ cuando $|Y_0| \approx 0$, no es válido en todo momento. Bejo esta justificación la ecuación se escribe de otra manera a continuación :
@@ -865,11 +866,13 @@ En la figura \ref{fig:ensayoSistTotal} se muestra uno de los resultados de este 
 \caption{Resultado del ensayo de respuesta al escalón del sistema total. El circulo marca cuando se desactiva el control y el sistema comienza a trabajar en lazo abierto. En esta caso $\Delta \omega=-50 $ RPM}
 \label{fig:ensayoSistTotal}
 \end{figure}
-Utilizando un conjunto de estos ensayos se estimo el siguiente sistema:
+Utilizando un conjunto de estos ensayos se estimó el siguiente sistema:
 \begin{equation}
 Sys_{tot}= \frac{0.028934}{s}  
 \label{eq:sys_tot_est}
 \end{equation}
+el cual explica un $82.93\%$ de los datos utilizados en el mejor de los casos.
+
 
 De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que $\frac{r}{L}=0.028934 $. Los parámetros medidos, si embargo, son $r=1.5cm$ y $L=16cm$, lo cual daría $\frac{r}{L}=0.09375 $. Esta discrepancia no se pudo explicar aún.   
 %$.$ Faltaría una imagen que muestre qué tan bien ajusta el modelo estimado.
@@ -887,10 +890,11 @@ C_a(s)= \frac{  19.243 (s-11.74)}{s}
 C_b(s)= \frac{ 18.68 (s-10.93)}{s}
 \end{equation*}
 
-El ajuste se realizó en tiempo continuo, con lo cual resulta necesario realizar una discretización del controlador para poder implementarlo en el microcontrolador. La discretización utilizada fue la de Backward Euler (o diferencias hacia atras), la cual realiza la siguiente sustitución:
-\begin{equation*}
-s=\frac{z-1}{zh}
-\end{equation*}%$.$ esto no sé si queda bien así
+El ajuste se realizó en tiempo continuo, con lo cual resulta necesario realizar una discretización del controlador para poder implementarlo en el microcontrolador. La discretización utilizada fue la de Backward Euler (o diferencias hacia atras).
+%, la cual realiza la siguiente sustitución:
+%\begin{equation*}
+%s=\frac{z-1}{zh}
+%\end{equation*}%$.$ esto no sé si queda bien así
 %$.$ No me acuerdo qué era lo que hacíamos inicialmente que daba unos coeficientes enormes. Eso hay que ponerlo
 
 Una vez implementados los controladores, se repitió el ensayo al escalón con el sistema a lazo cerrado. El resultado es el mostrado en la figura \ref{fig:respEscLazoCerrado}.
@@ -985,7 +989,7 @@ En función de los objetivos propuestos, se puede asegurar que se logro desarrol
 
 Se logro implementar todo el sistema en un microcontrolador de bajas prestaciones. El mismo cumple con los requisitos de fácil implementación, amplia documentación, bajos costos, entre otros.  
 
-Se obtuvo por medio de ensayos, los modelos de los motores, se implemento con éxito un controlador PID?? en cada motor. No se pudo estimar correctamente la planta total ni se obtuvo un modelo del sistema aceptable para alcanzar los requisitos de competición, sin embargo, el dispositivo puede seguir una curva de radio $r=40cm$ a una velocidad relativamente baja $300RPM$, esto es aproximadamente $47cm/s$ . La herramienta principal utilizada fueron los toolbox de matlab \cite{Sys_ident,PID_tuner}.
+Se obtuvo por medio de ensayos, los modelos de los motores, se implemento con éxito un controlador PI en cada motor. No se pudo estimar correctamente la planta total ni se obtuvo un modelo del sistema aceptable para alcanzar los requisitos de competición, sin embargo, el dispositivo puede seguir una curva de radio $r=40cm$ a una velocidad relativamente baja $300RPM$, esto es aproximadamente $47cm/s$ . La herramienta principal utilizada fueron los toolbox de matlab \cite{Sys_ident,PID_tuner}.
 
 
 
@@ -1012,11 +1016,11 @@ Una última posible mejora es obtener el modelo del sistema con hipótesis mas s
 \bibitem{arduinoNano} \url{https://store.arduino.cc/usa/arduino-nano}
 \bibitem{pathfoll} \textit{Path Following Mobile Robot in the Presence of Velocity Constraints}, Bak, Poulsen y Ravn.
 \bibitem{planning} \textit{Robotics: Modelling, Planning and Control}, Siciliano, Sciavicco, Villani y Oriolo.
-\bibitem{alex} Tesis de alexei.
-\bibitem{dorf} Dorf 10ma edicion; pagina 58.
+\bibitem{alex} \textit{Diseño y Control del Péndulo Invertido}, Alexey Sidenko.
+\bibitem{dorf} \textit{Sistemas de control moderno},Richard C. Dorf, Robrert H. Bishop, 10ma edicion, pág. 58.
 \bibitem{paginaZN} \url{https://sites.google.com/site/picuino/ziegler-nichols}.
-\bibitem{ogata} Ogata 5ta edicion capitulo 5
-\bibitem{biblia_PID} PID que nos paso colon.
+\bibitem{ogata} \textit{Ingeniería de control moderna}, Katsuhico Ogata, 5ta edicion cap. 5.
+\bibitem{biblia_PID} \textit{Notas sobre el diseño de sistemas de control}, Fernando D. Bianchi.
 \bibitem{paginaPID}\url{https://sites.google.com/site/picuino/ziegler-nichols}
 \bibitem{Sys_ident}\url{https://la.mathworks.com/products/sysid.html}
 \bibitem{PID_tuner}\url{https://la.mathworks.com/discovery/pid-tuning.html}
