@@ -16,14 +16,20 @@ disp('Puerto Cerrado')
 %%
 % Probar si esta clase de instrucciones funcionan, porque el terminador
 % cambio:
+% Condicion inicial
+solo_sens=0;
+N=36*5;
+Env_instruccion(s,'PWM',[0 0]);
+Env_instruccion(s,'setpoint',[0 0]);
+Env_instruccion(s,'control_off');
+pause(0.1);
  flushinput(s);
 pause(2)
 Env_instruccion(s,'online');%Le indico al nano que se ponga a escupir datos sin identificador de trama
 %Env_instruccion(s,'stop')}
 Comunic_test_rf(s)
  PWM=20;
- %Env_instruccion(s,'control_on'); 
-Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
+ if (~solo_sens); Env_instruccion(s,'PWM',[PWM PWM]); end %Que arranque en 10% el PWM para que no tire error por no entrar a la interrupci�n po flanco
  
 % pause(1)
 
@@ -31,7 +37,7 @@ Env_instruccion(s,'PWM',[PWM PWM]);%Que arranque en 10% el PWM para que no tire 
 % RPM2=400;RPM2=RPM;
 % Env_instruccion(s,'setpoint',[RPM,RPM]); 
 % 
-N=36*5;
+
 angulo=zeros(1,N);
 RPMA=zeros(1,N);
 RPMB=zeros(1,N);
@@ -44,25 +50,27 @@ limite_inf=0;
 try
      close(1)
 end
-PWM=380;
-
-Env_instruccion(s,'setpoint',[PWM PWM])
+PWM=400;
+wref=PWM;
+ if (~solo_sens);Env_instruccion(s,'setpoint',[PWM PWM]);end
 %pause(0.5)
-Env_instruccion(s,'control_on');
+ if (~solo_sens);Env_instruccion(s,'control_on');end
 figure(1)
  flushinput(s);
  veces_=0;
+ t=tic;
 while (veces_<veces)
    % Supongo [angulo][RPMA][RPMB]
     datos=DatoRx_rf(s);
     flushinput(s);
     %beta=datos(1);
+    %dec2bin(datos(1))
     beta=ConversionSensor(datos(1),0) ;
     angulo(i)=beta;RPMA(i)=datos(2);RPMB(i)=datos(3);
     
     m1=1:1:i;m2=i+1:1:N;
     subplot(311)
-    plot(m1,angulo(1:i),'.','color',[~a 0 a]); hold on;plot(m2,angulo(i+1:N),'.','color',[a 0 ~a]); hold off;ylim([-2 3])
+    plot(m1,angulo(1:i),'.','color',[~a 0 a]); hold on;plot(m2,angulo(i+1:N),'.','color',[a 0 ~a]); hold off;ylim([-2 4])
     ylabel('angulo (rad)')
     subplot(312)
     plot(m1,RPMA(1:i),'.','color',[~a 0 a]); hold on;plot(m2,RPMA(i+1:N),'.','color',[a 0 ~a]); hold off; ylim([0 1000]);
@@ -84,9 +92,39 @@ end
 Env_instruccion(s,'PWM',[0 0]);
 Env_instruccion(s,'setpoint',[0 0]);
 Env_instruccion(s,'control_off');
-Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
-disp('FIN')
-%Env_instruccion(s,'setpoint',[0,0]); 
+toc(t)
+b=1;
+while (b)
+    datos=DatoRx_rf(s);
+    if datos(2)<100 && datos(3)<100
+        Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
+        disp('FIN')
+        b=0;
+    end
+Env_instruccion(s,'PWM',[0 0]);
+Env_instruccion(s,'setpoint',[0 0]);
+Env_instruccion(s,'control_off');
+pause(0.1);
+    
+end
+dWw=RPMB-RPMA;
+figure(2)
+plot(dWw)
+dWwMax=max(dWw)
+Vmed=mean((RPMB+RPMA)/2)
+pierde_linea=find(angulo==3);
+l=length(angulo);n=1;
+for i=1:l
+    
+    if (angulo(i)~=3)
+    
+    angulo2(n)=angulo(i);
+    n=n+1;
+    end
+end
+
+var_angulo=var(angulo2)
+save('../../Mediciones/Rendimiento/controlador_5.mat','angulo','RPMB','RPMA','wref')
 %% Frenar
 Env_instruccion(s,'PWM',[0 0]);
 Env_instruccion(s,'setpoint',[0 0]);
