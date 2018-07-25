@@ -176,7 +176,7 @@ El presente informe trata el diseño y desarrollo de un robot seguidor de línea
 El objetivo de estudio para la materia era la discretización e implementación en la vida real de un controlador PID. Con esto en mente se propuso la realización de un robot seguidor de línea del estilo utilizado en diversas competencias de robótica, donde el objetivo de diseño es que el robot sea capaz de seguir una pista en un plano horizontal de forma autónoma en el menor tiempo posible. El presente trabajo se orientó a la obtención de un seguidor de línea básico, de velocidad moderada, con perspectiva de mejorarse en versiones posteriores.
 
 \section{Introducción}
-Esto fue copiado de la propuesta presentada 19/12/17
+%Esto fue copiado de la propuesta presentada 19/12/17
 
 \subsection{Motivación}
 En el marco de las Jornadas Argentinas de Robótica (JAR) 2019 a realizarse en la Universidad Nacional del Comahue, se desea dar los primeros pasos en la implementación de sistemas robóticos. En particular, se desea trabajar en el inicio de un movimiento en la facultad para la utilización de la robótica educativa. \\
@@ -184,7 +184,7 @@ La robótica educativa, también conocida como robótica pedagógica, es una dis
 complejos. \\
 Este tipo de herramienta pedagógica se encuentra dentro de la metodología ABP (aprendizajes basados en proyectos). El ABP se desarrolla en un entorno real y experimental, lo que ayuda a los alumnos a relacionar los contenidos teóricos con el mundo real y mejora la receptividad para aprender los conceptos teóricos. Los alumnos toman un papel activo en el proyecto, ya que tienen que marcar el ritmo y profundidad del aprendizaje, y fijar los objetivos de la realización del proyecto. Este tipo de metodología motiva al alumno, por lo que resulta una estrategia de particular interés para mejorar el rendimiento académico y la persistencia
 en los estudios. \\
-En la UNCo, particularmente en nuestra carrera, existe una fuerte inclinación a priorizar la enseñanza de conceptos casi exclusivamente teóricos, habiendo actualmente pocas materias que pidan la realización de proyectos concretos. Este enfoque puede traer aparejado una serie de inconvenientes: alumnos con poca capacidad para resolución de problemas reales, dificultad para relacionar los conceptos aprendidos con la vida real o para entender los mismos, falta de motivación en los alumnos, etc. Considerando esto y que actualmente la tasa de deserción en la carrera es de XXX\%, es que se desea avanzar hacia las metodologías
+En la UNCo, particularmente en nuestra carrera, existe una fuerte inclinación a priorizar la enseñanza de conceptos casi exclusivamente teóricos, habiendo actualmente pocas materias que pidan la realización de proyectos concretos. Este enfoque puede traer aparejado una serie de inconvenientes: alumnos con poca capacidad para resolución de problemas reales, dificultad para relacionar los conceptos aprendidos con la vida real o para entender los mismos, falta de motivación en los alumnos, etc. Considerando esto y que actualmente la tasa de deserción en la carrera es de 50 o más\%, es que se desea avanzar hacia las metodologías
 ABP mencionadas, particularmente en el área de robótica. \\
 En el marco de esto, el presente trabajo busca implementar los conocimientos adquiridos en la materia en el diseño e implementación de distintas estrategias de control sobre un robot en la configuración de seguidor de línea.
  \subsection{Seguidor de línea}
@@ -206,11 +206,11 @@ de un seguidor de línea con componentes relativamente baratos y de fácil acces
 \begin{itemize}
 \item Desarrollar e implementar un robot seguidor de linea.
 \item Identificación del sistema.
-\item Implementar un controlador PID discreto: efectos de la acción derivativa y algunas cuestiones practicas.
+\item {\color{red}Implementar un controlador PID discreto: efectos de la acción derivativa y algunas cuestiones practicas.}
 
 \end{itemize}
 \section{Estructura del Trabajo}
-El siguiente trabajo se divide en XXXX secciones. En la sección \ref{sec:implementacion} se define el hardware y estructura mecánica a utilizar, con un detalle del material de trabajo disponible. En la sección \ref{sec:Modelado_del_sistema} se analiza cómo modelar matemáticamente el comportamiento del sistema. En  \ref{sec:estrategia_de_control} se define la estrategia de control a implementar. En \ref{sec:sist_de_medicion} se explican los sensores diseñados para el robot. En \ref{sec:identifSist} se aborda la identificación de sistemas realizada para poder ajustar los controladores, lo cual se detalla en la sección \ref{sec:ajus_control}. Finalmente, la sección \ref{sec:resultados} discute los resultados obtenidos al probar el sistema completo, mientras que en la sección \ref{sec:conclusiones} se dan las conclusiones del trabajo.
+El siguiente trabajo se divide en {\color{red}XXXX secciones}. En la sección \ref{sec:implementacion} se define el hardware y estructura mecánica a utilizar, con un detalle del material de trabajo disponible. En la sección \ref{sec:Modelado_del_sistema} se analiza cómo modelar matemáticamente el comportamiento del sistema. En  \ref{sec:estrategia_de_control} se define la estrategia de control a implementar. En \ref{sec:sist_de_medicion} se explican los sensores diseñados para el robot. En \ref{sec:identifSist} se aborda la identificación de sistemas realizada para poder ajustar los controladores, lo cual se detalla en la sección \ref{sec:ajus_control}. Finalmente, la sección \ref{sec:resultados} discute los resultados obtenidos al probar el sistema completo, mientras que en la sección \ref{sec:conclusiones} se dan las conclusiones del trabajo.
 
 \section{Implementación}
 \label{sec:implementacion}
@@ -282,9 +282,9 @@ v=\frac{r(\omega _R + \omega _L)}{2}
 
 Donde L es la distancia entre las ruedas. 
 
-\subsubsection{Restricciones de Sensores Disponibles}%$.$ Mejorar nombre
-
-Suponiendo la situación mostrada en la figura \ref{fig:posturas} en donde la linea a seguir se encuentra sobre el eje $x$  y 
+\subsubsection{\color{red}Restricciones de Sensores Disponibles}%$.$ Mejorar nombre
+\label{sec:modelo_orien}
+Suponiendo la situación mostrada en la figura \ref{fig:posturas} en donde la linea a seguir se encuentra sobre el eje $x$, 
 
 \begin{figure}[h]
 \centering
@@ -443,35 +443,46 @@ Una vez implementados todos los controladores descritos el sistema total queda s
 En la anterior figura, se observa que cada sistema motor $Sys_M$ cuenta con dos entradas, una llamada $\omega_{ref}$ y otra $\pm \frac{\Delta \omega}{2}$, ademas cuentan con su propia controlador, originando así un sistema realimentado llamado $Sys_{Mc}$. Luego la diferencia de velocidades de los  ejes de cada motor controlado ingresa a la planta de orientación $Sys_O$. Con ayuda de la ecuación \ref{eq:tita_omega}  se deduce:
 
 \begin{equation}
-\theta=Sys_O(s)(\omega_R - \omega_L)=Sys_O(s)\left( Setpoint_BSys_{MBc} - Setpoint_ASys_{MAc}   \right)
+\theta=Sys_O(\omega_R - \omega_L)=Sys_O\left( Setpoint_BSys_{MBc} - Setpoint_ASys_{MAc}   \right)
 \end{equation}
 
 en donde $Setpoint = \omega_{ref} \pm \frac{\Delta \omega}{2}$, luego reemplazando
 
 
 \begin{equation}
-\theta=Sys_O(s)\left(Sys_{MBc}(\omega_{ref}+\frac{\Delta \omega}{2}) - Sys_{MAc} (\omega_{ref}-\frac{\Delta \omega}{2}) \right)
+\theta=Sys_O\left(Sys_{MBc}(\omega_{ref}+\frac{\Delta \omega}{2}) - Sys_{MAc} (\omega_{ref}-\frac{\Delta \omega}{2}) \right)
 \end{equation}
 
 reordenando
 
 \begin{equation}
-\theta=Sys_O(s)\left(\omega_{ref} (Sys_{MBc}-Sys_{MAc})+  \frac{\Delta \omega}{2}( Sys_{MBc}+Sys_{MAc})  \right)
+\theta=Sys_O\left(\omega_{ref} (Sys_{MBc}-Sys_{MAc})+  \frac{\Delta \omega}{2}( Sys_{MBc}+Sys_{MAc})  \right)
 \end{equation}
 
 luego si $Sys_{MBc} \approx Sys_{MAc}$ y ademas el termino $\omega_{ref} (Sys_{MBc}-Sys_{MAc})$ es muy pequeño comparado con $ \frac{\Delta \omega}{2}( Sys_{MBc}+Sys_{MAc}) $ resulta que
 
 \begin{equation}
-\theta=\Delta \omega Sys_O(s)Sys_{MAc}= \Delta \omega Sys_{total}
+\theta=\Delta \omega Sys_OSys_{MAc}= \Delta \omega Sys_{total}
 \end{equation}
 
 por lo tanto es necesario que el sistema controlado de ambos motores se comporten lo mas parecido posible y que ademas se cumpla $\omega_{ref} (Sys_{MBc}-Sys_{MAc}) \ll  \frac{\Delta \omega}{2}( Sys_{MBc}+Sys_{MAc}) $.
 
+Bajo estas hipótesis, el sistema completo sin control en la orientación será:
 
+\begin{equation}
+\frac{\theta(s)}{\Delta \omega}=Sys_O(s)Sys_{MAc}(s)=Sys_O(s)\frac{C_a(s)Sys_{MA}(s)}{1+C_a(s)Sys_{MA}(s)}
+\label{eq:sys_tot_LA}
+\end{equation}
+
+%y con control en la orientacion 
+%
+%\begin{equation}
+%\frac{\theta(s)}{\Delta \omega}=\frac{C_OSys_O(s)\frac{C_a(s)Sys_{MA}(s)}{1+C_a(s)Sys_{MA}(s)}}{1+C_OSys_O(s)\frac{C_a(s)Sys_{MA}(s)}{1+C_a(s)Sys_{MA}(s)}}
+%\end{equation}
 
 
 \subsection{PID}
- Esta parte es un choreo MODIFICADO de \cite[pág. 25]{biblia_PID}.\\
+ %Esta parte es un choreo MODIFICADO de \cite[pág. 25]{biblia_PID}.\\
 
 En esta sección no se espera realizar un analisis profundo sobre el controlador PID, sino mas bien una intro cualitativa, con algunas referencias hacia \cite{biblia_PID}. Por otro lado se parte de la suposicion de que se conocen algunos principios fundamentales de control (realimentacion, lugar de las raices, polos, ceros, entre otros.)
 
@@ -658,7 +669,7 @@ I(t)=\frac{K}{T_i}\int_0^t e(t) \,dt
   \label{eq:aprox_trape} 
   \end{equation}
   
-  según \cite{astrom} en el contexto del control digital la aproximación \ref{eq:aprox_trape} suele denominarse \textit{aproximación de Tustin, o transformación bilineal.} Utilizando estos métodos la funcion de transferencia discreta $H(z)$ se obtiene simplemente sustituyendo el argumento $s$ de $G(s)$ por $s'$, donde
+  Según \cite{astrom} en el contexto del control digital la aproximación \ref{eq:aprox_trape} suele denominarse \textit{aproximación de Tustin, o transformación bilineal.} Utilizando estos métodos la funcion de transferencia discreta $H(z)$ se obtiene simplemente sustituyendo el argumento $s$ de $G(s)$ por $s'$, donde
   
   \begin{equation}
   s'=\frac{z-1}{h} \quad (Metodo\ de\ Euler)
@@ -735,7 +746,7 @@ Donde $D$ es la cantidad de varillas del encoder.
 
 %Esto habría que revisarlo... $.$
 Para el primer modelo de encoder utilizado la señal cuadrada a la entrada del microcontrolador presentaba variaciones en el ancho del pulso debidas al movimiento de la rueda que se encontraba ligeramente descentrada. Para evitar este inconveniente y las variaciones introducidas por posibles asimetrías en la fabricación del encoder,
-se decidió calcular la velocidad con el tiempo demorado en realizar una vuelta entera. Para el modelo de encoder actual esto no debería ser tan necesario, sin embargo se ha mantenido en el código. El resultado de esta forma de medición equivale a agregar un filtro moving average \underline{ variante en el tiempo}. El efecto de esto se verá más
+se decidió calcular la velocidad con el tiempo demorado en realizar una vuelta entera. Para el modelo de encoder actual esto no debería ser tan necesario, sin embargo se ha mantenido en el código. El resultado de esta forma de medición equivale a agregar un filtro moving average {\color{red}\underline{ variante en el tiempo}}. El efecto de esto se verá más
 adelante.
 Sabiendo que la mínima variación de tiempo está dada por la cantidad de conteos realizados por el timer, resulta evidente que mientras más rápido cambie el timer mayor precisión se tendrá en la medición de velocidad.
 Sabemos que el timer genera interrupciones cada:
@@ -795,8 +806,8 @@ Se optó por diseñar las dos variantes para poder probar a futuro distintas est
 \subsubsection{Valores de Lectura}
 Considerando que se deseaba obtener un valor de ángulo como lectura del sensor, se podría haber realizado una deducción geométrica de los valores de ángulo a asignar para cada lectura posible del sensor. Sin embargo, dado que el diseño inicial tenía múltiples asimetrías, que resultaba difícil identificar correctamente el centro del robot y que los diodos utilizados pueden presentar imperfecciones o diferencias de sensibilidad, se optó por realizar un ensayo donde se midiera el rango de valores de ángulo de desviación para el cual se mantenía cada medición posible del sensor. Este ensayo se realizó marcando en un papel líneas de referencia y colocando cinta en línea recta sobre el mismo. Girando el robot sobre la pista con el centro siempre sobre un punto medio de la línea, se marcaron los rangos de desviación para los cuales se mantenía cada medición del sensor.
 \subsubsection{Lectura del Sensor con el Microcontrolador}
-Las salidas de las compuertas se conectan a pines de entrada del microcontrolador. En el programa principal la medición de la línea se necesita cada vez que se calcula el PID del sistema total, por ello se programó una subrutina de medición que se llama en el programa principal (main) antes de calcular el controlador cada $Ts$ segundos. Dentro de esta subrutina se lee cada valor digital de entrada y se almacenan los resultados en un vector de 8 componentes. Para anticiparse a valores de mediciones atípicos y atenuar el efecto de posibles errores de medición, se calcula una suma ponderada de las entradas para obtener un número que indica debajo de cuál de los fotodiodos se encuentra el centro de la línea, siendo las posibilidades para el caso de 8 LEDs: 1, 1.5, 2, 2.5,...,7,7.5 y 8, donde los números no enteros representan el caso en el que la línea se encuentre entre dos fotodiodos. Si a este número lo multiplicamos por dos y le restamos dos, nos queda uno de los siguientes resultados: 0,1,2,...14, que pueden usarse como índice de un vector. De esta forma lo que se hace es definir un vector constante con los resultados de ángulo obtenidos por ensayo cuando la línea estaba bajo cada una de las posibilidades y utilizar el número calculado para definir con cuál de los elementos del vector quedarse como medición actual. El caso en que todos
-las entradas estén en 0 se toma como valor particular y se la asigna el número 3 para que funcione como bandera e indique que se perdió la línea. Cuando esto ocurre el programa principal mantiene para los cálculos el último valor válido medido.
+Las salidas de las compuertas se conectan a pines de entrada del microcontrolador. En el programa principal la medición de la línea se necesita cada vez que se calcula el PID del sistema total, por ello se programó una subrutina de medición que se llama en el programa principal (main) antes de calcular el controlador cada $Ts$ segundos. Dentro de esta subrutina se lee cada valor digital de entrada y se almacenan los resultados en un vector de 8 componentes. Para anticiparse a valores de mediciones atípicos y atenuar el efecto de posibles errores de medición, se calcula una suma ponderada de las entradas para obtener un número que indica debajo de cuál de los fotodiodos se encuentra el centro de la línea, siendo las posibilidades para el caso de 8 LEDs: $1, 1.5, 2, 2.5,...,7,7.5$ y $8$, donde los números no enteros representan el caso en el que la línea se encuentre entre dos fotodiodos. Si a este número lo multiplicamos por dos y le restamos dos, nos queda uno de los siguientes resultados: $0,1,2,...14$, que pueden usarse como índice de un vector. De esta forma lo que se hace es definir un vector constante con los resultados de ángulo obtenidos por ensayo cuando la línea estaba bajo cada una de las posibilidades y utilizar el número calculado para definir con cuál de los elementos del vector quedarse como medición actual. El caso en que todos
+las entradas estén en $0$ se toma como valor particular y se la asigna el número 3 para que funcione como bandera e indique que se perdió la línea. Cuando esto ocurre el programa principal mantiene para los cálculos el último valor válido medido.
 
 \section{Identificación de Sistemas}
 \label{sec:identifSist}
@@ -857,7 +868,7 @@ Si el cambio de velocidad de los motores fuese automático, el robot giraría si
 %Lo que nos interesa es saber cuánto tiempo transcurre hasta que pierde la línea. Dicho punto sería cuando el último sensor de la derecha está sobre la línea verde. Si la distancia entre el eje central del robot y éste LED es $d_1$, entonces el LED se desplaza siguiendo una trayectoria circular de radio $R_{giro}$+$d_1$ …..
 
 Sin embargo, la implementación perfecta de un ensayo al escalón resulta muy difícil por dos inconvenientes. El primero es que se requiere que durante un tiempo el robot siga la línea perfectamente antes de girar. Para lograr esto se implementó un controlador proporcional ajustado a mano que permitía que el robot siga la pista. Así, el código implementado sigue la línea usando este controlador durante un breve lapso de tiempo que permita la estabilización del robot y luego desactiva el controlador y cambia abruptamente la diferencia de velocidad de los motores (manteniendo $v$ constante), siendo los valores del ensayo los tomados a partir de este instante de tiempo.
-El segundo conflicto es que la señal que realmente se puede controlar no es la diferencia real de velocidad de los motores, sino la diferencia de velocidad deseada. La diferencia entre ambas señales está dada por la dinámica de los motores con sus controladores correspondientes. Como sólo se desea estimar la sección correspondiente a la cinemática, se optó por medir las señales de entrada y salida de esta sección, es decir, $\Delta \omega$ real y $\beta$, y utilizar esas señales para estimación con el System Identification de Matlab \cite{Sys_ident} . De esta manera, no se tiene exactamente la respuesta al escalón, pero la señal es lo suficientemente parecida como para resultar de utilidad en la estimación.
+El segundo conflicto es que la señal que realmente se puede controlar no es la diferencia real de velocidad de los motores, sino la diferencia de velocidad deseada. La diferencia entre ambas señales está dada por la dinámica de los motores con sus controladores correspondientes. Como sólo se desea estimar la sección correspondiente a la cinemática, se optó por medir las señales de entrada y salida de esta sección, es decir, $\Delta \omega$ real y $\beta$, y utilizar esas señales para estimación con el System Identification de Matlab \cite{Sys_ident} . {\color{red}De esta manera, no se tiene exactamente la respuesta al escalón, pero la señal es lo suficientemente parecida como para resultar de utilidad en la estimación.}
 
 En la figura \ref{fig:ensayoSistTotal} se muestra uno de los resultados de este ensayo.
 \begin{figure}
@@ -877,7 +888,8 @@ el cual explica un $82.93\%$ de los datos utilizados en el mejor de los casos.
 De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que $\frac{r}{L}=0.028934 $. Los parámetros medidos, si embargo, son $r=1.5cm$ y $L=16cm$, lo cual daría $\frac{r}{L}=0.09375 $. Esta discrepancia no se pudo explicar aún.   
 %$.$ Faltaría una imagen que muestre qué tan bien ajusta el modelo estimado.
 
-\section{Ajuste de los Controladores} \label{sec:ajus_control}
+\section{Ajuste de los Controladores} 
+\subsection{Control Motores}\label{sec:ajus_control}
 Existen diversas estrategias para realizar la sintonización de un controlador PID. Una de las posibilidades estudiadas en la carrera es la utilización de tablas empíricas, como son los métodos de Ziegler Nichols. Inicialmente se quiso implementar el ajuste con uno de estos métodos por considerárselo más didáctico y porque no requiere un modelo completo de la planta. Más adelante se detalla el procedimiento seguido, no obstante los controladores obtenidos no presentaban un desempeño satisfactorio.
 
 Otras opciones estudiadas en la carrera requieren disponer de un modelo completo del sistema a controlar. Es por esto que se realizaron las estimaciones de funciones de transferencia explicadas en la sección \ref{sec:identifSist}. Conocidos los modelos de los sistemas, se puede realizar un ajuste con fundamentos matemáticos, pero dado que resulta más rápido y más intuitivo se optó por realizar un ajuste por software. Para ello se usó la herramienta de PID tuner de Matlab \cite{PID_tuner} que permite un ajuste muy fácil observando la curva de salida. Esto resulta de gran utilidad ya que se puede ver en la gráfica el impacto en el comportamiento efectivo, mientras que los cálculos teóricos estudiados en la carrera utilizan restricciones sobre los parámetros matemáticos que se relacionan de forma indirecta, aproximada y menos tangible con la respuesta temporal que realmente tendrá el sistema a lazo cerrado.
@@ -906,7 +918,7 @@ Una vez implementados los controladores, se repitió el ensayo al escalón con e
 \end{figure}
 Se observa que se pudo alcanzar el objetivo propuesto de reducir la asimetría de los motores.
 
-\subsection{Ajuste fallido por medio de Z-N} %$.$ no lo leí
+\subsection{\color{red}Ajuste fallido por medio de Z-N} %$.$ no lo leí
 %Explicar que es un controlador PID antes. Lo que sigue es un choreo del ogata\\
 
 Según \cite{ogata} como casi todos los controladores PID se ajustan en el sitio, en la literatura se han propuesto muchos tipos diferentes de reglas de sintonización, que permiten llevar a cabo una sintonización delicada y fina de los controladores PID en el sitio. Asimismo, se han desarrollado métodos automáticos de sintonización y algunos de los controladores PID poseen capacidad de sintonización automática en línea. Actualmente se usan en la industria formas modificadas del control PID, tales como el control I-PD y el control PID con dos grados de libertad.
@@ -944,22 +956,42 @@ la respuesta escalón en forma de S}
 Los parámetros del modelo de la ecuación \ref{eq:ajusteZN} pueden ser determinados por medio de la figura \ref{fig:escalon_zn}. La ganancia estática $K$ la obtenemos del valor final de la salida del proceso dividido el valor máximo de la entrada. 
 
 Para hallar los otros dos parámetros hay varias alternativas. Una de ellas consiste en trazar una recta tangente al punto donde de la respuesta al escalón presenta la mayor pendiente. El valor de la demora $L$ lo obtenemos de la intersección de esta recta con el eje horizontal. El valor de la constante de tiempo $T$ lo podemos obtener a partir de la distancia $t_a-t_c $, donde $t_c$ es el tiempo donde la respuesta al escalón es $0.632K$.
-Otro método, un poco más preciso, consiste en determinar los puntos $t_b$ y $t_c$ donde $s(t)$ toma los valores $0.283K$ y $0.632K$, respectivamente. Luego, la demora y la constante de tiempo la hallamos a partir de la ecuación \ref{eq:calculo_T_L}
+Otro método, un poco más preciso, consiste en determinar los puntos $t_b$ y $t_c$ donde $s(t)$ toma los valores $0.283K$ y $0.632K$, respectivamente. Luego, la demora y la constante de tiempo la hallamos a partir de la ecuación \ref{eq:calculo_T_L}.
 
 \begin{equation}
 T=1.5(t_c -t_b) \quad	L=t_c-T
 \label{eq:calculo_T_L}
 \end{equation}
 
-En como se menciono en la sección \ref{sec:ajus_control} este método no genero resultados satisfactorios en lo que el control de los motores respecta. Una de las causas reside en que este método es valido dentro de un rango de validez \cite[pág. 60]{biblia_PID} dado por $0.1<L/T<1$. Para el caso que nos acomete, dado por el delay de medición, el parámetro $L/T$ oscilaba entre 10 y 6, es decir $L/T \in (6,10) $. 
-\subsection{Sistema total y control}
+Como se menciono en la sección \ref{sec:ajus_control_mot} este método no genero resultados satisfactorios en lo que el control de los motores respecta. Una de las causas reside en que este método es valido dentro de un rango de validez \cite[pág. 60]{biblia_PID} dado por $0.1<L/T<1$. Para el caso que nos acomete, dado por el delay de medición, el parámetro $L/T$ oscilaba entre 10 y 6, es decir $L/T \in (6,10) $. 
+\subsection{Control de la Orientación - Sistema Total.}
 
-Si se parte de la suposición de que los motores se comportan de manera semejante, el diagrama del sistema total resulta:
+Para el ajuste de este controlador hay considerar la planta completa a lazo abierto, la cual luego de algunas hipótesis se demuestra en la ecuación \ref{eq:sys_tot_LA}. Por comodidad se vuelve a  muestrar a continuacion
 
+\begin{equation*}
+\frac{\theta(s)}{\Delta \omega}=Sys_O(s)Sys_{MAc}(s)=Sys_O(s)\frac{C_a(s)M_a(s)}{1+C_a(s)M_a(s)}
+\end{equation*}
 
-%Aca estaba la fig del diagrama en bloques. La saqué y la puse antes.
+Como se detallo en las seccion \ref{sec:modelo_orien} llegando a la ecuacion TAL y se demostro por medio de mediciones que el modelo es TAL2, resulta que el sistema de la orientacion es un integrador con un polo en el origen. Por la naturaleza del problema, no es viable ajustar un controlador mediante las reglas de Ziegler-Nichol. Además no es realista solo ajustar la parte del control de la orientacion de manera independiente del resto del sistema, ya que no se estarian conciderando la respuesta de los motores reales. Teniendo en cuenta todo esto el procedimiento fue obtener los controladores de los motores, controlar ese subsistema y obtener un modelo de este sistema controlado. El sistema controlado para el motor A resulta
 
-A la hora de implementar el control se encontraron varios inconvenientes.... Poner Z-N, problemas de rozamiento y de inestabilidad; falta de linealidad a bajas RPM
+\begin{equation}
+Sys_{MAc}(s)=\frac{C_a(s)M_a(s)}{1+C_a(s)M_a(s)}
+\end{equation}    
+
+lo cual si se reemplaza por sus valores reales y realizando un poco de algebra se obtiene
+
+\begin{equation}
+Sys_{MAc}(s)=\frac{367.68(s+11.74)}{(s+61.79) (s^2 + 15.34s + 69.87)}
+\end{equation}
+
+luego considerando el modelo estimado de la orientación del vehículo el sistema a controlar resulta
+\begin{equation}
+\frac{\theta(s)}{\Delta \omega}=Sys_O(s)Sys_{MAc}(s)=\frac{10.639 (s+11.74)}{s (s+61.79) (s^2 + 15.34s + 69.87)}
+\end{equation}
+
+%M_a(s)= \frac{7075.3 e^{-0.013s}}{(s+9.631)(s+67.5)}
+
+%C_a(s)= \frac{  19.243 (s-11.74)}{s}
 
 \section{Funcionamiento del Sistema Total}
 \label{sec:resultados}

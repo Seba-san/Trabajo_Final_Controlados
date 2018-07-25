@@ -319,9 +319,9 @@ sys_inv=inv(sys);% Entra dW sale beta
 sys_ac=feedback(Ca*sysA,1);
 [n,d]=ss2tf(sys_ac.A,sys_ac.B,sys_ac.C,sys_ac.D);
 sys_ac_tf=tf(n,d)
-dd=series(sys_cinematico2,sys_ac_tf)
-[z,p,k]=tf2zp(sys_ac_tf.num{1},sys_ac_tf.den{1})
-cc=zpk(z,p,k)
+
+sys_ac_tf=tf(n,d)
+
 
 
 
