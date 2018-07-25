@@ -984,34 +984,40 @@ lo cual si se reemplaza por sus valores reales y realizando un poco de algebra s
 Sys_{MAc}(s)=\frac{367.68(s+11.74)}{(s+61.79) (s^2 + 15.34s + 69.87)}
 \end{equation}
 
-luego considerando el modelo estimado de la orientación del vehículo el sistema a controlar resulta
+luego considerando el modelo estimado de la orientación del vehículo el sistema a controlar resulta:
 \begin{equation}
 \frac{\theta(s)}{\Delta \omega}=Sys_O(s)Sys_{MAc}(s)=\frac{10.639 (s+11.74)}{s (s+61.79) (s^2 + 15.34s + 69.87)}
 \end{equation}
 
-%M_a(s)= \frac{7075.3 e^{-0.013s}}{(s+9.631)(s+67.5)}
+Con estos resultados se ensayan distintos controladores sobre esta planta con el fin de calificar su rendimiento.
 
-%C_a(s)= \frac{  19.243 (s-11.74)}{s}
 
 \section{Funcionamiento del Sistema Total}
+ \subsection{Resultados} 
 \label{sec:resultados}
 %Acá iría el resultado de poner el bichito a seguir la pista.
-Controladores a Probar:
-\begin{itemize}
- \item P
- \item PI
- \item PD
- \item PID
- \item PIDF
- \item PIDF ajuste manual
-\end{itemize}
-Aspectos a medir en cada caso:
-\begin{itemize}
-\item Valor maximo de Wref para seguir la pista. (Tener en cuenta el valor maximo de la accion de control, nunca supera los 500)
-\item Tiempo promedio en dar una vuelta
-\item Velocidad promedio en pista.
-\item Parametro relativo: Cuantas vueltas tarda en salirse del circuito, o es estable?
-\end{itemize}
+
+\begin{table}[h]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+Controlador & $E_c [RPM]$ & $T_{as}[s]$ & $N^o$ v &$\omega_{ref}[RPM]$& $\omega_{med}[RPM]$ & $P_l$ & $TV_{med}[s]$ & $\sigma^2_\beta$ &$\Delta\omega _{max} $  \\
+\hline \hline
+P&466&1.8&4&400&393.012&si&6.315&&443.1373\\ \hline
+PI&466&1.85&4&400&392.3911&si&6.135&&376.47\\ \hline
+PDF&477&0.88&4&400&392.7832&si&6.5475&&231.3725\\ \hline
+PIDF&618&0.784&5&400&393.7146&no&6.006&&325.4902\\ \hline
+PIDF&910&0.466&5&500&491.4325&no&5.0586&&360.78\\ \hline
+
+\end{tabular}
+\caption{Mediciones de distintos controladores sobre la pista de la facultad. Referencias:$E_c$ esfuerzo del controlador,$T_{as}$ tiempo de asentamiento, $P_l$ pierde pista, $TV_{med}$ promedio de tiempo por vuelta}
+\label{tabla:mediciones}
+\end{center}
+\end{table}
+
+Si bien estos son algunos parámetros que se midieron en los ensayos, quizás existan otras variables mas reveladoras acerca del comportamiento deseado, por ejemplo numero de oscilaciones, estabilidad, etc.
+
+Un ensayo implementado se puede ver en este \href{https://youtu.be/hJU_oneTO20}{\underline{VIDEO}}. Corresponde a una prueba con el último controlador PIDF funcionando a $550RPM$, lo cual determina una velocidad promedio de $0.5m/s$. A esta velocidad y sobre la pista, el vehículo no puede completar la prueba de 4 vueltas ya que se despista antes. 
 
 
 
@@ -1021,13 +1027,13 @@ En función de los objetivos propuestos, se puede asegurar que se logro desarrol
 
 Se logro implementar todo el sistema en un microcontrolador de bajas prestaciones. El mismo cumple con los requisitos de fácil implementación, amplia documentación, bajos costos, entre otros.  
 
-Se obtuvo por medio de ensayos, los modelos de los motores, se implemento con éxito un controlador PI en cada motor. No se pudo estimar correctamente la planta total ni se obtuvo un modelo del sistema aceptable para alcanzar los requisitos de competición, sin embargo, el dispositivo puede seguir una curva de radio $r=40cm$ a una velocidad relativamente baja $300RPM$, esto es aproximadamente $47cm/s$ . La herramienta principal utilizada fueron los toolbox de matlab \cite{Sys_ident,PID_tuner}.
+Se obtuvo por medio de ensayos, los modelos de los motores, se implemento con éxito un controlador PI en cada motor. No se pudo estimar correctamente la planta total ni se obtuvo un modelo del sistema aceptable para alcanzar los requisitos de competición, sin embargo, el dispositivo puede seguir una curva de radio $r=40cm$ a una velocidad relativamente baja $500RPM$, esto es aproximadamente $47cm/s$ . La herramienta principal utilizada fueron los toolbox de matlab \cite{Sys_ident,PID_tuner}.
 
 
 
-Gracias al sistema ABP, se genero la necesidad y motivación de entender en un sentido amplio  la teoria de control clásica, moderna y digital vista a travez de las 3 materias curriculares de la carrera. Se hizo enfasis en la implementacion de un sistema de control de tiempo discreto ajustado por metodos estandarizados, de tal manera que sean repetibles. El enfrentamiento a distinta clase de problemas garantizo el conocimiento integro de los sistemas de control implementados. CHAMUYOOOOOOOOOOOOOOOOOOOOOOOOOO 
+Gracias al sistema ABP, se genero la necesidad y motivación de entender en un sentido amplio  la teoría de control clásica, moderna y digital vista a través de las 3 materias curriculares de la carrera. Se hizo énfasis en la implementación de un sistema de control de tiempo discreto ajustado por métodos estandarizados, de tal manera que sean repetibles. El enfrentamiento a distinta clase de problemas garantizo el conocimiento integro de los sistemas de control implementados. % CHAMUYOOOOOOOOOOOOOOOOOOOOOOOOOO 
  
-Los modelos de las piezas para imprimir, los circuitos, las placas y el programa se encuentran en esta direccion LINK.
+Los modelos de las piezas para imprimir, los circuitos, las placas y el programa se encuentran en esta direccion \href{https://github.com/Seba-san/Trabajo_Final_Controlados/}{\underline{LINK}}.
 
   
 
@@ -1037,7 +1043,7 @@ Una de las principales trabas en el desarrollo de este proyecto fue el diseño d
 
 Otra limitación observada a la hora de probar distintos controladores, es la resolución del sensor de linea. Como se ven en las imágenes, los datos del sensor de linea son digitales, por lo que poseen valores discretos a la salida, esto limita las capacidades del control para tomar acciones de corrección.
 
-Una última posible mejora es obtener el modelo del sistema con hipótesis mas suaves de las que se utilizaron en esta oportunidad, de forma que el control implementado pueda resolver situaciones en donde la velocidad media del robot sea mayor. Considerar que actualmente la potencia total utilizada de todo el dispositivo ronda un $30\%$ de su capacidad total, se estima que el rendimiento en pista puede mejorar sus tiempos a la mitad.   
+Una última posible mejora es obtener el modelo del sistema con hipótesis mas suaves de las que se utilizaron en esta oportunidad, de forma que el control implementado pueda resolver situaciones en donde la velocidad media del robot sea mayor. Considerar que actualmente la potencia total utilizada de todo el dispositivo ronda un $40\%$ de su capacidad total, se estima que el rendimiento en pista puede mejorar sus tiempos sustancialmente.   
 \begin{thebibliography}{X}
 %\bibitem{Farmers}Bergerman, M., Maeta, S. M., Zhang, J., Freitas, G. M., Hamner, B., Singh, S., \& Kantor, G. (2015). Robot farmers: Autonomous orchard vehicles help tree fruit production. IEEE Robotics \& Automation Magazine, 22(1), 54-63.
 %\bibitem “Path Following Mobile Robot in the Presence of Velocity Constraints”, Bak, Poulsen y Ravn.
