@@ -19,6 +19,7 @@ disp('Puerto Cerrado')
 % Condicion inicial
 solo_sens=0;
 N=36*5;
+wref=500;
 Env_instruccion(s,'PWM',[0 0]);
 Env_instruccion(s,'setpoint',[0 0]);
 Env_instruccion(s,'control_off');
@@ -50,8 +51,8 @@ limite_inf=0;
 try
      close(1)
 end
-PWM=400;
-wref=PWM;
+PWM=wref;
+%wref=PWM;
  if (~solo_sens);Env_instruccion(s,'setpoint',[PWM PWM]);end
 %pause(0.5)
  if (~solo_sens);Env_instruccion(s,'control_on');end
@@ -63,8 +64,10 @@ while (veces_<veces)
    % Supongo [angulo][RPMA][RPMB]
     datos=DatoRx_rf(s);
     flushinput(s);
-    %beta=datos(1);
-    %dec2bin(datos(1))
+     if (solo_sens)
+    beta=datos(1);
+    dec2bin(datos(1))
+     end
     beta=ConversionSensor(datos(1),0) ;
     angulo(i)=beta;RPMA(i)=datos(2);RPMB(i)=datos(3);
     
@@ -124,7 +127,7 @@ for i=1:l
 end
 
 var_angulo=var(angulo2)
-save('../../Mediciones/Rendimiento/controlador_5.mat','angulo','RPMB','RPMA','wref')
+%save('../../Mediciones/Rendimiento/controlador_5.mat','angulo','RPMB','RPMA','wref')
 %% Frenar
 Env_instruccion(s,'PWM',[0 0]);
 Env_instruccion(s,'setpoint',[0 0]);

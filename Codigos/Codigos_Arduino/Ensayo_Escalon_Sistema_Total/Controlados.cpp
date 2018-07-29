@@ -236,7 +236,7 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
 //Ensayo 22/06/18 (sensor circular, LEDs intercalados):
   float betaEnsayo[]={-0.916297857,-0.746128255,-0.654498469,-0.545415391,-0.401425728,-0.244346095,-0.061086524,0.061086524,0.135263017,0.22252948,0.357792497,0.523598776,0.593411946,0.72431164,0.907571211};
   
-	uint8_t LED[8]; int aux, suma, sumaPonderada;float beta;
+	uint8_t LED[8]; 	int aux, suma, sumaPonderada;float beta;
   
   LED[0]=bitRead(port1,bit1);
   LED[1]=bitRead(port2,bit2);
@@ -252,11 +252,13 @@ float Controlados::leerSensorDeLinea(unsigned char* byteSensor)
   //Junto todos los bits en un byte:
   *byteSensor=0;
   for(int k=0;k<8;k++){
+   
+    if (LED[k]){LED[k]=0;}else {LED[k]=1;} // Esta linea es para cambiar de linea negra a linea blanca.
     bitWrite(*byteSensor,k,LED[k]);
   }
   suma=LED[0]+LED[1]+LED[2]+LED[3]+LED[4]+LED[5]+LED[6]+LED[7];
   sumaPonderada=2*(LED[0]+2*LED[1]+3*LED[2]+4*LED[3]+5*LED[4]+6*LED[5]+7*LED[6]+8*LED[7]);
-  //Piso el valor de aux para hacer el switch case, total es int y ya no lo uso
+ 
   if(suma==0 || suma==8 ){beta=3;}//Si suma=0 es poque no detectó la línea, así que le doy el valor de error
   //Si suma=8 es poque detecto línea de parada, así que le doy el valor de error
   else{
