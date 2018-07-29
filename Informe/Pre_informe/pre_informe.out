@@ -1,44 +1,43 @@
-\BOOKMARK [1][-]{section.1}{Ideas}{}% 1
-\BOOKMARK [1][-]{section.2}{Resumen}{}% 2
-\BOOKMARK [1][-]{section.3}{Introducci\363n}{}% 3
-\BOOKMARK [2][-]{subsection.3.1}{Motivaci\363n}{section.3}% 4
-\BOOKMARK [2][-]{subsection.3.2}{Seguidor de l\355nea}{section.3}% 5
-\BOOKMARK [1][-]{section.4}{Objetivos de la propuesta}{}% 6
-\BOOKMARK [1][-]{section.5}{Estructura del Trabajo}{}% 7
-\BOOKMARK [1][-]{section.6}{Implementaci\363n}{}% 8
-\BOOKMARK [2][-]{subsection.6.1}{Estructura Mec\341nica}{section.6}% 9
-\BOOKMARK [1][-]{section.7}{Modelado del sistema}{}% 10
-\BOOKMARK [2][-]{subsection.7.1}{Modelo cinem\341tico}{section.7}% 11
-\BOOKMARK [3][-]{subsubsection.7.1.1}{Ecuaciones de Movimiento}{subsection.7.1}% 12
-\BOOKMARK [3][-]{subsubsection.7.1.2}{redRestricciones de Sensores Disponibles}{subsection.7.1}% 13
-\BOOKMARK [3][-]{subsubsection.7.1.3}{Radio de giro}{subsection.7.1}% 14
-\BOOKMARK [2][-]{subsection.7.2}{Modelado de los motores}{section.7}% 15
-\BOOKMARK [1][-]{section.8}{Estrategia de Control a Utilizar}{}% 16
-\BOOKMARK [2][-]{subsection.8.1}{PID}{section.8}% 17
-\BOOKMARK [3][-]{subsubsection.8.1.1}{Control Proporcional}{subsection.8.1}% 18
-\BOOKMARK [3][-]{subsubsection.8.1.2}{Control Integral}{subsection.8.1}% 19
-\BOOKMARK [3][-]{subsubsection.8.1.3}{Control Derivativo}{subsection.8.1}% 20
-\BOOKMARK [3][-]{subsubsection.8.1.4}{PID total}{subsection.8.1}% 21
-\BOOKMARK [3][-]{subsubsection.8.1.5}{Discretizaci\363n PID}{subsection.8.1}% 22
-\BOOKMARK [1][-]{section.9}{Sistemas de Medici\363n}{}% 23
-\BOOKMARK [2][-]{subsection.9.1}{Medici\363n de velocidad de los Motores}{section.9}% 24
-\BOOKMARK [3][-]{subsubsection.9.1.1}{Estructura Mec\341nica}{subsection.9.1}% 25
-\BOOKMARK [3][-]{subsubsection.9.1.2}{Circuito El\351ctrico}{subsection.9.1}% 26
-\BOOKMARK [3][-]{subsubsection.9.1.3}{Medici\363n de Velocidad con el Microcontrolador}{subsection.9.1}% 27
-\BOOKMARK [2][-]{subsection.9.2}{Sensor de L\355nea}{section.9}% 28
-\BOOKMARK [3][-]{subsubsection.9.2.1}{Circuito El\351ctrico}{subsection.9.2}% 29
-\BOOKMARK [3][-]{subsubsection.9.2.2}{Estructura Mec\341nica}{subsection.9.2}% 30
-\BOOKMARK [3][-]{subsubsection.9.2.3}{Valores de Lectura}{subsection.9.2}% 31
-\BOOKMARK [3][-]{subsubsection.9.2.4}{Lectura del Sensor con el Microcontrolador}{subsection.9.2}% 32
-\BOOKMARK [1][-]{section.10}{Identificaci\363n de Sistemas}{}% 33
-\BOOKMARK [2][-]{subsection.10.1}{Identificaci\363n de los Motores}{section.10}% 34
-\BOOKMARK [2][-]{subsection.10.2}{Identificaci\363n de la Cinem\341tica el Robot}{section.10}% 35
-\BOOKMARK [1][-]{section.11}{Ajuste de los Controladores}{}% 36
-\BOOKMARK [2][-]{subsection.11.1}{Control Motores}{section.11}% 37
-\BOOKMARK [2][-]{subsection.11.2}{redAjuste fallido por medio de Z-N}{section.11}% 38
-\BOOKMARK [3][-]{subsubsection.11.2.1}{Metodo de Z-N: respuesta al escal\363n}{subsection.11.2}% 39
-\BOOKMARK [2][-]{subsection.11.3}{Control de la Orientaci\363n - Sistema Total.}{section.11}% 40
-\BOOKMARK [1][-]{section.12}{Funcionamiento del Sistema Total}{}% 41
-\BOOKMARK [2][-]{subsection.12.1}{Resultados}{section.12}% 42
-\BOOKMARK [1][-]{section.13}{Conclusiones}{}% 43
-\BOOKMARK [1][-]{section.14}{Mejoras a futuro}{}% 44
+\BOOKMARK [1][-]{section.1}{Resumen}{}% 1
+\BOOKMARK [1][-]{section.2}{Introducci\363n}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Motivaci\363n}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Seguidor de l\355nea}{section.2}% 4
+\BOOKMARK [1][-]{section.3}{Objetivos de la propuesta}{}% 5
+\BOOKMARK [1][-]{section.4}{Estructura del Trabajo}{}% 6
+\BOOKMARK [1][-]{section.5}{Implementaci\363n}{}% 7
+\BOOKMARK [2][-]{subsection.5.1}{Estructura Mec\341nica}{section.5}% 8
+\BOOKMARK [1][-]{section.6}{Modelado del sistema}{}% 9
+\BOOKMARK [2][-]{subsection.6.1}{Modelo cinem\341tico}{section.6}% 10
+\BOOKMARK [3][-]{subsubsection.6.1.1}{Ecuaciones de Movimiento}{subsection.6.1}% 11
+\BOOKMARK [3][-]{subsubsection.6.1.2}{Modelado del sistema de medici\363n }{subsection.6.1}% 12
+\BOOKMARK [3][-]{subsubsection.6.1.3}{Radio de giro}{subsection.6.1}% 13
+\BOOKMARK [2][-]{subsection.6.2}{Modelado de los motores}{section.6}% 14
+\BOOKMARK [1][-]{section.7}{Estrategia de Control a Utilizar}{}% 15
+\BOOKMARK [2][-]{subsection.7.1}{PID}{section.7}% 16
+\BOOKMARK [3][-]{subsubsection.7.1.1}{Control Proporcional}{subsection.7.1}% 17
+\BOOKMARK [3][-]{subsubsection.7.1.2}{Control Integral}{subsection.7.1}% 18
+\BOOKMARK [3][-]{subsubsection.7.1.3}{Control Derivativo}{subsection.7.1}% 19
+\BOOKMARK [3][-]{subsubsection.7.1.4}{PID total}{subsection.7.1}% 20
+\BOOKMARK [3][-]{subsubsection.7.1.5}{Discretizaci\363n PID}{subsection.7.1}% 21
+\BOOKMARK [1][-]{section.8}{Sistemas de Medici\363n}{}% 22
+\BOOKMARK [2][-]{subsection.8.1}{Medici\363n de velocidad de los Motores}{section.8}% 23
+\BOOKMARK [3][-]{subsubsection.8.1.1}{Estructura Mec\341nica}{subsection.8.1}% 24
+\BOOKMARK [3][-]{subsubsection.8.1.2}{Circuito El\351ctrico}{subsection.8.1}% 25
+\BOOKMARK [3][-]{subsubsection.8.1.3}{Medici\363n de Velocidad con el Microcontrolador}{subsection.8.1}% 26
+\BOOKMARK [2][-]{subsection.8.2}{Sensor de L\355nea}{section.8}% 27
+\BOOKMARK [3][-]{subsubsection.8.2.1}{Circuito El\351ctrico}{subsection.8.2}% 28
+\BOOKMARK [3][-]{subsubsection.8.2.2}{Estructura Mec\341nica}{subsection.8.2}% 29
+\BOOKMARK [3][-]{subsubsection.8.2.3}{Valores de Lectura}{subsection.8.2}% 30
+\BOOKMARK [3][-]{subsubsection.8.2.4}{Lectura del Sensor con el Microcontrolador}{subsection.8.2}% 31
+\BOOKMARK [1][-]{section.9}{Identificaci\363n de Sistemas}{}% 32
+\BOOKMARK [2][-]{subsection.9.1}{Identificaci\363n de los Motores}{section.9}% 33
+\BOOKMARK [2][-]{subsection.9.2}{Identificaci\363n de la Cinem\341tica el Robot}{section.9}% 34
+\BOOKMARK [1][-]{section.10}{Ajuste de los Controladores}{}% 35
+\BOOKMARK [2][-]{subsection.10.1}{Control Motores}{section.10}% 36
+\BOOKMARK [2][-]{subsection.10.2}{Sintonizacion de controlador PID mediante reglas de Ziegler Nichols}{section.10}% 37
+\BOOKMARK [3][-]{subsubsection.10.2.1}{Metodo de Z-N: respuesta al escal\363n}{subsection.10.2}% 38
+\BOOKMARK [2][-]{subsection.10.3}{Control de la Orientaci\363n - Sistema Total.}{section.10}% 39
+\BOOKMARK [1][-]{section.11}{Funcionamiento del Sistema Total}{}% 40
+\BOOKMARK [2][-]{subsection.11.1}{Resultados}{section.11}% 41
+\BOOKMARK [1][-]{section.12}{Conclusiones}{}% 42
+\BOOKMARK [1][-]{section.13}{Mejoras a futuro}{}% 43
