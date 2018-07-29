@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.7.28)  29 JUL 2018 03:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.7.28)  29 JUL 2018 03:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1063,16 +1063,12 @@ Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1078.
 
 Package rerunfilecheck Info: File `pre_informe.out' has not changed.
 (rerunfilecheck)             Checksum: FDF1850D397735C0E142B6DFF75EA06B;3172.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1078.
  ) 
 Here is how much of TeX's memory you used:
  10557 strings out of 493029
  154133 string characters out of 6136234
- 267751 words of memory out of 5000000
+ 267753 words of memory out of 5000000
  13786 multiletter control sequences out of 15000+600000
  7330 words of font info for 27 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1092,7 +1088,7 @@ usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/sh
 are/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/tex
 live/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/t
 exmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on pre_informe.pdf (20 pages, 25083533 bytes).
+Output written on pre_informe.pdf (20 pages, 25083523 bytes).
 PDF statistics:
  597 PDF objects out of 1000 (max. 8388607)
  525 compressed objects within 6 object streams
