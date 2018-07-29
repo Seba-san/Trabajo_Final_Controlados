@@ -998,28 +998,31 @@ Con estos resultados se ensayan distintos controladores sobre esta planta con el
  \subsection{Resultados} 
 \label{sec:resultados}
 %Acá iría el resultado de poner el bichito a seguir la pista.
+Para probar el rendimiento de los distintos controladores, se diseño el siguiente ensayo.
 
+Se ajustó cada controlador teniendo en cuento el esfuerzo máximo de la señal de control y el tiempo de asentamiento necesario para recuperar su posición sobre la linea. Luego se desarrollo una prueba en pista que dure un total de 30 segundos. Solo se registraron los controladores que lograron mantener el dispositivo siempre sobre la pista, es decir, que pudieran completar la prueba. Hay casos que si bien pierden momentáneamente la pista, el sistema logra recuperar la linea. Los resultados se muestran en la tabla \ref{tabla:mediciones}.   
 \begin{table}[h]
 \begin{center}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|}
 \hline
-Controlador & $E_c [RPM]$ & $T_{as}[s]$ & $N^o$ v &$\omega_{ref}[RPM]$& $\omega_{med}[RPM]$ & $P_l$ & $TV_{med}[s]$ & $\sigma^2_\beta$ &$\Delta\omega _{max} $  \\
+Controlador & $E_c [RPM]$ & $T_{as}[s]$ & $N^o$ v &$\omega_{ref}[RPM]$& $\omega_{med}[RPM]$ & $P_l$ & $TV_{med}[s]$ &$\Delta\omega _{max} $  \\
 \hline \hline
-P&466&1.8&4&400&393.012&si&6.315&&443.1373\\ \hline
-PI&466&1.85&4&400&392.3911&si&6.135&&376.47\\ \hline
-PDF&477&0.88&4&400&392.7832&si&6.5475&&231.3725\\ \hline
-PIDF&618&0.784&5&400&393.7146&no&6.006&&325.4902\\ \hline
-PIDF&910&0.466&5&500&491.4325&no&5.0586&&360.78\\ \hline
+P&466&1.8&4&400&393.012&si&6.315&443.1373\\ \hline
+PI&466&1.85&4&400&392.3911&si&6.135&376.47\\ \hline
+PDF&477&0.88&4&400&392.7832&si&6.5475&231.3725\\ \hline
+PIDF&618&0.784&5&400&393.7146&no&6.006&325.4902\\ \hline
+PIDF&910&0.466&5&500&491.4325&no&5.0586&360.78\\ \hline
 
 \end{tabular}
-\caption{Mediciones de distintos controladores sobre la pista de la facultad. Referencias: $E_c$ esfuerzo del controlador, $T_{as}$ tiempo de asentamiento, $P_l$ pierde pista, $TV_{med}$ promedio de tiempo por vuelta}
+\caption{Mediciones de distintos controladores sobre la pista de la facultad. Referencias: $E_c$ esfuerzo del controlador, $T_{as}$ tiempo de asentamiento, $N^o$ v: Numero de vueltas, $P_l$ pierde linea, $TV_{med}$ promedio de tiempo por vuelta}
 \label{tabla:mediciones}
 \end{center}
 \end{table}
 
+Hay que considerar que si se baja la velocidad de referencia $\omega_{ref}$ la salida del controlador será menor en amplitud y en velocidad, lo cual genera un andar menos oscilatorio y mas estable. 
 Si bien estos son algunos parámetros que se midieron en los ensayos, quizás existan otras variables mas reveladoras acerca del comportamiento deseado, por ejemplo numero de oscilaciones, estabilidad, entre otras.
 
-Un ensayo implementado se puede ver en este \href{https://youtu.be/hJU_oneTO20}{\underline{VIDEO}}. Corresponde a una prueba con el último controlador PIDF funcionando a $550RPM$, lo cual determina una velocidad promedio de $0.5m/s$. A esta velocidad y sobre la pista, el vehículo no puede completar la prueba de 4 vueltas ya que se sale de la pista antes. 
+Un ensayo implementado se puede ver en este \href{https://youtu.be/hJU_oneTO20}{\underline{VIDEO}}. Corresponde a una prueba con el último controlador PIDF funcionando a $550RPM$, lo cual determina una velocidad promedio de $0.5m/s$. A esta velocidad y sobre la pista, el vehículo no puede completar la prueba de 30 segundos ya que se sale de la pista antes. 
 
 
 
