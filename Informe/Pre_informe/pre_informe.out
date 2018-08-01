@@ -33,11 +33,10 @@
 \BOOKMARK [2][-]{subsection.9.1}{Identificaci\363n de los Motores}{section.9}% 33
 \BOOKMARK [2][-]{subsection.9.2}{Identificaci\363n de la Cinem\341tica el Robot}{section.9}% 34
 \BOOKMARK [1][-]{section.10}{Ajuste de los Controladores}{}% 35
-\BOOKMARK [2][-]{subsection.10.1}{Control Motores}{section.10}% 36
+\BOOKMARK [2][-]{subsection.10.1}{Control de los Motores}{section.10}% 36
 \BOOKMARK [2][-]{subsection.10.2}{Sintonizacion de controlador PID mediante reglas de Ziegler Nichols}{section.10}% 37
-\BOOKMARK [3][-]{subsubsection.10.2.1}{Metodo de Z-N: respuesta al escal\363n}{subsection.10.2}% 38
+\BOOKMARK [3][-]{subsubsection.10.2.1}{M\351todo de Z-N: respuesta al escal\363n}{subsection.10.2}% 38
 \BOOKMARK [2][-]{subsection.10.3}{Control de la Orientaci\363n - Sistema Total.}{section.10}% 39
 \BOOKMARK [1][-]{section.11}{Funcionamiento del Sistema Total}{}% 40
-\BOOKMARK [2][-]{subsection.11.1}{Resultados}{section.11}% 41
-\BOOKMARK [1][-]{section.12}{Conclusiones}{}% 42
-\BOOKMARK [1][-]{section.13}{Mejoras a futuro}{}% 43
+\BOOKMARK [1][-]{section.12}{Conclusiones}{}% 41
+\BOOKMARK [1][-]{section.13}{Mejoras a futuro}{}% 42
