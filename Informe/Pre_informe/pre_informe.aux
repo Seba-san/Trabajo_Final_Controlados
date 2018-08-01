@@ -16,7 +16,10 @@
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
-\babel@aux{spanish}{}
+\select@language{spanish}
+\@writefile{toc}{\select@language{spanish}}
+\@writefile{lof}{\select@language{spanish}}
+\@writefile{lot}{\select@language{spanish}}
 \citation{lambo}
 \@writefile{toc}{\contentsline {section}{\numberline {1}Resumen}{1}{section.1}}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Introducci\IeC {\'o}n}{1}{section.2}}
@@ -78,10 +81,10 @@
 \newlabel{eq:control_integral}{{17}{7}{Control Integral}{equation.7.17}{}}
 \@writefile{toc}{\contentsline {paragraph}{Problem\IeC {\'a}tica:}{7}{section*.9}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {7.1.3}Control Derivativo}{7}{subsubsection.7.1.3}}
-\newlabel{eq:ajuste_deriv}{{20}{7}{Control Derivativo}{equation.7.20}{}}
 \citation{astrom}
 \citation{biblia_PID}
 \citation{astrom}
+\newlabel{eq:ajuste_deriv}{{20}{8}{Control Derivativo}{equation.7.20}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {7.1.4}PID total}{8}{subsubsection.7.1.4}}
 \newlabel{eq:pid_basico}{{22}{8}{PID total}{equation.7.22}{}}
 \newlabel{eq:pid_final}{{23}{8}{PID total}{equation.7.23}{}}
@@ -90,9 +93,11 @@
 \newlabel{eq:int_var}{{26}{8}{Método de Euler:}{equation.7.26}{}}
 \@writefile{toc}{\contentsline {paragraph}{Regla rectangular hacia adelante:}{8}{equation.7.27}}
 \@writefile{toc}{\contentsline {paragraph}{Regla rectangular hacia atr\IeC {\'a}s:}{8}{equation.7.28}}
-\@writefile{toc}{\contentsline {paragraph}{Regla trapezoidal:}{8}{equation.7.29}}
-\newlabel{eq:aprox_trape}{{29}{8}{Regla trapezoidal:}{equation.7.29}{}}
 \citation{astrom}
+\@writefile{toc}{\contentsline {paragraph}{Regla trapezoidal:}{9}{equation.7.29}}
+\newlabel{eq:aprox_trape}{{29}{9}{Regla trapezoidal:}{equation.7.29}{}}
+\newlabel{eq:Euler}{{30}{9}{Regla trapezoidal:}{equation.7.30}{}}
+\newlabel{eq:dif_retroceso}{{31}{9}{Regla trapezoidal:}{equation.7.31}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {8}Sistemas de Medici\IeC {\'o}n}{9}{section.8}}
 \newlabel{sec:sist_de_medicion}{{8}{9}{Sistemas de Medición}{section.8}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Medici\IeC {\'o}n de velocidad de los Motores}{9}{subsection.8.1}}
@@ -102,61 +107,62 @@
 \newlabel{fig:circuitoFotodiodo}{{7}{9}{Circuito del fotodiodo y de los diodos infrarrojos.\relax }{figure.caption.14}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {8.1.3}Medici\IeC {\'o}n de Velocidad con el Microcontrolador}{10}{subsubsection.8.1.3}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Sensor de L\IeC {\'\i }nea}{11}{subsection.8.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces En esta implementaci\IeC {\'o}n se ve el cabezal circular con 2 leds emisores. El led Rojo hace las veces de led Emisor de luz y el led Azul como fotodiodo.\relax }}{11}{figure.caption.15}}
-\newlabel{fig:sensorLinea}{{8}{11}{En esta implementación se ve el cabezal circular con 2 leds emisores. El led Rojo hace las veces de led Emisor de luz y el led Azul como fotodiodo.\relax }{figure.caption.15}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces En esta implementaci\IeC {\'o}n se ve el cabezal circular con 2 leds emisores. El led Rojo hace las veces de led Emisor de luz y el led Azul como fotodiodo (receptor de luz).\relax }}{11}{figure.caption.15}}
+\newlabel{fig:sensorLinea}{{8}{11}{En esta implementación se ve el cabezal circular con 2 leds emisores. El led Rojo hace las veces de led Emisor de luz y el led Azul como fotodiodo (receptor de luz).\relax }{figure.caption.15}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.1}Circuito El\IeC {\'e}ctrico}{11}{subsubsection.8.2.1}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.2}Estructura Mec\IeC {\'a}nica}{11}{subsubsection.8.2.2}}
 \@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Circuito utilizado para alimentar los diodos LED infrarrojos y los correspondientes fotodiodos que componen el sensor de l\IeC {\'\i }nea. Este esquema permite ampliar la cantidad de sensores a la que se desee. En el dispositivo final se cuenta con 8 fotodiodos. \relax }}{12}{figure.caption.16}}
 \newlabel{fig:circuitoSensorLinea}{{9}{12}{Circuito utilizado para alimentar los diodos LED infrarrojos y los correspondientes fotodiodos que componen el sensor de línea. Este esquema permite ampliar la cantidad de sensores a la que se desee. En el dispositivo final se cuenta con 8 fotodiodos. \relax }{figure.caption.16}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.2}Estructura Mec\IeC {\'a}nica}{12}{subsubsection.8.2.2}}
 \@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Esquema del robot con los dos tipos de estructuras dise\IeC {\~n}adas para fijar la disposici\IeC {\'o}n de los diodos seg\IeC {\'u}n la configuraci\IeC {\'o}n geom\IeC {\'e}trica deseada: (a) lineal, y (b) circular.\relax }}{12}{figure.caption.17}}
 \newlabel{fig:estructuraSensor}{{10}{12}{Esquema del robot con los dos tipos de estructuras diseñadas para fijar la disposición de los diodos según la configuración geométrica deseada: (a) lineal, y (b) circular.\relax }{figure.caption.17}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.3}Valores de Lectura}{12}{subsubsection.8.2.3}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.4}Lectura del Sensor con el Microcontrolador}{12}{subsubsection.8.2.4}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.3}Valores de Lectura}{13}{subsubsection.8.2.3}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {8.2.4}Lectura del Sensor con el Microcontrolador}{13}{subsubsection.8.2.4}}
 \@writefile{toc}{\contentsline {section}{\numberline {9}Identificaci\IeC {\'o}n de Sistemas}{13}{section.9}}
 \newlabel{sec:identifSist}{{9}{13}{Identificación de Sistemas}{section.9}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Identificaci\IeC {\'o}n de los Motores}{13}{subsection.9.1}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Curva de respuesta entrada-salida para el motor B.\relax }}{13}{figure.caption.18}}
-\newlabel{linealidad}{{11}{13}{Curva de respuesta entrada-salida para el motor B.\relax }{figure.caption.18}{}}
 \citation{Sys_ident}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Curva de respuesta entrada-salida para el motor B.\relax }}{14}{figure.caption.18}}
+\newlabel{linealidad}{{11}{14}{Curva de respuesta entrada-salida para el motor B.\relax }{figure.caption.18}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Respuesta al escal\IeC {\'o}n de ambos motores a lazo abierto con carga.\relax }}{14}{figure.caption.19}}
 \newlabel{EscalonMotores}{{12}{14}{Respuesta al escalón de ambos motores a lazo abierto con carga.\relax }{figure.caption.19}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Identificaci\IeC {\'o}n de la Cinem\IeC {\'a}tica el Robot}{14}{subsection.9.2}}
-\newlabel{eq:sys_tot_teo}{{39}{14}{Identificación de la Cinemática el Robot}{equation.9.39}{}}
 \citation{Sys_ident}
-\citation{PID_tuner}
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Identificaci\IeC {\'o}n de la Cinem\IeC {\'a}tica el Robot}{15}{subsection.9.2}}
+\newlabel{eq:sys_tot_teo}{{39}{15}{Identificación de la Cinemática el Robot}{equation.9.39}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces Trayectoria seguida por el robot si empieza a girar a $\Delta \omega $ constante (verde) arrancando inicialmente alineado con la l\IeC {\'\i }nea (gris).\relax }}{15}{figure.caption.20}}
 \newlabel{fig:carritoEsc}{{13}{15}{Trayectoria seguida por el robot si empieza a girar a $\Delta \omega $ constante (verde) arrancando inicialmente alineado con la línea (gris).\relax }{figure.caption.20}{}}
 \newlabel{eq:sys_tot_est}{{40}{15}{Identificación de la Cinemática el Robot}{equation.9.40}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {10}Ajuste de los Controladores}{15}{section.10}}
 \newlabel{sec:ajus_control}{{10}{15}{Ajuste de los Controladores}{section.10}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {10.1}Control de los Motores}{15}{subsection.10.1}}
+\citation{PID_tuner}
 \citation{ogata}
 \@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces Resultado del ensayo de respuesta al escal\IeC {\'o}n del sistema total. El circulo marca cuando se desactiva el control y el sistema comienza a trabajar en lazo abierto. En esta caso $\Delta \omega $ m\IeC {\'a}ximo fue de -50 RPM.\relax }}{16}{figure.caption.21}}
 \newlabel{fig:ensayoSistTotal}{{14}{16}{Resultado del ensayo de respuesta al escalón del sistema total. El circulo marca cuando se desactiva el control y el sistema comienza a trabajar en lazo abierto. En esta caso $\Delta \omega $ máximo fue de -50 RPM.\relax }{figure.caption.21}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Resultado del ensayo de respuesta al escal\IeC {\'o}n para ambos motores funcionando con los controladores PI calculados.\relax }}{16}{figure.caption.22}}
-\newlabel{fig:respEscLazoCerrado}{{15}{16}{Resultado del ensayo de respuesta al escalón para ambos motores funcionando con los controladores PI calculados.\relax }{figure.caption.22}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {10.2}Sintonizacion de controlador PID mediante reglas de Ziegler Nichols}{16}{subsection.10.2}}
 \citation{biblia_PID}
-\citation{paginaPID}
+\citation{paginaZN}
 \citation{biblia_PID}
-\citation{biblia_PID}
+\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces Resultado del ensayo de respuesta al escal\IeC {\'o}n para ambos motores funcionando con los controladores PI calculados.\relax }}{17}{figure.caption.22}}
+\newlabel{fig:respEscLazoCerrado}{{15}{17}{Resultado del ensayo de respuesta al escalón para ambos motores funcionando con los controladores PI calculados.\relax }{figure.caption.22}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {10.2.1}M\IeC {\'e}todo de Z-N: respuesta al escal\IeC {\'o}n}{17}{subsubsection.10.2.1}}
 \newlabel{eq:ajusteZN}{{41}{17}{Método de Z-N: respuesta al escalón}{equation.10.41}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces Determinaci\IeC {\'o}n gr\IeC {\'a}fica de los par\IeC {\'a}metros de un modelo a partir de la respuesta escal\IeC {\'o}n en forma de S\relax }}{17}{figure.caption.23}}
 \newlabel{fig:escalon_zn}{{16}{17}{Determinación gráfica de los parámetros de un modelo a partir de la respuesta escalón en forma de S\relax }{figure.caption.23}{}}
-\newlabel{eq:calculo_T_L}{{42}{17}{Método de Z-N: respuesta al escalón}{equation.10.42}{}}
+\citation{biblia_PID}
+\newlabel{eq:calculo_T_L}{{42}{18}{Método de Z-N: respuesta al escalón}{equation.10.42}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {10.3}Control de la Orientaci\IeC {\'o}n - Sistema Total.}{18}{subsection.10.3}}
 \@writefile{toc}{\contentsline {section}{\numberline {11}Funcionamiento del Sistema Total}{18}{section.11}}
 \newlabel{sec:resultados}{{11}{18}{Funcionamiento del Sistema Total}{section.11}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Mediciones de distintos controladores sobre la pista de la facultad. Referencias: $E_c$ esfuerzo del controlador, $T_{as}$ tiempo de asentamiento, $N^o$ v: N\IeC {\'u}mero de vueltas, $P_l$ pierde linea, $TV_{med}$ promedio de tiempo por vuelta\relax }}{18}{table.caption.24}}
-\newlabel{tabla:mediciones}{{1}{18}{Mediciones de distintos controladores sobre la pista de la facultad. Referencias: $E_c$ esfuerzo del controlador, $T_{as}$ tiempo de asentamiento, $N^o$ v: Número de vueltas, $P_l$ pierde linea, $TV_{med}$ promedio de tiempo por vuelta\relax }{table.caption.24}{}}
 \citation{Sys_ident,PID_tuner}
-\bibcite{lambo}{1}
-\bibcite{motores}{2}
-\bibcite{puenteH}{3}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Mediciones de distintos controladores sobre la pista de la facultad. Referencias: $E_c$ esfuerzo del controlador, $T_{as}$ tiempo de asentamiento, $N^o$ v: N\IeC {\'u}mero de vueltas, $P_l$ pierde moment\IeC {\'a}neamente la linea, $TV_{med}$ promedio de tiempo por vuelta\relax }}{19}{table.caption.24}}
+\newlabel{tabla:mediciones}{{1}{19}{Mediciones de distintos controladores sobre la pista de la facultad. Referencias: $E_c$ esfuerzo del controlador, $T_{as}$ tiempo de asentamiento, $N^o$ v: Número de vueltas, $P_l$ pierde momentáneamente la linea, $TV_{med}$ promedio de tiempo por vuelta\relax }{table.caption.24}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {12}Conclusiones}{19}{section.12}}
 \newlabel{sec:conclusiones}{{12}{19}{Conclusiones}{section.12}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {13}Mejoras a futuro}{19}{section.13}}
+\newlabel{sec:Trabajo_futuro}{{13}{19}{Mejoras a futuro}{section.13}{}}
+\bibcite{lambo}{1}
+\bibcite{motores}{2}
+\bibcite{puenteH}{3}
 \bibcite{arduinoNano}{4}
 \bibcite{pathfoll}{5}
 \bibcite{planning}{6}
@@ -165,7 +171,6 @@
 \bibcite{paginaZN}{9}
 \bibcite{ogata}{10}
 \bibcite{biblia_PID}{11}
-\bibcite{paginaPID}{12}
-\bibcite{Sys_ident}{13}
-\bibcite{PID_tuner}{14}
-\bibcite{astrom}{15}
+\bibcite{Sys_ident}{12}
+\bibcite{PID_tuner}{13}
+\bibcite{astrom}{14}

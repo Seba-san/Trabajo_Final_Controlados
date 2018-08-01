@@ -37,7 +37,7 @@ Env_instruccion(s,'stop');%Le indico al nano que deje de transmitir datos
 name=datestr(now,'yymmddhhMMss');
 name=strcat('curva_ent_sal_motorB',name,'.mat');
 %save(name,'wA','PWMA') 
-%% Gráfico de la Respuesta del motor
+%% Grï¿½fico de la Respuesta del motor
 figure();
 a=201;b=1602;%Para limitar el PWM al rango de 10 a 80%
 f=fit(PWMA(a:b)',mean(wA(:,a:b))','poly1');%Ajuste recta
@@ -45,3 +45,10 @@ plot(f,'r');hold on;plot(PWMA,wA,'b.');
 legend('Recta Ajustada','Datos Medidos')
 title('Respuesta del Motor A');
 xlabel('PWM');ylabel('frec de giro (rpm)')
+%%
+
+wA_RPM=wA*60/8;
+fO=fit(PWMA(110:end)',wA_RPM(110:end)','poly1');
+
+plot(fO,PWMA,wA_RPM,'.');grid on;grid minor;ylabel('RPM');xlabel('% duty');
+title('Barrido de PWM; Prueba de linealidad');legend('Motor B','Curva ajustada')
