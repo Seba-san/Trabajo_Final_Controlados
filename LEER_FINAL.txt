@@ -1,0 +1,3 @@
+La version del informe final esta en TaniaModificaInforme
+Las versiones de los ultimos programas del arduino FUNCIONANDO, estan en Testeos 
+Los modelos y los programas de Matlab que se usaron para simular estan en Simulando_planta_ok
