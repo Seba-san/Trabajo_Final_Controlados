@@ -91,38 +91,50 @@
 \vspace{2cm}
 \begin{figure}[h]
 \centering
-\includegraphics[width=3cm]{./imagenes/LogoUNC}
+\includegraphics[width=6cm]{./imagenes/LogoUNC}
 \end{figure}
 
 \vspace{2cm}
 \normalsize
 \begin{LARGE}
 
-
- Sistemas controlados por computadora \\
-
-
+\textbf{
+UNIVERSIDAD NACIONAL DEL COMAHUE\\
+Facultad de Ingeniería\\
+Departamento de Electrotecnia\\ 
+ Sistemas controlados por computadora \\}
  
  \end{LARGE}
  \vspace{2cm}
 \begin{Large}
-Diseño e implementación de un robot seguidor de linea controlado mediante PID
+Diseño e Implementación de un Robot Seguidor de Linea Controlado Mediante PID
 \end{Large}
-\vspace{2cm}
+
+
+\vspace{3cm}%Antes era 2
 \normalsize 
+\begin{large}
 \begin{flushleft}
-Alumnos: Ferreyra Tania,  Sansoni Sebastián 
+Alumnos:
+
+\begin{center}
+\begin{tabular}{c c c}
+Ferreyra Tania&Ingeniería Electrónica&ferreyra.1992@gmail.com \\
+Sansoni Sebastian&Ingeniería Electrónica&sansoni.sebas@gmail.com
+\end{tabular}
+\end{center}
 
 \end{flushleft}
-
+\end{large}
 \vspace{1cm}
 
-
+\begin{large}
 \centering Neuquén, \the\year \\
+\end{large}
 
 
 \vspace{1cm}
-
+%\end{large}
 
 
 \end{titlepage}
@@ -228,7 +240,7 @@ Para facilitar la implementación del robot, se propone utilizar la configuraci�
 
 \subsection{Estructura Mecánica}
 Se definió utilizar una estructura con dos ruedas y un punto de apoyo. El frente del robot se encuentra en el lado opuesto al del punto de apoyo, con una estructura para soporte de los LEDs del sensor de línea colocada en esta zona. La estructura diseñada se muestra en la figura \ref{fig:estructuraRobot}.
-\begin{figure}[h] %$.$ Faltan los encoders
+\begin{figure}[h] % Faltan los encoders, pero es bastante trabajo ponerlos u.u
 \centering
 \includegraphics[width=8cm]{./imagenes/estructuraCompleta.png}
 \caption{Estructura mecánica del robot.}
@@ -313,7 +325,8 @@ m= \left( T\sin(\theta) + Y_0 \right) \frac{1}{\cos(\theta)}
 
 y para (b)
 
-%$.$ Seba: El anterior ponele que sale, pero este lo encuentro demasiado rebuscado para seguirlo. Yo dí vuelta varios minutos sin saber qué fue lo que planteaste hasta que me dí por vencida.
+%Seba: El anterior ponele que sale, pero este lo encuentro demasiado rebuscado para seguirlo. Yo dí vuelta varios minutos sin saber qué fue lo que planteaste hasta que me dí por vencida.
+% Fue, quedó así.
 \begin{equation}
 m=\sqrt{Y_0^2 - T^2 + \left((T-Y_0\sin(\theta))\frac{1}{\cos(\theta)} \right)^2}
 \label{eq:pose2}
@@ -415,8 +428,7 @@ Así, mientras más pequeño sea el radio de giro, más grande debe ser $\Delta 
  \subsection{Modelado de los motores}
  \label{modeloMotores}
  
- Los motores a utilizar son motores de DC con escobillas. Según \cite[pág. 58-59]{dorf}, si se desprecia el torque de la perturbación,%$.$ para mí no se entiende qué es el torque de "perturbación", pero no sé qué es exactamente como para poder cambiarlo :( (dorf pág 58-59)
-\ la función de transferencia de la combinación motor-carga resulta
+ Los motores a utilizar son motores de DC con escobillas. Según \cite[pág. 58-59]{dorf}, si se desprecia el torque de la perturbación, la función de transferencia de la combinación motor-carga resulta
  \begin{equation*}
  \frac{\theta(s)}{V_f(s)}=\frac{K_m}{s(Js+b)(L_fs+R_f)}
  \end{equation*}
@@ -774,7 +786,6 @@ Generalmente cuando cambia el color de una superficie también cambia el materia
 
 La idea se muestra en la figura \ref{fig:sensorLinea}, donde se colocaron sobre el soporte del robot dos LEDs de color visible para ver la región que iluminaría el emisor y la que podría detectar el receptor.
  
-%Completar!! $.$
 \begin{figure}[h]
 \centering
 \includegraphics[width=8cm]{./imagenes/sens_rebotando2.png}%sensorLinea.png
@@ -828,8 +839,7 @@ A continuación se detallan los ensayos realizados para la identificación de lo
 \subsection{Identificación de los Motores}
 El modelo de función de transferencia planteado matemáticamente en la sección \ref{modeloMotores} define como variable de salida la velocidad angular del motor $\omega $ y como variable de entrada la tensión promedio aplicada entre sus bornes. Para la implementación con el microcontrolador se utiliza una señal de PWM de alta frecuencia $15Khz$(comparada con la frecuencia de corte del polo mecánico y el polo eléctrico) cuyo duty cycle modifica el valor de tensión continua aplicado al motor. Esto es factible debido a que el \textit{ sistema motor} actúa como un filtro pasabajos, manteniendo la componente de continua de la señal y atenuando las restantes. Dado que esta es la señal que se puede controlar realmente, se utiliza como señal de entrada el duty cycle utilizado en los PWM.
 
-El modelo obtenido de forma teórica realiza varias simplificaciones. Una de ellas es ignorar el ciclo de histéresis de los motores y otra es no considerar el efecto de una carga en el motor, que en este caso implicaría considerar la dinámica del robot sobre el suelo. Estos fenómenos hacen que el comportamiento real de los motores no sea realmente lineal. Para analizar la linealidad el sistema y el intervalo de trabajo a utilizar se diseñó un ensayo que genere un barrido de las distintas posibilidades de duty cycle para cada motor y almacenara varias muestras de las velocidades obtenidas en el estado estacionario. En la figura \ref{linealidad} se muestra la curva obtenida para el motor B. La del motor A es análoga. %$.$ Revisar que ya esté explicado en algún lado que el motor B es el derecho y el A el izquierdo
-
+El modelo obtenido de forma teórica realiza varias simplificaciones. Una de ellas es ignorar el ciclo de histéresis de los motores y otra es no considerar el efecto de una carga en el motor, que en este caso implicaría considerar la dinámica del robot sobre el suelo. Estos fenómenos hacen que el comportamiento real de los motores no sea realmente lineal. Para analizar la linealidad el sistema y el intervalo de trabajo a utilizar se diseñó un ensayo que genere un barrido de las distintas posibilidades de duty cycle para cada motor y almacenara varias muestras de las velocidades obtenidas en el estado estacionario. En la figura \ref{linealidad} se muestra la curva obtenida para el motor B (motor a la derecha del robot). La del motor A (izquierda del robot) es análoga. 
 
 \begin{figure}[h]
 \centering
@@ -859,7 +869,7 @@ M_b(s)= \frac{5042.1 e^{-0.013s}}{(s+9.988) (s+45.48)}
 \end{equation}
 
 Cabe aclarar que la precisión del ajuste depende mayoritariamente de cómo fueron tomadas las muestras. En este caso la metodología de medición genera un delay variable con las $RPM$ (mayor delay a bajas $RPM$), por lo que se optó por ajustar los modelos para un ensayo escalón en el cual se producirá el mayor delay, es decir el peor de los casos. 
-%$.$ Utilizando esta información se ajustaron los controladores PID de cada motor, según se explicará en la sección \ref{control}. 
+ 
 \subsection{Identificación de la Cinemática el Robot}
 En función de lo analizado en la sección \ref{modelo cinematico}, se puede pensar que si el robot arranca alineado con una línea recta, y manteniendo la restricción de $v$ constante, entonces la planta se comporta como un sistema cuya entrada es $\Delta \omega$ y su salida $\theta$, gobernado por la ecuación \ref{eq:tita_omega}. Para un mayor entendimiento se reemplaza $\theta$ por $\beta$ ya que si bien $\theta \approx \beta $ cuando $|Y_0| \approx 0$, no es válido en todo momento. Utilizando la hipótesis mencionada la ecuación se reescribe a continuación como:
 
@@ -897,7 +907,6 @@ el cual explica un $82.93\%$ de los datos utilizados en el mejor de los casos.
 
 
 De la ecuación \ref{eq:sys_tot_teo} y de \ref{eq:sys_tot_est}  se concluye que $\frac{r}{L}=0.028934 $. Los parámetros medidos, si embargo, son $r=1.5cm$ y $L=16cm$, lo cual daría $\frac{r}{L}=0.09375 $. Esta discrepancia no se pudo explicar aún.   
-%$.$ Faltaría una imagen que muestre qué tan bien ajusta el modelo estimado.
 
 \section{Ajuste de los Controladores} 
 \label{sec:ajus_control}
@@ -917,7 +926,6 @@ C_b(s)= \frac{ 18.68 (s-10.93)}{s}
 El ajuste se realizó en tiempo continuo, con lo cual resulta necesario realizar una discretización del controlador para poder implementarlo en el microcontrolador. La discretización utilizada fue la de Backward Euler (o diferencias hacia atrás).
 
 A la hora de realizar este ajuste hay que tener en cuenta la salida del controlador, ya que esta limitada, en este caso por el $\% duty \in [0, 100] $. Esta aclaración es necesaria ya que cuando se obtengan los valores de los coeficientes hay que constatar los ordenes de magnitud de los mismos porque puede ser que se den situaciones en que sea necesario que la acción de control requerida este por fuera de los intervalos reales, produciendo así que no responda como se espera.
-%$.$ No me acuerdo qué era lo que hacíamos inicialmente que daba unos coeficientes enormes. Eso hay que ponerlo. Agregado arriba.
 
 Una vez implementados los controladores, se repitió el ensayo al escalón con el sistema a lazo cerrado. El resultado es el mostrado en la figura \ref{fig:respEscLazoCerrado}.
 \begin{figure}[h]
@@ -928,8 +936,7 @@ Una vez implementados los controladores, se repitió el ensayo al escalón con e
 \end{figure}
 Se observa que se pudo alcanzar el objetivo propuesto de reducir la asimetría de los motores.
 
-\subsection{Sintonizacion de controlador PID mediante reglas de Ziegler Nichols} %$.$ no lo leí
-%Explicar que es un controlador PID antes. Lo que sigue es un choreo del ogata\\
+\subsection{Sintonizacion de controlador PID mediante reglas de Ziegler Nichols} 
 
 Según \cite{ogata} casi todos los controladores PID se ajustan en el sitio. En la literatura se han propuesto muchos tipos diferentes de reglas de sintonización, que permiten llevar a cabo una sintonización delicada y fina de los controladores PID en el sitio. Asimismo, se han desarrollado métodos automáticos de sintonización y algunos de los controladores PID poseen capacidad de sintonización automática en línea. Actualmente se usan en la industria formas modificadas del control PID, tales como el control I-PD y el control PID con dos grados de libertad.
 
@@ -1008,7 +1015,7 @@ Con estos resultados se ensayaron distintos controladores sobre esta planta con 
 %Acá iría el resultado de poner el bichito a seguir la pista.
 Para probar el rendimiento de los distintos controladores, se diseñó el siguiente ensayo.
 
-Se ajustó cada controlador teniendo en cuento el esfuerzo máximo de la señal de control $\Delta u $ y el tiempo de asentamiento necesario $T_{as}$ para recuperar su posición sobre la linea. Luego se desarrolló una prueba en pista que dure un total de 30 segundos. Solo se registraron los controladores que lograron mantener el dispositivo siempre sobre la pista, es decir, que pudieran completar la prueba. Hay casos en que si bien pierden momentáneamente la pista, logran recuperarse y terminar el recorrido. Los resultados se muestran en la tabla \ref{tabla:mediciones}.   
+Se ajustó cada controlador teniendo en cuenta el esfuerzo máximo de la señal de control $\Delta u $ y el tiempo de asentamiento necesario $T_{as}$ para recuperar su posición sobre la linea. Luego se desarrolló una prueba en pista que dure un total de 30 segundos. Solo se registraron los controladores que lograron mantener el dispositivo siempre sobre la pista, es decir, que pudieran completar la prueba. Hay casos en que si bien pierden momentáneamente la pista, logran recuperarse y terminar el recorrido. Los resultados se muestran en la tabla \ref{tabla:mediciones}.   
 \begin{table}[h]
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
@@ -1026,30 +1033,24 @@ PIDF&910&0.466&5&500&491.4325&no&5.0586&360.78\\ \hline
 \label{tabla:mediciones}
 \end{center}
 \end{table}
-%$.$ Seba: Acá falta decir qué se entiende por "esfuerzo del controlador". Era el dw máximo, no?. Por otro lado, el Tas era el valor simulado, no? Habría que aclararlo. Además, me parece que habría que mostrar la pista usada. Tania: Lo del esfuerzo del controlador esta explicado antes de la tabla. (estaba antes, ahora lo modifique, porque me parece que no estaba claro.)
-
 
 Hay que considerar que si se baja la velocidad de referencia $\omega_{ref}$ la salida del controlador será menor en amplitud y más lenta, lo cual genera un andar menos oscilatorio y más estable. 
 Si bien estos son algunos parámetros que se midieron en los ensayos, quizás existan otras variables más relevantes acerca del comportamiento deseado, por ejemplo número de oscilaciones, estabilidad, gasto energético, entre otras.
 
 Un ensayo implementado se puede ver en el siguiente \href{https://youtu.be/hJU_oneTO20}{\underline{VIDEO}}. El mismo corresponde a una prueba con el último controlador PIDF funcionando a $550RPM$, lo cual determina una velocidad promedio de $0.5m/s$. A esta velocidad y sobre la pista, el vehículo no puede completar la prueba de 30 segundos ya que se sale de la pista unos antes de completar el tiempo de la prueba. 
-%$.$ Seba: No tenemos un video donde se mantenga siempre en la pista?
 
 
 \section{Conclusiones}
 \label{sec:conclusiones}
 En función de los objetivos propuestos, la conclusión más importante es que se logró desarrollar e implementar un robot seguidor de linea basado en componentes fáciles de conseguir y/o fabricar, lo cual podría impulsar el desarrollo de esta clase de dispositivos en la institución. En particular se destaca que se logró implementar todo el sistema en un microcontrolador de bajas prestaciones, el cual cumple con los requisitos de fácil implementación, amplia documentación, bajos costos, entre otros.  
 
-Respecto a los objetivos de control planteados, se pudieron implementar controladores PID digitales de desempeño satisfactorio y realizar estudios prácticos que permitieron profundizar en el estudio de los controladores PID.
+Respecto a los objetivos de control planteados, se pudieron implementar controladores PID digitales de desempeño satisfactorio y realizar estudios prácticos que permitieron profundizar en el conocimiento de los controladores PID.
 Se obtuvieron por medio de ensayos los modelos de los motores y se implementó con éxito un controlador PI en cada motor. Además, se pudieron implementar con éxito controladores PID de distinta estructura que permitiesen al robot cumplir el requisito básico de completar la pista de prueba a velocidades moderadas.
 Para la estimación de sistemas y ajuste de los controladores las herramientas principales utilizadas fueron los toolbox de matlab \cite{Sys_ident,PID_tuner}. Se hizo énfasis en la implementación de sistemas de control de tiempo discreto ajustados por métodos estandarizados, de tal manera que sean repetibles.
 
 A pesar de todo el trabajo realizado, no se pudo estimar la planta total con tanta precisión ni se obtuvo un modelo del sistema aceptable para alcanzar los requisitos de competición. Aún así, el dispositivo actual puede seguir una curva de radio $r=40cm$ a una velocidad de $500RPM$, esto es aproximadamente $47cm/s$, lo que representa un satisfactorio primer prototipo para luego poder avanzar en futuras versiones a desempeños competitivos, lo cual se corresponde con lo planteado en los objetivos.
 
 Si bien el proyecto completo demoró mucho más del tiempo estimado inicialmente, la realización del mismo permitió integrar conceptos de distintas materias y profundizar en los mismos de formas que no serían posible con un estudio exclusivamente teórico de la temática. Enfrentándose a los problemas que surgen en la implementación práctica de un proyecto de este calibre surgen dudas o errores de concepto que es fácil pasar por alto en los estudios teóricos. Además, la temática elegida permitió mantener un nivel de motivación alto, incluso frente a las mayores dificultades. Todo esto permitió corroborar las ideas expresadas en \ref{sec:motivacion}, por lo que los miembros de este grupo consideran de gran interés para la institución la implementación de estas estrategias pedagógicas.
-%Gracias al sistema ABP, se genero la necesidad y motivación de entender en un sentido amplio  la teoría de control clásica, moderna y digital vista a través de las 3 materias curriculares de la carrera.%$.$ Seba: cuáles 3?
-\ %El enfrentamiento a distinta clase de problemas garantizo el conocimiento integro de los sistemas de control implementados. % CHAMUYOOOOOOOOOOOOOOOOOOOOOOOOOO 
-%$.$ Seba: lo siento, la tuve que sacar, me pareció una gran mentira decir que tenemos un conocimiento integro :/
  
 Los modelos de las piezas para imprimir, los circuitos, las placas y el programa se encuentran en esta dirección \href{https://github.com/Seba-san/Trabajo_Final_Controlados/}{\underline{LINK}}.
 
@@ -1065,7 +1066,7 @@ El modelado del sistema es otra de las áreas donde se pueden realizar mejoras. 
 
 Asociado a lo dicho en los párrafos anteriores, se podría plantear la incorporación de sistemas de medición adicionales que permitan obtener mayor información del sistema, como por ejemplo, una IMU (unidad de medición inercial). De esta manera se tendrían opciones adicionales al momento de implementar las estrategias de control, además de que podría permitir la incorporación de la odometría de la pista, lo que a su vez haría posible adaptar el control a la curvatura actual de la misma.
 
-Finalmente, no se puede dejar de mencionar la parte mecánica. Si se desea alcanzar un desempeño de alto nivel para poder competir es probable que se requiera de un diseño mecánico superior. Este puntos, sin embargo, es el más conflictivo, ya que requiere conocimientos que corresponden a la ingeniería mecánica más que a la electrónica, por lo que la mejor solución sería la incorporación de otra persona al proyecto, cosa que no ha sido factible hasta el momento.
+Finalmente, no se puede dejar de mencionar la parte mecánica. Si se desea alcanzar un desempeño de alto nivel para poder competir es probable que se requiera de un diseño mecánico superior. Este punto, sin embargo, es el más conflictivo, ya que requiere conocimientos que corresponden a la ingeniería mecánica más que a la electrónica, por lo que la mejor solución sería la incorporación de otra persona al proyecto, cosa que no ha sido factible hasta el momento.
 %Esto es factible ya que actualmente las capacidades del dispositivo no se encuentran completamente explotadas, dando margen a una mejora de tiempos y estabilidad en la pista. %potencia total utilizada de todo el dispositivo % ronda un $40\%$ de su capacidad total, se estima que el rendimiento en pista puede mejorar sus tiempos sustancialmente.   
 \begin{thebibliography}{X}
 %\bibliography{biblioteca_plan}
@@ -1088,7 +1089,7 @@ Finalmente, no se puede dejar de mencionar la parte mecánica. Si se desea alcan
 \bibitem{PID_tuner}\href{https://la.mathworks.com/discovery/pid-tuning.html}{\textit{Automatically tune PID controller gains} Matlab \textregistered}
 \bibitem{astrom} Aström, Karl J. \textit{Sistemas controlados por computador}. No. 04; TJ213, A8.. 1988.
 \end{thebibliography}
-%$.$ Cambie el formato de la biliografia manualmente, para que se vean todas parecidas. No use bibliotecas, me parecio mas facil intentar hacerlo asi. 
+% Cambie el formato de la biliografia manualmente, para que se vean todas parecidas. No use bibliotecas, me parecio mas facil intentar hacerlo asi. 
 
 
 
